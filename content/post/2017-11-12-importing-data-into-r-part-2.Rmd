@@ -1,0 +1,131 @@
+---
+title: Importing Data into R - Part 2
+author: Aravind Hebbali
+date: '2017-11-12'
+slug: importing-data-into-r-part-2
+categories:
+  - data wrangling
+tags:
+  - import
+  - readxl
+---
+
+## Introduction
+
+This is the second post in the series **Importing Data into R**. In the previous [post](), we explored reading data from flat/delimited files. In this post, we will:
+
+- list sheets in an excel file
+- read data from an excel sheet
+- read specific cells from an excel sheet
+- read specific rows
+- read specific columns
+- read data from
+		- SAS 
+		- SPSS
+		- STATA
+
+## Libraries, Data & Code
+
+We will use the [readxl](http://readr.tidyverse.org/index.html) package. It has no external dependencies as compared to other packages available for reading data from Excel. The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) and the codes from [here](https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4).
+
+```{r library, message=FALSE}
+library(readxl)
+```
+
+## List Sheets
+
+Before we read data from an excel file, let us see how many sheets are present using `excel_sheets()`.
+
+```{r list_sheets}
+excel_sheets('sample.xls')
+```
+
+## Read Sheet
+
+To read data from a particular sheet, use `read_excel()` and specify the file name and the sheet number. Below is a simple example:
+
+```{r import56, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1)
+```
+
+## Read Specific Cells
+
+To read data from specific cells or a range of cells, use the `range` arguments and specify the range of cells from which we want to read data. For example, to read data from first 4 rows of columns **B** and **C**, we will specify the range as `"B1:C4"`.
+
+```{r import58, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = "B1:C4")
+```
+
+To read data from first 5 rows of columns **A**, **B** and **C**, we will specify the range as `"A1:C5"`.
+
+```{r import59, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = "A1:C5")
+```
+
+Another way to read specific cells is by providing a particular cell and then specifying the number of rows and columns keeping that cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell `A4`.
+
+```{r import61, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, col_names = FALSE,
+  range = anchored("A4", dim = c(3, 2)))
+```
+
+Use cell_limits to specify one end of the rectangle such as top left or top right.
+
+
+```{r import65, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, 2), c(NA, NA)))
+```
+
+```{r import66, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, NA), c(NA, 2)))
+```
+
+## Specify Rows
+
+Use `cell_rows()` to specify the rows from which data must be read. In the below example, we want to read the first 4 rows of data from the file.
+
+```{r import62, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = cell_rows(1:4))
+```
+
+## Specify Columns
+
+Use `cell_cols()` to specify the columns from which data must be read. In the below example, we want to read the 2nd and 3rd column from the file.
+
+```{r import63, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = cell_cols(2:3))
+```
+
+## Statistical Softwares
+
+We will use the [haven]() package to read data from files of other statistical softwares such as:
+
+- SAS
+- SPSS
+- STATA
+
+### Library
+
+```{r haven, message=FALSE}
+library(haven)
+```
+
+### STATA
+
+```{r import68, echo=TRUE, results='markup', message=FALSE}
+read_stata('airline.dta')  
+```
+
+### SPSS
+
+```{r import71, echo=TRUE, results='markup', message=FALSE}
+read_spss('employee.sav')  
+```
+
+### SAS
+
+```{r import73, echo=TRUE, results='markup', message=FALSE}
+read_sas('airline.sas7bdat')
+```

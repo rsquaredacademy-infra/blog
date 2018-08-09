@@ -1,0 +1,183 @@
+---
+title: Introduction to ggplot2
+date: '2016-01-07'
+slug: introduction-to-ggplot2
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+
+
+<p><a href="https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus"><img src="http://i.imgur.com/tXSoThF.png" alt="Twitter" /></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u="><img src="http://i.imgur.com/P3YfQoD.png" alt="Facebook" /></a></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the first post in the series <strong>Elegant Data Visualization with ggplot2</strong>. In this post, we will:</p>
+<ul>
+<li>understand the philosophy of Grammar of Graphics</li>
+<li>explore different aspects of ggplot2</li>
+<li>learn to build some of the basic plots regularly used for exploring data</li>
+</ul>
+<p><a href="http://ggplot2.tidyverse.org/index.html">ggplot2</a> is an <strong>awesome</strong> alternative to base R for data visualization. It is based on <a href="http://www.springer.com/in/book/9780387245447">The Grammar of Graphics</a>. In this post, we will understand the philosophy behind <strong>ggplot2</strong> and learn to build some of the most frequently used plots for visualizing data.</p>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/4bc7327c8e921657f90c5101e14a35a7">here</a>.</p>
+<p><br></p>
+</div>
+<div id="grammar-of-graphics" class="section level3">
+<h3>Grammar of Graphics</h3>
+<hr>
+<p>Grammar of Graphics is a formal system for building plots. The core idea is that any plot can be uniquely described as a combination of</p>
+<ul>
+<li>a dataset</li>
+<li>a geom</li>
+<li>a set of mappings</li>
+<li>a statistic</li>
+<li>a position adjustment</li>
+<li>a coordinate system</li>
+<li>a faceting scheme</li>
+</ul>
+<p><br></p>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<hr>
+<p>Let us build a scatter plot from scratch using the <code>mtcars</code> data. We will build the plot incrementally and understand the above layers. The first step in any data visualization exercise is to identify the data set. In <code>ggplot2</code>, we can
+specify the data set using <code>ggplot()</code>.</p>
+<pre class="r"><code>ggplot(data = mtcars) </code></pre>
+<p><img src="/post/2017-05-12-introduction-to-ggplot2_files/figure-html/gg1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>If you observe, <code>ggplot()</code> does not generate any plot, it just creates a coordinate system.</p>
+<p><br></p>
+</div>
+<div id="geom" class="section level3">
+<h3>Geom</h3>
+<hr>
+<p>After specifying the data set, we have to decide how the data will be visualized. We will do this using <code>geoms</code>. It basically details the geometric shapes that must be used to display the data. In our case, we want the data to displayed as <code>points</code>.</p>
+<p>There are several <code>geoms</code> and we will explore them one by one. For the time time being, let us use <code>geom_point()</code>. This tells ggplot2 it must use points to represent the data. The next step is to specify the variables that will be represented by the <code>X</code> and <code>Y</code> axis. To do this we will use <code>mapping</code> and <code>aes</code>.</p>
+<p><code>aes</code> is the short for aesthetics. Using <code>mapping</code>, we can map variables to aesthetics. We specify the aesthetic type and the corresponding variable within <code>aes</code>.In our example, we want the <code>X</code> axis to be represented by <code>disp</code> and <code>Y</code> axis by <code>mpg</code>. ggplot2 will search for these variables in the data we have provided in <code>ggplot</code> which is <code>mtcars</code>. If ggplot2 can’t find the variables, it will return an error.</p>
+<p>So far we have provided:</p>
+<ul>
+<li>data set</li>
+<li>geometric shape to represent data</li>
+<li>variables to represent <code>X</code> and <code>Y</code> axis</li>
+</ul>
+<p>The above layers are the bare minimum required to create a plot in ggplot2.</p>
+<pre class="r"><code>ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg))</code></pre>
+<p><img src="/post/2017-05-12-introduction-to-ggplot2_files/figure-html/gg2-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="aesthetics" class="section level3">
+<h3>Aesthetics</h3>
+<hr>
+<p>What are aesthetics?</p>
+<ul>
+<li><code>x</code></li>
+<li><code>y</code></li>
+<li><code>shape</code></li>
+<li><code>size</code></li>
+<li><code>color</code></li>
+<li><code>fill</code></li>
+<li><code>alpha</code></li>
+<li><code>linetype</code></li>
+</ul>
+<p>Aestheics are the visual properties of the objects in the plot. We can display the geometric object in different ways by
+changing the values of its aesthetic properties.</p>
+<div id="color" class="section level4">
+<h4>Color</h4>
+<hr>
+<pre class="r"><code>ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, color = cyl))</code></pre>
+<p><img src="/post/2017-05-12-introduction-to-ggplot2_files/figure-html/gg3-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="shape" class="section level4">
+<h4>Shape</h4>
+<hr>
+<pre class="r"><code>ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, shape = factor(gear)))</code></pre>
+<p><img src="/post/2017-05-12-introduction-to-ggplot2_files/figure-html/gg4-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="size" class="section level4">
+<h4>Size</h4>
+<hr>
+<pre class="r"><code>ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, size = hp))</code></pre>
+<p><img src="/post/2017-05-12-introduction-to-ggplot2_files/figure-html/gg5-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="stat" class="section level3">
+<h3>Stat</h3>
+<hr>
+<p>Some graphs plot the raw data set, but others like bar plot, box plot and histograms compute new values and plot them.
+In this section, we will look at how the data is transformed.</p>
+<ul>
+<li><code>stat_count</code></li>
+<li><code>stat_boxplot</code></li>
+<li><code>stat_bin</code></li>
+<li><code>stat_summary</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="position" class="section level3">
+<h3>Position</h3>
+<hr>
+<ul>
+<li><code>position_dodge</code></li>
+<li><code>position_identity</code></li>
+<li><code>position_jitter</code></li>
+<li><code>position_fill</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="coordinate-system" class="section level3">
+<h3>Coordinate System</h3>
+<hr>
+<p>Default is the cartesian coordinate system.</p>
+<ul>
+<li><code>coord_flip</code></li>
+<li><code>coord_polar</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="facet" class="section level3">
+<h3>Facet</h3>
+<hr>
+<ul>
+<li><code>facet_grid</code></li>
+<li><code>facet_wrap</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we learnt</p>
+<ul>
+<li>about grammar of graphics</li>
+<li>the components of a plot/chart</li>
+<li>to build a plot step by step</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next <a href="https://rsquaredacademy.github.io/blog/post/ggplot2-quick-tour/">post</a>, we will learn to quickly build a set of plots/charts that are routinely used in exploring data.</p>
+<p><br></p>
+</div>

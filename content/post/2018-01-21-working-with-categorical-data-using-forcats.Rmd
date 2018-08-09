@@ -1,0 +1,352 @@
+---
+title: Working with Categorical Data using forcats
+author: Aravind Hebbali
+date: '2018-01-21'
+slug: working-with-categorical-data-using-forcats
+categories:
+  - data wrangling
+tags:
+  - forcats
+  - factor
+  - categorical
+---
+
+## Introduction
+
+In this post, we will learn to work with categorical/qualitative data in R using [forcats](http://forcats.tidyverse.org). Let us begin by installing and loading forcats and a set of other pacakges we will be using.
+
+## Libraries &  Code
+
+We will use the following packages: 
+
+- [forcats](http://forcats.tidyverse.org/index.html) 
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- [magrittr](http://magrittr.tidyverse.org/index.html) 
+- [ggplot2](http://ggplot2.tidyverse.org/index.html) 
+- [tibbe](http://tibble.tidyverse.org/index.html) 
+- [purrr](http://purrr.tidyverse.org/index.html) 
+- and [readr](http://readr.tidyverse.org/index.html)  
+
+The codes from [here](https://gist.github.com/aravindhebbali/85fac536f563ae3fd8e2605fd56a7086).
+
+```{r cat1, message=FALSE}
+library(forcats)
+library(tibble)
+library(magrittr)
+library(purrr)
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+## Case Study
+
+We will use a case study to explore the various features of the forcats package. You can download the data for the case study from [here](https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv) or directly import the data using the readr package. We will do the following in this case study:
+
+- compute the frequency of different referrers
+- plot average number of pages browsed for different referrers
+- collapse referrers with low sample size into a single group
+- club traffic from social media websites into a new category
+- group referrers with traffic below a threshold into a single category
+ 
+### Data
+
+```{r show, message=FALSE}
+ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv',
+                 col_types = list(col_integer(), 
+                                  col_factor(levels = c("bing", "direct", "social", "yahoo", "google")), 
+                                  col_factor(levels = c("laptop", "mobile", "tablet")), 
+                                  col_logical(), col_number(),
+                                  col_number(), col_number(), col_character(), 
+                                  col_logical(), col_number(), col_number()))
+
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Tabulate Referrers
+
+Let us look at the traffic driven by different referrers. 
+
+```{r cat2}
+ecom %>%
+  pull(referrer) %>%
+  fct_count
+```
+
+If you want to sort the output in descending order, use `sort` and set it to `TRUE`.
+
+```{r cat2a}
+ecom %>%
+  pull(referrer) %>%
+  fct_count(sort = TRUE)
+```
+
+## Reorder Referrers
+
+We want to examine the average number of pages visited by each referrer type. 
+
+```{r cat3}
+refer_summary <- 
+  ecom %>%
+  group_by(referrer) %>%
+  summarise(
+    page = mean(n_pages),
+    tos = mean(duration),
+    n = n()
+  )
+
+refer_summary
+```
+
+Let us plot the average number of pages visited by each referrer type. 
+
+```{r cat10, fig.align='center', fig.width=6, fig.height=4}
+refer_summary %>%
+  ggplot() +
+  geom_point(aes(page, referrer))
+```
+
+Use `fct_reorder` to reorder the referrer types by the average number of pages
+visited.
+
+```{r cat11, fig.align='center', fig.width=6, fig.height=4}
+refer_summary %>%
+  ggplot() +
+  geom_point(aes(page, fct_reorder(referrer, page)))
+```
+
+## Plot Referrer Frequency (Descending Order)
+
+Let us look at the distribution of the referreres.
+
+```{r cat21}
+ecom %>%
+  pull(referrer) %>%
+  fct_count(sort = TRUE)
+```
+
+Use `fct_unique` to view the categories or levels of the referrer variable.
+
+```{r cat22}
+ecom %>%
+  pull(referrer) %>%
+  fct_unique
+```
+
+Since we want to plot the referrers in descending order of frequency, we will
+use `fct_infreq()` to reorder by frequency.
+
+```{r cat23}
+ecom %>%
+  pull(referrer) %>%
+  fct_infreq %>%
+  fct_unique
+```
+
+Now that we have reordered the referrers by frequency, let us plot them.
+
+```{r cat4, fig.align='center', fig.width=6, fig.height=4}
+ecom %>%
+  mutate(
+    ref = referrer %>% 
+      fct_infreq
+  ) %>%
+  ggplot(aes(ref)) +
+  geom_bar()
+```
+
+## Plot Referrer Frequency (Ascending Order)
+
+Let us look at the categories of the referrer variable. 
+
+```{r cat24}
+ecom %>%
+  pull(referrer) %>%
+  fct_unique
+```
+
+Since we want to plot the referrers in ascending order of frequency, we will 
+use `fct_rev()` to reverse the order.
+
+```{r cat25}
+ecom %>%
+  pull(referrer) %>%
+  fct_rev %>%
+  fct_unique
+```
+
+Let us reorder the referrers by frequency first and then reverse the order 
+before plotting their frequencies.
+
+```{r cat5, fig.align='center', fig.width=6, fig.height=4}
+ecom %>%
+  mutate(
+    ref = referrer %>% 
+      fct_infreq %>% 
+      fct_rev
+  ) %>%
+  ggplot(aes(ref)) +
+  geom_bar()
+```
+
+## Case Study 2
+
+### Data 
+
+```{r import2, message=FALSE}
+traffic <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv',
+  col_types = list(col_factor(levels = c("affiliates", "bing", "direct", "facebook", "yahoo", "google",
+    "instagram", "twitter", "unknown"))))
+
+traffic
+```
+
+## Tabulate Referrer
+
+Let us compute the traffic driven by different referrers using `fct_count`.
+
+```{r cat6}
+traffic %>%
+  pull(traffics) %>% 
+  fct_count
+```
+
+## Collapse Referrer Categories
+
+We want to group the referrers into 2 categories:
+
+- social
+- search
+
+Use `fct_collapse()` to group categories.
+
+```{r cat7}
+traffic %>%
+  pull(traffics) %>%
+  fct_collapse(
+    social = c("facebook", "twitter", "instagram"),
+    search = c("google", "bing", "yahoo")
+  ) %>% 
+  fct_count
+```
+
+## Lump Infrequent Referrer Types
+
+Let us group together referrer types that drive low traffic to the website.
+Use `fct_lump()` to lump together categories.
+
+```{r cat8, collapse = TRUE}
+traffic %>%
+  pull(traffics) %>% 
+  fct_count
+
+traffic %>%
+  pull(traffics) %>% 
+  fct_lump %>% 
+  table
+```
+
+## Retain top 3 referrers
+
+We want to retain the top 3 referrers and combine the rest of them into a
+single category.
+
+```{r cat9, echo=FALSE}
+traffic %>%
+  pull(traffics) %>% 
+  fct_count %>% 
+  arrange(desc(n))
+```
+
+Use `fct_lump()` and set the argument `n` to `3` indicating we want to
+retain top 3 categories and combine the rest.
+
+```{r cat17}
+traffic %>% 
+  pull(traffics) %>% 
+  fct_lump(n = 3) %>% 
+  table
+```
+
+## Lump Referrer Types with less than 10% traffic
+
+Let us combine referrers that drive less than 10% traffic to the website.
+
+```{r cat12, echo=FALSE}
+traffic %>% 
+  pull(traffics) %>% 
+  fct_count %>%
+  mutate(
+    percent = round((n / sum(n)) * 100, 2)
+  )
+```
+
+Since we are looking at proportion of traffic driven to the website and
+not the actual numbers, we use the `prop` argument and set it to `0.1`,
+indicating that we want to retain only those categories which have a
+proportion of more than 10% and combine the rest.
+
+```{r cat16}
+traffic %>%
+  pull(traffics) %>% 
+  fct_lump(prop = 0.1) %>% 
+  table
+```
+
+## Retain 3 Referrer Types with lowest traffic
+
+What if we want to retain 3 referrers which drive the lowest traffic 
+to the website and combine the rest? 
+
+```{r cat14, echo=FALSE}
+traffic %>%
+  pull(traffics) %>% 
+  fct_count %>% 
+  arrange(n)
+```
+
+We will still use the `n` argument but instead of specifying `3`, we now specify `-3`. 
+
+```{r cat19}
+traffic %>% 
+  pull(traffics) %>% 
+  fct_lump(n = -3) %>% 
+  table
+```
+
+## Retain 3 Referrer Types with less than 10% traffic
+
+Let us see how to retain referrers that drive less than 10 % traffic to 
+the website and combine the rest into a single group. 
+
+```{r cat15, echo=FALSE}
+traffic %>%
+  pull(traffics) %>% 
+  fct_count %>%
+  mutate(
+    percent = round((n / sum(n)) * 100, 2)
+  )
+```
+
+Instead of setting `prop` to `0.1`, we will set it to `-0.1`.
+
+```{r cat20}
+traffic %>% 
+  pull(traffics) %>% 
+  fct_lump(prop = -0.1) %>% 
+  table
+```

@@ -1,0 +1,202 @@
+---
+title: Importing Data into R - Part 2
+author: Aravind Hebbali
+date: '2017-11-12'
+slug: importing-data-into-r-part-2
+categories:
+  - data wrangling
+tags:
+  - import
+  - readxl
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This is the second post in the series <strong>Importing Data into R</strong>. In the previous <a href="">post</a>, we explored reading data from flat/delimited files. In this post, we will:</p>
+<ul>
+<li>list sheets in an excel file</li>
+<li>read data from an excel sheet</li>
+<li>read specific cells from an excel sheet</li>
+<li>read specific rows</li>
+<li>read specific columns</li>
+<li>read data from
+- SAS
+- SPSS
+- STATA</li>
+</ul>
+</div>
+<div id="libraries-data-code" class="section level2">
+<h2>Libraries, Data &amp; Code</h2>
+<p>We will use the <a href="http://readr.tidyverse.org/index.html">readxl</a> package. It has no external dependencies as compared to other packages available for reading data from Excel. The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4">here</a>.</p>
+<pre class="r"><code>library(readxl)</code></pre>
+</div>
+<div id="list-sheets" class="section level2">
+<h2>List Sheets</h2>
+<p>Before we read data from an excel file, let us see how many sheets are present using <code>excel_sheets()</code>.</p>
+<pre class="r"><code>excel_sheets(&#39;sample.xls&#39;)</code></pre>
+<pre><code>## [1] &quot;ecom&quot;</code></pre>
+</div>
+<div id="read-sheet" class="section level2">
+<h2>Read Sheet</h2>
+<p>To read data from a particular sheet, use <code>read_excel()</code> and specify the file name and the sheet number. Below is a simple example:</p>
+<pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1)</code></pre>
+<pre><code>## # A tibble: 7 x 5
+##   channel        users new_users sessions bounce_rate
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+## 1 Organic Search 43296     40238    50810 48.72%     
+## 2 Direct         12916     12311    16419 49.27%     
+## 3 Referral       10983      7636    18105 22.26%     
+## 4 Social         10346     10029    11101 61.92%     
+## 5 Display         5564      4790     7220 83.30%     
+## 6 Paid Search     2687      2205     3438 38.02%     
+## 7 Affiliates      1773      1585     2167 55.75%</code></pre>
+</div>
+<div id="read-specific-cells" class="section level2">
+<h2>Read Specific Cells</h2>
+<p>To read data from specific cells or a range of cells, use the <code>range</code> arguments and specify the range of cells from which we want to read data. For example, to read data from first 4 rows of columns <strong>B</strong> and <strong>C</strong>, we will specify the range as <code>&quot;B1:C4&quot;</code>.</p>
+<pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = &quot;B1:C4&quot;)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   users new_users
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 43296     40238
+## 2 12916     12311
+## 3 10983      7636</code></pre>
+<p>To read data from first 5 rows of columns <strong>A</strong>, <strong>B</strong> and <strong>C</strong>, we will specify the range as <code>&quot;A1:C5&quot;</code>.</p>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1, range = &quot;A1:C5&quot;)</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   channel        users new_users
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Organic Search 43296     40238
+## 2 Direct         12916     12311
+## 3 Referral       10983      7636
+## 4 Social         10346     10029</code></pre>
+<p>Another way to read specific cells is by providing a particular cell and then specifying the number of rows and columns keeping that cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell <code>A4</code>.</p>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1, col_names = FALSE,
+  range = anchored(&quot;A4&quot;, dim = c(3, 2)))</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   X__1      X__2
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 Referral 10983
+## 2 Social   10346
+## 3 Display   5564</code></pre>
+<p>Use cell_limits to specify one end of the rectangle such as top left or top right.</p>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1,
+  range = cell_limits(c(1, 2), c(NA, NA)))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##   users new_users sessions bounce_rate
+##   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+## 1 43296     40238    50810 48.72%     
+## 2 12916     12311    16419 49.27%     
+## 3 10983      7636    18105 22.26%     
+## 4 10346     10029    11101 61.92%     
+## 5  5564      4790     7220 83.30%     
+## 6  2687      2205     3438 38.02%     
+## 7  1773      1585     2167 55.75%</code></pre>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1,
+  range = cell_limits(c(1, NA), c(NA, 2)))</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   channel        users
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 Organic Search 43296
+## 2 Direct         12916
+## 3 Referral       10983
+## 4 Social         10346
+## 5 Display         5564
+## 6 Paid Search     2687
+## 7 Affiliates      1773</code></pre>
+</div>
+<div id="specify-rows" class="section level2">
+<h2>Specify Rows</h2>
+<p>Use <code>cell_rows()</code> to specify the rows from which data must be read. In the below example, we want to read the first 4 rows of data from the file.</p>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_rows(1:4))</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   channel        users new_users sessions bounce_rate
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+## 1 Organic Search 43296     40238    50810 48.72%     
+## 2 Direct         12916     12311    16419 49.27%     
+## 3 Referral       10983      7636    18105 22.26%</code></pre>
+</div>
+<div id="specify-columns" class="section level2">
+<h2>Specify Columns</h2>
+<p>Use <code>cell_cols()</code> to specify the columns from which data must be read. In the below example, we want to read the 2nd and 3rd column from the file.</p>
+<pre class="r"><code>readxl::read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(2:3))</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   users new_users
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 43296     40238
+## 2 12916     12311
+## 3 10983      7636
+## 4 10346     10029
+## 5  5564      4790
+## 6  2687      2205
+## 7  1773      1585</code></pre>
+</div>
+<div id="statistical-softwares" class="section level2">
+<h2>Statistical Softwares</h2>
+<p>We will use the <a href="">haven</a> package to read data from files of other statistical softwares such as:</p>
+<ul>
+<li>SAS</li>
+<li>SPSS</li>
+<li>STATA</li>
+</ul>
+<div id="library" class="section level3">
+<h3>Library</h3>
+<pre class="r"><code>library(haven)</code></pre>
+</div>
+<div id="stata" class="section level3">
+<h3>STATA</h3>
+<pre class="r"><code>read_stata(&#39;airline.dta&#39;)  </code></pre>
+<pre><code>## # A tibble: 32 x 6
+##     year     y     w     r     l     k
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  1948  1.21 0.243 0.145  1.41 0.612
+##  2  1949  1.35 0.260 0.218  1.38 0.559
+##  3  1950  1.57 0.278 0.316  1.39 0.573
+##  4  1951  1.95 0.297 0.394  1.55 0.564
+##  5  1952  2.27 0.310 0.356  1.80 0.574
+##  6  1953  2.73 0.322 0.359  1.93 0.711
+##  7  1954  3.03 0.335 0.403  1.96 0.776
+##  8  1955  3.56 0.350 0.396  2.12 0.827
+##  9  1956  3.98 0.361 0.382  2.43 0.800
+## 10  1957  4.42 0.379 0.305  2.71 0.921
+## # ... with 22 more rows</code></pre>
+</div>
+<div id="spss" class="section level3">
+<h3>SPSS</h3>
+<pre class="r"><code>read_spss(&#39;employee.sav&#39;)  </code></pre>
+<pre><code>## # A tibble: 474 x 9
+##       id gender    educ   jobcat  salary salbegin jobtime prevexp minority
+##    &lt;dbl&gt; &lt;chr+lbl&gt; &lt;dbl+&gt; &lt;dbl+l&gt; &lt;dbl+&gt; &lt;dbl+lb&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt;
+##  1  1.00 m         15     3       57000  27000    98      144     0       
+##  2  2.00 m         16     1       40200  18750    98      36      0       
+##  3  3.00 f         12     1       21450  12000    98      381     0       
+##  4  4.00 f         8      1       21900  13200    98      190     0       
+##  5  5.00 m         15     1       45000  21000    98      138     0       
+##  6  6.00 m         15     1       32100  13500    98      67      0       
+##  7  7.00 m         15     1       36000  18750    98      114     0       
+##  8  8.00 f         12     1       21900  9750     98      0       0       
+##  9  9.00 f         15     1       27900  12750    98      115     0       
+## 10 10.0  f         12     1       24000  13500    98      244     0       
+## # ... with 464 more rows</code></pre>
+</div>
+<div id="sas" class="section level3">
+<h3>SAS</h3>
+<pre class="r"><code>read_sas(&#39;airline.sas7bdat&#39;)</code></pre>
+<pre><code>## # A tibble: 32 x 6
+##     YEAR     Y     W     R     L     K
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  1948  1.21 0.243 0.145  1.41 0.612
+##  2  1949  1.35 0.260 0.218  1.38 0.559
+##  3  1950  1.57 0.278 0.316  1.39 0.573
+##  4  1951  1.95 0.297 0.394  1.55 0.564
+##  5  1952  2.27 0.310 0.356  1.80 0.574
+##  6  1953  2.73 0.322 0.359  1.93 0.711
+##  7  1954  3.03 0.335 0.403  1.96 0.776
+##  8  1955  3.56 0.350 0.396  2.12 0.827
+##  9  1956  3.98 0.361 0.382  2.43 0.800
+## 10  1957  4.42 0.379 0.305  2.71 0.921
+## # ... with 22 more rows</code></pre>
+</div>
+</div>

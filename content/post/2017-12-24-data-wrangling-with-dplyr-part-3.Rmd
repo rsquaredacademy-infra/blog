@@ -1,0 +1,234 @@
+---
+title: Data Wrangling with dplyr - Part 3
+author: Aravind Hebbali
+date: '2017-12-24'
+slug: data-wrangling-with-dplyr-part-3
+categories:
+  - data wrangling
+tags:
+  - dplyr
+---
+
+## Introduction
+
+In the previous [post](https://blog.aravindhebbali.com/2017/12/25/data-wrangling-with-dplyr-part-2/), 
+we learnt to combine tables using dplyr. In this post, we will explore a set of 
+helper functions in order to:
+
+- extract unique rows 
+- rename columns
+- sample data
+- extract columns
+- slice rows
+- arrange rows
+- compare tables
+- extract/mutate data using predicate functions
+- count observations for different levels of a variable
+
+## Libraries, Code & Data
+
+We will use the following packages:
+
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- [readr](http://readr.tidyverse.org/index.html)  
+
+The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) 
+and the codes from [here](https://gist.github.com/aravindhebbali/55c4f40476028c09949b73af97bb1619).
+
+```{r dplyr1, message=FALSE}
+library(dplyr)
+library(readr)
+```
+
+## Case Study
+
+Let us look at a case study (e-commerce data) and see how we can use dplyr 
+helper functions to answer questions we have about and to modify/transform the 
+underlying data set. 
+
+### Data
+
+```{r show, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Data Sanitization
+
+Let us ensure that the data is sanitized by checking the sources of traffic
+and devices used to visit the site. We will use `distinct` to examine the
+values in the `referrer` column
+
+```{r dplyr2}
+ecom %>%
+  distinct(referrer)
+```
+
+and the `device` column as well.
+
+```{r dplyr30}
+ecom %>%
+  distinct(device)
+```
+
+## Data Tabulation
+
+Let us now look at the proportion or share of visits driven by different sources
+of traffic. 
+
+```{r dplyr14}
+ecom %>%
+  group_by(referrer) %>%
+  tally()
+```
+
+We would also like to know the number of bouncers driven by the different 
+sources of traffic.
+
+```{r dplyr15}
+ecom %>%
+  group_by(referrer, bouncers) %>%
+  tally()
+```
+
+Let us look at how many conversions happen across different devices.
+
+```{r dplyr25}
+ecom %>%
+  group_by(device, purchase) %>%
+  tally() %>%
+  filter(purchase == 'true')
+```
+
+Another way to extract the above information is by using `count`
+
+```{r dplyr17}
+ecom %>%
+  count(referrer, purchase) %>%
+  filter(purchase == "true")
+```
+
+## Sampling Data
+
+dplyr offers sampling functions which allow us to specify either the
+number or percentage of observations. `sample_n()` allows sampling a specific
+number of observations.  
+
+```{r dplyr4}
+ecom %>%
+  sample_n(700)
+```
+
+We can combine the sampling functions with other dplyr functions as shown below 
+where we sample observation after grouping them according to the source of 
+traffic.
+
+```{r dplyr5}
+ecom %>%
+  group_by(referrer) %>%
+  sample_n(100)
+```
+
+`sample_frac()` allows a specific percentage of observations.
+
+```{r dplyr6}
+ecom %>%
+  sample_frac(size = 0.7)
+```
+
+## Data Extraction
+
+In the first [post](https://blog.aravindhebbali.com/2017/12/25/data-wrangling-with-dplyr-part-1/),
+we had observed that dplyr verbs always returned a tibble. What if you want to
+extract a specific column or a bunch of rows but not as a tibble? 
+
+Use `pull` to extract columns either by name or position. It will return a 
+vector. In the below example, we extract the `device` column as a vector. I am 
+using `head` in addition to limit the output printed.
+
+```{r dplyr8}
+ecom %>%
+  pull(device) %>%
+  head
+```
+
+Let us extract the first column from `ecom` using column position instead of 
+name.
+
+```{r dplyr9}
+ecom %>%
+  pull(1) %>%
+  head
+```
+
+You can use `-` before the column position to indicate the position in reverse.
+The below example extracts data from the last column.
+
+```{r dplyr10}
+ecom %>%
+  pull(-1) %>%
+  head
+```
+
+Let us now look at extracting rows using `slice()`. In the below example, we 
+extract data starting from the 5th row and upto the 15th row.
+
+```{r dplyr11}
+ecom %>%
+  slice(5:15)
+```
+
+Use `n()` inside `slice()` to extract the last row.
+
+```{r dplyr12}
+ecom %>%
+  slice(n())
+```
+
+## Between
+
+`between()` allows us to test if the values in a column lie between two specific
+values. In the below example, we check how many visits browsed pages between 5 
+and 15.
+
+```{r dplyr19}
+ecom_sample <-
+  ecom %>%
+  sample_n(30)
+  
+ecom_sample %>%
+  pull(n_pages) %>%
+  between(5, 15) 
+```
+
+## Case When
+
+`case_when()` is an alternative to `if else`. It allows us to lay down the 
+conditions clearly and makes the code more readable. In the below example, we
+create a new column `repeat_visit` from `n_visit` (the number of previous visits).
+
+```{r dplyr20}
+ecom %>%
+  mutate(
+    repeat_visit = case_when(
+      n_visit > 0 ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) %>%
+  select(n_visit, repeat_visit) 
+```
+

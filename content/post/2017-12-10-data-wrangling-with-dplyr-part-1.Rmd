@@ -1,0 +1,476 @@
+---
+title: Data Wrangling with dplyr - Part 1
+author: Aravind Hebbali
+date: '2017-12-10'
+slug: data-wrangling-with-dplyr-part-1
+categories:
+  - data wrangling
+tags:
+  - dplyr
+---
+
+## Introduction
+
+According to  a [survey](http://visit.crowdflower.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf) by [CrowdFlower](https://www.crowdflower.com/), data scientists spend most of their 
+time cleaning and manipulating data rather than mining or modeling them for 
+insights. As such, it becomes important to have tools that make data 
+manipulation faster and easier. In today's post, we introduce you to 
+[dplyr](http://dplyr.tidyverse.org/), a grammar of data manipulation.
+
+<center>
+<img src = "/post/crowd_flower3.png" width = "800" height = "600">
+</center>
+
+
+## Libraries, Code & Data
+
+We will use the following libraries:
+
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- and [readr](http://readr.tidyverse.org/index.html)  
+
+The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) 
+and the codes from [here](https://gist.github.com/aravindhebbali/7758b86c2bc13ff1e5d88d9d1c204f8c).
+
+```{r libs, message=FALSE}
+library(dplyr)
+library(readr)
+```
+
+## dplyr Verbs
+
+dplyr provides a set of verbs that help us solve the most common data 
+manipulation challenges while working with tabular data (dataframes, tibbles):
+
+- `select`: returns subset of columns
+- `filter`: returns a subset of rows
+- `arrange`: re-order or arrange rows according to single/multiple variables
+- `mutate`: create new columns from existing columns
+- `summarise`: reduce data to a single summary
+
+## Case Study
+
+We will explore a dummy data set that resembles web logs of an online retail 
+company. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) 
+or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) 
+package. We will use dplyr to answer the following:
+
+- what is the average order value by device types?
+- what is the average number of pages visited by purchasers and non-purchasers?
+- what is the average time on site for purchasers vs non-purchasers?
+- what is the average number of pages visited by purchasers and non-purchasers 
+using mobile?
+
+## Data
+
+```{r show, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+###### Data Dictionary
+
+Below is the description of the data set:
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Average Order Value
+
+<center>
+<img src = "/post/image.jpg" width = "800" height = "600">
+</center>
+
+## AOV by Devices
+
+<center>
+<img src = "/post/aov_flow_canva.png" width = "800" height = "600">
+</center>
+
+
+```{r case}
+ecom %>%
+  filter(purchase == 'true') %>%
+  select(device, order_value, order_items) %>%
+  group_by(device) %>%
+  summarise_all(funs(sum)) %>%
+  mutate(
+    aov = order_value / order_items
+  ) %>%
+  select(device, aov)
+```
+
+## Syntax
+
+Before we start exploring the dplyr verbs, let us look at their syntax:
+
+- the first argument is always a `data.frame` or `tibble`
+- the subsequent arguments provide the information required for the verbs to 
+take action
+- the name of columns in the data need not be surrounded by quotes
+
+
+## Filter Rows
+
+In order to compute the AOV, we must first separate the purchasers from 
+non-purchasers. We will do this by filtering the data related to purchasers
+using the `filter()` function. It allows us to filter rows that meet a specific 
+criteria/condition. The first argument is the name of the data frame and the 
+rest of the arguments are expressions for filtering the data. Let us look at a 
+few examples:
+
+The first example we will look at filters all visits from device **mobile**. As 
+we had learnt in the previous section, the first argument is our data set `ecom` 
+and the next argument is the condition for filtering rows.
+
+```{r dplyr2}
+filter(ecom, device == "mobile")
+```
+
+We can specify multiple filtering conditions as well. In the below example, we
+specify two filter conditions:
+
+- visit from device **tablet**
+- resulted in a purchase or conversion
+
+```{r dplyr3}
+filter(ecom, device == "tablet", purchase == "true")
+```
+
+Here is another example where we specify multiple conditions: 
+
+- visit from device **tablet**
+- made a purchase
+- browsed less than 15 pages 
+
+```{r dplyr4}
+filter(ecom, device == "tablet", purchase == "true", n_pages < 15)
+```
+
+##### Case Study
+
+Let us apply what we have learnt to the case study. We want to filter all
+visits that resulted in a purchase. 
+
+```{r dplyr5}
+filter(ecom, purchase == "true")
+```
+
+## Select Columns
+
+After filtering the data, we need to select relevent variables to compute the 
+AOV. Remember, we do not need all the columns in the data to compute a required 
+metric (in our case, AOV). The `select()` function allows us to select a subset 
+of columns. The first argument is the name of the data frame and the subsequent 
+arguments specify the columns by name or position. 
+
+To select the `device` and `purchase` columns, we specify the data set i.e. 
+`ecom` followed by the name of the columns.
+
+```{r dplyr6}
+select(ecom, device, purchase)
+```
+
+We can select a set of columns using `:`. In the below example, we select all 
+the columns starting from `device` up to `purchase`. Remember that we can use `:` only when
+the columns are adjacent to each other in the data set.
+
+```{r dplyr7}
+select(ecom, device:purchase)
+```
+
+What if you want to select all columns except a few? Typing the name of many
+columns can be cumbersome and may also result in spelling errors. We may use `:`
+only if the columns are adjacent to each other but that may not always be
+the case. dplyr allows us to specify columns that need not be
+selected using `-`. In the below example, we select all columns except `id` and 
+`country`. Notice the `-` before both of them.
+
+```{r dplyr8}
+select(ecom, -id, -country)
+```
+
+##### Case Study
+
+For our case study, we need to select the columns `order_value` and `order_items` 
+to calculate the AOV. We also need to select the `device` column as we are 
+computing the AOV for each device type.
+
+```{r dplyr9}
+select(ecom, device, order_value, order_items)
+```
+
+But we want the above data only for purchasers. Let us combine `filter()` and 
+`select()` functions to extract `order_value` and `order_items` only for those
+visis that resulted in a purchase.
+
+```{r dplyr10}
+# filter all visits that resulted in a purchase
+ecom1 <- filter(ecom, purchase == "true")
+
+# select the relevant columns
+ecom2 <- select(ecom1, device, order_value, order_items)
+
+# view data
+ecom2
+```
+
+## Grouping Data
+
+We need to compute the total order value and total order items for each device 
+in order to compute their AOV. To achieve this, we need to group the selected 
+`order_value` and `order_items` by device type. `group_by()` allows us to group 
+or split data based on particular (discrete) variable. The first argument is the 
+name of the data set and the second argument is the name of the column based on 
+which the data will be split. 
+
+To split the data by referrer type, we use `group_by` and specify the data set
+i.e. `ecom` and the column based on which to split the data i.e. `referrer`.
+
+```{r dplyr11}
+group_by(ecom, referrer)
+```
+
+##### Case Study
+
+In the second line in the previous output, you can observe `Groups: referrer [5]`
+. The data is split into 5 groups as the referrer variable has 5 distinct values. 
+For our case study, we need to group the data by `device` type.
+
+```{r dplyr12}
+# split ecom2 by device type
+ecom3 <- group_by(ecom2, device)
+ecom3
+```
+
+## Summarise Data
+
+The next step is to compute the total order value and total order items for each 
+device. i.e. we need to reduce the order value and order items data to a single 
+summary. We can achieve this using `summarise()`. As usual, the first argument 
+is the name of a data set and the subsequent arguments are functions that can 
+summarise data. For example, we can use `min`, `max`, `sum`, `mean` etc.
+
+Let us compute the average number of pages browsed by referrer type:
+
+- split data by `referrer` type
+- compute the average number of pages using `mean`
+
+```{r sumeg}
+# split data by referrer type
+step_1 <- group_by(ecom, referrer)
+
+# compute average number of pages
+step_2 <- summarise(step_1, mean(n_pages))
+step_2
+```
+
+Now let us compute both the `mean` and the `median`.
+
+```{r sumeg2}
+# split data by referrer type
+step_1 <- group_by(ecom, referrer)
+
+# compute average number of pages
+step_2 <- summarise(step_1, mean(n_pages), median(n_pages))
+step_2
+```
+
+Another way to achieve the above result is to use the 
+`summarise_all()` function. How does that work? It generates the specified 
+summary for all the columns in the data set except for the column based on 
+which the data has been grouped or split. So we need to ensure that the data 
+does not have any irrelevant columns.
+
+- split data by `referrer` type
+- select `order_value` and `order_items`
+- compute the average number of pages by applying the `mean` function to all 
+the columns
+
+
+```{r sumall_eg}
+# select relevant columns
+step_1 <- select(ecom, referrer, order_value, order_items)
+
+# split data by referrer type
+step_2 <- group_by(step_1, referrer)
+
+# compute average number of pages
+step_3 <- summarise_all(step_2, funs(mean))
+step_3
+```
+
+Let us compute `mean` and `median` number of pages for each referre type using 
+`summarise_all`.
+
+```{r sumall_eg2}
+# select relevant columns
+step_1 <- select(ecom, referrer, order_value, order_items)
+
+# split data by referrer type
+step_2 <- group_by(step_1, referrer)
+
+# compute mean and median number of pages
+step_3 <- summarise_all(step_2, funs(mean, median))
+step_3
+```
+
+
+##### Case Study
+
+So far, we have split the data based on the `device` type and we have selected 2 
+columns,  `order_value` and `order_items`. We need the sum of order value and 
+order items. What function can we use to obtain them? The `sum()` function will 
+generate the sum of the values and hence we will use it inside the `summarise()` 
+function. Remember, we need to provide a name to the summary being generated. 
+
+```{r dplyr13}
+ecom4 <- summarise(ecom3, total_value = sum(order_value),
+          total_items = sum(order_items))
+ecom4
+```
+
+There you go, we have the total order value and total order items for each 
+device type. If we use `summarise_all()`, it will generate the summary for the 
+selected columns based on the function specified. To specify the functions, we 
+need to use another argument `funs` and it can take any number of valid 
+functions.
+
+```{r dplyr14}
+ecom4 <- summarise_all(ecom3, funs(sum))
+ecom4
+```
+
+## Create Columns
+
+To create a new column, we will use `mutate()`. The first argument is the name 
+of the data set and the subsequent arguments are expressions for creating new 
+columns based out of existing columns. 
+
+Let us add a new column `avg_page_time` i.e. time on site divided by number of
+pages visited.
+
+```{r mutateg}
+# select duration and n_pages from ecom
+mutate_1 <- select(ecom, n_pages, duration)
+mutate(mutate_1, avg_page_time = duration / n_pages)
+```
+
+We can create new columns based on other columns created using `mutate`. Let us 
+create another column `sqrt_avg_page_time` i.e. square root of the average time
+on page using `avg_page_time`.
+
+```{r mutateg2}
+mutate(mutate_1,
+       avg_page_time = duration / n_pages,
+       sqrt_avg_page_time = sqrt(avg_page_time))
+```
+
+##### Case Study
+
+Back to our case study, from the last step we have the total order value and 
+total order items for each device category and can compute the AOV. We will 
+create a new column to store AOV. 
+
+```{r dplyr15}
+ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom5
+```
+
+## Select Columns
+
+The last step is to select the relevant columns. We will select the device type 
+and the corresponding aov while getting rid of other columns. Use `select()`
+to extract the relevant columns.
+
+```{r dplyr16}
+ecom6 <- select(ecom5, device, aov)
+ecom6
+```
+
+## Arrange Data
+
+Arranging data in ascending or descending order is one of the most common tasks
+in data manipulation. We can use `arrange` to arrange data by different columns.
+Let us say we want to arrange data by the number of pages browsed.
+
+```{r arrange_eg}
+arrange(ecom, n_pages)
+```
+
+If we want to arrange the data in descending order, we can use `desc()`. Let us 
+arrange the data in descending order.
+
+```{r arrange_eg2}
+arrange(ecom , desc(n_pages))
+```
+
+Data can be arranged by multiple variables as well. Let us arrange data first by 
+number of visits and then by number of pages in a descending order.
+
+```{r arrange_eg3}
+arrange(ecom, n_visit, desc(n_pages))
+```
+
+##### Case Study
+
+If you observe `ecom6`, the `aov` column is arranged in descending order. 
+
+```{r arrange4}
+arrange(ecom6, aov)
+```
+
+## AOV by Devices
+
+Let us combine all the code from the above steps:
+
+```{r dplyr17}
+ecom1 <- filter(ecom, purchase == "true")
+ecom2 <- select(ecom1, device, order_value, order_items)
+ecom3 <- group_by(ecom2, device)
+ecom4 <- summarise_all(ecom3, funs(sum))
+ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom6 <- select(ecom5, device, aov)
+ecom7 <- arrange(ecom6, aov)
+ecom7
+```
+
+If you observe, at each step we create a new variable(data frame) and then use 
+it as an input in the next step i.e. the output from one step becomes the input 
+for the next. Can we achieve the final outcome i.e. `ecom7` without creating the 
+intermediate data (ecom1 - ecom6)? Yes, we can. We will use the `%>%` operator 
+to chain the steps and get rid of the intermediate data. 
+
+```{r dplyr18}
+ecom %>%
+  filter(purchase == 'true') %>%
+  select(device, order_value, order_items) %>%
+  group_by(device) %>%
+  summarise_all(funs(sum)) %>%
+  mutate(
+    aov = order_value / order_items
+  ) %>%
+  select(device, aov) %>%
+  arrange(aov)
+```
+
+Below we map the description of each step to dplyr verbs.
+
+<center>
+<img src = "/post/aov_flow_map_canva.png" width = "1200" height = "800">
+</center>
+
+## Your Turn
+
+- what is the average number of pages visited by purchasers and non-purchasers?
+- what is the average time on site for purchasers vs non-purchasers?
+- what is the average number of pages visited by purchasers and non-purchasers using mobile?

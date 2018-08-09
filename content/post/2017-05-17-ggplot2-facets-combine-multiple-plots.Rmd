@@ -1,0 +1,238 @@
+---
+title: 'ggplot2: Facets (Combine multiple plots)'
+date: '2016-07-08'
+slug: ggplot2-facets-combine-multiple-plots
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+
+### Introduction
+
+<hr>
+
+This is the 20th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/ggplot2-statistical-plots/), we learnt the `stat_*()` family of functions. In this post, we will learn about faceting i.e. combining plots.
+
+```{r facet, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/733381d6b5773e1007a097aeca0f8f4d).
+
+<br>
+
+### Data
+
+<hr>
+
+```{r import, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+<br>
+
+### Data Dictionary
+
+<hr>
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+<br>
+
+### Facet - Intro
+
+<hr>
+
+Generate subplots that each display one subset of the data using
+
+- `facet_grid()`
+- `facet_wrap()`
+
+<br>
+
+### Columns
+
+<hr>
+
+```{r facet1, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) + 
+  geom_point() +
+  facet_grid(. ~ device)
+```
+
+<br>
+
+### Rows
+
+<hr>
+
+```{r facet2, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) + 
+  geom_point() +
+  facet_grid(device ~ .)
+```
+
+<br>
+
+### Rows & Columns
+
+<hr>
+
+```{r facet3, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) + 
+  geom_point() +
+  facet_grid(purchase ~ device)
+```
+
+<br>
+
+### Rows & Columns
+
+```{r facet4, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) + 
+  geom_point() +
+  facet_grid(device ~ purchase)
+```
+
+<br>
+
+### Scales
+
+<hr>
+
+Different range instead of fixed range.
+
+```{r facet5, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration, color = factor(device))) +
+  geom_point() + 
+  facet_grid(. ~ device, scales = "free")
+```
+
+<br>
+
+### Switch Axis
+
+<hr>
+
+```{r facet6, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) + 
+  geom_point() + 
+  facet_grid(device ~ purchase, switch = "both") 
+```
+
+<br>
+
+### Wrap
+
+<hr>
+
+```{r facet7, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(~device)
+```
+
+<br>
+
+### Specify Rows
+
+<hr>
+
+```{r facet8, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(~device, nrow = 2)
+```
+
+<br>
+
+### Specify Rows
+
+<hr>
+
+```{r facet9, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(~device, nrow = 3)
+```
+
+<br>
+
+### Rows & Columns
+
+<hr>
+
+```{r facet10, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(~device + purchase)
+```
+
+<br>
+
+### Rows & Columns
+
+<hr>
+
+```{r facet11, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(c("device", "purchase"))
+```
+
+<br>
+
+### Scales
+
+<hr>
+
+```{r facet12, fig.align='center'}
+ggplot(ecom, aes(n_pages, duration)) +
+  geom_point() +
+  facet_wrap(~device, scales = "free")
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/ggplot2-themes/), we will learn to modify the theme of a plot.
+
+<br>

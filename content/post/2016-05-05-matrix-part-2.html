@@ -1,0 +1,180 @@
+---
+title: Matrices - Part 2
+author: ''
+date: '2016-05-05'
+slug: matrix-part-2
+categories:
+  - r-introduction
+tags:
+  - matrix
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This is the ninth post in the series <strong>Introduction to R</strong>. In the previous <a href="">post</a>, we learnt to create matrices. In this post, we will learn to:</p>
+<ul>
+<li>combining matrices</li>
+<li>index/subset matrices</li>
+<li>dissolve matrices</li>
+</ul>
+</div>
+<div id="append-data" class="section level2">
+<h2>Append Data</h2>
+<p>In this section, we will learn how to append data to a matrix. There are two functions that can be used for this purpose:</p>
+<ul>
+<li><code>rbind()</code></li>
+<li><code>cbind()</code></li>
+</ul>
+<p><code>cbind</code> will append a new column to the matrix while <code>rbind</code> will append a new row.</p>
+<div id="append-rowcolumn" class="section level4">
+<h4>Append Row/Column</h4>
+<pre class="r"><code># 3 x 3 matrix
+mat &lt;- matrix(data = 1:9, nrow = 3)
+mat</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<pre class="r"><code># numeric vector
+v &lt;- c(10, 11, 12)
+v</code></pre>
+<pre><code>## [1] 10 11 12</code></pre>
+<pre class="r"><code># append row
+rbind(mat, v)</code></pre>
+<pre><code>##   [,1] [,2] [,3]
+##      1    4    7
+##      2    5    8
+##      3    6    9
+## v   10   11   12</code></pre>
+<pre class="r"><code># append column
+cbind(mat, v)</code></pre>
+<pre><code>##             v
+## [1,] 1 4 7 10
+## [2,] 2 5 8 11
+## [3,] 3 6 9 12</code></pre>
+</div>
+</div>
+<div id="combine-matrices" class="section level2">
+<h2>Combine Matrices</h2>
+<p>When you use <code>rbind</code> to combine two matrices, the number of columns must match and in case of <code>cbind</code>, the number of rows must match.</p>
+<div id="append-rowcolumn-1" class="section level4">
+<h4>Append Row/Column</h4>
+<pre class="r"><code># 3 x 3 matrix
+mat1 &lt;- matrix(data = 1:9, nrow = 3)
+mat2 &lt;- matrix(data = sample(9), nrow = 3)
+
+# append rows
+rbind(mat1, mat2)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+## [4,]    2    7    3
+## [5,]    1    9    5
+## [6,]    4    6    8</code></pre>
+<pre class="r"><code># append columns
+cbind(mat1, mat2)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]    1    4    7    2    7    3
+## [2,]    2    5    8    1    9    5
+## [3,]    3    6    9    4    6    8</code></pre>
+</div>
+</div>
+<div id="subset-matrices" class="section level2">
+<h2>Subset Matrices</h2>
+<p>In this section, we will learn to subset matrices. The <code>[]</code> operator can be used to subset matrices just like vectors but since matrices are two dimensional, we need to specify both the row number and the column number. Below are a few examples:</p>
+<pre class="r"><code># 3 x 4 matrix
+mat &lt;- matrix(data = 1:12, nrow =3)
+mat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12</code></pre>
+<pre class="r"><code># extract element from first row, first column
+mat[1, 1]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># extract all rows of first column
+mat[, 1]</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<pre class="r"><code># extract all columns of first row
+mat[1,]</code></pre>
+<pre><code>## [1]  1  4  7 10</code></pre>
+<pre class="r"><code># extract 2nd and 3rd row of first column
+mat[c(2, 3), 1]</code></pre>
+<pre><code>## [1] 2 3</code></pre>
+<pre class="r"><code># extract 2nd and 3rd column of first row
+mat[1, c(2, 3)]</code></pre>
+<pre><code>## [1] 4 7</code></pre>
+<pre class="r"><code># extract 2nd and 3rd row of first and third column
+mat[c(2, 3), c(1, 3)]</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    2    8
+## [2,]    3    9</code></pre>
+<div id="using-row-column-names" class="section level4">
+<h4>Using Row &amp; Column Names</h4>
+<p>In an earlier section, we learnt how to name the rows and columns of a matrix. Let us see how these names can be used to subset matrices.</p>
+<pre class="r"><code># row names
+row_names &lt;- c(&#39;row_1&#39;, &#39;row_2&#39;, &#39;row_3&#39;)
+
+# column names
+col_names &lt;- c(&#39;col_1&#39;, &#39;col_2&#39;, &#39;col_3&#39;)
+
+# matrix with row and column names
+mat &lt;- matrix(data = 1:9, nrow = 3, dimnames = list(row_names, col_names))
+
+# extract elements from first row/columns
+mat[&#39;row_1&#39;, &#39;col_1&#39;]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># extract all rows of first column
+mat[, &#39;col_1&#39;]</code></pre>
+<pre><code>## row_1 row_2 row_3 
+##     1     2     3</code></pre>
+<pre class="r"><code># extract all columns of first row
+mat[&#39;row_1&#39;,]</code></pre>
+<pre><code>## col_1 col_2 col_3 
+##     1     4     7</code></pre>
+</div>
+<div id="using-logical-expressions" class="section level4">
+<h4>Using Logical Expressions</h4>
+<p>We can use logical expressions to subset matrices.</p>
+<pre class="r"><code># 3 x 4 matrix
+mat &lt;- matrix(data = 1:12, nrow =3)
+mat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12</code></pre>
+<pre class="r"><code># elements greater than 4
+mat &gt; 4</code></pre>
+<pre><code>##       [,1]  [,2] [,3] [,4]
+## [1,] FALSE FALSE TRUE TRUE
+## [2,] FALSE  TRUE TRUE TRUE
+## [3,] FALSE  TRUE TRUE TRUE</code></pre>
+<pre class="r"><code># extract elements greater than 4
+mat[mat &gt; 4]</code></pre>
+<pre><code>## [1]  5  6  7  8  9 10 11 12</code></pre>
+</div>
+</div>
+<div id="dissolve-matrices" class="section level2">
+<h2>Dissolve Matrices</h2>
+<p>Till now we have learnt how to coerce a vector into matrix. Now let us learn how to coerce a matrix into a vector using:</p>
+<ul>
+<li><code>c()</code></li>
+<li><code>as.vector()</code></li>
+</ul>
+<pre class="r"><code># 3 x 3 matrix
+mat &lt;- matrix(data = 1:9, nrow =3)
+mat</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<pre class="r"><code># using c()
+c(mat)</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6 7 8 9</code></pre>
+<pre class="r"><code># using as.vector()
+as.vector(mat)</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6 7 8 9</code></pre>
+</div>

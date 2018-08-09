@@ -1,0 +1,437 @@
+---
+title: Readable Code with Pipes
+author: Aravind Hebbali
+date: '2017-12-03'
+slug: readable-code-with-pipes
+categories:
+  - data wrangling
+tags:
+  - pipes
+  - magrittr
+---
+
+## Introduction
+
+R code contain a lot of parentheses in case of a sequence of multiple operations. When you are dealing with 
+complex code, it results in nested function calls which are hard to read and maintain. The [magrittr](https://CRAN.R-project.org/package=magrittr) package by [Stefan Milton Bache](http://stefanbache.dk/) provides pipes enabling us to write R code that is readable.
+
+Pipes allow us to clearly express a sequence of multiple operations by:
+
+- structuring operations from left to right
+- avoiding
+    - nested function calls
+    - intermediate steps
+    - overwriting of original data
+- minimizing creation of local variables
+
+## Pipes
+
+If you are using [tidyverse](https://www.tidyverse.org/), magrittr will be automatically loaded. We will look at 3 different types of pipes:
+
+- `%>%` : pipe a value forward into an expression or function call
+- `%<>%`: result assigned to left hand side object instead of returning it 
+- `%$%` : expose names within left hand side objects to right hand side expressions
+
+## Libraries, Code & Data
+
+We will use the following packages in this post:
+
+- [magrittr](http://magrittr.tidyverse.org/) 
+- [readr](http://readr.tidyverse.org/) 
+- [dplyr](http://dplyr.tidyverse.org/)
+- [stringr](http://stringr.tidyverse.org/)
+- and [purrr](http://readr.tidyverse.org/) 
+
+You can find the data sets [here](https://github.com/rsquaredacademy/datasets) and the codes 
+[here](https://gist.github.com/aravindhebbali/26d85ab4a4dadd2fe7c1f58d854cc950).
+
+
+```{r importlib1, message=FALSE}
+library(magrittr)
+library(readr)
+library(dplyr)
+library(stringr)
+library(purrr)
+```
+
+## Data
+
+```{r show, message=FALSE}
+ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+#### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## First Example
+
+Let us start with a simple example. You must be aware of `head()`. If not,
+do not worry. It returns the first few observations/rows of data. We can
+specify the number of observations it should return as well. Let us use 
+it to view the first 10 rows of our data set.
+
+```{r mag1}
+head(ecom, 10)
+```
+
+#### Using Pipe
+
+Now let us do the same but with `%>%`. 
+
+```{r mag2}
+ecom %>% head(10)
+```
+
+## Square Root 
+
+Time to try a slightly  more challenging example. We want the square root of 
+`n_pages` column from the data set. To ensure the output does not clutter 
+the page, we will view the first few observations using `head()`.
+
+```{r mag3}
+y <- head(sqrt(ecom$n_pages))
+```
+
+Let us break down the above computation into small steps:
+
+- select/expose the `n_pages` column from `ecom` data
+- compute the square root
+- assign the first few observations to `y`
+
+Let us reproduce `y` using pipes.
+
+
+```{r mag4}
+# select n_pages variable and assign it to y
+y <-
+    ecom %$%
+    n_pages
+
+# compute square root of y and assign it to y 
+y %<>% sqrt
+
+head(y)
+```
+
+Another way to compute the square root of y is shown below.
+
+```{r mag5}
+y <-
+  ecom %$% 
+  n_pages %>% 
+  sqrt 
+
+head(y)
+```
+
+## Visualization
+
+Let us look at a data visualization example. We will create a bar plot to
+visualize the frequency of different referrer types that drove purchasers
+to the website. Let us look at the steps involved in creating the bar plot:
+
+- extract rows where purchase == true
+- select/expose `referrer` column
+- tabulate referrer data using `table()`
+- use the tabulated data to create bar plot using `barplot()`
+
+```{r mag21, fig.align='center', fig.height=4, fig.width=6}
+barplot(table(subset(ecom, purchase == 'true')$referrer))
+```
+
+#### Using pipe
+
+<center>
+<img src = "/post/pipes_viz.png" width = "800" height = "600">
+</center>
+
+
+```{r mag7, fig.align='center', fig.height=4, fig.width=6}
+ecom %>%
+  subset(purchase == 'true') %>%
+  extract('referrer') %>%
+  table %>%
+  barplot
+```
+
+## Correlation
+
+Correlation is a statistical measure that indicates the extent to which two or more variables 
+fluctuate together. In R, correlation is computed using `cor()`. Let us look at the 
+correlation between the number of pages browsed and time spent on the site for
+visitors who purchased some product. Below are the steps for computing correlation:
+
+- extract rows where purchase == true
+- select/expose `n_pages` and `duration` columns
+- use `cor()` to compute the correlation
+
+```{r mag6, collpase = TRUE}
+# without pipe
+ecom1 <- subset(ecom, purchase == 'true')
+cor(ecom1$n_pages, ecom1$duration)
+
+# with pipe
+ecom %>%
+  subset(purchase == 'true') %$% 
+  cor(n_pages, duration)
+
+# with pipe
+ecom %>%
+  filter(purchase == 'true') %$% 
+  cor(n_pages, duration)
+```
+
+
+## Regression
+
+Let us look at a regression example. We regress time spent on the site on 
+number of pages visited. Below are the steps involved in running the regression:
+
+- use `duration` and `n_pages` columns from econ data
+- pass the above data to `lm()`
+- pass the output from `lm()` to `summary()` 
+
+```{r mag8}
+summary(lm(duration ~ n_pages, data = ecom))
+```
+
+#### Using pipe
+
+```{r mag22}
+ecom %$%
+  lm(duration ~ n_pages) %>%
+  summary
+```
+
+## String Manipulation
+
+We want to extract the first name (jovial) from the below email id and
+convert it to upper case. Below are the steps to achieve this:
+
+- split the email id using the pattern `@` using `str_split()`
+- extract the first element from the resulting list using `extract2()`
+- extract the first element from the character vector using `extract()`
+- extract the first six characters using `str_sub()`
+- convert to upper case using `str_to_upper()`
+
+```{r mag9}
+email <- 'jovialcann@anymail.com'
+
+# without pipe
+str_to_upper(str_sub(str_split(email, '@')[[1]][1], start = 1, end = 6))
+
+# with pipe
+email %>%
+  str_split(pattern = '@') %>%
+  extract2(1) %>%
+  extract(1) %>%
+  str_sub(start = 1, end = 6) %>%
+  str_to_upper()
+```
+
+<center>
+<img src = "/post/pipes_canva.png" width = "800" height = "600">
+</center>
+
+Another method that uses `map_chr()` from the [purrr](http://readr.tidyverse.org/) package.
+
+```{r map39}
+email %>%
+  str_split(pattern = '@') %>%
+  map_chr(1) %>%
+  str_sub(start = 1, end = 6) %>%
+  str_to_upper()
+```
+
+## Data Extraction
+
+Let us turn our attention towards data extraction. magrittr provides
+alternatives to `$`, `[` and `[[`.
+
+- `extract()`
+- `extract2()`
+- `use_series()`
+
+#### Extract Column By Name
+
+To extract a specific column using the column name, we mention the name 
+of the column in single/double quotes within `[` or `[[`. In case of `$`,
+we do not use quotes.
+
+Let us extract the first 3 observations of `n_pages` column.
+
+```{r mag10}
+head(ecom['n_pages'], 3)
+
+ecom %>%
+  extract('n_pages') %>%
+  head(3)
+```
+
+#### Extract Column By Position
+
+We can extract columns using their index position. Keep in mind that index 
+position starts from **1** in R. In the below example, we show how to 
+extract the first 3 observations of `n_pages` column but instead of using
+the column name, we use the column position.
+
+```{r mag23}
+head(ecom[6], 3)
+
+ecom %>%
+  extract(6) %>%
+  head(3)
+```
+
+#### Extract Column (as vector)
+
+One important differentiator between `[` and `[[` is that `[[` will
+return a atomic vector and not a `data.frame`. `$` will also return
+a atomic vector. In magrittr, we can use `use_series()` in place of
+`$`.
+
+```{r mag11}
+head(ecom$n_pages)
+
+ecom %>%
+  use_series('n_pages') %>%
+  head
+```
+
+#### Extract List Element By Name
+
+To extract elements of a list, we can use `extract2()`. If is an
+alternative for `[[`.
+
+```{r mag12}
+mt <- as.list(mtcars)
+
+mt[['mpg']]
+
+mt %>%
+  extract2('mpg')
+```
+
+#### Extract List Element By Position
+
+```{r mag13}
+mt <- as.list(mtcars)
+
+mt[[1]]
+
+mt %>%
+  extract2(1)
+```
+
+#### Extract List Element 
+
+We can extract the elements of a list using `use_series()` as well.
+
+```{r mag14}
+mt <- as.list(mtcars)
+
+mt$mpg
+
+mt %>%
+  use_series(mpg)
+```
+
+## Arithmetic Operations
+
+magrittr offer alternatives for arithemtic operations as well. We will look at 
+a few examples below.
+
+- `add()`
+- `subtract()`
+- `multiply_by()`
+- `multiply_by_matrix()`
+- `divide_by()`
+- `divide_by_int()`
+- `mod()`
+- `raise_to_power()`
+
+#### Addition
+
+```{r mag15}
+1:10 %>%
+  `+`(1)
+
+1:10 %>%
+  add(1)
+```
+
+#### Multiplication
+
+```{r mag16}
+1:10 %>%
+  `*`(3)
+
+1:10 %>%
+  multiply_by(3)
+```
+
+#### Division
+
+```{r mag17}
+1:10 %>%
+  `/`(2)
+
+1:10 %>%
+  divide_by(2)
+```
+
+#### Power
+
+```{r mag18}
+1:10 %>%
+  `^`(2)
+
+1:10 %>%
+  raise_to_power(2)
+```
+
+## Logical Operators
+
+There are alternatives for logical operators as well. We will look at 
+a few examples below.
+
+- `and()`
+- `or()`
+- `equals()`
+- `not()`
+- `is_greater_than()`
+- `is_weakly_greater_than()`
+- `is_less_than()`
+- `is_weakly_less_than()`
+
+#### Greater Than
+
+```{r mag19}
+1:10 %>%
+  `>`(5)
+
+1:10 %>%
+  is_greater_than(5)
+```
+
+#### Weakly Greater Than
+
+```{r mag20}
+1:10 %>%
+  `>=`(5)
+
+1:10 %>%
+  is_weakly_greater_than(5)
+```

@@ -1,0 +1,356 @@
+---
+title: Data Wrangling with dplyr - Part 2
+author: Aravind Hebali
+date: '2017-12-17'
+slug: data-wrangling-with-dplyr-part-2
+categories:
+  - data wrangling
+tags:
+  - dplyr
+  - joins
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In the previous <a href="https://blog.aravindhebbali.com/2017/12/25/data-wrangling-with-dplyr-part-1/">post</a>,
+we learnt about dplyr verbs and used them to compute average order value for an
+online retail company data. In this post, we will learn to combine tables using
+different <code>*_join</code> functions provided in dplyr.</p>
+</div>
+<div id="libraries-code-data" class="section level2">
+<h2>Libraries, Code &amp; Data</h2>
+<p>We will use the following packages:</p>
+<ul>
+<li><a href="http://dplyr.tidyverse.org/index.html">dplyr</a></li>
+<li><a href="http://readr.tidyverse.org/index.html">readr</a></li>
+</ul>
+<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a>
+and the codes from <a href="https://gist.github.com/aravindhebbali/3e31f13a4194a8f1003034aa7d70d5ee">here</a>.</p>
+<pre class="r"><code>library(dplyr)
+library(readr)
+options(tibble.width = Inf)</code></pre>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case Study</h2>
+<p>For our case study, we will use two data sets. The first one, <code>order</code>, contains
+details of orders placed by different customers. The second data set, <code>customer</code>
+contains details of each customer. The below table displays the details stored
+in each data set.</p>
+<center>
+<img src = "/post/join_data.png" width = "800" height = "250">
+</center>
+<p>Let us import both the data sets using <code>read_csv</code>.</p>
+<div id="data-orders" class="section level3">
+<h3>Data: Orders</h3>
+<pre class="r"><code>order &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv&#39;)
+order</code></pre>
+<pre><code>## # A tibble: 300 x 5
+##       id order_data order_number customer_id amount
+##    &lt;int&gt; &lt;chr&gt;             &lt;int&gt;       &lt;int&gt;  &lt;dbl&gt;
+##  1   368 7/2/2016         543346         352    365
+##  2   286 11/2/2016        543390         305   2064
+##  3    28 2/22/2017        543404          78    432
+##  4   309 3/5/2017         543389         447    480
+##  5     2 12/28/2016       543233         374    235
+##  6    31 12/30/2016       543475          48   2745
+##  7   179 12/21/2016       543155         280   2358
+##  8   484 11/24/2016       543485         445   1031
+##  9   115 9/9/2016         543489         278   1218
+## 10   340 5/6/2017         543246         131   1184
+## # ... with 290 more rows</code></pre>
+</div>
+<div id="data-customers" class="section level3">
+<h3>Data: Customers</h3>
+<pre class="r"><code>customer &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv&#39;)
+customer</code></pre>
+<pre><code>## # A tibble: 91 x 5
+##       id first_name last_name             city       phone          
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;          
+##  1     1 Elbertine  Robertucci            California 1-(805)951-9083
+##  2     2 Marcella   Kilshall              Colorado   1-(303)642-9320
+##  3     3 Daria      de la Valette Parisot Florida    1-(352)629-9125
+##  4     4 Sherilyn   Widd                  Distric... 1-(202)453-3897
+##  5     5 Ketty      Cridlin               Texas      1-(214)455-2169
+##  6     6 Jethro     Lubomirski            California 1-(510)278-9668
+##  7     7 Jeremiah   Carrabot              California 1-(559)713-9864
+##  8     8 Constancia Eastmead              Texas      1-(806)550-1701
+##  9     9 Muire      Prestwich             Idaho      1-(208)811-7437
+## 10    10 Abigail    Craigs                Texas      1-(469)653-1340
+## # ... with 81 more rows</code></pre>
+<p>We will explore the following in the case study:</p>
+<ul>
+<li>details of customers who have placed orders and their order details</li>
+<li>details of customers and their orders irrespective of whether a customer has
+placed orders or not</li>
+<li>customer details for each order</li>
+<li>details of customers who have placed orders</li>
+<li>details of customers who have not placed orders</li>
+<li>details of all customers and all orders</li>
+</ul>
+</div>
+</div>
+<div id="example-data" class="section level2">
+<h2>Example Data</h2>
+<p>We will use another data set to illustrate how the different joins work. You can
+view the example data sets below.</p>
+<center>
+<img src = "/post/join.png" width = "800" height = "250">
+</center>
+</div>
+<div id="inner-join" class="section level2">
+<h2>Inner Join</h2>
+<center>
+<img src = "/post/draw_inner.png" width = "800" height = "250">
+</center>
+<p>Inner join return all rows from <code>Age</code> where there are matching values in
+<code>Height</code>, and all columns from <code>Age</code> and <code>Height</code>. If there are multiple matches
+between <code>Age</code> and <code>Height</code>, all combination of the matches are returned.</p>
+<div id="case-study-1" class="section level4">
+<h4>Case Study</h4>
+<div id="details-of-customers-who-have-placed-orders-and-their-order-details" class="section level6">
+<h6>Details of customers who have placed orders and their order details</h6>
+<p>To get data for all those customers who have placed orders in the past let us
+join the <code>order</code> data with the <code>customer</code> data using <code>inner_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  inner_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 55 x 9
+##       id first_name last_name  city       phone           order_data
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     
+##  1     2 Marcella   Kilshall   Colorado   1-(303)642-9320 12/28/2016
+##  2     2 Marcella   Kilshall   Colorado   1-(303)642-9320 8/31/2016 
+##  3     5 Ketty      Cridlin    Texas      1-(214)455-2169 1/17/2017 
+##  4     6 Jethro     Lubomirski California 1-(510)278-9668 1/27/2017 
+##  5     7 Jeremiah   Carrabot   California 1-(559)713-9864 6/21/2016 
+##  6     7 Jeremiah   Carrabot   California 1-(559)713-9864 2/13/2017 
+##  7     7 Jeremiah   Carrabot   California 1-(559)713-9864 7/8/2016  
+##  8     8 Constancia Eastmead   Texas      1-(806)550-1701 11/5/2016 
+##  9     8 Constancia Eastmead   Texas      1-(806)550-1701 5/19/2017 
+## 10     9 Muire      Prestwich  Idaho      1-(208)811-7437 12/28/2016
+##    order_number customer_id amount
+##           &lt;int&gt;       &lt;int&gt;  &lt;dbl&gt;
+##  1       543233         374    235
+##  2       543129         334   1150
+##  3       543453         475    346
+##  4       543274         218   2317
+##  5       543423         282    136
+##  6       543379         346   1407
+##  7       543477         483   1914
+##  8       543157         341   2461
+##  9       543117         364   2714
+## 10       543201         207    187
+## # ... with 45 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="left-join" class="section level2">
+<h2>Left Join</h2>
+<center>
+<img src = "/post/draw_left.png" width = "800" height = "250">
+</center>
+<p>Left join return all rows from <code>Age</code>, and all columns from <code>Age</code> and <code>Height</code>.
+Rows in <code>Age</code> with no match in <code>Height</code> will have NA values in the new columns.
+If there are multiple matches between <code>Age</code> and <code>Height</code>, all combinations of
+the matches are returned.</p>
+<div id="case-study-2" class="section level4">
+<h4>Case Study</h4>
+<div id="details-of-customers-and-their-orders-irrespective-of-whether-a-customer-has" class="section level6">
+<h6>Details of customers and their orders irrespective of whether a customer has</h6>
+<p>placed orders or not.</p>
+<p>To get data for all those customers and their orders irrespective of whether a
+customer has placed orders or not let us join the <code>order</code> data with the
+<code>customer</code> data using <code>left_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  left_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 104 x 9
+##       id first_name last_name             city       phone          
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;          
+##  1     1 Elbertine  Robertucci            California 1-(805)951-9083
+##  2     2 Marcella   Kilshall              Colorado   1-(303)642-9320
+##  3     2 Marcella   Kilshall              Colorado   1-(303)642-9320
+##  4     3 Daria      de la Valette Parisot Florida    1-(352)629-9125
+##  5     4 Sherilyn   Widd                  Distric... 1-(202)453-3897
+##  6     5 Ketty      Cridlin               Texas      1-(214)455-2169
+##  7     6 Jethro     Lubomirski            California 1-(510)278-9668
+##  8     7 Jeremiah   Carrabot              California 1-(559)713-9864
+##  9     7 Jeremiah   Carrabot              California 1-(559)713-9864
+## 10     7 Jeremiah   Carrabot              California 1-(559)713-9864
+##    order_data order_number customer_id amount
+##    &lt;chr&gt;             &lt;int&gt;       &lt;int&gt;  &lt;dbl&gt;
+##  1 &lt;NA&gt;                 NA          NA     NA
+##  2 12/28/2016       543233         374    235
+##  3 8/31/2016        543129         334   1150
+##  4 &lt;NA&gt;                 NA          NA     NA
+##  5 &lt;NA&gt;                 NA          NA     NA
+##  6 1/17/2017        543453         475    346
+##  7 1/27/2017        543274         218   2317
+##  8 6/21/2016        543423         282    136
+##  9 2/13/2017        543379         346   1407
+## 10 7/8/2016         543477         483   1914
+## # ... with 94 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="right-join" class="section level2">
+<h2>Right Join</h2>
+<center>
+<img src = "/post/draw_right.png" width = "800" height = "250">
+</center>
+<p>Right join return all rows from <code>Height</code>, and all columns from <code>Age</code> and
+<code>Height</code>. Rows in <code>Height</code> with no match in <code>Age</code> will have NA values in the
+new columns. If there are multiple matches between <code>Age</code> and <code>Height</code>, all
+combinations of the matches are returned.</p>
+<div id="case-study-3" class="section level4">
+<h4>Case Study</h4>
+<div id="customer-details-for-each-order" class="section level6">
+<h6>Customer details for each order</h6>
+<p>To get customer data for all orders, let us join the <code>order</code> data with the
+<code>customer</code> data using <code>right_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  right_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 300 x 9
+##       id first_name last_name city      phone           order_data
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;           &lt;chr&gt;     
+##  1   368 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            7/2/2016  
+##  2   286 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            11/2/2016 
+##  3    28 Avrit      Lerven    Texas     1-(817)651-5322 2/22/2017 
+##  4   309 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            3/5/2017  
+##  5     2 Marcella   Kilshall  Colorado  1-(303)642-9320 12/28/2016
+##  6    31 Clemmie    McKeady   Tennessee 1-(865)334-8263 12/30/2016
+##  7   179 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            12/21/2016
+##  8   484 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            11/24/2016
+##  9   115 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            9/9/2016  
+## 10   340 &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;            5/6/2017  
+##    order_number customer_id amount
+##           &lt;int&gt;       &lt;int&gt;  &lt;dbl&gt;
+##  1       543346         352    365
+##  2       543390         305   2064
+##  3       543404          78    432
+##  4       543389         447    480
+##  5       543233         374    235
+##  6       543475          48   2745
+##  7       543155         280   2358
+##  8       543485         445   1031
+##  9       543489         278   1218
+## 10       543246         131   1184
+## # ... with 290 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="semi-join" class="section level2">
+<h2>Semi Join</h2>
+<center>
+<img src = "/post/draw_semi.png" width = "800" height = "250">
+</center>
+<p>Semi join return all rows from <code>Age</code> where there are matching values in <code>Height</code>,
+keeping just columns from <code>Age</code>. A semi join differs from an inner join because
+an inner join will return one row of <code>Age</code> for each matching row of <code>Height</code>,
+where a semi join will never duplicate rows of <code>Age</code>.</p>
+<div id="case-study-4" class="section level4">
+<h4>Case Study</h4>
+<div id="details-of-customers-who-have-placed-orders" class="section level6">
+<h6>Details of customers who have placed orders</h6>
+<p>To get customer data for all orders, let us join the <code>order</code> data with the
+<code>customer</code> data using <code>semi_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  semi_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 42 x 5
+##       id first_name last_name  city       phone          
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          
+##  1     2 Marcella   Kilshall   Colorado   1-(303)642-9320
+##  2     5 Ketty      Cridlin    Texas      1-(214)455-2169
+##  3     6 Jethro     Lubomirski California 1-(510)278-9668
+##  4     7 Jeremiah   Carrabot   California 1-(559)713-9864
+##  5     8 Constancia Eastmead   Texas      1-(806)550-1701
+##  6     9 Muire      Prestwich  Idaho      1-(208)811-7437
+##  7    15 Valentijn  Reddel     California 1-(562)760-7094
+##  8    16 Monique    Van Zon    Missouri   1-(314)444-6148
+##  9    20 Colette    Doddridge  Texas      1-(214)267-1433
+## 10    28 Avrit      Lerven     Texas      1-(817)651-5322
+## # ... with 32 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="anti-join" class="section level2">
+<h2>Anti Join</h2>
+<center>
+<img src = "/post/draw_anti.png" width = "800" height = "250">
+</center>
+<p>Anti join return all rows from <code>Age</code> where there are not matching values in
+<code>Height</code>, keeping just columns from <code>Age</code>.</p>
+<div id="case-study-5" class="section level4">
+<h4>Case Study</h4>
+<div id="details-of-customers-who-have-not-placed-orders" class="section level6">
+<h6>Details of customers who have not placed orders</h6>
+<p>To get details of customers who have not placed orders, let us join the <code>order</code>
+data with the <code>customer</code> data using <code>anti_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  anti_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 49 x 5
+##       id first_name last_name             city       phone          
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;          
+##  1     1 Elbertine  Robertucci            California 1-(805)951-9083
+##  2     3 Daria      de la Valette Parisot Florida    1-(352)629-9125
+##  3     4 Sherilyn   Widd                  Distric... 1-(202)453-3897
+##  4    10 Abigail    Craigs                Texas      1-(469)653-1340
+##  5    11 Wynne      Roote                 Georgia    1-(404)911-0264
+##  6    12 Pietra     Hynson                Minnesota  1-(651)506-8628
+##  7    13 Bram       Valde                 Iowa       1-(515)637-1353
+##  8    14 Rees       MacAllester           New York   1-(716)187-2661
+##  9    17 Orazio     Boddis                Louisiana  1-(318)313-4592
+## 10    18 Mason      Letterick             Texas      1-(806)351-0113
+## # ... with 39 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="full-join" class="section level2">
+<h2>Full Join</h2>
+<center>
+<img src = "/post/draw_full.png" width = "800" height = "250">
+</center>
+<p>Full join return all rows and all columns from both <code>Age</code> and <code>Height</code>. Where
+there are not matching values, returns NA for the one missing.</p>
+<div id="case-study-6" class="section level4">
+<h4>Case Study</h4>
+<div id="details-of-all-customers-and-all-orders" class="section level6">
+<h6>Details of all customers and all orders</h6>
+<p>To get details of all customers and all orders, let us join the <code>order</code>
+data with the <code>customer</code> data using <code>full_join</code>.</p>
+<pre class="r"><code>customer %&gt;%
+  full_join(order)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 349 x 9
+##       id first_name last_name             city       phone          
+##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                 &lt;chr&gt;      &lt;chr&gt;          
+##  1     1 Elbertine  Robertucci            California 1-(805)951-9083
+##  2     2 Marcella   Kilshall              Colorado   1-(303)642-9320
+##  3     2 Marcella   Kilshall              Colorado   1-(303)642-9320
+##  4     3 Daria      de la Valette Parisot Florida    1-(352)629-9125
+##  5     4 Sherilyn   Widd                  Distric... 1-(202)453-3897
+##  6     5 Ketty      Cridlin               Texas      1-(214)455-2169
+##  7     6 Jethro     Lubomirski            California 1-(510)278-9668
+##  8     7 Jeremiah   Carrabot              California 1-(559)713-9864
+##  9     7 Jeremiah   Carrabot              California 1-(559)713-9864
+## 10     7 Jeremiah   Carrabot              California 1-(559)713-9864
+##    order_data order_number customer_id amount
+##    &lt;chr&gt;             &lt;int&gt;       &lt;int&gt;  &lt;dbl&gt;
+##  1 &lt;NA&gt;                 NA          NA     NA
+##  2 12/28/2016       543233         374    235
+##  3 8/31/2016        543129         334   1150
+##  4 &lt;NA&gt;                 NA          NA     NA
+##  5 &lt;NA&gt;                 NA          NA     NA
+##  6 1/17/2017        543453         475    346
+##  7 1/27/2017        543274         218   2317
+##  8 6/21/2016        543423         282    136
+##  9 2/13/2017        543379         346   1407
+## 10 7/8/2016         543477         483   1914
+## # ... with 339 more rows</code></pre>
+</div>
+</div>
+</div>

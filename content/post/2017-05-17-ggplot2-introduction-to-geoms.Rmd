@@ -1,0 +1,424 @@
+---
+title: 'ggplot2: Introduction to geoms'
+date: '2016-02-05'
+slug: ggplot2-introduction-to-geoms
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+
+### Introduction
+
+<hr>
+
+This is the third post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/ggplot2-quick-tour/), we learnt how to create plots using the `qplot()` function. In this post, we will create some of the most routinely used plots to explore data using the `geom_*` functions. 
+
+```{r geoms1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tibble)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+- [tibble](http://tibble.tidyverse.org/)
+- [dplyr](http://dplyr.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/2d0d5d5b60d0ef0f4d1b227c8fb0335d).
+
+<br>
+
+### Data
+
+<hr>
+
+```{r use, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+<br>
+
+#### Data Dictionary
+
+<hr>
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+<br>
+
+### Scatter Plot
+
+<hr>
+
+A scatter plot displays the relationship between two continuous variables. In ggplot2, we can build a scatter plot using `geom_point()`. Scatterplots can show you visually 
+
+- the strength of the relationship between the variables 
+- the direction of the relationship between the variables 
+- and whether outliers exist
+
+<br>
+
+#### Point
+
+<hr>
+
+```{r geoms2, fig.align='center'}
+ggplot(ecom, aes(x = n_pages, y = duration)) + 
+  geom_point()
+```
+
+<br>
+
+#### Regression Line
+
+<hr>
+
+Fit a regression line or using 
+
+- `geom_abline()`
+- `geom_smooth()`
+
+#### Regression Line
+
+<hr>
+
+```{r geoms5, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() + 
+  geom_abline(intercept = 37.285, slope = -5.344)
+```
+
+<br>
+
+#### Regression Line
+
+<hr>
+
+```{r geoms6, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_smooth(method = 'lm', se = TRUE)
+```
+
+<br>
+
+#### Regression Line
+
+<hr>
+
+```{r geoms7, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_smooth(method = 'loess', se = FALSE)
+```
+
+<br>
+
+#### Horizontal/Vertical Lines
+
+<hr>
+
+Add horizontal or vertical lines using
+
+- `geom_hline()`
+- `geom_vline()`
+
+<br>
+
+#### Horizontal Line
+
+<hr>
+
+```{r geoms4, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_hline(yintercept = 30) 
+```
+
+<br>
+
+#### Vertical Line
+
+<hr>
+
+```{r geoms3, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_vline(xintercept = 5) 
+```
+
+<br>
+
+#### Bar Plot
+
+<hr>
+
+Bar plots present grouped data with rectangular bars. The bars may represent the frequency of the groups or values. Bar plots can be: 
+
+- horizontal 
+- vertical
+- grouped
+- stacked 
+- proportional
+
+<br>
+
+#### Frequency
+
+<hr>
+
+```{r geoms8, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar()
+```
+
+<br>
+
+#### Weight
+
+<hr>
+
+```{r geoms9, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar(aes(weight = order_value))
+```
+
+<br>
+
+#### Stacked Bar Plot
+
+<hr>
+
+```{r geoms10, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar(aes(fill = purchase))
+```
+
+<br>
+
+#### Horizontal Bar Plot
+
+<hr>
+
+```{r geoms11, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar(aes(fill = purchase)) +
+  coord_flip()
+```
+
+<br>
+
+#### Columns
+
+<hr>
+
+```{r geoms12, fig.align='center', fig.height=4}
+device <- c('laptop', 'mobile', 'tablet')
+visits <- c(30000, 12000, 5000)
+traffic <- tibble::tibble(device, visits)
+ggplot(traffic, aes(x = device, y = visits)) +
+  geom_col(fill = 'blue') 
+```
+
+<br>
+
+#### Boxplot
+
+<hr>
+
+- examine the distribution of a variable  
+- detect outliers, boxplots are very handy
+
+<br>
+
+#### Boxplot
+
+<hr>
+
+```{r geoms13, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = n_pages)) +
+  geom_boxplot()
+```
+
+<br>
+
+#### Add Jitter
+
+<hr>
+
+```{r geoms14, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = n_pages)) +
+  geom_boxplot() +
+  geom_jitter()
+```
+
+<br>
+
+#### Histogram
+
+<hr>
+
+Histograms are used to examine:
+
+- distribution of a continuous variable
+- skewness and kurtosis
+
+<br>
+
+#### Histogram
+
+<hr>
+
+```{r geoms15, fig.align='center'}
+ggplot(ecom, aes(x = duration)) +
+  geom_histogram()
+```
+
+<br>
+
+#### Bins
+
+<hr>
+
+```{r geoms16, fig.align='center'}
+ggplot(ecom, aes(x = duration)) +
+  geom_histogram(bins = 5)
+```
+
+<br>
+
+#### Line
+
+<hr>
+
+Line charts are used to examine trends over time.
+
+<br>
+
+#### Data
+
+<hr>
+
+```{r import2, eval=TRUE, message=FALSE}
+gdp <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/gdp.csv')
+gdp
+```
+
+<br>
+
+#### Line Chart
+
+<hr>
+
+```{r geomline1, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line()
+```
+
+<br>
+
+#### Line Color & Type 
+
+<hr>
+
+```{r geomline2, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(color = 'blue', linetype = 'dashed')
+```
+
+<br>
+
+#### Jitter
+
+<hr>
+
+```{r geoms17, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = duration)) +
+  geom_jitter()
+```
+
+<br>
+
+#### Jitter Width & Height
+
+<hr>
+
+```{r geoms18, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = duration)) +
+  geom_jitter(width = 0.25, height = 0.5)
+```
+
+<br>
+
+#### Label
+
+<hr>
+
+```{r geoms20, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_label()
+```
+
+<br>
+
+#### Text
+
+<hr>
+
+```{r geoms19, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_text(check_overlap = TRUE, size = 2)
+```
+
+<br>
+
+#### Text
+
+<hr>
+
+```{r geoms21, fig.align='center'}
+ggplot(mtcars, aes(x = disp, y = mpg, label = rownames(mtcars))) +
+  geom_point() + 
+  geom_text(aes(color = cyl), hjust = 0, nudge_x = 0.05, 
+            size = 2, angle = 45)
+```
+
+<br>
+
+### Summary 
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/ggplot2-introduction-to-aesthetics/), we will learn about aesthetics.
+
+<br>

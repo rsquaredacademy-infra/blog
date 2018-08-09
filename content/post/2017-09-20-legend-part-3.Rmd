@@ -1,0 +1,216 @@
+---
+title: Legend - Part 3
+author: ''
+date: '2017-09-20'
+slug: legend-part-3
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+  - legend
+---
+
+### Introduction
+
+This is the 15th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/legend-part-2/), we learnt how to modify the legend of plots when aesthetics are mapped to variables.If the aesthetics are mapped to variables, ggplot2 automatically creates legends wherever applicable. 
+You may want to modify the appearance of legends. In this module, we will learn to modify the legends when
+`shape` is mapped to categorical variables. If you have mapped shape/size to a discrete variable which has 
+less than six categories, you can use `scale_shape()`
+
+Modify legend when `shape` is mapped to variables. Specifically
+
+- title
+- breaks
+- limits
+- range
+- labels
+- values
+- symbol type
+
+```{r gui1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/446c78bd5cb4a6cb546bd440bc357140).
+
+<br>
+
+### Plot
+
+<hr>
+
+```{r leg29, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl)))
+```
+
+<br>
+
+```{r leg50, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape()
+```
+
+<br>
+
+### Title
+
+<hr>
+
+```{r leg30, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(name = "Cylinders",values = c(4, 12, 24))
+```
+
+<br>
+
+<hr>
+
+```{r leg51, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(name = 'Cylinders')
+```
+
+<br>
+
+### Values
+
+<hr>
+
+```{r leg31, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(values = c(4, 12, 24))
+```
+
+<br>
+
+### Labels
+
+<hr>
+
+```{r leg32, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(values = c(4, 12, 24), labels = c('Four', 'Six', 'Eight'))
+```
+
+<br>
+
+<hr>
+
+```{r leg52, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(labels = c('Four', 'Six', 'Eight'))
+```
+
+<br>
+
+### Limits
+
+<hr>
+
+```{r leg33, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(values = c(4, 12, 24), limits = c(4, 6, 8))
+```
+
+<br>
+
+<hr>
+
+```{r leg53, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(limits = c(4, 6, 8))
+```
+
+<br>
+
+### Breaks
+
+<hr>
+
+```{r leg34, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(values = c(4, 12, 24), breaks = c(4, 6, 8))
+```
+
+<br>
+
+<hr>
+
+```{r leg54, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(breaks = c(4, 6, 8))
+```
+
+<br>
+
+### Symbol
+
+<hr>
+
+```{r leg55, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(solid = FALSE)
+```
+
+<br>
+
+### Putting it all together
+
+<hr>
+
+```{r leg35, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape_manual(name = "Cylinders", labels = c('Four', 'Six', 'Eight'),  
+     values = c(4, 12, 24), limits = c(4, 6, 8), breaks = c(4, 6, 8))
+```
+
+<hr>
+
+```{r leg56, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl))) +
+  scale_shape(solid = FALSE, name = 'Cylinders', limits = c(4, 6, 8),
+    labels = c('Four', 'Six', 'Eight'), breaks = c(4, 6, 8))
+```
+
+
+<br>
+
+### Summary
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/legend-part-4/), we will learn how to modify the legend when `size` is mapped to categorical variables.
+
+<br>

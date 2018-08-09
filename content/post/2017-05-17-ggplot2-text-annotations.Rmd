@@ -1,0 +1,152 @@
+---
+title: 'ggplot2: Text Annotations'
+date: '2016-06-10'
+slug: ggplot2-text-annotations
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+
+### Introduction
+
+<hr>
+
+This is the sixth post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](http://www.rsquaredacademy.com/blog/post/axis-plot-labels/), we learnt to modify the axis and plot labels. In this post, we will learn to add text to the plots.
+
+- add custom text 
+- modify color
+- modify size
+- modify fontface
+- modify angle
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/567094325b5e134b5b4459677206f363).
+
+<br>
+
+#### Annotate
+
+<hr>
+
+We will use the `annotate()` function to add custom text to the plots. You can use the `annotate()` function to add rectangles/segments/pointrange as well but our focus will be on adding text. Let us start with a simple scatter plot.
+
+```{r ann1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+Use `annotate()` to add custom text to a plot. It takes the following arguments:
+
+- `geom`     : specify text
+- `x`        : x axis location
+- `y`        : y axis location
+- `label`    : custom text 
+- `color`    : color of text
+- `size`     : size of text
+- `fontface` : fontface of text
+- `angle`    : angle of text
+
+<br>
+
+#### Add Text
+
+<hr>
+
+```{r ann2, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text')
+```
+
+<br>
+
+#### Color
+
+<hr>
+
+```{r ann4, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text', color = 'red')
+```
+
+<br>
+
+#### Size
+
+<hr>
+
+```{r ann5, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text', size = 6)
+```
+
+<br>
+
+#### Font
+
+<hr>
+
+```{r ann6, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text', fontface = 'bold')
+```
+
+<br>
+
+#### Angle
+
+<hr>
+
+```{r ann7, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text', angle = 25)
+```
+
+<br>
+
+#### Annotate
+
+<hr>
+
+```{r ann3, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  annotate('text', x = 200, y = 30, label = 'Sample Text',
+           color = 'red', size = 6, fontface = 'bold', angle = 25)
+```
+
+<br>
+
+#### Summary
+
+<hr>
+
+<br>
+
+#### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/ggplot2-scatter-plots/), we will build scatter plots.
+
+<br>

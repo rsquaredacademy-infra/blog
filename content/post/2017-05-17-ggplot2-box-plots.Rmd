@@ -1,0 +1,334 @@
+---
+title: 'ggplot2: Box Plots'
+date: '2016-04-21'
+slug: ggplot2-box-plots
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+
+### Introduction
+
+<hr>
+
+This is the 9th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/ggplot2-bar-plots/), we learnt how to build bar charts. In this post, we will 
+
+- build box plots
+- modify box 
+    - color
+    - fill
+    - alpha
+    - line size
+    - line type
+- modify outlier 
+    - color
+    - shape 
+    - size 
+    - alpha
+
+```{r box, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/246091b512a6c006e68374e2d24caf7c).
+
+<br>
+
+### Data
+
+<hr>
+
+```{r import, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+<br>
+
+### Data Dictionary
+
+<hr>
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+<br>
+
+#### Univariate Box Plot
+
+<hr>
+
+```{r box2, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(1), y = n_visit))
+```
+
+<br>
+
+#### Box Plot
+
+<hr>
+
+```{r box3, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit))
+```
+
+<br>
+
+#### Horizontal Box Plot
+
+<hr>   
+
+```{r box4, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit)) +
+  coord_flip()
+```
+
+<br>
+
+#### Notch
+
+<hr>
+
+```{r box5, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit),
+               notch = TRUE) 
+```
+
+<br>
+
+#### Jitter
+
+<hr>
+
+```{r box6, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = n_visit)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, color = 'blue')
+```
+
+<br>
+
+#### Outliers
+
+<hr>
+
+- color
+- shape
+- size
+- alpha
+
+<br>
+
+#### Outlier Color
+
+<hr>
+
+```{r box7, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.color = 'red')
+```
+
+<br>
+
+#### Outlier Shape
+
+<hr>
+
+```{r box8, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.shape = 23)
+```
+
+<br>
+
+#### Outlier Shape
+
+<hr>
+
+```{r box9, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration), outlier.shape = 23) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Outlier Size
+
+<hr>
+
+```{r box10, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration), outlier.size = 3) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Outlier Alpha
+
+<hr>
+
+```{r box11, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.color = 'blue', outlier.alpha = 0.3) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Box Aesthetics
+
+<hr>
+
+- color
+- fill
+- alpha
+- line type
+- line width
+
+<br>
+
+#### Specify Values for Fill
+
+<hr>
+
+```{r box12, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               fill = c('blue', 'red', 'green')) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Map Fill to Variable
+
+<hr>
+
+```{r box13, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration,
+               fill = factor(device))) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Specify Values for Alpha
+
+```{r box14, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               fill = 'blue', alpha = 0.3) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Specify Values for Color
+
+<hr>
+
+```{r box15, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               color = c('blue', 'red', 'green')) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Map Color to Variables
+
+<hr>
+
+```{r box16, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration,
+               color = factor(device))) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Specify Values for Line Width
+
+<hr>
+
+```{r box17, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               size = 1.5) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+#### Specify Values for Line Type
+
+<hr>
+
+```{r box18, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               linetype = 2) +
+  expand_limits(y = c(0, 1100))
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+In this post, we learnt to:
+
+- build box plots
+- modify outlier color, shape, size etc.
+- modify box color
+- modify box line color, size and line type
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/ggplot2-histogram/), we will learn to build histograms.
+
+<br>

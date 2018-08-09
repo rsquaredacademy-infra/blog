@@ -1,0 +1,181 @@
+---
+title: 'ggplot2: Histogram'
+date: '2016-05-06'
+slug: ggplot2-histogram
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+
+
+<p><a href="https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus"><img src="http://i.imgur.com/tXSoThF.png" alt="Twitter" /></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u="><img src="http://i.imgur.com/P3YfQoD.png" alt="Facebook" /></a></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the eleventh post in the series <strong>Elegant Data Visualization with ggplot2</strong>. In the previous <a href="https://rsquaredacademy.github.io/blog/post/ggplot2-box-plots/">post</a>, we learnt to build box plots. In this post, we will learn to</p>
+<ul>
+<li>build histogram</li>
+<li>specify bins</li>
+<li>modify
+<ul>
+<li>color</li>
+<li>fill</li>
+<li>alpha</li>
+<li>bin width</li>
+<li>line type</li>
+<li>line size</li>
+</ul></li>
+<li>map aesthetics to variables</li>
+</ul>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/674bc30cc1539d735bdc4e6210982d1d">here</a>.</p>
+<p><br></p>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<hr>
+<pre class="r"><code>ecom &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;)
+ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 11
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1     1 google   laptop true          10    1.00    693   Czech Republic
+##  2     2 yahoo    tablet true           9    1.00    459   Yemen         
+##  3     3 direct   laptop true           0    1.00    996   Brazil        
+##  4     4 bing     tablet false          3   18.0     468   China         
+##  5     5 yahoo    mobile true           9    1.00    955   Poland        
+##  6     6 yahoo    laptop false          5    5.00    135   South Africa  
+##  7     7 yahoo    mobile true          10    1.00     75.0 Bangladesh    
+##  8     8 direct   mobile true          10    1.00    908   Indonesia     
+##  9     9 bing     mobile false          3   19.0     209   Netherlands   
+## 10    10 google   mobile true           6    1.00    208   Czech Republic
+## # ... with 990 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+<p><br></p>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<hr>
+<ul>
+<li>id: row id</li>
+<li>referrer: referrer website/search engine</li>
+<li>os: operating system</li>
+<li>browser: browser</li>
+<li>device: device used to visit the website</li>
+<li>n_pages: number of pages visited</li>
+<li>duration: time spent on the website (in seconds)</li>
+<li>repeat: frequency of visits</li>
+<li>country: country of origin</li>
+<li>purchase: whether visitor purchased</li>
+<li>order_value: order value of visitor (in dollars)</li>
+</ul>
+<p><br></p>
+<div id="histogram" class="section level4">
+<h4>Histogram</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit))</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-bins" class="section level4">
+<h4>Specify Bins</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="fill" class="section level4">
+<h4>Fill</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7, fill = &#39;blue&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="alpha" class="section level4">
+<h4>Alpha</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7, fill = &#39;blue&#39;, alpha = 0.3)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="color" class="section level4">
+<h4>Color</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7, fill = &#39;white&#39;, color = &#39;blue&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist8-1.png" width="672" style="display: block; margin: auto;" />
+<br></p>
+</div>
+<div id="bins-color-fill" class="section level4">
+<h4>Bins, Color &amp; Fill</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7, fill = &#39;blue&#39;, color = &#39;white&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="bin-width" class="section level4">
+<h4>Bin Width</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), binwidth = 2, fill = &#39;blue&#39;, color = &#39;black&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line-type" class="section level4">
+<h4>Line Type</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 5, fill = &#39;white&#39;, 
+    color = &#39;blue&#39;, linetype = 3)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line-size" class="section level4">
+<h4>Line Size</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 5, fill = &#39;white&#39;, 
+    color = &#39;blue&#39;, size = 1.25)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="map-fill-to-variable" class="section level4">
+<h4>Map Fill to Variable</h4>
+<hr>
+<pre class="r"><code>ggplot(ecom) +
+  geom_histogram(aes(n_visit, fill = device), bins = 7)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-histogram_files/figure-html/hist7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next <a href="https://rsquaredacademy.github.io/blog/post/guides-axes/">post</a>, we will learn to modify the axes of a plot.</p>
+<p><br></p>
+</div>

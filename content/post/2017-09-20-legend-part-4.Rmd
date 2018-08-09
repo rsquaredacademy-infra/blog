@@ -1,0 +1,149 @@
+---
+title: Legend - Part 4
+author: ''
+date: '2017-09-20'
+slug: legend-part-4
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+  - legend
+---
+
+### Introduction
+
+<hr>
+
+This is the 16th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/legend-part-3/), we learnt how to modify the legend of plot when `shape` is mapped to categorical variables.If the aesthetics are mapped to variables, ggplot2 automatically creates legends wherever applicable. 
+You may want to modify the appearance of legends. In this module, we will learn to modify the legends when
+`size` is mapped to categorical variables.
+
+Modify legend when `size` is mapped to variables. Specifically
+
+- title
+- breaks
+- limits
+- range
+- labels
+- values
+- symbol type
+
+```{r gui1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/9c1e4475fe554377bb3b20acf0b71231).
+
+<br>
+
+### Plot
+
+<hr>
+
+```{r leg36}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp))
+```
+
+<br>
+
+### Title
+
+<hr>
+
+```{r leg37}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(name = "Horsepower")
+```
+
+<br>
+
+### Range
+
+<hr>
+
+```{r leg38}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(range = c(3, 6))
+```
+
+<br>
+
+### Limits
+
+<hr>
+
+```{r leg39}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(limits = c(0, 400))
+```
+
+<br>
+
+### Breaks
+
+<hr>
+
+```{r leg40}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(breaks = c(100, 200, 300, 400))
+```
+
+<br>
+
+### Labels
+
+<hr>
+
+```{r leg41}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(breaks = c(100, 200, 300, 400),
+    labels = c("Hundred", "2 Hundred", "3 Hundred", "4 Hundred"))
+```
+
+<br>
+
+### Putting it all together
+
+<hr>
+
+```{r leg42}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp)) +
+  scale_size_continuous(name = "Horsepower", range = c(3, 6), 
+    limits = c(0, 400), breaks = c(100, 200, 300, 400),
+    labels = c("Hundred", "2 Hundred", "3 Hundred", "4 Hundred"))
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/legend-part-5/), we will learn to modify the legend when `alpha` is mapped to categorical variables. 
+
+<br>

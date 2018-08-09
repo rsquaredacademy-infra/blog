@@ -1,0 +1,205 @@
+---
+title: 'ggplot2: Scatter Plots'
+date: '2016-03-09'
+slug: ggplot2-scatter-plots
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+
+
+<p><a href="https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus"><img src="http://i.imgur.com/tXSoThF.png" alt="Twitter" /></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u="><img src="http://i.imgur.com/P3YfQoD.png" alt="Facebook" /></a></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the fifth post in the series <strong>Elegant Data Visualization with ggplot2</strong>. In the previous <a href="https://rsquaredacademy.github.io/blog/post/ggplot2-text-annotations/">post</a>, we learnt about text annotations. In this post, we will build scatter plots by applying everything we have learnt so far.</p>
+<ul>
+<li>build scatter plots</li>
+<li>modify point
+<ul>
+<li>color</li>
+<li>fill</li>
+<li>alpha</li>
+<li>shape</li>
+<li>size</li>
+</ul></li>
+<li>fit regression line</li>
+</ul>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="">here</a>.</p>
+<p><br></p>
+<div id="basic-plot" class="section level4">
+<h4>Basic Plot</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg))</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="jitter" class="section level4">
+<h4>Jitter</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg), position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="jitter-1" class="section level4">
+<h4>Jitter</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_jitter(aes(disp, mpg))</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="aesthetics" class="section level4">
+<h4>Aesthetics</h4>
+<hr>
+<p>Now let us modify the aesthetics of the points. There are two ways:</p>
+<ul>
+<li>map them to variables using the <code>aes()</code> function</li>
+<li>specify values</li>
+</ul>
+<p><br></p>
+</div>
+<div id="map-color-to-variable-categorical" class="section level4">
+<h4>Map Color to Variable (Categorical)</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = factor(cyl)), 
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="map-color-to-variable-continuous" class="section level4">
+<h4>Map Color to Variable (Continuous)</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp), 
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-value-for-color" class="section level4">
+<h4>Specify Value for Color</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg), color = &#39;blue&#39;, 
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-value-for-alpha" class="section level4">
+<h4>Specify Value for Alpha</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg), color = &#39;blue&#39;, alpha = 0.4, 
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="map-shape-to-variable" class="section level4">
+<h4>Map Shape to Variable</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl)),
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-value-for-shape" class="section level4">
+<h4>Specify Value for Shape</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg), shape = 3,
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="map-size-to-variable" class="section level4">
+<h4>Map Size to Variable</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp), color = &#39;blue&#39;,
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-value-for-size" class="section level4">
+<h4>Specify Value for Size</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg), size = 3,
+             position = &#39;jitter&#39;)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/scat11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="regression-line" class="section level4">
+<h4>Regression Line</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point(position = &#39;jitter&#39;) +
+  geom_smooth(method = &#39;lm&#39;, se = FALSE)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/aes12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="regression-line---conf.-interval" class="section level4">
+<h4>Regression Line - Conf. Interval</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point(position = &#39;jitter&#39;) +
+  geom_smooth(method = &#39;lm&#39;, se = TRUE)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/aes13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="regression-line---loess-method" class="section level4">
+<h4>Regression Line - Loess Method</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point(position = &#39;jitter&#39;) +
+  geom_smooth(method = &#39;loess&#39;, se = FALSE)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/aes14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="fit-line---intercept-slope" class="section level4">
+<h4>Fit Line - Intercept &amp; Slope</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point(position = &#39;jitter&#39;) +
+  geom_abline(slope = 29.59985, intercept = -0.04122)</code></pre>
+<p><img src="/post/2017-05-17-ggplot2-scatter-plots_files/figure-html/aes17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we learnt to:</p>
+<ul>
+<li>build scatter plots</li>
+<li>map aesthetics to variables</li>
+<li>modify axis and legend</li>
+<li>fit regression line</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next <a href="https://rsquaredacademy.github.io/blog/post/ggplot2-line-graphs/">post</a>, we will learn to build line charts.</p>
+<p><br></p>
+</div>

@@ -1,0 +1,155 @@
+---
+title: 'Legend - Part 2'
+date: '2017-07-06'
+slug: legend-part-2
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+draft: yes
+---
+
+### Introduction
+
+<hr>
+
+This is the 14th post in the series **Elegant Data Visualization with ggplot2**. In the previos [post](https://rsquaredacademy.github.io/blog/post/guides-legends/), we learnt how to modify the legend of plots when aesthetics are mapped to variables. In this post, we will continue to explore different ways to modify/customize the legend of plots.
+
+
+```{r gui1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+If the aesthetics are mapped to variables, ggplot2 automatically creates legends wherever applicable. 
+You may want to modify the appearance of legends. In this module, we will learn to modify the legends when
+`fill` is mapped to categorical variables.
+
+Modify legend when `fill` is mapped to variables. Specifically
+
+- title
+- breaks
+- limits
+- labels
+- values
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/ef2b665173cf7cfe17093f3dcb052035).
+
+<br>
+
+### Plot
+
+<hr>
+
+```{r leg22}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22)
+```
+
+<br>
+
+### Title
+
+<hr>
+
+```{r leg23}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(name = "Cylinders", 
+    values = c("red", "blue", "green"))
+```
+
+<br>
+
+### Values
+
+<hr>
+
+```{r leg24}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"))
+```
+
+<br>
+
+### Labels
+
+<hr>
+
+```{r leg25}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    labels = c('Four', 'Six', 'Eight'))
+```
+
+<br>
+
+### Limits
+
+<hr>
+
+```{r leg26}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    limits = c(4, 6, 8))
+```
+
+<br>
+
+### Breaks
+
+<hr>
+
+```{r leg27}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    breaks = c(4, 6, 8))
+```
+
+<br>
+
+### Putting it all together...
+
+<hr>
+
+```{r leg28}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(name = "Cylinders", values = c("red", "blue", "green"),
+    labels = c('Four', 'Six', 'Eight'), limits = c(4, 6, 8), breaks = c(4, 6, 8))
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/legend-part-3/), we will learn to modify the legend when 
+`shape` is mapped to categorical variables.
+
+<br>
+
+

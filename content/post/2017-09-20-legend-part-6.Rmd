@@ -1,0 +1,336 @@
+---
+title: Legend - Part 6
+author: ''
+date: '2017-09-20'
+slug: legend-part-6
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+  - legend
+---
+
+### Introduction
+
+<hr>
+
+This is the 18th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/legend-part-5/), we learnt how to modify the legend of plot when `alpha` is mapped to a categorical variable. In this post, we will learn to modify legend
+
+- title
+- label
+-  and bar
+
+<br>
+
+```{r load, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/a77a836e7e06c61c28ba7db3a69e1510).
+
+<br>
+
+### Title
+
+<hr>
+
+- position
+    - top
+    - bottom
+    - left
+    - right
+- alignment
+    - 0 (left)
+    - 1 (right)
+
+
+<br>
+
+### Legend Title
+
+<hr>
+
+```{r leg1, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(title = "Cylinders"))
+```
+
+<br>
+
+### Title Alignment
+
+<hr>
+
+```{r leg2, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(title = "Cylinders", title.hjust = 0.5))
+```
+
+<br>
+
+### Title Position
+
+<hr>
+
+```{r leg3, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(title = "Cylinders", title.hjust = 0.5, 
+      title.position = "top"))
+```
+
+<br>
+
+### Label
+
+<hr>
+
+- position
+    - top
+    - bottom
+    - left 
+    - right
+- alignment 
+    - 0 (left)
+    - 1 (right)
+- direction
+    - horizontal
+    - vertical
+- reverse
+    - TRUE
+    - FALSE
+- rows
+
+<br>
+
+### Label Position
+
+<hr>
+
+```{r leg4, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(label.position = "right"))
+```
+
+<br>
+
+### Label Alignment
+
+<hr>
+
+```{r leg5, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(label.hjust = 0.5))
+```
+
+<br>
+
+### Direction
+
+<hr>
+
+```{r leg6, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(direction = "horizontal"))
+```
+
+<br>
+
+### Rows
+
+<hr>
+
+```{r leg7, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(nrow = 2))
+```
+
+<br>
+
+### Reverse
+
+<hr>
+
+```{r leg8, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(reverse = TRUE))
+```
+
+<br>
+
+### Guides
+
+<hr>
+
+```{r leg20, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c("red", "blue", "green"),
+    guide = guide_legend(title = "Cylinders", title.hjust = 0.5, 
+      title.position = "top", label.position = "right", 
+      direction = "horizontal", label.hjust = 0.5, nrow = 2, reverse = TRUE)
+  )
+```
+
+<br>
+
+### Title Alignment (Vertical)
+
+<hr>
+
+```{r leg22, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    title = "Horsepower", title.position = "top", title.vjust = 1))
+```
+
+<br>
+
+### Labels Alignment (Vertical)
+
+<hr>
+
+```{r leg23, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    label.vjust = 0.8))
+```
+
+<br>
+
+### Legend Bar 
+
+<hr>
+
+- width
+- height
+- bins
+- ticks
+- limits
+
+<br>
+
+### Legend Bar Width
+
+<hr>
+
+```{r leg24, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barwidth = 10))
+```
+
+<br>
+
+### Legend Bar Height
+
+<hr>
+
+```{r leg25, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barheight = 3))
+```
+
+<br>
+
+### Legend Bar Bins
+
+<hr>
+
+```{r leg26, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    nbin = 4))
+```
+
+<br>
+
+### Legend Bar Ticks
+
+<hr>
+
+```{r leg28, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    ticks = FALSE))
+```
+
+<br>
+
+### Legend Bar Upper/Lower Limits
+
+<hr>
+
+```{r leg29, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    draw.ulim = TRUE, draw.llim = FALSE))
+```
+
+<br>
+
+### Guides
+
+<hr>
+
+```{r leg34, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, 
+    size = qsec, shape = factor(gear))) + 
+  guides(color = "colorbar", shape = "legend", size = "legend")
+```
+
+<br>
+
+### Guides: Color, Shape & Size
+
+<hr>
+
+```{r leg35, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, size = wt, shape = factor(gear))) + 
+  guides(color = guide_colorbar(title = "Horsepower"),
+    shape = guide_legend(title = "Weight"), size = guide_legend(title = "Gear")
+  )
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/overlapping/), we will learn how to position the geoms to avoid overlapping. 
+
+<br>

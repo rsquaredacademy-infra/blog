@@ -1,0 +1,17 @@
+---
+title: RStudio 2 GitHub - Introduction
+date: '2016-09-08'
+slug: introduction-to-version-control
+topics:
+  - Git and GitHub
+tags:
+  - git
+  - github
+  - version control
+  - rstudio
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+

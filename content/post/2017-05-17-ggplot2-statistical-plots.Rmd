@@ -1,0 +1,151 @@
+---
+title: 'ggplot2: Statistical Plots'
+date: '2016-05-23'
+slug: ggplot2-statistical-plots
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)
+
+### Introduction
+
+<hr>
+
+This is the 19th post in the series **Elegant Data Visualization with ggplot2**. In the previous [post](https://rsquaredacademy.github.io/blog/post/overlapping/), we learnt to position geoms to avoid overlapping. In this post, we will explore an alternative method to build plots.
+
+```{r stat, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+So far we have used `geom_*()` functions to build plots. Now we will use a new set of functions `stat_*()`: 
+
+- `stat_count()`
+- `stat_boxplot()`
+- `stat_identity()`
+- `stat_bin()`
+- `stat_unique()`
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/427ca668cbb5f0dfe70138b618775da9).
+
+<br>
+
+### Data
+
+<hr>
+
+```{r import, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+<br>
+
+### Data Dictionary
+
+<hr>
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+<br>
+
+### Bar Plots
+
+<hr>
+
+```{r stat2, fig.align='center'}
+ggplot(ecom) +
+  stat_count(aes(device))
+```
+
+<br>
+
+### Box Plots
+
+<hr>
+
+```{r stat3, fig.align='center'}
+ggplot(ecom) +
+  stat_boxplot(aes(factor(1), n_visit))
+```
+
+<br>
+
+### Scatter Plots
+
+<hr>
+
+```{r stat4, fig.align='center'}
+ggplot(ecom) +
+  stat_identity(aes(n_pages, duration), position = 'jitter')
+```
+
+<br>
+
+### Histogram
+
+<hr>
+
+```{r stat5, fig.align='center'}
+ggplot(ecom) +
+  stat_bin(aes(n_visit), bins = 7, fill = 'blue', alpha = 0.3,
+           color = 'black')
+```
+
+<br>
+
+### Unique Values
+
+<hr>
+
+```{r stat6, fig.align='center'}
+ggplot(ecom) +
+  stat_unique(aes(n_pages, duration), 
+              position = 'jitter')
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+In this post, we learnt about the functions underlying the `geom_*()` family of functions. 
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next [post](https://rsquaredacademy.github.io/blog/post/ggplot2-facets-combine-multiple-plots/), we will learn about faceting i.e. combining plots.
+
+<br>
+

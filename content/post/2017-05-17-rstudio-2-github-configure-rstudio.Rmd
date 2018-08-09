@@ -1,0 +1,15 @@
+---
+title: RStudio 2 GitHub - Configure RStudio
+date: '2016-10-22'
+slug: configure-rstudio
+topics:
+  - git and github
+tags:
+  - git
+  - github
+  - version control
+draft: yes
+---
+
+[![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
+[![Facebook](http://i.imgur.com/P3YfQoD.png)](https://www.facebook.com/sharer/sharer.php?u=)

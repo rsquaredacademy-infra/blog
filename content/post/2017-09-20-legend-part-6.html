@@ -1,0 +1,284 @@
+---
+title: Legend - Part 6
+author: ''
+date: '2017-09-20'
+slug: legend-part-6
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+  - legend
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the 18th post in the series <strong>Elegant Data Visualization with ggplot2</strong>. In the previous <a href="https://rsquaredacademy.github.io/blog/post/legend-part-5/">post</a>, we learnt how to modify the legend of plot when <code>alpha</code> is mapped to a categorical variable. In this post, we will learn to modify legend</p>
+<ul>
+<li>title</li>
+<li>label</li>
+<li>and bar</li>
+</ul>
+<p><br></p>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/a77a836e7e06c61c28ba7db3a69e1510">here</a>.</p>
+<p><br></p>
+</div>
+<div id="title" class="section level3">
+<h3>Title</h3>
+<hr>
+<ul>
+<li>position
+<ul>
+<li>top</li>
+<li>bottom</li>
+<li>left</li>
+<li>right</li>
+</ul></li>
+<li>alignment
+<ul>
+<li>0 (left)</li>
+<li>1 (right)</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="legend-title" class="section level3">
+<h3>Legend Title</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-alignment" class="section level3">
+<h3>Title Alignment</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-position" class="section level3">
+<h3>Title Position</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5, 
+      title.position = &quot;top&quot;))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="label" class="section level3">
+<h3>Label</h3>
+<hr>
+<ul>
+<li>position
+<ul>
+<li>top</li>
+<li>bottom</li>
+<li>left</li>
+<li>right</li>
+</ul></li>
+<li>alignment
+<ul>
+<li>0 (left)</li>
+<li>1 (right)</li>
+</ul></li>
+<li>direction
+<ul>
+<li>horizontal</li>
+<li>vertical</li>
+</ul></li>
+<li>reverse
+<ul>
+<li>TRUE</li>
+<li>FALSE</li>
+</ul></li>
+<li>rows</li>
+</ul>
+<p><br></p>
+</div>
+<div id="label-position" class="section level3">
+<h3>Label Position</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(label.position = &quot;right&quot;))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="label-alignment" class="section level3">
+<h3>Label Alignment</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(label.hjust = 0.5))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="direction" class="section level3">
+<h3>Direction</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(direction = &quot;horizontal&quot;))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="rows" class="section level3">
+<h3>Rows</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(nrow = 2))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="reverse" class="section level3">
+<h3>Reverse</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(reverse = TRUE))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="guides" class="section level3">
+<h3>Guides</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5, 
+      title.position = &quot;top&quot;, label.position = &quot;right&quot;, 
+      direction = &quot;horizontal&quot;, label.hjust = 0.5, nrow = 2, reverse = TRUE)
+  )</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-alignment-vertical" class="section level3">
+<h3>Title Alignment (Vertical)</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    title = &quot;Horsepower&quot;, title.position = &quot;top&quot;, title.vjust = 1))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="labels-alignment-vertical" class="section level3">
+<h3>Labels Alignment (Vertical)</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    label.vjust = 0.8))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar" class="section level3">
+<h3>Legend Bar</h3>
+<hr>
+<ul>
+<li>width</li>
+<li>height</li>
+<li>bins</li>
+<li>ticks</li>
+<li>limits</li>
+</ul>
+<p><br></p>
+</div>
+<div id="legend-bar-width" class="section level3">
+<h3>Legend Bar Width</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barwidth = 10))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar-height" class="section level3">
+<h3>Legend Bar Height</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barheight = 3))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar-bins" class="section level3">
+<h3>Legend Bar Bins</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    nbin = 4))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar-ticks" class="section level3">
+<h3>Legend Bar Ticks</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    ticks = FALSE))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg28-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar-upperlower-limits" class="section level3">
+<h3>Legend Bar Upper/Lower Limits</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    draw.ulim = TRUE, draw.llim = FALSE))</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="guides-1" class="section level3">
+<h3>Guides</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, 
+    size = qsec, shape = factor(gear))) + 
+  guides(color = &quot;colorbar&quot;, shape = &quot;legend&quot;, size = &quot;legend&quot;)</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="guides-color-shape-size" class="section level3">
+<h3>Guides: Color, Shape &amp; Size</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, size = wt, shape = factor(gear))) + 
+  guides(color = guide_colorbar(title = &quot;Horsepower&quot;),
+    shape = guide_legend(title = &quot;Weight&quot;), size = guide_legend(title = &quot;Gear&quot;)
+  )</code></pre>
+<p><img src="/post/2017-09-20-legend-part-6_files/figure-html/leg35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next <a href="https://rsquaredacademy.github.io/blog/post/overlapping/">post</a>, we will learn how to position the geoms to avoid overlapping.</p>
+<p><br></p>
+</div>

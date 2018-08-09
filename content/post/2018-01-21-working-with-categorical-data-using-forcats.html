@@ -1,0 +1,421 @@
+---
+title: Working with Categorical Data using forcats
+author: Aravind Hebbali
+date: '2018-01-21'
+slug: working-with-categorical-data-using-forcats
+categories:
+  - data wrangling
+tags:
+  - forcats
+  - factor
+  - categorical
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this post, we will learn to work with categorical/qualitative data in R using <a href="http://forcats.tidyverse.org">forcats</a>. Let us begin by installing and loading forcats and a set of other pacakges we will be using.</p>
+</div>
+<div id="libraries-code" class="section level2">
+<h2>Libraries &amp; Code</h2>
+<p>We will use the following packages:</p>
+<ul>
+<li><a href="http://forcats.tidyverse.org/index.html">forcats</a></li>
+<li><a href="http://dplyr.tidyverse.org/index.html">dplyr</a></li>
+<li><a href="http://magrittr.tidyverse.org/index.html">magrittr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/index.html">ggplot2</a></li>
+<li><a href="http://tibble.tidyverse.org/index.html">tibbe</a></li>
+<li><a href="http://purrr.tidyverse.org/index.html">purrr</a></li>
+<li>and <a href="http://readr.tidyverse.org/index.html">readr</a></li>
+</ul>
+<p>The codes from <a href="https://gist.github.com/aravindhebbali/85fac536f563ae3fd8e2605fd56a7086">here</a>.</p>
+<pre class="r"><code>library(forcats)
+library(tibble)
+library(magrittr)
+library(purrr)
+library(dplyr)
+library(ggplot2)
+library(readr)</code></pre>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case Study</h2>
+<p>We will use a case study to explore the various features of the forcats package. You can download the data for the case study from <a href="https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv">here</a> or directly import the data using the readr package. We will do the following in this case study:</p>
+<ul>
+<li>compute the frequency of different referrers</li>
+<li>plot average number of pages browsed for different referrers</li>
+<li>collapse referrers with low sample size into a single group</li>
+<li>club traffic from social media websites into a new category</li>
+<li>group referrers with traffic below a threshold into a single category</li>
+</ul>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<pre class="r"><code>ecom &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
+                 col_types = list(col_integer(), 
+                                  col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)), 
+                                  col_factor(levels = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)), 
+                                  col_logical(), col_number(),
+                                  col_number(), col_number(), col_character(), 
+                                  col_logical(), col_number(), col_number()))
+
+ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 11
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1     1 google   laptop T          10.0     1.00    693   Czech Republic
+##  2     2 yahoo    tablet T           9.00    1.00    459   Yemen         
+##  3     3 direct   laptop T           0       1.00    996   Brazil        
+##  4     4 bing     tablet F           3.00   18.0     468   China         
+##  5     5 yahoo    mobile T           9.00    1.00    955   Poland        
+##  6     6 yahoo    laptop F           5.00    5.00    135   South Africa  
+##  7     7 yahoo    mobile T          10.0     1.00     75.0 Bangladesh    
+##  8     8 direct   mobile T          10.0     1.00    908   Indonesia     
+##  9     9 bing     mobile F           3.00   19.0     209   Netherlands   
+## 10    10 google   mobile T           6.00    1.00    208   Czech Republic
+## # ... with 990 more rows, and 3 more variables: purchase &lt;lgl&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<ul>
+<li>id: row id</li>
+<li>referrer: referrer website/search engine</li>
+<li>os: operating system</li>
+<li>browser: browser</li>
+<li>device: device used to visit the website</li>
+<li>n_pages: number of pages visited</li>
+<li>duration: time spent on the website (in seconds)</li>
+<li>repeat: frequency of visits</li>
+<li>country: country of origin</li>
+<li>purchase: whether visitor purchased</li>
+<li>order_value: order value of visitor (in dollars)</li>
+</ul>
+</div>
+</div>
+<div id="tabulate-referrers" class="section level2">
+<h2>Tabulate Referrers</h2>
+<p>Let us look at the traffic driven by different referrers.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_count</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f          n
+##   &lt;fct&gt;  &lt;int&gt;
+## 1 bing     194
+## 2 direct   191
+## 3 social   200
+## 4 yahoo    207
+## 5 google   208</code></pre>
+<p>If you want to sort the output in descending order, use <code>sort</code> and set it to <code>TRUE</code>.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_count(sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f          n
+##   &lt;fct&gt;  &lt;int&gt;
+## 1 google   208
+## 2 yahoo    207
+## 3 social   200
+## 4 bing     194
+## 5 direct   191</code></pre>
+</div>
+<div id="reorder-referrers" class="section level2">
+<h2>Reorder Referrers</h2>
+<p>We want to examine the average number of pages visited by each referrer type.</p>
+<pre class="r"><code>refer_summary &lt;- 
+  ecom %&gt;%
+  group_by(referrer) %&gt;%
+  summarise(
+    page = mean(n_pages),
+    tos = mean(duration),
+    n = n()
+  )
+
+refer_summary</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##   referrer  page   tos     n
+##   &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 bing      6.13   368   194
+## 2 direct    6.38   358   191
+## 3 social    5.42   355   200
+## 4 yahoo     5.99   336   207
+## 5 google    5.73   360   208</code></pre>
+<p>Let us plot the average number of pages visited by each referrer type.</p>
+<pre class="r"><code>refer_summary %&gt;%
+  ggplot() +
+  geom_point(aes(page, referrer))</code></pre>
+<p><img src="/post/2018-01-21-working-with-categorical-data-using-forcats_files/figure-html/cat10-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Use <code>fct_reorder</code> to reorder the referrer types by the average number of pages
+visited.</p>
+<pre class="r"><code>refer_summary %&gt;%
+  ggplot() +
+  geom_point(aes(page, fct_reorder(referrer, page)))</code></pre>
+<p><img src="/post/2018-01-21-working-with-categorical-data-using-forcats_files/figure-html/cat11-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-referrer-frequency-descending-order" class="section level2">
+<h2>Plot Referrer Frequency (Descending Order)</h2>
+<p>Let us look at the distribution of the referreres.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_count(sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f          n
+##   &lt;fct&gt;  &lt;int&gt;
+## 1 google   208
+## 2 yahoo    207
+## 3 social   200
+## 4 bing     194
+## 5 direct   191</code></pre>
+<p>Use <code>fct_unique</code> to view the categories or levels of the referrer variable.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_unique</code></pre>
+<pre><code>## [1] bing   direct social yahoo  google
+## Levels: bing direct social yahoo google</code></pre>
+<p>Since we want to plot the referrers in descending order of frequency, we will
+use <code>fct_infreq()</code> to reorder by frequency.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_infreq %&gt;%
+  fct_unique</code></pre>
+<pre><code>## [1] google yahoo  social bing   direct
+## Levels: google yahoo social bing direct</code></pre>
+<p>Now that we have reordered the referrers by frequency, let us plot them.</p>
+<pre class="r"><code>ecom %&gt;%
+  mutate(
+    ref = referrer %&gt;% 
+      fct_infreq
+  ) %&gt;%
+  ggplot(aes(ref)) +
+  geom_bar()</code></pre>
+<p><img src="/post/2018-01-21-working-with-categorical-data-using-forcats_files/figure-html/cat4-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-referrer-frequency-ascending-order" class="section level2">
+<h2>Plot Referrer Frequency (Ascending Order)</h2>
+<p>Let us look at the categories of the referrer variable.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_unique</code></pre>
+<pre><code>## [1] bing   direct social yahoo  google
+## Levels: bing direct social yahoo google</code></pre>
+<p>Since we want to plot the referrers in ascending order of frequency, we will
+use <code>fct_rev()</code> to reverse the order.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(referrer) %&gt;%
+  fct_rev %&gt;%
+  fct_unique</code></pre>
+<pre><code>## [1] google yahoo  social direct bing  
+## Levels: google yahoo social direct bing</code></pre>
+<p>Let us reorder the referrers by frequency first and then reverse the order
+before plotting their frequencies.</p>
+<pre class="r"><code>ecom %&gt;%
+  mutate(
+    ref = referrer %&gt;% 
+      fct_infreq %&gt;% 
+      fct_rev
+  ) %&gt;%
+  ggplot(aes(ref)) +
+  geom_bar()</code></pre>
+<p><img src="/post/2018-01-21-working-with-categorical-data-using-forcats_files/figure-html/cat5-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="case-study-2" class="section level2">
+<h2>Case Study 2</h2>
+<div id="data-1" class="section level3">
+<h3>Data</h3>
+<pre class="r"><code>traffic &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv&#39;,
+  col_types = list(col_factor(levels = c(&quot;affiliates&quot;, &quot;bing&quot;, &quot;direct&quot;, &quot;facebook&quot;, &quot;yahoo&quot;, &quot;google&quot;,
+    &quot;instagram&quot;, &quot;twitter&quot;, &quot;unknown&quot;))))
+
+traffic</code></pre>
+<pre><code>## # A tibble: 48,232 x 1
+##    traffics
+##    &lt;fct&gt;   
+##  1 google  
+##  2 google  
+##  3 google  
+##  4 google  
+##  5 google  
+##  6 google  
+##  7 google  
+##  8 google  
+##  9 google  
+## 10 google  
+## # ... with 48,222 more rows</code></pre>
+</div>
+</div>
+<div id="tabulate-referrer" class="section level2">
+<h2>Tabulate Referrer</h2>
+<p>Let us compute the traffic driven by different referrers using <code>fct_count</code>.</p>
+<pre class="r"><code>traffic %&gt;%
+  pull(traffics) %&gt;% 
+  fct_count</code></pre>
+<pre><code>## # A tibble: 9 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 affiliates  7641
+## 2 bing        5893
+## 3 direct      1350
+## 4 facebook    8135
+## 5 yahoo       4899
+## 6 google      9229
+## 7 instagram   3907
+## 8 twitter     4521
+## 9 unknown     2657</code></pre>
+</div>
+<div id="collapse-referrer-categories" class="section level2">
+<h2>Collapse Referrer Categories</h2>
+<p>We want to group the referrers into 2 categories:</p>
+<ul>
+<li>social</li>
+<li>search</li>
+</ul>
+<p>Use <code>fct_collapse()</code> to group categories.</p>
+<pre class="r"><code>traffic %&gt;%
+  pull(traffics) %&gt;%
+  fct_collapse(
+    social = c(&quot;facebook&quot;, &quot;twitter&quot;, &quot;instagram&quot;),
+    search = c(&quot;google&quot;, &quot;bing&quot;, &quot;yahoo&quot;)
+  ) %&gt;% 
+  fct_count</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 affiliates  7641
+## 2 search     20021
+## 3 direct      1350
+## 4 social     16563
+## 5 unknown     2657</code></pre>
+</div>
+<div id="lump-infrequent-referrer-types" class="section level2">
+<h2>Lump Infrequent Referrer Types</h2>
+<p>Let us group together referrer types that drive low traffic to the website.
+Use <code>fct_lump()</code> to lump together categories.</p>
+<pre class="r"><code>traffic %&gt;%
+  pull(traffics) %&gt;% 
+  fct_count
+## # A tibble: 9 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 affiliates  7641
+## 2 bing        5893
+## 3 direct      1350
+## 4 facebook    8135
+## 5 yahoo       4899
+## 6 google      9229
+## 7 instagram   3907
+## 8 twitter     4521
+## 9 unknown     2657
+
+traffic %&gt;%
+  pull(traffics) %&gt;% 
+  fct_lump %&gt;% 
+  table
+## .
+## affiliates       bing   facebook      yahoo     google  instagram 
+##       7641       5893       8135       4899       9229       3907 
+##    twitter    unknown      Other 
+##       4521       2657       1350</code></pre>
+</div>
+<div id="retain-top-3-referrers" class="section level2">
+<h2>Retain top 3 referrers</h2>
+<p>We want to retain the top 3 referrers and combine the rest of them into a
+single category.</p>
+<pre><code>## # A tibble: 9 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 google      9229
+## 2 facebook    8135
+## 3 affiliates  7641
+## 4 bing        5893
+## 5 yahoo       4899
+## 6 twitter     4521
+## 7 instagram   3907
+## 8 unknown     2657
+## 9 direct      1350</code></pre>
+<p>Use <code>fct_lump()</code> and set the argument <code>n</code> to <code>3</code> indicating we want to
+retain top 3 categories and combine the rest.</p>
+<pre class="r"><code>traffic %&gt;% 
+  pull(traffics) %&gt;% 
+  fct_lump(n = 3) %&gt;% 
+  table</code></pre>
+<pre><code>## .
+## affiliates   facebook     google      Other 
+##       7641       8135       9229      23227</code></pre>
+</div>
+<div id="lump-referrer-types-with-less-than-10-traffic" class="section level2">
+<h2>Lump Referrer Types with less than 10% traffic</h2>
+<p>Let us combine referrers that drive less than 10% traffic to the website.</p>
+<pre><code>## # A tibble: 9 x 3
+##   f              n percent
+##   &lt;fct&gt;      &lt;int&gt;   &lt;dbl&gt;
+## 1 affiliates  7641   15.8 
+## 2 bing        5893   12.2 
+## 3 direct      1350    2.80
+## 4 facebook    8135   16.9 
+## 5 yahoo       4899   10.2 
+## 6 google      9229   19.1 
+## 7 instagram   3907    8.10
+## 8 twitter     4521    9.37
+## 9 unknown     2657    5.51</code></pre>
+<p>Since we are looking at proportion of traffic driven to the website and
+not the actual numbers, we use the <code>prop</code> argument and set it to <code>0.1</code>,
+indicating that we want to retain only those categories which have a
+proportion of more than 10% and combine the rest.</p>
+<pre class="r"><code>traffic %&gt;%
+  pull(traffics) %&gt;% 
+  fct_lump(prop = 0.1) %&gt;% 
+  table</code></pre>
+<pre><code>## .
+## affiliates       bing   facebook      yahoo     google      Other 
+##       7641       5893       8135       4899       9229      12435</code></pre>
+</div>
+<div id="retain-3-referrer-types-with-lowest-traffic" class="section level2">
+<h2>Retain 3 Referrer Types with lowest traffic</h2>
+<p>What if we want to retain 3 referrers which drive the lowest traffic
+to the website and combine the rest?</p>
+<pre><code>## # A tibble: 9 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 direct      1350
+## 2 unknown     2657
+## 3 instagram   3907
+## 4 twitter     4521
+## 5 yahoo       4899
+## 6 bing        5893
+## 7 affiliates  7641
+## 8 facebook    8135
+## 9 google      9229</code></pre>
+<p>We will still use the <code>n</code> argument but instead of specifying <code>3</code>, we now specify <code>-3</code>.</p>
+<pre class="r"><code>traffic %&gt;% 
+  pull(traffics) %&gt;% 
+  fct_lump(n = -3) %&gt;% 
+  table</code></pre>
+<pre><code>## .
+##    direct instagram   unknown     Other 
+##      1350      3907      2657     40318</code></pre>
+</div>
+<div id="retain-3-referrer-types-with-less-than-10-traffic" class="section level2">
+<h2>Retain 3 Referrer Types with less than 10% traffic</h2>
+<p>Let us see how to retain referrers that drive less than 10 % traffic to
+the website and combine the rest into a single group.</p>
+<pre><code>## # A tibble: 9 x 3
+##   f              n percent
+##   &lt;fct&gt;      &lt;int&gt;   &lt;dbl&gt;
+## 1 affiliates  7641   15.8 
+## 2 bing        5893   12.2 
+## 3 direct      1350    2.80
+## 4 facebook    8135   16.9 
+## 5 yahoo       4899   10.2 
+## 6 google      9229   19.1 
+## 7 instagram   3907    8.10
+## 8 twitter     4521    9.37
+## 9 unknown     2657    5.51</code></pre>
+<p>Instead of setting <code>prop</code> to <code>0.1</code>, we will set it to <code>-0.1</code>.</p>
+<pre class="r"><code>traffic %&gt;% 
+  pull(traffics) %&gt;% 
+  fct_lump(prop = -0.1) %&gt;% 
+  table</code></pre>
+<pre><code>## .
+##    direct instagram   twitter   unknown     Other 
+##      1350      3907      4521      2657     35797</code></pre>
+</div>

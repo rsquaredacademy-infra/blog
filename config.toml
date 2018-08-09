@@ -1,0 +1,97 @@
+baseurl = "https://blog.rsquaredacademy.com/"
+relativeurls = true
+languageCode = "en-us"
+title = "Rsquared Academy Blog"
+theme = "blackburn"
+copyright = "&copy; 2014-2018. All rights reserved."
+canonifyurls = true
+paginate = 10
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[indexes]
+  tag = "tags"
+  topic = "topics"
+
+[params]
+  # Shown in the home page
+  subtitle = "Explore..Discover..Learn"
+  brand = "![Rsquared Academy Logo](/img/logos.png)"
+  googleAnalytics = "UA-57270671-6"
+  disqus = ""
+  # CSS name for highlight.js
+  highlightjs = "Github"
+  highlightjs_extra_languages = ["r", "yaml"]
+  dateFormat = "02 Jan 2006"
+
+[menu]
+  # Shown in the side menu.
+  [[menu.main]]
+    name = "Home"
+    pre = "<i class='fa fa-home fa-fw'></i>"
+    weight = 1
+    identifier = "home"
+    url = "/"
+  [[menu.main]]
+    name = "New? Start Here"
+    pre = "<i class='fa fa-play fa-fw'></i>"
+    weight = 2
+    identifier = "start"
+    url = "/start-here"
+  [[menu.main]]
+    name = "Topics"
+    pre = "<i class='fa fa-bars fa-fw'></i>"
+    weight = 4
+    identifier = "topic"
+    url = "/topics"  
+  [[menu.main]]
+    name = "Courses"
+    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
+    weight = 5
+    identifier = "courses"
+    url = "https://www.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = "Shiny Apps"
+    pre = "<i class='fa fa-cube fa-fw'></i>"
+    weight = 6
+    identifier = "app"
+    url = "https://apps.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = "Packages"
+    pre = "<i class='fa fa-code fa-fw'></i>"
+    weight = 7
+    identifier = "package"
+    url = "https://pkgs.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = "Posts"
+    pre = "<i class='fa fa-list fa-fw'></i>"
+    weight = 3
+    identifier = "post"
+    url = "/post/"
+  [[menu.main]]
+    name = "About"
+    pre = "<i class='fa fa-user fa-fw'></i>"
+    weight = 9
+    identifier = "about"
+    url = "/about/"
+  [[menu.main]]
+    name = "Subscribe"
+    pre = "<i class='fa fa-envelope fa-fw'></i>"
+    weight = 10
+    identifier = "subscribe"
+    url = "/subscribe/"
+
+[social]
+  # Link your social networking accounts to the side menu
+  # by entering your username or ID.
+
+  # SNS microblogging
+  twitter = "rsquaredacademy"
+  facebook = "rsquaredacademy"
+
+  # SNS photo/video sharing
+  youtube = "rsquaredin"
+  slideshare = "rsquaredin"
+  linkedin = "rsquared-academy"
+
+  # Techie
+  github = "rsquaredacademy"
