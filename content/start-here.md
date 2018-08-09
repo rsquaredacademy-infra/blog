@@ -10,11 +10,6 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Introduction to R](https://rsquaredacademy.github.io/blog/post/introduction-to-r/)
 - [Introduction to RStudio](https://rsquaredacademy.github.io/blog/post/introduction-to-rstudio/)
 - [Variables & Data Types](https://rsquaredacademy.github.io/blog/post/variables-and-data-types/)
-- [Vectors](https://rsquaredacademy.github.io/blog/post/introduction-to-vectors/)
-- [Matrix](https://rsquaredacademy.github.io/blog/post/introduction-to-matrix/)
-- [Lists](https://rsquaredacademy.github.io/blog/post/introduction-to-lists/)
-- [Factors](https://rsquaredacademy.github.io/blog/post/introduction-to-factors/)
-- [Dataframes](https://rsquaredacademy.github.io/blog/post/introduction-to-dataframes/)
 - [Getting Help in R](https://rsquaredacademy.github.io/blog/post/getting-help-in-r/)
 - [Beginners Guide to R Pacakge Ecosystem](https://rsquaredacademy.github.io/blog/post/beginners-guide-to-r-package-ecosystem/)
 
@@ -68,21 +63,6 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Facets](https://rsquaredacademy.github.io/blog/post/ggplot2-facets-combine-multiple-plots/)
 - [Themes](https://rsquaredacademy.github.io/blog/post/ggplot2-themes/)
 
-### Base 
-
-- [Introduction](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-introduction/)
-- [Title and Axis Labels](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-title-and-axis-labels/)
-- [Scatter Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-scatter-plots/)
-- [Line Graphs](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-line-graphs/)
-- [Bar Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-bar-plots/)
-- [Box Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-box-plots/)
-- [Histogram](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-histogram/)
-- [Legends](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-legends/)
-- [Text Annotations](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-text-annotations/)
-- [Combine Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-combining-plots/)
-- [Miscellaneous](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-font-color-size/)
-
-
 ## RMarkdown 
 
 - [Introduction](https://rsquaredacademy.github.io/blog/post/rmarkdown-tutorial-for-beginners/)
@@ -102,3 +82,26 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Branch Workflow](https://rsquaredacademy.github.io/blog/post/git-branch-workflow/)
 - [Command Line](https://rsquaredacademy.github.io/blog/post/git-command-line/)
 - [GitHub Pages](https://rsquaredacademy.github.io/blog/post/github-pages/)
+
+### Base 
+
+- [Introduction](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-introduction/)
+- [Title and Axis Labels](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-title-and-axis-labels/)
+- [Scatter Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-scatter-plots/)
+- [Line Graphs](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-line-graphs/)
+- [Bar Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-bar-plots/)
+- [Box Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-box-plots/)
+- [Histogram](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-histogram/)
+- [Legends](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-legends/)
+- [Text Annotations](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-text-annotations/)
+- [Combine Plots](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-combining-plots/)
+- [Miscellaneous](https://rsquaredacademy.github.io/blog/post/data-visualization-with-r-font-color-size/)
+
+
+## Data Types/Structures
+
+- [Vectors](https://rsquaredacademy.github.io/blog/post/introduction-to-vectors/)
+- [Matrix](https://rsquaredacademy.github.io/blog/post/introduction-to-matrix/)
+- [Lists](https://rsquaredacademy.github.io/blog/post/introduction-to-lists/)
+- [Factors](https://rsquaredacademy.github.io/blog/post/introduction-to-factors/)
+- [Dataframes](https://rsquaredacademy.github.io/blog/post/introduction-to-dataframes/)
