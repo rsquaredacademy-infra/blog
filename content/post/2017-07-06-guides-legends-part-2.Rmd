@@ -6,7 +6,6 @@ topics:
   - data-visualization
 tags:
   - ggplot2
-draft: yes
 ---
 
 ### Introduction

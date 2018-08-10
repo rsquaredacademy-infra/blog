@@ -8,7 +8,6 @@ tags:
   - git
   - github
   - version control
-draft: yes
 ---
 
 [![Twitter](http://i.imgur.com/tXSoThF.png)](https://twitter.com/login?redirect_after_login=%2Fhome%3Fstatus)
