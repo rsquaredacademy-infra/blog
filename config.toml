@@ -1,10 +1,8 @@
 baseurl = "https://blog.rsquaredacademy.com/"
-relativeurls = true
 languageCode = "en-us"
 title = "Rsquared Academy Blog"
 theme = "blackburn"
 copyright = "&copy; 2014-2018. All rights reserved."
-canonifyurls = true
 paginate = 10
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
