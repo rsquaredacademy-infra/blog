@@ -6,6 +6,9 @@ copyright = "&copy; 2014-2018. All rights reserved."
 paginate = 10
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
+[permalinks]
+post = "/:slug/"
+
 [indexes]
   tag = "tags"
   topic = "topics"
