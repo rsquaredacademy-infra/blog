@@ -1,5 +1,5 @@
 ---
-title: 'ggplot2: Introduction to aesthetics'
+title: ggplot2: Introduction to aesthetics
 date: '2016-02-20'
 slug: ggplot2-introduction-to-aesthetics
 topics:
