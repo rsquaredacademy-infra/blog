@@ -70,7 +70,7 @@ post = "/:slug/"
     url = "/about/"
   [[menu.main]]
     name = "R Bloggers"
-    pre = "<i class='fa fa-blogger fa-fw'></i>"
+    pre = "<i class='fa fa-cubes fa-fw'></i>"
     weight = 9
     identifier = "package"
     url = "https://r-bloggers.com/" 
