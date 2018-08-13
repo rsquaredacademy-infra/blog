@@ -63,17 +63,17 @@ post = "/:slug/"
     identifier = "package"
     url = "https://pkgs.rsquaredacademy.com/" 
   [[menu.main]]
-    name = "Posts"
-    pre = "<i class='fa fa-list fa-fw'></i>"
-    weight = 3
-    identifier = "post"
-    url = "/post/"
-  [[menu.main]]
     name = "About"
     pre = "<i class='fa fa-user fa-fw'></i>"
-    weight = 9
+    weight = 8
     identifier = "about"
     url = "/about/"
+  [[menu.main]]
+    name = "R Bloggers"
+    pre = "<i class='fa fa-blogger fa-fw'></i>"
+    weight = 9
+    identifier = "package"
+    url = "https://r-bloggers.com/" 
 
 [social]
   # Link your social networking accounts to the side menu
