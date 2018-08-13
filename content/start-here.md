@@ -18,7 +18,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 - [Getting started with tidyverse](/post/getting-started-with-tidyverse/)
 - [Introduction to tibbles](/post/introduction-to-tibbles/)
-- [A Complete Guide to Importing Data into R - Part 1](import-data-into-r-part-1/)
+- <a href="https://blog.rsquaredacademy.com/import-data-into-r-part-1/" target="_blank">A Complete Guide to Importing Data into R - Part 1</a>
 - [A Complete Guide to Importing Data into R - Part 2](/post/import-data-into-r-part-2/)
 - [A Complete Guide to Importing Data into R - Part 3](/post/a-complete-guide-to-importing-data-into-r-part-3/)
 - [Readable Code with Pipes](/post/readable-code-with-pipes/)

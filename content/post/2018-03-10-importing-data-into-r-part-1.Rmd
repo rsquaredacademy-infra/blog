@@ -104,7 +104,7 @@ read_csv('hsb3.csv', col_names = cnames)
 
 ### Skip Lines
 
-```{r img7, fig.align='center', echo=FALSE}
+```{r img7, fig.align='center', echo=FALSE, out.width="80%"}
 knitr::include_graphics('/img/mtcars_skip.png')
 ```
 
@@ -171,7 +171,7 @@ read_csv('hsb2.csv', col_types = cols_only(id = col_integer(),
 
 ## Summary
 
-```{r img10, fig.align='center', echo=FALSE}
+```{r img10, fig.align='center', echo=FALSE, out.width="80%"}
 knitr::include_graphics('/img/import_funca.png')
 ```
 
