@@ -2,7 +2,7 @@
 title: "Import Data into R - Part 1"
 author: "Aravind Hebbali"
 date: '2018-03-10'
-twiiterImage: /img/import.png
+twitterImg: /img/import.png
 description: "Learn to read data from flat/delimited files into R."
 slug: import-data-into-r-part-1
 tags:
