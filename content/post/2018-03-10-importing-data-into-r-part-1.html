@@ -32,17 +32,13 @@ topics:
 </div>
 <div id="delimiters" class="section level2">
 <h2>Delimiters</h2>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_comma.png&#39;)</code></pre>
-<p><img src="img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_semicolon.png&#39;)</code></pre>
-<p><img src="img/mtcars_semicolon.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_semicolon.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_space.png&#39;)</code></pre>
-<p><img src="img/mtcars_space.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_space.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_tab.png&#39;)</code></pre>
-<p><img src="img/mtcars_tab.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_tab.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
@@ -100,11 +96,9 @@ topics:
 <h3>Options</h3>
 <div id="column-names" class="section level4">
 <h4>Column Names</h4>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_comma.png&#39;)</code></pre>
-<p><img src="img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_column_false.png&#39;)</code></pre>
-<p><img src="img/mtcars_column_false.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_column_false.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p>Use <code>col_names</code> to indicate whether the data includes column names. It takes two values, <code>TRUE</code> and <code>FALSE</code>. If set to <code>FALSE</code>, readr will generate column names. In the below example, we will read data from a file which does not have column names present in the first row.</p>
 <pre class="r"><code>read_csv(&#39;hsb3.csv&#39;, col_names = FALSE)</code></pre>
@@ -143,8 +137,7 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="skip-lines" class="section level3">
 <h3>Skip Lines</h3>
-<pre class="r"><code>knitr::include_graphics(&#39;img/mtcars_skip.png&#39;)</code></pre>
-<p><img src="img/mtcars_skip.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/mtcars_skip.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p>Use <code>skip</code> to skip a certain number of lines. For example, if the file has contents other than data in the first few lines, we need to skip them before reading the data. In the below example, we will skip the first 3 lines as they contain information about the data set which we do not need.</p>
 <pre class="r"><code>read_csv(&#39;hsb4.csv&#39;, skip = 3)</code></pre>
@@ -184,8 +177,7 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="column-types" class="section level3">
 <h3>Column Types</h3>
-<pre class="r"><code>knitr::include_graphics(&#39;img/column_types_list_canva.png&#39;)</code></pre>
-<p><img src="img/column_types_list_canva.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/column_types_list_canva.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p>In certain cases, we need to specify the data type of the columns. It might be related to dates or categorical variables. readr allows us to specify the data types using <code>col_xxx</code> functions which include:</p>
 <ul>
@@ -220,8 +212,7 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="specific-columns" class="section level3">
 <h3>Specific Columns</h3>
-<pre class="r"><code>knitr::include_graphics(&#39;img/column_objective_function_map.png&#39;)</code></pre>
-<p><img src="img/column_objective_function_map.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/column_objective_function_map.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p>We may not always want to read all the columns from a file. In such cases, we can specify the columns to be read using <code>col_types</code> argument and supplying to it the names of the columns to be read. We will use <code>cols_only()</code> to specify the column names and their respective data types.</p>
 <pre class="r"><code>read_csv(&#39;hsb2.csv&#39;, col_types = cols_only(id = col_integer(),
@@ -292,8 +283,7 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<pre class="r"><code>knitr::include_graphics(&#39;img/import_funca.png&#39;)</code></pre>
-<p><img src="img/import_funca.png" style="display: block; margin: auto;" /></p>
+<p><img src="/img/import_funca.png" style="display: block; margin: auto;" /></p>
 <div id="practice" class="section level3">
 <h3>Practice</h3>
 <ul>

@@ -31,25 +31,25 @@ library(readr)
 
 ## Delimiters
 
-```{r img1, fig.align='center'}
+```{r img1, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_comma.png')
 ```
 
 <br>
 
-```{r img2, fig.align='center'}
+```{r img2, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_semicolon.png')
 ```
 
 <br>
 
-```{r img3, fig.align='center'}
+```{r img3, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_space.png')
 ```
 
 <br>
 
-```{r img4, fig.align='center'}
+```{r img4, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_tab.png')
 ```
 
@@ -76,13 +76,13 @@ spec_csv('hsb2.csv')
 
 #### Column Names
 
-```{r img5, fig.align='center'}
+```{r img5, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_comma.png')
 ```
 
 <br>
 
-```{r img6, fig.align='center'}
+```{r img6, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_column_false.png')
 ```
 
@@ -104,7 +104,7 @@ read_csv('hsb3.csv', col_names = cnames)
 
 ### Skip Lines
 
-```{r img7, fig.align='center'}
+```{r img7, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/mtcars_skip.png')
 ```
 
@@ -126,7 +126,7 @@ read_csv('hsb2.csv', n_max = 120)
 
 ### Column Types
 
-```{r img8, fig.align='center'}
+```{r img8, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/column_types_list_canva.png')
 ```
 
@@ -155,7 +155,7 @@ read_csv('hsb2.csv', col_types = list(
 
 ### Specific Columns
 
-```{r img9, fig.align='center'}
+```{r img9, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/column_objective_function_map.png')
 ```
 
@@ -171,7 +171,7 @@ read_csv('hsb2.csv', col_types = cols_only(id = col_integer(),
 
 ## Summary
 
-```{r img10, fig.align='center'}
+```{r img10, fig.align='center', echo=FALSE}
 knitr::include_graphics('/img/import_funca.png')
 ```
 
