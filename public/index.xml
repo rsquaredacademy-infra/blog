@@ -1,48 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Rsquared Academy Blog</title>
-    <link>https://blog.rsquaredacademy.com/</link>
-    <description>Recent content on Rsquared Academy Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2014-2018. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 10 Mar 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://blog.rsquaredacademy.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Import Data into R - Part 1</title>
-      <link>https://blog.rsquaredacademy.com/import-data-into-r-part-1/</link>
-      <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://blog.rsquaredacademy.com/import-data-into-r-part-1/</guid>
-      <description>IntroductionIn this post, we will learn to:
-read data from flat or delimited fileshandle column names/headerskip text/info present before dataspecify column/variable typesread specific columns/variablesLibraries, Data &amp;amp; CodeWe will use the readr package. The data sets can be downloaded from here and the codes from here.
-library(readr)## Warning: package &amp;#39;readr&amp;#39; was built under R version 3.5.1Delimitersknitr::include_graphics(&amp;#39;img/mtcars_comma.png&amp;#39;)</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://blog.rsquaredacademy.com/about/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-      
-      <guid>https://blog.rsquaredacademy.com/about/</guid>
-      <description>Rsquared Academy is an e-learning platform offering self paced and instructor led courses. Our main area of focus are data science and business analytics. Our courses are curated by experts from the industry and delivered by a team passionate about online education. We offer 24&amp;frasl;7 on-demand support for all our courses.
-Vision To make professional education flexible, affordable, effective and enjoyable.
-Mission Leverage technology and experitse to build a platform that offers interactive online learning accompanied by 24&amp;frasl;7 support.</description>
-    </item>
-    
-    <item>
-      <title>New? Start Here</title>
-      <link>https://blog.rsquaredacademy.com/start-here/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-      
-      <guid>https://blog.rsquaredacademy.com/start-here/</guid>
-      <description>New to our blog? Welcome aboard! There are posts on a wide variety of topics listed below. If you are new to R, we suggest you start with Introduction to R section. If you have been using R for a while, feel free to choose any of the topics.
-Introduction to R  Introduction to R Introduction to RStudio Variables &amp;amp; Data Types Getting Help in R Beginners Guide to R Pacakge Ecosystem  Data Wrangling With R  Getting started with tidyverse Introduction to tibbles A Complete Guide to Importing Data into R - Part 1 A Complete Guide to Importing Data into R - Part 2 A Complete Guide to Importing Data into R - Part 3 Readable Code with Pipes Data Manipulation in R with dplyr - Part 1 Data Manipulation in R with dplyr - Part 2 Data Manipulation in R with dplyr - Part 3 How to work with dates in R?</description>
-    </item>
-    
-  </channel>
-</rss>

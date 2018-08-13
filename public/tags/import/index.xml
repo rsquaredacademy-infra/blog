@@ -1,27 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Import on Rsquared Academy Blog</title>
-    <link>https://blog.rsquaredacademy.com/tags/import/</link>
-    <description>Recent content in Import on Rsquared Academy Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2014-2018. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 10 Mar 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://blog.rsquaredacademy.com/tags/import/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Import Data into R - Part 1</title>
-      <link>https://blog.rsquaredacademy.com/import-data-into-r-part-1/</link>
-      <pubDate>Sat, 10 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://blog.rsquaredacademy.com/import-data-into-r-part-1/</guid>
-      <description>IntroductionIn this post, we will learn to:
-read data from flat or delimited fileshandle column names/headerskip text/info present before dataspecify column/variable typesread specific columns/variablesLibraries, Data &amp;amp; CodeWe will use the readr package. The data sets can be downloaded from here and the codes from here.
-library(readr)## Warning: package &amp;#39;readr&amp;#39; was built under R version 3.5.1Delimitersknitr::include_graphics(&amp;#39;img/mtcars_comma.png&amp;#39;)</description>
-    </item>
-    
-  </channel>
-</rss>
