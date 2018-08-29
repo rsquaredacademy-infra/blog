@@ -3,7 +3,7 @@ title: 'Working with Date and Time in R '
 author: Aravind Hebbali
 twitterImg: /img/lubridate.png
 description: "Learn to handle dates & time in R using lubridate"
-date: '2018-01-14'
+date: '2018-07-06'
 slug: working-with-dates-in-r
 topics:
   - data wrangling
