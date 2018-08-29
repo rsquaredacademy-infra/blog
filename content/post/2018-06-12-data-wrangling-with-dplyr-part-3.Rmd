@@ -79,7 +79,7 @@ values in the `referrer` column
 <br>
 
 ```{r img1, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("distinct_1.png")
+knitr::include_graphics("/img/distinct_1.png")
 ```
 
 <br>
@@ -101,7 +101,7 @@ Columns can be renamed using `rename()`.
 <br>
 
 ```{r img2, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("rename_1.png")
+knitr::include_graphics("/img/rename_1.png")
 ```
 
 <br>
@@ -118,7 +118,7 @@ of traffic.
 <br>
 
 ```{r img6, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("tally_count.png")
+knitr::include_graphics("/img/tally_count.png")
 ```
 
 <br>
@@ -164,7 +164,7 @@ number of observations.
 <br>
 
 ```{r img3, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("sample_frac_n.png")
+knitr::include_graphics("/img/sample_frac_n.png")
 ```
 
 <br>
@@ -202,7 +202,7 @@ using `head` in addition to limit the output printed.
 <br>
 
 ```{r img4, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("pull_1.png")
+knitr::include_graphics("/img/pull_1.png")
 ```
 
 <br>
@@ -237,7 +237,7 @@ extract data starting from the 5th row and upto the 15th row.
 <br>
 
 ```{r img5, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("slice_1.png")
+knitr::include_graphics("/img/slice_1.png")
 ```
 
 <br>
