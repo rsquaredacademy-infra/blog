@@ -1,0 +1,244 @@
+---
+title: Data Wrangling with dplyr - Part 2
+author: Aravind Hebali
+twitterImg: /img/dplyr.png
+description: "Learn to join tables using dplyr."
+date: '2018-05-31'
+slug: data-wrangling-with-dplyr-part-2
+topics:
+  - data wrangling
+  - dplyr
+tags:
+  - dplyr
+  - joins
+---
+
+## Introduction
+
+In the previous post we learnt about dplyr verbs and used them to compute 
+average order value for an online retail company data. In this post, we will 
+learn to combine tables using different `*_join` functions provided in dplyr. 
+
+## Libraries, Code & Data
+
+We will use the following packages: 
+
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- [readr](http://readr.tidyverse.org/index.html)  
+
+The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) 
+and the codes from [here](https://gist.github.com/aravindhebbali/3e31f13a4194a8f1003034aa7d70d5ee).
+
+```{r dplyr1, message=FALSE}
+library(dplyr)
+library(readr)
+options(tibble.width = Inf)
+```
+
+## Case Study
+
+For our case study, we will use two data sets. The first one, `order`, contains
+details of orders placed by different customers. The second data set, `customer`
+contains details of each customer. The below table displays the details stored
+in each data set.
+
+<br>
+
+```{r img1, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/join_data.png")
+```
+
+<br>
+
+Let us import both the data sets using `read_csv`.
+
+### Data: Orders
+
+```{r dplyr2, message=FALSE}
+order <- readr::read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv', delim = ';')
+order
+```
+
+### Data: Customers
+
+```{r dplyr, message=FALSE}
+customer <- readr::read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv', delim = ';')
+customer
+```
+
+We will explore the following in the case study:
+
+- details of customers who have placed orders and their order details
+- details of customers and their orders irrespective of whether a customer has 
+placed orders or not
+- customer details for each order
+- details of customers who have placed orders
+- details of customers who have not placed orders
+- details of all customers and all orders
+
+## Example Data
+
+We will use another data set to illustrate how the different joins work. You can
+view the example data sets below.
+
+<br>
+
+```{r img2, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/join.png")
+```
+
+<br>
+
+## Inner Join
+
+<br>
+
+```{r img3, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_inner.png")
+```
+
+<br>
+
+Inner join return all rows from `Age` where there are matching values in 
+`Height`, and all columns from `Age` and `Height`. If there are multiple matches 
+between `Age` and `Height`, all combination of the matches are returned.
+
+#### Case Study
+
+###### Details of customers who have placed orders and their order details
+
+To get data for all those customers who have placed orders in the past let us 
+join the `order` data with the `customer` data using `inner_join`. 
+
+```{r dplyr3}
+inner_join(customer, order, by = "id")
+```
+
+## Left Join
+
+<br>
+
+```{r img4, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_left.png")
+```
+
+<br>
+
+Left join return all rows from `Age`, and all columns from `Age` and `Height`. 
+Rows in `Age` with  no match in `Height` will have NA values in the new columns. 
+If there are multiple  matches between `Age` and `Height`, all combinations of 
+the matches are returned.
+
+#### Case Study
+
+###### Details of customers and their orders irrespective of whether a customer has 
+placed orders or not.
+
+To get data for all those customers and their orders irrespective of whether a 
+customer has placed orders or not let us join the `order` data with the 
+`customer` data using `left_join`. 
+
+
+```{r dplyr4}
+left_join(customer, order, by = "id")
+```
+
+## Right Join
+
+<br>
+
+```{r img5, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_right.png")
+```
+
+<br>
+
+Right join return all rows from `Height`, and all columns from `Age` and 
+`Height`. Rows in `Height` with no match in `Age` will have NA values in the 
+new columns. If there are multiple matches between `Age` and `Height`, all 
+combinations of the matches are returned.
+
+#### Case Study
+
+###### Customer details for each order
+
+To get customer data for all orders, let us join the `order` data with the 
+`customer` data using `right_join`. 
+
+```{r dplyr5}
+right_join(customer, order, by = "id")
+```
+
+## Semi Join
+
+<br>
+
+```{r img6, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_semi.png")
+```
+
+<br>
+
+Semi join return all rows from `Age` where there are matching values in `Height`, 
+keeping just columns from `Age`. A semi join differs from an inner join because 
+an inner join will return one row of `Age` for each matching row of `Height`, 
+where a semi join will never duplicate rows of `Age`.
+
+#### Case Study
+
+###### Details of customers who have placed orders
+
+To get customer data for all orders, let us join the `order` data with the 
+`customer` data using `semi_join`. 
+
+```{r dplyr6}
+semi_join(customer, order, by = "id")
+```
+
+## Anti Join
+
+<br>
+
+```{r img7, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_anti.png")
+```
+
+<br>
+
+Anti join return all rows from `Age` where there are not matching values in 
+`Height`, keeping just columns from `Age`.
+
+#### Case Study
+
+###### Details of customers who have not placed orders
+
+To get details of customers who have not placed orders, let us join the `order` 
+data with the `customer` data using `anti_join`. 
+
+```{r dplyr7}
+anti_join(customer, order, by = "id")
+```
+
+## Full Join
+
+<br>
+
+```{r img8, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_full.png")
+```
+
+<br>
+
+Full join return all rows and all columns from both `Age` and `Height`. Where 
+there are not matching values, returns NA for the one missing.
+
+#### Case Study
+
+###### Details of all customers and all orders
+
+To get details of all customers and all orders, let us join the `order` 
+data with the `customer` data using `full_join`. 
+
+```{r dplyr8}
+full_join(customer, order, by = "id")
+```
