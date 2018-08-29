@@ -1,0 +1,256 @@
+---
+title: "Import Data into R - Part 2"
+author: "Aravind Hebbali"
+date: '2018-04-13'
+twitterImg: /img/import.png
+description: "Learn to read data from excel spreadsheets & statistical softwares into R."
+slug: import-data-into-r-part-2
+tags:
+- import
+- readxl
+topics:
+- import
+- R
+---
+
+## Introduction
+
+This is the second post in the series **Importing Data into R**. In the 
+previous post, we explored reading data from flat/delimited files. In this 
+post, we will:
+
+- list sheets in an excel file
+- read data from an excel sheet
+- read specific cells from an excel sheet
+- read specific rows
+- read specific columns
+- read data from
+		- SAS 
+		- SPSS
+		- STATA
+
+## Libraries, Data & Code
+
+We will use the [readxl](http://readr.tidyverse.org/index.html) package. It has 
+no external dependencies as compared to other packages available for reading 
+data from Excel. The data sets can be downloaded from 
+[here](https://github.com/rsquaredacademy/datasets) and the codes from 
+[here](https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4).
+
+```{r library, message=FALSE}
+library(readxl)
+```
+
+## List Sheets
+
+An excel file may contain several sheets. Let us see how many sheets are 
+present in `sample.xls` file and their respective names using `excel_sheets()`.
+
+```{r list_sheets}
+excel_sheets('sample.xls')
+```
+
+## Read Sheet
+
+Now that we know the number of sheets and their names, let us read data from 
+the `ecom` sheet of the `sample.xls` file using `read_excel()`. We will specify
+the file name, and the sheet name or sheet number. 
+
+### Case 1: Specify the sheet number
+
+```{r import56, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1)
+```
+
+### Case 2: Specify the sheet name
+
+```{r import56a, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 'ecom')
+```
+
+Notice when you use the sheet name, the name should be enclosed in 
+single/double quotes.
+
+## Read Specific Cells
+
+You may not always want to read all the columns or rows from the excel sheet.
+In such cases, you can specify the cells from which the data must be read 
+which can be achieved using the `range` argument. So how do we specify the 
+cells from which to read data? There are different ways of specifying the 
+cell range and we will look at them one by one:
+
+
+### Method 1
+
+```{r import74, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/readxl_range.png")
+```
+
+<br>
+
+The first method uses the cell names along with `:` to specify the cell range. 
+For example, to read data from first 4 rows of columns **B** and **C**, we will 
+specify the range as `"B1:C4"`.
+
+```{r import58, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = "B1:C4")
+```
+
+To read data from first 5 rows of columns **A**, **B** and **C**, we will specify the range as `"A1:C5"`.
+
+```{r import59, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = "A1:C5")
+```
+
+### Method 2
+
+```{r import75, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/readxl_anchored_lucid.png")
+```
+
+<br>
+
+In the second method, we start from a particular cell and specify the number 
+of rows and columns to be covered keeping the inital cell as anchorage. 
+In the below example, we want to read 3 rows and 2 columns starting from the 
+cell `A4`.
+
+```{r import61, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, col_names = FALSE,
+  range = anchored("A4", dim = c(3, 2)))
+```
+
+### Method 3
+
+In this method, we use the `cell_limit()` and specify the location of two ends 
+of a rectangle covering the cells we want to read. For example, to read data 
+from the first 6 rows and 4 columns, we will specify the range as following:
+
+- start from the first row of the first column
+- cover all cells upto the 6th row of the 4th column
+
+```{r import76, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/readxl_cell_limits_lucid.png")
+```
+
+<br>
+
+```{r import65, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, 1), c(6, 4)))
+```
+
+You can use `NA` to indicate the first and last row/column. For example, to 
+read data from all the rows from the second column onwards:
+
+```{r import66, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, 2), c(NA, NA)))
+```
+
+Let us quickly look at how we will specify range of cells using the above 3 
+methods when we want to read data from the first 4 rows of columns `B` and `C`:
+
+#### Method 1
+
+```{r import66a, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1,
+  range = "B1:C4")
+```
+
+#### Method 2
+
+```{r import66b, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1,
+  range = anchored("B1", dim = c(4, 2)))
+```
+
+#### Method 3
+
+```{r import66c, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, 2), c(4, 3)))
+```
+
+## Read Specific Rows
+
+When you want to read a subset of rows from the data, use `cell_rows()` and 
+specify the row numbers or the range. In the below example, we want to read 
+the first 4 rows of data from the file.
+
+```{r import62, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = cell_rows(1:4))
+```
+
+## Read Single Column
+
+If you want to read a single column from the data, use `cell_cols()` and 
+specify the column number. In the below example, we read the second column
+from the `sample.xls` file.
+
+```{r import63a, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = cell_cols(2))
+```
+
+## Read Multiple Columns
+
+In case of multiple columns, we need to specify the column numbers or the
+column range. In the below example, we want to read the 2nd, 4th and 6th column from 
+the `sample.xls` file.
+
+```{r import63b, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = cell_cols(c(2, 4, 6)))
+```
+
+In the next example, we want to read data from the 2nd column upto and 
+including the 6th column.
+
+```{r import63c, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = cell_cols(c(2:6)))
+```
+
+<br>
+
+### Summary
+
+```{r import77, echo=FALSE, out.width="80%", fig.align="center"}
+knitr::include_graphics("/img/range_summary.png")
+```
+
+## Statistical Softwares
+
+We will use the [haven](https://haven.tidyverse.org) package to read data from files of other statistical softwares such as:
+
+- SAS
+- SPSS
+- STATA
+
+### Library
+
+```{r haven, message=FALSE}
+library(haven)
+```
+
+### STATA
+
+```{r import68, echo=TRUE, results='markup', message=FALSE}
+read_stata('airline.dta')  
+```
+
+### SPSS
+
+```{r import71, echo=TRUE, results='markup', message=FALSE}
+read_spss('employee.sav')  
+```
+
+### SAS
+
+```{r import73, echo=TRUE, results='markup', message=FALSE}
+read_sas('airline.sas7bdat')
+```
+
+### Summary
+
+```{r import78, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/readxl_summary_lucid.png")
+```
