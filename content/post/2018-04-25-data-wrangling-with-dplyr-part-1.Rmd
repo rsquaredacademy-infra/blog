@@ -3,7 +3,7 @@ title: Data Wrangling with dplyr - Part 1
 author: Aravind Hebbali
 twitterImg: /img/dplyr.png
 description: "Introduction to data wrangling with dplyr."
-date: '2018-05-19'
+date: '2018-04-25'
 slug: data-wrangling-with-dplyr-part-1
 topics:
   - data wrangling
