@@ -1,7 +1,7 @@
 ---
 title: "Import Data into R - Part 1"
 author: "Aravind Hebbali"
-date: '2018-03-10'
+date: '2018-04-01'
 twitterImg: /img/import.png
 description: "Learn to read data from flat/delimited files into R."
 slug: import-data-into-r-part-1
@@ -32,19 +32,32 @@ topics:
 <pre class="r"><code>library(readr)</code></pre>
 <pre><code>## Warning: package &#39;readr&#39; was built under R version 3.5.1</code></pre>
 </div>
-<div id="delimiters" class="section level2">
-<h2>Delimiters</h2>
+<div id="types-of-delimiters" class="section level2">
+<h2>Types of Delimiters</h2>
+<p>Before we start reading data from files, let us take a quick look at the different types of delimiters we have to deal with while reading or importing data. In general, it is a good practice to take a quick look at as you will clearly know the delimiter used in the file.</p>
+<div id="comma-separated-values" class="section level4">
+<h4>Comma Separated Values</h4>
 <p><img src="/img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
+</div>
+<div id="semi-colon-separated-values" class="section level3">
+<h3>Semi Colon Separated Values</h3>
 <p><img src="/img/mtcars_semicolon.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
+</div>
+<div id="space-separated-values" class="section level3">
+<h3>Space Separated Values</h3>
 <p><img src="/img/mtcars_space.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
+</div>
+<div id="tab-separated-values" class="section level3">
+<h3>Tab Separated Values</h3>
 <p><img src="/img/mtcars_tab.png" style="display: block; margin: auto;" /></p>
 </div>
-<div id="case-study" class="section level2">
-<h2>Case Study</h2>
-<p>In this section, we will read data from a csv (comma separated values) file and explore the options listed in the previous section.</p>
+</div>
+<div id="read-data" class="section level2">
+<h2>Read Data</h2>
+<p>Let us begin by reading data from a <code>csv</code> file using <code>read_csv()</code>.</p>
 <pre class="r"><code>read_csv(&#39;hsb2.csv&#39;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -74,12 +87,14 @@ topics:
 ##  9    84      0     4     2      1     1    63    57    54      58    51
 ## 10    48      0     3     2      1     2    57    55    52      50    51
 ## # ... with 190 more rows</code></pre>
-<p>Great! If you see the above output, you have successfully read data into R. In case you get an error, do not worry and do the following:</p>
+<p>Great! If you see the above output, you have successfully read data into R. If you see an error message (which most of us see when we are trying to read data for the first time), follow the below instructions:</p>
 <ul>
 <li>check the separator in the file and ensure it is a <code>comma</code></li>
-<li>check the path to the file</li>
+<li>check the file name</li>
+<li>check the file path i.e. location of the file</li>
+<li>ensure that the file name or path is enclosed in single or double quotes</li>
 </ul>
-<p>When you read data using readr, it will display the data type detected for each column/variable in the data set. If you want to check the data types before reading the data, use <code>spec_csv()</code>. We will learn to specify the column types in the next section.</p>
+<p>When you read data using <code>readr</code>, it will display the data type detected for each column/variable in the data set. If you want to check the data types before reading the data, use <code>spec_csv()</code>. We will learn to specify the column types in the next section.</p>
 <pre class="r"><code>spec_csv(&#39;hsb2.csv&#39;)</code></pre>
 <pre><code>## cols(
 ##   id = col_integer(),
@@ -94,15 +109,15 @@ topics:
 ##   science = col_integer(),
 ##   socst = col_integer()
 ## )</code></pre>
-<div id="options" class="section level3">
-<h3>Options</h3>
-<div id="column-names" class="section level4">
-<h4>Column Names</h4>
+</div>
+<div id="column-names" class="section level2">
+<h2>Column Names</h2>
+<p>In some cases, files do not include column names or headers. If we do not indicate the absence of column names, <code>readr</code> will treat the first row from th data as the column name. Like we said before, it is a good practice to take a quick look at the data to check for the presence/absence of column names.</p>
 <p><img src="/img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p><img src="/img/mtcars_column_false.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Use <code>col_names</code> to indicate whether the data includes column names. It takes two values, <code>TRUE</code> and <code>FALSE</code>. If set to <code>FALSE</code>, readr will generate column names. In the below example, we will read data from a file which does not have column names present in the first row.</p>
+<p>If the column names are absent (i.e. the column names are provided in a seprate file), use the <code>col_names</code> argument and set it to <code>FALSE</code>. Now <code>readr</code> will not convert the first row of data into column name and instead it will generate new column names.</p>
 <pre class="r"><code>read_csv(&#39;hsb3.csv&#39;, col_names = FALSE)</code></pre>
 <pre><code>## # A tibble: 200 x 11
 ##       X1    X2    X3    X4    X5    X6    X7    X8    X9   X10   X11
@@ -118,7 +133,7 @@ topics:
 ##  9    84     0     4     2     1     1    63    57    54    58    51
 ## 10    48     0     3     2     1     2    57    55    52    50    51
 ## # ... with 190 more rows</code></pre>
-<p><code>col_names</code> can be used to specify column names while reading data. We need to store the names as a character vector and supply it to <code>col_names</code>. Let us reread <code>hsb3</code> and specify column names.</p>
+<p>We may not always want to use the column names generated by <code>readr</code> and instead specify new column names. In such cases, we can use <code>col_names</code> to supply column names as shown in the below example. Let us reread <code>hsb3</code> and specify column names.</p>
 <pre class="r"><code>cnames &lt;- c(&quot;id&quot;, &quot;female&quot;, &quot;race&quot;, &quot;ses&quot;, &quot;schtyp&quot;, &quot;prog&quot;, &quot;read&quot;, &quot;write&quot;, &quot;math&quot;, &quot;science&quot;, &quot;socst&quot;)
 read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 <pre><code>## # A tibble: 200 x 11
@@ -135,13 +150,19 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 ##  9    84      0     4     2      1     1    63    57    54      58    51
 ## 10    48      0     3     2      1     2    57    55    52      50    51
 ## # ... with 190 more rows</code></pre>
-</div>
-</div>
 <div id="skip-lines" class="section level3">
 <h3>Skip Lines</h3>
+<p>In certain files, you will find information related to the data such as:</p>
+<ul>
+<li>the data source</li>
+<li>column names</li>
+<li>column description</li>
+<li>copyright etc.</li>
+</ul>
+<p>The data will appear after/below such text/information. While reading data from such files, we need to skip all the rows where the text is present. If we do not skip them, <code>readr</code> will consider them as part of the data.</p>
 <p><img src="/img/mtcars_skip.png" width="80%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Use <code>skip</code> to skip a certain number of lines. For example, if the file has contents other than data in the first few lines, we need to skip them before reading the data. In the below example, we will skip the first 3 lines as they contain information about the data set which we do not need.</p>
+<p>Use <code>skip</code> argument to indicate the number of lines/rows to be skipped while reading data from a file. For example, if the file has contents other than data in the first few lines, we need to skip them before reading the data. In the below example, we will skip the first 3 lines as they contain information about the data set which we do not need.</p>
 <pre class="r"><code>read_csv(&#39;hsb4.csv&#39;, skip = 3)</code></pre>
 <pre><code>## # A tibble: 200 x 11
 ##       id female  race   ses schtyp  prog  read write  math science socst
@@ -160,7 +181,7 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="maximum-lines" class="section level3">
 <h3>Maximum Lines</h3>
-<p>Use <code>n_max</code> to specify the maximum number of lines to read. Suppose we want to read only 100 rows of data from a file, we can set <code>n_max</code> equal to 100. In the next example, we will read the first 120 rows from the <code>hsb2</code> file. If you observe the last row in the output, it says <code># ... with 110 more rows</code>, indicating that only 120 rows of data has been read from the file.</p>
+<p>Suppose the data file contains several thousands of rows of data and we do not want to read all of it. What can we do in such cases? <code>readr</code> allows us to specify the maximum number of rows to be read using the <code>n_max</code> argument. Suppose we want to read only 100 rows of data from a file, we can set <code>n_max</code> equal to 100. In the next example, we will read the first 120 rows from the <code>hsb2</code> file. If you observe the last row in the output, it says <code># ... with  110 more rows</code>, indicating that only 120 rows of data has been read from the file.</p>
 <pre class="r"><code>read_csv(&#39;hsb2.csv&#39;, n_max = 120)</code></pre>
 <pre><code>## # A tibble: 120 x 11
 ##       id female  race   ses schtyp  prog  read write  math science socst
@@ -179,17 +200,30 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 </div>
 <div id="column-types" class="section level3">
 <h3>Column Types</h3>
+<p>If you have observed carefully, when you read data using <code>readr</code>, it displays the column names and column types followed by the first 10 rows of data. <code>readr</code> determines the data type for each column based on the first 1000 rows of data. The data can be of the following types:</p>
+<ul>
+<li>integer</li>
+<li>double (decimal point)</li>
+<li>logical (TRUE/FALSE)</li>
+<li>character (text/string)</li>
+<li>factor (categorical/qualitative)</li>
+<li>date/time</li>
+</ul>
 <p><img src="/img/column_types_list_canva.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>In certain cases, we need to specify the data type of the columns. It might be related to dates or categorical variables. readr allows us to specify the data types using <code>col_xxx</code> functions which include:</p>
+<p>Before you read data from a file, use <code>spec_csv()</code> to see the data types as determined by <code>readr</code>. If it determines the data types correctly, you can go ahead and read the data else we will have to specify the data types and we will have to do that for all the columns we want to read and not just for those columns whose data type was wrongly determined by <code>readr</code>.</p>
+<p>To specify the data types, we will use the <code>col_types</code> argument and supply it a list of data types. The data types can be specified using:</p>
 <ul>
-<li><code>col_double()</code></li>
 <li><code>col_integer()</code></li>
+<li><code>col_double()</code></li>
 <li><code>col_factor()</code></li>
+<li><code>col_logical()</code></li>
 <li><code>col_character()</code></li>
+<li><code>col_date()</code></li>
+<li><code>col_time()</code></li>
 <li><code>col_datetime()</code></li>
 </ul>
-<p>To specify the data types, we will use <code>col_types</code> argument and supply to it a list indicating the data type (using <code>col_xxx</code>) of each column in the data set. In the below example, we read data from <code>hsb2</code> file while sprcifying the data types. Keep in mind that we need to specify the data type for each column.</p>
+<p>While specifying the data types we also need to specify the categories of the categorical/qualitative variable. To do that, we use the <code>levels</code> argument within <code>col_factor()</code>. Let us read data from the <code>hsb2.csv</code> file to understand data type specification.</p>
 <pre class="r"><code>read_csv(&#39;hsb2.csv&#39;, col_types = list(
   col_integer(), col_factor(levels = c(0, 1)), 
   col_factor(levels = c(1, 2, 3, 4)), col_factor(levels = c(1, 2, 3)), 
@@ -211,12 +245,22 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 ##  9    84 0      4     2     1      1        63    57    54      58    51
 ## 10    48 0      3     2     1      2        57    55    52      50    51
 ## # ... with 190 more rows</code></pre>
+<p>If we do not specify the data type for all columns, <code>readr</code> will return an error which leads to the following questions:</p>
+<ol style="list-style-type: decimal">
+<li>What if I want to skip a few columns?</li>
+<li>What if I want to read certain columns only?</li>
+</ol>
 </div>
 <div id="specific-columns" class="section level3">
 <h3>Specific Columns</h3>
 <p><img src="/img/column_objective_function_map.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>We may not always want to read all the columns from a file. In such cases, we can specify the columns to be read using <code>col_types</code> argument and supplying to it the names of the columns to be read. We will use <code>cols_only()</code> to specify the column names and their respective data types.</p>
+<p>For the first scenario, we can use <code>col_skip()</code> i.e. instead of specifying the data type, we indicate to <code>readr</code> to skip that particular column while reading the data.</p>
+<p>In case of the second scenario, we will use <code>cols_only()</code> to specify the columns to be read i.e. instead of using <code>list()</code> to supply the data types, we will use <code>cols_only()</code> and provide the following details:</p>
+<ul>
+<li>column name</li>
+<li>column type using <code>col_types</code> argument</li>
+</ul>
 <pre class="r"><code>read_csv(&#39;hsb2.csv&#39;, col_types = cols_only(id = col_integer(),
   prog = col_factor(levels = c(1, 2, 3)), read = col_integer())
 )</code></pre>
@@ -281,36 +325,23 @@ read_csv(&#39;hsb3.csv&#39;, col_names = cnames)</code></pre>
 ##  9    84 1        63
 ## 10    48 2        57
 ## # ... with 190 more rows</code></pre>
+<p>If you have a data set with 10 columns and plan to skip only a couple of columns, use <code>col_skip()</code> instead if you plan to read only a couple of columns, use <code>cols_only()</code>.</p>
 </div>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
 <p><img src="/img/import_funca.png" width="80%" style="display: block; margin: auto;" /></p>
-<div id="practice" class="section level3">
-<h3>Practice</h3>
-<ul>
-<li><p>check the separator type in the following files and read them using appropriate <code>read_xxx()</code> function:</p>
-<ul>
-<li><code>hsb.csv</code></li>
-<li><code>mtcars.tsv</code></li>
-<li><code>hsb1.csv</code></li>
-<li><code>hsb.txt</code></li>
-</ul></li>
-</ul>
-</div>
 <div id="summary-1" class="section level3">
 <h3>Summary</h3>
 <p>In this post, we explored:</p>
 <ul>
 <li>reading data from flat/delimited files</li>
-<li>reading specific columns</li>
-<li>specifying
-<ul>
-<li>column data types</li>
-<li>number of skipping lines</li>
-<li>maximum number of lines to read</li>
-<li>if data includes column names</li>
-</ul></li>
+<li>indicating the presence/absence of column names</li>
+<li>skipping rows in the presence of text/information</li>
+<li>specifying maximum rows to be read</li>
+<li>specifying column data types</li>
+<li>skipping columns</li>
+<li>reading specific columns only</li>
 </ul>
 <p>In the next post, we will explore reading data from excel spreadsheets and other statistical softwares.</p>
 </div>
