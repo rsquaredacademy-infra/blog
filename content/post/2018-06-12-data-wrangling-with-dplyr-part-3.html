@@ -1,0 +1,338 @@
+---
+title: Data Wrangling with dplyr - Part 3
+author: Aravind Hebbali
+twitterImg: /img/dplyr.png
+description: "Use dplyr to extract, sample and summarize data."
+date: '2018-06-12'
+slug: data-wrangling-with-dplyr-part-3
+topics:
+  - data wrangling
+  - dplyr
+tags:
+  - dplyr
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In the previous <a href="https://blog.aravindhebbali.com/2017/12/25/data-wrangling-with-dplyr-part-2/">post</a>, we learnt to combine tables using dplyr. In this post, we will explore a set of helper functions in order to:</p>
+<ul>
+<li>extract unique rows</li>
+<li>rename columns</li>
+<li>sample data</li>
+<li>extract columns</li>
+<li>slice rows</li>
+<li>arrange rows</li>
+<li>compare tables</li>
+<li>extract/mutate data using predicate functions</li>
+<li>count observations for different levels of a variable</li>
+</ul>
+</div>
+<div id="libraries-code-data" class="section level2">
+<h2>Libraries, Code &amp; Data</h2>
+<p>We will use the following packages:</p>
+<ul>
+<li><a href="http://dplyr.tidyverse.org/index.html">dplyr</a></li>
+<li><a href="http://readr.tidyverse.org/index.html">readr</a></li>
+</ul>
+<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/55c4f40476028c09949b73af97bb1619">here</a>.</p>
+<pre class="r"><code>library(dplyr)
+library(readr)</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 3.5.1</code></pre>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case Study</h2>
+<p>Let us look at a case study (e-commerce data) and see how we can use dplyr helper functions to answer questions we have about and to modify/transform the underlying data set.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<pre class="r"><code>ecom &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;)
+ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 11
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1     1 google   laptop true          10       1      693 Czech Republic
+##  2     2 yahoo    tablet true           9       1      459 Yemen         
+##  3     3 direct   laptop true           0       1      996 Brazil        
+##  4     4 bing     tablet false          3      18      468 China         
+##  5     5 yahoo    mobile true           9       1      955 Poland        
+##  6     6 yahoo    laptop false          5       5      135 South Africa  
+##  7     7 yahoo    mobile true          10       1       75 Bangladesh    
+##  8     8 direct   mobile true          10       1      908 Indonesia     
+##  9     9 bing     mobile false          3      19      209 Netherlands   
+## 10    10 google   mobile true           6       1      208 Czech Republic
+## # ... with 990 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<ul>
+<li>id: row id</li>
+<li>referrer: referrer website/search engine</li>
+<li>os: operating system</li>
+<li>browser: browser</li>
+<li>device: device used to visit the website</li>
+<li>n_pages: number of pages visited</li>
+<li>duration: time spent on the website (in seconds)</li>
+<li>repeat: frequency of visits</li>
+<li>country: country of origin</li>
+<li>purchase: whether visitor purchased</li>
+<li>order_value: order value of visitor (in dollars)</li>
+</ul>
+</div>
+</div>
+<div id="data-sanitization" class="section level2">
+<h2>Data Sanitization</h2>
+<p>Let us ensure that the data is sanitized by checking the sources of traffic and devices used to visit the site. We will use <code>distinct</code> to examine the values in the <code>referrer</code> column</p>
+<p><br></p>
+<p><img src="distinct_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>distinct(ecom, referrer)</code></pre>
+<pre><code>## # A tibble: 5 x 1
+##   referrer
+##   &lt;chr&gt;   
+## 1 google  
+## 2 yahoo   
+## 3 direct  
+## 4 bing    
+## 5 social</code></pre>
+<p>and the <code>device</code> column as well.</p>
+<pre class="r"><code>distinct(ecom, device)</code></pre>
+<pre><code>## # A tibble: 3 x 1
+##   device
+##   &lt;chr&gt; 
+## 1 laptop
+## 2 tablet
+## 3 mobile</code></pre>
+</div>
+<div id="rename-columns" class="section level2">
+<h2>Rename Columns</h2>
+<p>Columns can be renamed using <code>rename()</code>.</p>
+<p><br></p>
+<p><img src="rename_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>rename(ecom, time_on_site = duration)</code></pre>
+<pre><code>## # A tibble: 1,000 x 11
+##       id referrer device bouncers n_visit n_pages time_on_site country    
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      
+##  1     1 google   laptop true          10       1          693 Czech Repu~
+##  2     2 yahoo    tablet true           9       1          459 Yemen      
+##  3     3 direct   laptop true           0       1          996 Brazil     
+##  4     4 bing     tablet false          3      18          468 China      
+##  5     5 yahoo    mobile true           9       1          955 Poland     
+##  6     6 yahoo    laptop false          5       5          135 South Afri~
+##  7     7 yahoo    mobile true          10       1           75 Bangladesh 
+##  8     8 direct   mobile true          10       1          908 Indonesia  
+##  9     9 bing     mobile false          3      19          209 Netherlands
+## 10    10 google   mobile true           6       1          208 Czech Repu~
+## # ... with 990 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+</div>
+<div id="data-tabulation" class="section level2">
+<h2>Data Tabulation</h2>
+<p>Let us now look at the proportion or share of visits driven by different sources of traffic.</p>
+<p><br></p>
+<p><img src="tally_count.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>ecom %&gt;%
+  group_by(referrer) %&gt;%
+  tally()</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   referrer     n
+##   &lt;chr&gt;    &lt;int&gt;
+## 1 bing       194
+## 2 direct     191
+## 3 google     208
+## 4 social     200
+## 5 yahoo      207</code></pre>
+<p>We would also like to know the number of bouncers driven by the different sources of traffic.</p>
+<pre class="r"><code>ecom %&gt;%
+  group_by(referrer, bouncers) %&gt;%
+  tally()</code></pre>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   referrer [?]
+##    referrer bouncers     n
+##    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;
+##  1 bing     false      104
+##  2 bing     true        90
+##  3 direct   false       98
+##  4 direct   true        93
+##  5 google   false      101
+##  6 google   true       107
+##  7 social   false       93
+##  8 social   true       107
+##  9 yahoo    false      110
+## 10 yahoo    true        97</code></pre>
+<p>Let us look at how many conversions happen across different devices.</p>
+<pre class="r"><code>ecom %&gt;%
+  group_by(device, purchase) %&gt;%
+  tally() %&gt;%
+  filter(purchase == &#39;true&#39;)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+## # Groups:   device [3]
+##   device purchase     n
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;
+## 1 laptop true        31
+## 2 mobile true        36
+## 3 tablet true        36</code></pre>
+<p>Another way to extract the above information is by using <code>count</code></p>
+<pre class="r"><code>ecom %&gt;%
+  count(referrer, purchase) %&gt;%
+  filter(purchase == &quot;true&quot;)</code></pre>
+<pre><code>## # A tibble: 5 x 3
+##   referrer purchase     n
+##   &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;
+## 1 bing     true        17
+## 2 direct   true        25
+## 3 google   true        19
+## 4 social   true        20
+## 5 yahoo    true        22</code></pre>
+</div>
+<div id="sampling-data" class="section level2">
+<h2>Sampling Data</h2>
+<p>dplyr offers sampling functions which allow us to specify either the number or percentage of observations. <code>sample_n()</code> allows sampling a specific number of observations.</p>
+<p><br></p>
+<p><img src="sample_frac_n.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>sample_n(ecom, 700)</code></pre>
+<pre><code>## # A tibble: 700 x 11
+##       id referrer device bouncers n_visit n_pages duration country    
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+##  1   847 yahoo    mobile true           0       1      895 Russia     
+##  2    12 direct   tablet false          6      12      132 Estonia    
+##  3   110 direct   mobile false          5       5       55 Russia     
+##  4   169 direct   laptop false          6       6       96 Albania    
+##  5   518 direct   tablet true           4       1      164 Chile      
+##  6   489 google   tablet false          9       3       48 China      
+##  7   185 google   mobile false          8       2       44 Philippines
+##  8   802 direct   mobile false          8      15      180 Philippines
+##  9   399 google   tablet true           5       1       82 Indonesia  
+## 10   536 google   mobile true          10       1      221 China      
+## # ... with 690 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+<p>We can combine the sampling functions with other dplyr functions as shown below where we sample observation after grouping them according to the source of traffic.</p>
+<pre class="r"><code>ecom %&gt;%
+  group_by(referrer) %&gt;%
+  sample_n(100)</code></pre>
+<pre><code>## # A tibble: 500 x 11
+## # Groups:   referrer [5]
+##       id referrer device bouncers n_visit n_pages duration country    
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+##  1   949 bing     mobile false         10       1       26 China      
+##  2   697 bing     tablet true           0       1      356 Greece     
+##  3   810 bing     mobile true           3       1      119 Indonesia  
+##  4   500 bing     mobile true           9       1      574 Egypt      
+##  5   485 bing     tablet true           7       1      423 Qatar      
+##  6   341 bing     mobile false          5      15      405 Russia     
+##  7   502 bing     laptop true           7       1      516 Portugal   
+##  8   853 bing     tablet false          7       2       34 Afghanistan
+##  9   231 bing     tablet true           0       1      697 Portugal   
+## 10    36 bing     mobile false          1       1       25 Ireland    
+## # ... with 490 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+<p><code>sample_frac()</code> allows a specific percentage of observations.</p>
+<pre class="r"><code>sample_frac(ecom, size = 0.7)</code></pre>
+<pre><code>## # A tibble: 700 x 11
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1   879 google   mobile false          2      15      210 United Kingdom
+##  2   851 direct   laptop true           2       1      111 Portugal      
+##  3   946 direct   mobile false          1      15      180 Kenya         
+##  4   655 bing     mobile true           6       1      604 Nigeria       
+##  5   136 yahoo    tablet false          0      20      200 Indonesia     
+##  6   932 google   laptop false          2      17      391 Ukraine       
+##  7   913 direct   laptop false          2      18      324 China         
+##  8   958 direct   tablet true           4       1      136 Poland        
+##  9    22 google   mobile true           5       1      147 Brazil        
+## 10   455 social   laptop true           2       1      806 Brazil        
+## # ... with 690 more rows, and 3 more variables: purchase &lt;chr&gt;,
+## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+</div>
+<div id="data-extraction" class="section level2">
+<h2>Data Extraction</h2>
+<p>In the first <a href="https://blog.aravindhebbali.com/2017/12/25/data-wrangling-with-dplyr-part-1/">post</a>, we had observed that dplyr verbs always returned a tibble. What if you want to extract a specific column or a bunch of rows but not as a tibble?</p>
+<p>Use <code>pull</code> to extract columns either by name or position. It will return a vector. In the below example, we extract the <code>device</code> column as a vector. I am using <code>head</code> in addition to limit the output printed.</p>
+<p><br></p>
+<p><img src="pull_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>ecom %&gt;%
+  pull(device) %&gt;%
+  head</code></pre>
+<pre><code>## [1] &quot;laptop&quot; &quot;tablet&quot; &quot;laptop&quot; &quot;tablet&quot; &quot;mobile&quot; &quot;laptop&quot;</code></pre>
+<p>Let us extract the first column from <code>ecom</code> using column position instead of name.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(1) %&gt;%
+  head</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6</code></pre>
+<p>You can use <code>-</code> before the column position to indicate the position in reverse. The below example extracts data from the last column.</p>
+<pre class="r"><code>ecom %&gt;%
+  pull(-1) %&gt;%
+  head</code></pre>
+<pre><code>## [1]   0   0   0 434   0   0</code></pre>
+<p>Let us now look at extracting rows using <code>slice()</code>. In the below example, we extract data starting from the 5th row and upto the 15th row.</p>
+<p><br></p>
+<p><img src="slice_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>slice(ecom, 5:15)</code></pre>
+<pre><code>## # A tibble: 11 x 11
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1     5 yahoo    mobile true           9       1      955 Poland        
+##  2     6 yahoo    laptop false          5       5      135 South Africa  
+##  3     7 yahoo    mobile true          10       1       75 Bangladesh    
+##  4     8 direct   mobile true          10       1      908 Indonesia     
+##  5     9 bing     mobile false          3      19      209 Netherlands   
+##  6    10 google   mobile true           6       1      208 Czech Republic
+##  7    11 direct   laptop true           9       1      738 Jamaica       
+##  8    12 direct   tablet false          6      12      132 Estonia       
+##  9    13 direct   mobile false          9      14      406 Ireland       
+## 10    14 yahoo    tablet false          5       8       80 Philippines   
+## 11    15 yahoo    mobile false          7       1       19 France        
+## # ... with 3 more variables: purchase &lt;chr&gt;, order_items &lt;dbl&gt;,
+## #   order_value &lt;dbl&gt;</code></pre>
+<p>Use <code>n()</code> inside <code>slice()</code> to extract the last row.</p>
+<pre class="r"><code>slice(ecom, n())</code></pre>
+<pre><code>## # A tibble: 1 x 11
+##      id referrer device bouncers n_visit n_pages duration country purchase
+##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
+## 1  1000 google   mobile true           9       1      269 China   false   
+## # ... with 2 more variables: order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+</div>
+<div id="between" class="section level2">
+<h2>Between</h2>
+<p><code>between()</code> allows us to test if the values in a column lie between two specific values. In the below example, we check how many visits browsed pages between 5 and 15.</p>
+<pre class="r"><code>ecom_sample &lt;- sample_n(ecom, 30)
+  
+ecom_sample %&gt;%
+  pull(n_pages) %&gt;%
+  between(5, 15) </code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
+## [23] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE</code></pre>
+</div>
+<div id="case-when" class="section level2">
+<h2>Case When</h2>
+<p><code>case_when()</code> is an alternative to <code>if else</code>. It allows us to lay down the conditions clearly and makes the code more readable. In the below example, we create a new column <code>repeat_visit</code> from <code>n_visit</code> (the number of previous visits).</p>
+<pre class="r"><code>ecom %&gt;%
+  mutate(
+    repeat_visit = case_when(
+      n_visit &gt; 0 ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) %&gt;%
+  select(n_visit, repeat_visit) </code></pre>
+<pre><code>## # A tibble: 1,000 x 2
+##    n_visit repeat_visit
+##      &lt;int&gt; &lt;lgl&gt;       
+##  1      10 TRUE        
+##  2       9 TRUE        
+##  3       0 FALSE       
+##  4       3 TRUE        
+##  5       9 TRUE        
+##  6       5 TRUE        
+##  7      10 TRUE        
+##  8      10 TRUE        
+##  9       3 TRUE        
+## 10       6 TRUE        
+## # ... with 990 more rows</code></pre>
+</div>
