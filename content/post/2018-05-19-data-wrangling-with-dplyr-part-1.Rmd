@@ -462,6 +462,14 @@ Arranging data in ascending or descending order is one of the most common tasks
 in data manipulation. We can use `arrange` to arrange data by different columns.
 Let us say we want to arrange data by the number of pages browsed.
 
+<br>
+
+```{r img13, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("arrange_1.png")
+```
+
+<br>
+
 ```{r arrange_eg}
 arrange(ecom, n_pages)
 ```
