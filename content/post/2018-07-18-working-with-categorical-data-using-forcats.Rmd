@@ -16,7 +16,9 @@ tags:
 
 ## Introduction
 
-In this post, we will learn to work with categorical/qualitative data in R using [forcats](https://forcats.tidyverse.org). Let us begin by installing and loading forcats and a set of other pacakges we will be using.
+In this post, we will learn to work with categorical/qualitative data in R 
+using [forcats](https://forcats.tidyverse.org). Let us begin by installing 
+and loading forcats and a set of other pacakges we will be using.
 
 ## Libraries &  Code
 
@@ -44,7 +46,11 @@ library(readr)
 
 ## Case Study
 
-We will use a case study to explore the various features of the forcats package. You can download the data for the case study from [here](https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv) or directly import the data using the readr package. We will do the following in this case study:
+We will use a case study to explore the various features of the forcats 
+package. You can download the data for the case study from 
+[here](https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv) 
+or directly import the data using the readr package. We will do the following 
+in this case study:
 
 - compute the frequency of different referrers
 - plot average number of pages browsed for different referrers
@@ -55,13 +61,13 @@ We will use a case study to explore the various features of the forcats package.
 ### Data
 
 ```{r show, message=FALSE}
-ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv',
-                 col_types = list(col_integer(), 
-                                  col_factor(levels = c("bing", "direct", "social", "yahoo", "google")), 
-                                  col_factor(levels = c("laptop", "mobile", "tablet")), 
-                                  col_logical(), col_number(),
-                                  col_number(), col_number(), col_character(), 
-                                  col_logical(), col_number(), col_number()))
+ecom <- 
+  read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv',
+    col_types = list(col_integer(), 
+    col_factor(levels = c("bing", "direct", "social", "yahoo", "google")), 
+    col_factor(levels = c("laptop", "mobile", "tablet")), 
+    col_logical(), col_number(), col_number(), col_number(), 
+    col_character(), col_logical(), col_number(), col_number()))
 
 ecom
 ```
@@ -95,7 +101,7 @@ knitr::include_graphics("/img/fct_count.png")
 ```{r cat2}
 ecom %>%
   pull(referrer) %>%
-  fct_count
+  fct_count()
 ```
 
 If you want to sort the output in descending order, use `sort` and set it to `TRUE`.
@@ -155,7 +161,7 @@ Use `fct_unique` to view the categories or levels of the referrer variable.
 ```{r cat22}
 ecom %>%
   pull(referrer) %>%
-  fct_unique
+  fct_unique()
 ```
 
 Since we want to plot the referrers in descending order of frequency, we will
@@ -172,8 +178,8 @@ knitr::include_graphics("/img/fct_infreq.png")
 ```{r cat23}
 ecom %>%
   pull(referrer) %>%
-  fct_infreq %>%
-  fct_unique
+  fct_infreq() %>%
+  fct_unique()
 ```
 
 Now that we have reordered the referrers by frequency, let us plot them.
@@ -182,7 +188,7 @@ Now that we have reordered the referrers by frequency, let us plot them.
 ecom %>%
   mutate(
     ref = referrer %>% 
-      fct_infreq
+      fct_infreq()
   ) %>%
   ggplot(aes(ref)) +
   geom_bar()
@@ -195,7 +201,7 @@ Let us look at the categories of the referrer variable.
 ```{r cat24}
 ecom %>%
   pull(referrer) %>%
-  fct_unique
+  fct_unique()
 ```
 
 Since we want to plot the referrers in ascending order of frequency, we will 
@@ -212,8 +218,8 @@ knitr::include_graphics("/img/fct_rev.png")
 ```{r cat25}
 ecom %>%
   pull(referrer) %>%
-  fct_rev %>%
-  fct_unique
+  fct_rev() %>%
+  fct_unique()
 ```
 
 Let us reorder the referrers by frequency first and then reverse the order 
@@ -223,8 +229,8 @@ before plotting their frequencies.
 ecom %>%
   mutate(
     ref = referrer %>% 
-      fct_infreq %>% 
-      fct_rev
+      fct_infreq() %>% 
+      fct_rev()
   ) %>%
   ggplot(aes(ref)) +
   geom_bar()
@@ -235,7 +241,8 @@ ecom %>%
 ### Data 
 
 ```{r import2, message=FALSE}
-traffic <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv',
+traffic <- 
+  read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv',
   col_types = list(col_factor(levels = c("affiliates", "bing", "direct", "facebook", "yahoo", "google",
     "instagram", "twitter", "unknown"))))
 
@@ -256,7 +263,7 @@ Let us compute the traffic driven by different referrers using `fct_count`.
 ```{r cat6}
 traffic %>%
   pull(traffics) %>% 
-  fct_count
+  fct_count()
 ```
 
 ## Collapse Referrer Categories
@@ -283,7 +290,7 @@ traffic %>%
     social = c("facebook", "twitter", "instagram"),
     search = c("google", "bing", "yahoo")
   ) %>% 
-  fct_count
+  fct_count()
 ```
 
 ## Lump Infrequent Referrer Types
@@ -302,12 +309,12 @@ knitr::include_graphics("/img/fct_lump_1.png")
 ```{r cat8, collapse = TRUE}
 traffic %>%
   pull(traffics) %>% 
-  fct_count
+  fct_count()
 
 traffic %>%
   pull(traffics) %>% 
-  fct_lump %>% 
-  table
+  fct_lump() %>% 
+  table()
 ```
 
 ## Retain top 3 referrers
@@ -318,7 +325,7 @@ single category.
 ```{r cat9, echo=FALSE}
 traffic %>%
   pull(traffics) %>% 
-  fct_count %>% 
+  fct_count() %>% 
   arrange(desc(n))
 ```
 
@@ -329,7 +336,7 @@ retain top 3 categories and combine the rest.
 traffic %>% 
   pull(traffics) %>% 
   fct_lump(n = 3) %>% 
-  table
+  table()
 ```
 
 ## Lump Referrer Types with less than 10% traffic
@@ -347,7 +354,7 @@ knitr::include_graphics("/img/fct_lump_2.png")
 ```{r cat12, echo=FALSE}
 traffic %>% 
   pull(traffics) %>% 
-  fct_count %>%
+  fct_count() %>%
   mutate(
     percent = round((n / sum(n)) * 100, 2)
   )
@@ -362,7 +369,7 @@ proportion of more than 10% and combine the rest.
 traffic %>%
   pull(traffics) %>% 
   fct_lump(prop = 0.1) %>% 
-  table
+  table()
 ```
 
 ## Retain 3 Referrer Types with lowest traffic
@@ -373,7 +380,7 @@ to the website and combine the rest?
 ```{r cat14, echo=FALSE}
 traffic %>%
   pull(traffics) %>% 
-  fct_count %>% 
+  fct_count() %>% 
   arrange(n)
 ```
 
@@ -383,7 +390,7 @@ We will still use the `n` argument but instead of specifying `3`, we now specify
 traffic %>% 
   pull(traffics) %>% 
   fct_lump(n = -3) %>% 
-  table
+  table()
 ```
 
 ## Retain 3 Referrer Types with less than 10% traffic
@@ -394,7 +401,7 @@ the website and combine the rest into a single group.
 ```{r cat15, echo=FALSE}
 traffic %>%
   pull(traffics) %>% 
-  fct_count %>%
+  fct_count() %>%
   mutate(
     percent = round((n / sum(n)) * 100, 2)
   )
@@ -406,7 +413,7 @@ Instead of setting `prop` to `0.1`, we will set it to `-0.1`.
 traffic %>% 
   pull(traffics) %>% 
   fct_lump(prop = -0.1) %>% 
-  table
+  table()
 ```
 
 ## Replace Levels
@@ -448,12 +455,13 @@ knitr::include_graphics("/img/fct_recode.png")
 <br>
 
 ```{r recode}
-fct_recode(traffics, search = "bing", 
-                     search = "yahoo", 
-                     search = "google",
-                     social = "facebook", 
-                     social = "twitter", 
-                     social = "instagram") %>%
+fct_recode(traffics, 
+  search = "bing", 
+  search = "yahoo", 
+  search = "google",
+  social = "facebook", 
+  social = "twitter", 
+  social = "instagram") %>%
   levels()
 ```
 
@@ -501,12 +509,14 @@ fct_relevel(traffics, "facebook", after = Inf) %>%
 ## Data 
 
 ```{r import3a, echo=TRUE, message=FALSE}
-response_data <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv',
+response_data <- 
+  read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv',
   col_types = list(col_factor(levels = c("like", "like somewhat", "neutral", 
     "dislike somewhat", "dislike"), ordered = TRUE)))
 ```
 
-## Data
+Since we will be using only one column from the above data set, let us extract it using
+`use_series()` and save it as `responses`.
 
 ```{r import2n}
 responses <- use_series(response_data, response)
@@ -541,3 +551,4 @@ fct_shift(responses, -2) %>%
 ```
 
 ## References
+

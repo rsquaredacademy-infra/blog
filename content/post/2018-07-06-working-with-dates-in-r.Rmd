@@ -70,7 +70,7 @@ transact <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets
 ```
 
 ```{r show, echo=FALSE, eval=TRUE, message=FALSE}
-transact <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv')
+transact <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv')
 transact
 ```
 
@@ -118,9 +118,9 @@ Let us now extract the date, month and year from the `Due` column.
 ```{r lub2}
 transact %>%
   mutate(
-    due_day = day(Due),
+    due_day   = day(Due),
     due_month = month(Due),
-    due_year = year(Due)
+    due_year  = year(Due)
   )
 ```
 
@@ -138,12 +138,9 @@ knitr::include_graphics("/img/course_duration.png")
 <br>
 
 ```{r lub19, collapse = TRUE}
-course_start <- as_date('2017-04-12')
-
-course_end <- as_date('2017-04-21')
-
+course_start    <- as_date('2017-04-12')
+course_end      <- as_date('2017-04-21')
 course_duration <- course_end - course_start
-
 course_duration
 ```
 
@@ -170,7 +167,7 @@ transact %>%
     delay = Due - Payment
   ) %>%
   filter(delay < 0) %>%
-  tally
+  tally()
 ```
 
 ## Is due year a leap year?
@@ -202,10 +199,10 @@ the invoice or payment date, they will not be selected.
 ```{r lub6}
 transact %>%
   mutate(
-    due_day = day(Due),
+    due_day   = day(Due),
     due_month = month(Due),
-    due_year = year(Due),
-    is_leap = leap_year(due_year)
+    due_year  = year(Due),
+    is_leap   = leap_year(due_year)
   ) %>%
   select(-(Invoice), -(Payment)) %>%
   filter(due_month == 2 & due_day == 29)
@@ -230,9 +227,7 @@ knitr::include_graphics("/img/shift_dates.png")
 
 ```{r lab40, collapse = TRUE}
 course_start + days(2)
-
 course_start + weeks(3)
-
 course_start + years(1)
 ```
 
@@ -275,14 +270,10 @@ knitr::include_graphics("/img/interval_overlap.png")
 <br>
 
 ```{r lub60, collapse = TRUE}
-vacation_start <- as_date('2017-04-19')
-
-vacation_end <- as_date('2017-04-25')
-
-course_interval <- interval(course_start, course_end)
-
+vacation_start    <- as_date('2017-04-19')
+vacation_end      <- as_date('2017-04-25')
+course_interval   <- interval(course_start, course_end)
 vacation_interval <- interval(vacation_start, vacation_end)
-
 int_overlaps(course_interval, vacation_interval)
 ```
 
@@ -299,9 +290,9 @@ the due date. To do this, we will:
 transact %>%
   mutate(
     inv_due_interval = interval(Invoice, Due),
-    due_next = Due + days(1),
+    due_next         = Due + days(1),
     due_pay_interval = interval(due_next, Payment),
-    overlaps = int_overlaps(inv_due_interval, due_pay_interval)
+    overlaps         = int_overlaps(inv_due_interval, due_pay_interval)
   ) %>%
   select(Invoice, Due, Payment, overlaps)
 ```
@@ -315,8 +306,8 @@ transact %>%
   mutate(
     inv_due_interval = interval(Invoice, Due),
     due_pay_interval = interval(Due, Payment),  
-    due_pay_next = int_shift(due_pay_interval, by = days(1)),
-    overlaps = int_overlaps(inv_due_interval, due_pay_next)
+    due_pay_next     = int_shift(due_pay_interval, by = days(1)),
+    overlaps         = int_overlaps(inv_due_interval, due_pay_next)
   ) %>%
   select(Invoice, Due, Payment, overlaps)
 ```
@@ -341,15 +332,9 @@ knitr::include_graphics("/img/shift_interval.png")
 
 ```{r lab50, collapse = TRUE}
 course_interval <- interval(course_start, course_end)
-
-course_interval %>%
-  int_shift(by = days(1))
-
-course_interval %>%
-  int_shift(by = weeks(3))
-
-course_interval %>%
-  int_shift(by = years(1))
+int_shift(course_interval, by = days(1))
+int_shift(course_interval, by = weeks(3))
+int_shift(course_interval, by = years(1))
 ```
 
 ## Within
@@ -367,7 +352,6 @@ knitr::include_graphics("/img/within.png")
 
 ```{r lub30, collapse = TRUE}
 conference <- as_date('2017-04-15')
-
 conference %within% interval(course_start, course_end)
 ```
 
@@ -383,7 +367,7 @@ the due date. We will do this by:
 transact %>%
   mutate(
     inv_due_interval = interval(Invoice, Due),
-    overlaps = Payment %within% inv_due_interval
+    overlaps         = Payment %within% inv_due_interval
   ) %>%
   select(Due, Payment, overlaps)
 ```
@@ -402,15 +386,9 @@ knitr::include_graphics("/img/quarter_semester.png")
 
 ```{r lub20, collapse = TRUE}
 course_start
-
-course_start %>%
-  quarter
-
-course_start %>%
-  quarter(with_year = TRUE)
-
-course_start %>%
-  semester
+quarter(course_start)
+quarter(course_start, with_year = TRUE)
+semester(course_start)  
 ```
 
 Let us count the invoices due for each quarter.
@@ -435,42 +413,28 @@ transact %>%
 Let us get the course duration in different units.
 
 ```{r lub15, collapse = TRUE}
-course_duration <- 
-  (course_end - course_start) %>%
-  as.numeric
-
-course_duration %>%
-  duration(units = 'hours')
-
-course_duration %>%
-  duration(units = 'days')
-
-course_duration %>%
-  duration(units = 'weeks')
+course_duration <- as.numeric(course_end - course_start) 
+duration(course_duration, units = 'hours')
+duration(course_duration, units = 'days')
+duration(course_duration, units = 'weeks')
 ```
 
 #### Case Study
-
-Let us also get the course interval in different units.
-
-<br>
 
 ```{r img9, echo=FALSE, out.width="100%", fig.align="center"}
 knitr::include_graphics("/img/convert.png")
 ```
 
+Let us also get the course interval in different units.
+
 <br>
 
 ```{r lub11, collapse = TRUE}
-interval(course_start, course_end) / dseconds()
-
-interval(course_start, course_end) / dminutes()
-
-interval(course_start, course_end) / dhours()
-
-interval(course_start, course_end) / dweeks()
-
-interval(course_start, course_end) / dyears()
+course_interval / dseconds()
+course_interval / dminutes()
+course_interval / dhours()
+course_interval / dweeks()
+course_interval / dyears()
 ```
 
 We can use `time_length()` to get the course interval in different units.
@@ -484,14 +448,9 @@ knitr::include_graphics("/img/time_length.png")
 <br>
 
 ```{r lub16, collapse = TRUE}
-interval(course_start, course_end) %>%
-  time_length(unit = "seconds")
-
-interval(course_start, course_end) %>%
-  time_length(unit = "minutes")
-
-interval(course_start, course_end) %>%
-  time_length(unit = "hours")
+time_length(course_interval, unit = "seconds")
+time_length(course_interval, unit = "minutes")
+time_length(course_interval, unit = "hours")
 ```
 
 `as.period()` is another way to get the course interval in different units.
@@ -505,12 +464,9 @@ knitr::include_graphics("/img/as_period.png")
 <br>
 
 ```{r lub17, collapse = TRUE}
-interval(course_start, course_end) %>%
-  as.period(unit = "seconds")
-
-interval(course_start, course_end) %>%
-  as.period(unit = "minutes")
-
-interval(course_start, course_end) %>%
-  as.period(unit = "hours")
+as.period(course_interval, unit = "seconds")
+as.period(course_interval, unit = "minutes")
+as.period(course_interval, unit = "hours")
 ```
+
+## References

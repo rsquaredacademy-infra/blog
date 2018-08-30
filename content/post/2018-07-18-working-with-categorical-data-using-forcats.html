@@ -55,13 +55,13 @@ library(ggplot2)</code></pre>
 </ul>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<pre class="r"><code>ecom &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
-                 col_types = list(col_integer(), 
-                                  col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)), 
-                                  col_factor(levels = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)), 
-                                  col_logical(), col_number(),
-                                  col_number(), col_number(), col_character(), 
-                                  col_logical(), col_number(), col_number()))
+<pre class="r"><code>ecom &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
+    col_types = list(col_integer(), 
+    col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)), 
+    col_factor(levels = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)), 
+    col_logical(), col_number(), col_number(), col_number(), 
+    col_character(), col_logical(), col_number(), col_number()))
 
 ecom</code></pre>
 <pre><code>## # A tibble: 1,000 x 11
@@ -105,7 +105,7 @@ ecom</code></pre>
 <p><br></p>
 <pre class="r"><code>ecom %&gt;%
   pull(referrer) %&gt;%
-  fct_count</code></pre>
+  fct_count()</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
@@ -176,7 +176,7 @@ refer_summary</code></pre>
 <p>Use <code>fct_unique</code> to view the categories or levels of the referrer variable.</p>
 <pre class="r"><code>ecom %&gt;%
   pull(referrer) %&gt;%
-  fct_unique</code></pre>
+  fct_unique()</code></pre>
 <pre><code>## [1] bing   direct social yahoo  google
 ## Levels: bing direct social yahoo google</code></pre>
 <p>Since we want to plot the referrers in descending order of frequency, we will use <code>fct_infreq()</code> to reorder by frequency.</p>
@@ -185,15 +185,15 @@ refer_summary</code></pre>
 <p><br></p>
 <pre class="r"><code>ecom %&gt;%
   pull(referrer) %&gt;%
-  fct_infreq %&gt;%
-  fct_unique</code></pre>
+  fct_infreq() %&gt;%
+  fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social bing   direct
 ## Levels: google yahoo social bing direct</code></pre>
 <p>Now that we have reordered the referrers by frequency, let us plot them.</p>
 <pre class="r"><code>ecom %&gt;%
   mutate(
     ref = referrer %&gt;% 
-      fct_infreq
+      fct_infreq()
   ) %&gt;%
   ggplot(aes(ref)) +
   geom_bar()</code></pre>
@@ -204,7 +204,7 @@ refer_summary</code></pre>
 <p>Let us look at the categories of the referrer variable.</p>
 <pre class="r"><code>ecom %&gt;%
   pull(referrer) %&gt;%
-  fct_unique</code></pre>
+  fct_unique()</code></pre>
 <pre><code>## [1] bing   direct social yahoo  google
 ## Levels: bing direct social yahoo google</code></pre>
 <p>Since we want to plot the referrers in ascending order of frequency, we will use <code>fct_rev()</code> to reverse the order.</p>
@@ -213,16 +213,16 @@ refer_summary</code></pre>
 <p><br></p>
 <pre class="r"><code>ecom %&gt;%
   pull(referrer) %&gt;%
-  fct_rev %&gt;%
-  fct_unique</code></pre>
+  fct_rev() %&gt;%
+  fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social direct bing  
 ## Levels: google yahoo social direct bing</code></pre>
 <p>Let us reorder the referrers by frequency first and then reverse the order before plotting their frequencies.</p>
 <pre class="r"><code>ecom %&gt;%
   mutate(
     ref = referrer %&gt;% 
-      fct_infreq %&gt;% 
-      fct_rev
+      fct_infreq() %&gt;% 
+      fct_rev()
   ) %&gt;%
   ggplot(aes(ref)) +
   geom_bar()</code></pre>
@@ -232,7 +232,8 @@ refer_summary</code></pre>
 <h2>Case Study 2</h2>
 <div id="data-1" class="section level3">
 <h3>Data</h3>
-<pre class="r"><code>traffic &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv&#39;,
+<pre class="r"><code>traffic &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv&#39;,
   col_types = list(col_factor(levels = c(&quot;affiliates&quot;, &quot;bing&quot;, &quot;direct&quot;, &quot;facebook&quot;, &quot;yahoo&quot;, &quot;google&quot;,
     &quot;instagram&quot;, &quot;twitter&quot;, &quot;unknown&quot;))))
 
@@ -260,7 +261,7 @@ traffic</code></pre>
 <p>Let us compute the traffic driven by different referrers using <code>fct_count</code>.</p>
 <pre class="r"><code>traffic %&gt;%
   pull(traffics) %&gt;% 
-  fct_count</code></pre>
+  fct_count()</code></pre>
 <pre><code>## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -291,7 +292,7 @@ traffic</code></pre>
     social = c(&quot;facebook&quot;, &quot;twitter&quot;, &quot;instagram&quot;),
     search = c(&quot;google&quot;, &quot;bing&quot;, &quot;yahoo&quot;)
   ) %&gt;% 
-  fct_count</code></pre>
+  fct_count()</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -309,7 +310,7 @@ traffic</code></pre>
 <p><br></p>
 <pre class="r"><code>traffic %&gt;%
   pull(traffics) %&gt;% 
-  fct_count
+  fct_count()
 ## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -325,8 +326,8 @@ traffic</code></pre>
 
 traffic %&gt;%
   pull(traffics) %&gt;% 
-  fct_lump %&gt;% 
-  table
+  fct_lump() %&gt;% 
+  table()
 ## .
 ## affiliates       bing   facebook      yahoo     google  instagram 
 ##       7641       5893       8135       4899       9229       3907 
@@ -352,7 +353,7 @@ traffic %&gt;%
 <pre class="r"><code>traffic %&gt;% 
   pull(traffics) %&gt;% 
   fct_lump(n = 3) %&gt;% 
-  table</code></pre>
+  table()</code></pre>
 <pre><code>## .
 ## affiliates   facebook     google      Other 
 ##       7641       8135       9229      23227</code></pre>
@@ -379,7 +380,7 @@ traffic %&gt;%
 <pre class="r"><code>traffic %&gt;%
   pull(traffics) %&gt;% 
   fct_lump(prop = 0.1) %&gt;% 
-  table</code></pre>
+  table()</code></pre>
 <pre><code>## .
 ## affiliates       bing   facebook      yahoo     google      Other 
 ##       7641       5893       8135       4899       9229      12435</code></pre>
@@ -403,7 +404,7 @@ traffic %&gt;%
 <pre class="r"><code>traffic %&gt;% 
   pull(traffics) %&gt;% 
   fct_lump(n = -3) %&gt;% 
-  table</code></pre>
+  table()</code></pre>
 <pre><code>## .
 ##    direct instagram   unknown     Other 
 ##      1350      3907      2657     40318</code></pre>
@@ -427,7 +428,7 @@ traffic %&gt;%
 <pre class="r"><code>traffic %&gt;% 
   pull(traffics) %&gt;% 
   fct_lump(prop = -0.1) %&gt;% 
-  table</code></pre>
+  table()</code></pre>
 <pre><code>## .
 ##    direct instagram   twitter   unknown     Other 
 ##      1350      3907      4521      2657     35797</code></pre>
@@ -453,12 +454,13 @@ traffic %&gt;%
 <p><br></p>
 <p><img src="/img/fct_recode.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>fct_recode(traffics, search = &quot;bing&quot;, 
-                     search = &quot;yahoo&quot;, 
-                     search = &quot;google&quot;,
-                     social = &quot;facebook&quot;, 
-                     social = &quot;twitter&quot;, 
-                     social = &quot;instagram&quot;) %&gt;%
+<pre class="r"><code>fct_recode(traffics, 
+  search = &quot;bing&quot;, 
+  search = &quot;yahoo&quot;, 
+  search = &quot;google&quot;,
+  social = &quot;facebook&quot;, 
+  social = &quot;twitter&quot;, 
+  social = &quot;instagram&quot;) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;affiliates&quot; &quot;search&quot;     &quot;direct&quot;     &quot;social&quot;     &quot;unknown&quot;</code></pre>
 </div>
@@ -488,12 +490,11 @@ traffic %&gt;%
 </div>
 <div id="data-2" class="section level2">
 <h2>Data</h2>
-<pre class="r"><code>response_data &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv&#39;,
+<pre class="r"><code>response_data &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv&#39;,
   col_types = list(col_factor(levels = c(&quot;like&quot;, &quot;like somewhat&quot;, &quot;neutral&quot;, 
     &quot;dislike somewhat&quot;, &quot;dislike&quot;), ordered = TRUE)))</code></pre>
-</div>
-<div id="data-3" class="section level2">
-<h2>Data</h2>
+<p>Since we will be using only one column from the above data set, let us extract it using <code>use_series()</code> and save it as <code>responses</code>.</p>
 <pre class="r"><code>responses &lt;- use_series(response_data, response)</code></pre>
 </div>
 <div id="shift-levels" class="section level2">
