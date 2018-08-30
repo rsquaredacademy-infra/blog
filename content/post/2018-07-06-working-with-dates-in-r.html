@@ -48,7 +48,7 @@ library(readr)</code></pre>
 <h4>Current Date/Time</h4>
 <p>Next, let us check out the current date, time and whether it occurs in the am or pm. <code>now()</code> returns the date time as well as the time zone whereas <code>today()</code> will return only the current date. <code>am()</code> and <code>pm()</code> return <code>TRUE</code> or <code>FALSE</code>.</p>
 <pre class="r"><code>now()</code></pre>
-<pre><code>## [1] &quot;2018-08-30 13:11:16 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2018-08-30 15:07:10 IST&quot;</code></pre>
 <pre class="r"><code>today()</code></pre>
 <pre><code>## [1] &quot;2018-08-30&quot;</code></pre>
 <pre class="r"><code>am(now())  </code></pre>
@@ -206,13 +206,22 @@ course_duration
 </div>
 <div id="if-due-day-is-february-29-is-it-a-leap-year" class="section level2">
 <h2>If due day is February 29, is it a leap year?</h2>
-<p>Let us do some data sanitization. If the due day happens to be February 29, let us ensure that the due year is a leap year. We will extract the following from the due date:</p>
+<p>Let us do some data sanitization. If the due day happens to be February 29, let us ensure that the due year is a leap year. Below are the steps to check if the due year is a leap year:</p>
+<ul>
+<li>we will extract the following from the due date:
 <ul>
 <li>day</li>
 <li>month</li>
 <li>year</li>
+</ul></li>
+<li>we will then create a new column <code>is_leap</code> which will have be set to <code>TRUE</code> if the year is a leap year else it will be set to <code>FALSE</code></li>
+<li>filter all the payments due on 29th Feb</li>
+<li>select the following columns:
+<ul>
+<li><code>Due</code></li>
+<li><code>is_leap</code></li>
+</ul></li>
 </ul>
-<p>We will then create a new column <code>is_leap</code> which will have be set to <code>TRUE</code> if the year is a leap year else it will be set to <code>FALSE</code> and filter all the rows where the month is 2 and the day is 29. Since we do not need the invoice or payment date, they will not be selected.</p>
 <pre class="r"><code>transact %&gt;%
   mutate(
     due_day   = day(Due),
@@ -220,15 +229,15 @@ course_duration
     due_year  = year(Due),
     is_leap   = leap_year(due_year)
   ) %&gt;%
-  select(-(Invoice), -(Payment)) %&gt;%
-  filter(due_month == 2 &amp; due_day == 29)</code></pre>
-<pre><code>## # A tibble: 4 x 5
-##   Due        due_day due_month due_year is_leap
-##   &lt;date&gt;       &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;  
-## 1 2012-02-29      29         2     2012 TRUE   
-## 2 2012-02-29      29         2     2012 TRUE   
-## 3 2012-02-29      29         2     2012 TRUE   
-## 4 2012-02-29      29         2     2012 TRUE</code></pre>
+  filter(due_month == 2 &amp; due_day == 29) %&gt;%
+  select(Due, is_leap) </code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   Due        is_leap
+##   &lt;date&gt;     &lt;lgl&gt;  
+## 1 2012-02-29 TRUE   
+## 2 2012-02-29 TRUE   
+## 3 2012-02-29 TRUE   
+## 4 2012-02-29 TRUE</code></pre>
 </div>
 <div id="shift-date" class="section level2">
 <h2>Shift Date</h2>
@@ -280,7 +289,8 @@ int_overlaps(course_interval, vacation_interval)
 <p>Let us use intervals to count the number of invoices that were settled within the due date. To do this, we will:</p>
 <ul>
 <li>create an interval for the invoice and due date</li>
-<li>another interval for the due date and the payment date</li>
+<li>create a new column <code>due_next</code> by incrementing the due date by 1 day</li>
+<li>another interval for <code>due_next</code> and the payment date</li>
 <li>if the intervals overlap, the payment was made within the due date</li>
 </ul>
 <pre class="r"><code>transact %&gt;%
@@ -328,6 +338,28 @@ int_overlaps(course_interval, vacation_interval)
 ##  9 2012-05-14 2012-06-13 2012-07-01 FALSE   
 ## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
 ## # ... with 2,456 more rows</code></pre>
+<p>You might be thinking why we incremented the due date by a day before creating the interval between the due day and the payment day. If we do not increment, both the intervals will share a common date i.e. the due date and they will always overlap as shown below:</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    inv_due_interval = interval(Invoice, Due),
+    due_pay_interval = interval(Due, Payment),
+    overlaps         = int_overlaps(inv_due_interval, due_pay_interval)
+  ) %&gt;%
+  select(Invoice, Due, Payment, overlaps)</code></pre>
+<pre><code>## # A tibble: 2,466 x 4
+##    Invoice    Due        Payment    overlaps
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;   
+##  1 2013-01-02 2013-02-01 2013-01-15 TRUE    
+##  2 2013-01-26 2013-02-25 2013-03-03 TRUE    
+##  3 2013-07-03 2013-08-02 2013-07-08 TRUE    
+##  4 2013-02-10 2013-03-12 2013-03-17 TRUE    
+##  5 2012-10-25 2012-11-24 2012-11-28 TRUE    
+##  6 2012-01-27 2012-02-26 2012-02-22 TRUE    
+##  7 2013-08-13 2013-09-12 2013-09-09 TRUE    
+##  8 2012-12-16 2013-01-15 2013-01-12 TRUE    
+##  9 2012-05-14 2012-06-13 2012-07-01 TRUE    
+## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
+## # ... with 2,456 more rows</code></pre>
 </div>
 <div id="shift-interval" class="section level2">
 <h2>Shift Interval</h2>
@@ -350,12 +382,12 @@ int_shift(course_interval, by = years(1))
 </div>
 <div id="within" class="section level2">
 <h2>Within</h2>
-<p>Does a conference that we need to attend occur during the course duration?</p>
+<p>Let us assume that we have to attend a conference in April 2017. Does it occur during the course duration? We can answer this using <code>%within%</code> which will return <code>TRUE</code> if a date falls within an interval.</p>
 <p><br></p>
 <p><img src="/img/within.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>conference &lt;- as_date(&#39;2017-04-15&#39;)
-conference %within% interval(course_start, course_end)
+conference %within% course_interval
 ## [1] TRUE</code></pre>
 <div id="how-many-invoices-were-settled-within-due-date-1" class="section level4">
 <h4>How many invoices were settled within due date?</h4>
@@ -431,17 +463,6 @@ semester(course_start)
 ##  9 2012-05-14 2012-06-13 2012-07-01   2012.
 ## 10 2013-07-01 2013-07-31 2013-07-26   2013.
 ## # ... with 2,456 more rows</code></pre>
-</div>
-<div id="duration" class="section level2">
-<h2>Duration</h2>
-<p>Let us get the course duration in different units.</p>
-<pre class="r"><code>course_duration &lt;- as.numeric(course_end - course_start) 
-duration(course_duration, units = &#39;hours&#39;)
-## [1] &quot;32400s (~9 hours)&quot;
-duration(course_duration, units = &#39;days&#39;)
-## [1] &quot;777600s (~1.29 weeks)&quot;
-duration(course_duration, units = &#39;weeks&#39;)
-## [1] &quot;5443200s (~9 weeks)&quot;</code></pre>
 <div id="case-study-1" class="section level4">
 <h4>Case Study</h4>
 <p><img src="/img/convert.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -481,4 +502,8 @@ as.period(course_interval, unit = &quot;hours&quot;)
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
+<ul>
+<li><a href="https://lubridate.tidyverse.org/" class="uri">https://lubridate.tidyverse.org/</a></li>
+<li><a href="http://r4ds.had.co.nz/dates-and-times.html" class="uri">http://r4ds.had.co.nz/dates-and-times.html</a></li>
+</ul>
 </div>

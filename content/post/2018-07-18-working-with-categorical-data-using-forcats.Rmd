@@ -243,8 +243,12 @@ ecom %>%
 ```{r import2, message=FALSE}
 traffic <- 
   read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv',
-  col_types = list(col_factor(levels = c("affiliates", "bing", "direct", "facebook", "yahoo", "google",
-    "instagram", "twitter", "unknown"))))
+    col_types = list(
+      col_factor(levels = c("affiliates", "bing", "direct", "facebook", 
+        "yahoo", "google", "instagram", "twitter", "unknown")
+      )
+    )
+  )
 
 traffic
 ```
@@ -511,8 +515,10 @@ fct_relevel(traffics, "facebook", after = Inf) %>%
 ```{r import3a, echo=TRUE, message=FALSE}
 response_data <- 
   read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv',
-  col_types = list(col_factor(levels = c("like", "like somewhat", "neutral", 
-    "dislike somewhat", "dislike"), ordered = TRUE)))
+    col_types = list(col_factor(levels = c("like", "like somewhat", "neutral", 
+      "dislike somewhat", "dislike"), ordered = TRUE)
+    )
+  )
 ```
 
 Since we will be using only one column from the above data set, let us extract it using

@@ -234,8 +234,12 @@ refer_summary</code></pre>
 <h3>Data</h3>
 <pre class="r"><code>traffic &lt;- 
   read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web_traffic.csv&#39;,
-  col_types = list(col_factor(levels = c(&quot;affiliates&quot;, &quot;bing&quot;, &quot;direct&quot;, &quot;facebook&quot;, &quot;yahoo&quot;, &quot;google&quot;,
-    &quot;instagram&quot;, &quot;twitter&quot;, &quot;unknown&quot;))))
+    col_types = list(
+      col_factor(levels = c(&quot;affiliates&quot;, &quot;bing&quot;, &quot;direct&quot;, &quot;facebook&quot;, 
+        &quot;yahoo&quot;, &quot;google&quot;, &quot;instagram&quot;, &quot;twitter&quot;, &quot;unknown&quot;)
+      )
+    )
+  )
 
 traffic</code></pre>
 <pre><code>## # A tibble: 48,232 x 1
@@ -492,8 +496,10 @@ traffic %&gt;%
 <h2>Data</h2>
 <pre class="r"><code>response_data &lt;- 
   read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv&#39;,
-  col_types = list(col_factor(levels = c(&quot;like&quot;, &quot;like somewhat&quot;, &quot;neutral&quot;, 
-    &quot;dislike somewhat&quot;, &quot;dislike&quot;), ordered = TRUE)))</code></pre>
+    col_types = list(col_factor(levels = c(&quot;like&quot;, &quot;like somewhat&quot;, &quot;neutral&quot;, 
+      &quot;dislike somewhat&quot;, &quot;dislike&quot;), ordered = TRUE)
+    )
+  )</code></pre>
 <p>Since we will be using only one column from the above data set, let us extract it using <code>use_series()</code> and save it as <code>responses</code>.</p>
 <pre class="r"><code>responses &lt;- use_series(response_data, response)</code></pre>
 </div>
