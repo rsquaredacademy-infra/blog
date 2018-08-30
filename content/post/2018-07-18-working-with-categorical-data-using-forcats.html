@@ -57,55 +57,60 @@ library(ggplot2)</code></pre>
 <h3>Data</h3>
 <pre class="r"><code>ecom &lt;- 
   read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
-    col_types = list(col_integer(), 
-    col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)), 
-    col_factor(levels = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)), 
-    col_logical(), col_number(), col_number(), col_number(), 
-    col_character(), col_logical(), col_number(), col_number()))
+    col_types = cols_only(
+      referrer = col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)),
+      n_pages = col_double(), duration = col_double()
+    )
+  )</code></pre>
+<pre><code>## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
 
-ecom</code></pre>
-<pre><code>## # A tibble: 1,000 x 11
-##       id referrer device bouncers n_visit n_pages duration country       
-##    &lt;int&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
-##  1     1 google   laptop TRUE          10       1      693 Czech Republic
-##  2     2 yahoo    tablet TRUE           9       1      459 Yemen         
-##  3     3 direct   laptop TRUE           0       1      996 Brazil        
-##  4     4 bing     tablet FALSE          3      18      468 China         
-##  5     5 yahoo    mobile TRUE           9       1      955 Poland        
-##  6     6 yahoo    laptop FALSE          5       5      135 South Africa  
-##  7     7 yahoo    mobile TRUE          10       1       75 Bangladesh    
-##  8     8 direct   mobile TRUE          10       1      908 Indonesia     
-##  9     9 bing     mobile FALSE          3      19      209 Netherlands   
-## 10    10 google   mobile TRUE           6       1      208 Czech Republic
-## # ... with 990 more rows, and 3 more variables: purchase &lt;lgl&gt;,
-## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
-</div>
-<div id="data-dictionary" class="section level3">
-<h3>Data Dictionary</h3>
-<ul>
-<li>id: row id</li>
-<li>referrer: referrer website/search engine</li>
-<li>os: operating system</li>
-<li>browser: browser</li>
-<li>device: device used to visit the website</li>
-<li>n_pages: number of pages visited</li>
-<li>duration: time spent on the website (in seconds)</li>
-<li>repeat: frequency of visits</li>
-<li>country: country of origin</li>
-<li>purchase: whether visitor purchased</li>
-<li>order_value: order value of visitor (in dollars)</li>
-</ul>
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed</code></pre>
+<pre class="r"><code>ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 3
+##    referrer n_pages duration
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+##  1 google         1      693
+##  2 yahoo          1      459
+##  3 direct         1      996
+##  4 bing          18      468
+##  5 yahoo          1      955
+##  6 yahoo          5      135
+##  7 yahoo          1       75
+##  8 direct         1      908
+##  9 bing          19      209
+## 10 google         1      208
+## # ... with 990 more rows</code></pre>
+<p>Let us extract the <code>referrer</code> column from the above data using <code>use_series</code> and save it in a new variable <code>referrers</code>. Instead of using ecom which is a tibble, we will use <code>referrers</code> which is a vector. We do this to avoid extracting the <code>referrer</code> column from the above data in later examples.</p>
+<pre class="r"><code>referrers &lt;- use_series(ecom, referrer)</code></pre>
 </div>
 </div>
 <div id="tabulate-referrers" class="section level2">
 <h2>Tabulate Referrers</h2>
-<p>Let us look at the traffic driven by different referrers.</p>
+<p>Let us look at the traffic driven by different referrer types.</p>
 <p><br></p>
 <p><img src="/img/fct_count.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
-  fct_count()</code></pre>
+<pre class="r"><code>fct_count(referrers)</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
@@ -115,9 +120,7 @@ ecom</code></pre>
 ## 4 yahoo    207
 ## 5 google   208</code></pre>
 <p>If you want to sort the output in descending order, use <code>sort</code> and set it to <code>TRUE</code>.</p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
-  fct_count(sort = TRUE)</code></pre>
+<pre class="r"><code>fct_count(referrers, sort = TRUE)</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
@@ -126,6 +129,10 @@ ecom</code></pre>
 ## 3 social   200
 ## 4 bing     194
 ## 5 direct   191</code></pre>
+<p>Use <code>fct_unique</code> to view the categories or levels of the referrer variable.</p>
+<pre class="r"><code>fct_unique(referrers)</code></pre>
+<pre><code>## [1] bing   direct social yahoo  google
+## Levels: bing direct social yahoo google</code></pre>
 </div>
 <div id="reorder-referrers" class="section level2">
 <h2>Reorder Referrers</h2>
@@ -161,35 +168,16 @@ refer_summary</code></pre>
 </div>
 <div id="plot-referrer-frequency-descending-order" class="section level2">
 <h2>Plot Referrer Frequency (Descending Order)</h2>
-<p>Let us look at the distribution of the referreres.</p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
-  fct_count(sort = TRUE)</code></pre>
-<pre><code>## # A tibble: 5 x 2
-##   f          n
-##   &lt;fct&gt;  &lt;int&gt;
-## 1 google   208
-## 2 yahoo    207
-## 3 social   200
-## 4 bing     194
-## 5 direct   191</code></pre>
-<p>Use <code>fct_unique</code> to view the categories or levels of the referrer variable.</p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
-  fct_unique()</code></pre>
-<pre><code>## [1] bing   direct social yahoo  google
-## Levels: bing direct social yahoo google</code></pre>
 <p>Since we want to plot the referrers in descending order of frequency, we will use <code>fct_infreq()</code> to reorder by frequency.</p>
 <p><br></p>
 <p><img src="/img/fct_infreq.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
+<pre class="r"><code>referrers %&gt;%
   fct_infreq() %&gt;%
   fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social bing   direct
 ## Levels: google yahoo social bing direct</code></pre>
-<p>Now that we have reordered the referrers by frequency, let us plot them.</p>
+<p>Now that we know how to reorder categories/levels by frequency, let us reorder the referrers by frequency and plot them.</p>
 <pre class="r"><code>ecom %&gt;%
   mutate(
     ref = referrer %&gt;% 
@@ -202,17 +190,14 @@ refer_summary</code></pre>
 <div id="plot-referrer-frequency-ascending-order" class="section level2">
 <h2>Plot Referrer Frequency (Ascending Order)</h2>
 <p>Let us look at the categories of the referrer variable.</p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
-  fct_unique()</code></pre>
+<pre class="r"><code>fct_unique(referrers)</code></pre>
 <pre><code>## [1] bing   direct social yahoo  google
 ## Levels: bing direct social yahoo google</code></pre>
 <p>Since we want to plot the referrers in ascending order of frequency, we will use <code>fct_rev()</code> to reverse the order.</p>
 <p><br></p>
 <p><img src="/img/fct_rev.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>ecom %&gt;%
-  pull(referrer) %&gt;%
+<pre class="r"><code>referrers %&gt;%
   fct_rev() %&gt;%
   fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social direct bing  
@@ -230,6 +215,12 @@ refer_summary</code></pre>
 </div>
 <div id="case-study-2" class="section level2">
 <h2>Case Study 2</h2>
+<p>In this case study, we will learn to:</p>
+<ul>
+<li>combine categories</li>
+<li>recategorize</li>
+</ul>
+<p>The data set we will use has just one column <code>traffics</code> i.e. the source of traffic for a imaginary website.</p>
 <div id="data-1" class="section level3">
 <h3>Data</h3>
 <pre class="r"><code>traffic &lt;- 
@@ -256,16 +247,14 @@ traffic</code></pre>
 ##  9 google  
 ## 10 google  
 ## # ... with 48,222 more rows</code></pre>
-<p>We will use the <code>traffics</code> column from the above data.</p>
+<p>Let us extract the <code>traffics</code> column from the above data using <code>use_series</code> and save it in a new variable <code>traffics</code>. Instead of using traffic which is a tibble, we will use <code>traffics</code> which is a vector. We do this to avoid extracting the <code>traffics</code> column from the above data in all the examples shown below.</p>
 <pre class="r"><code>traffics &lt;- use_series(traffic, traffics)</code></pre>
 </div>
 </div>
 <div id="tabulate-referrer" class="section level2">
 <h2>Tabulate Referrer</h2>
 <p>Let us compute the traffic driven by different referrers using <code>fct_count</code>.</p>
-<pre class="r"><code>traffic %&gt;%
-  pull(traffics) %&gt;% 
-  fct_count()</code></pre>
+<pre class="r"><code>fct_count(traffics)   </code></pre>
 <pre><code>## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -281,17 +270,16 @@ traffic</code></pre>
 </div>
 <div id="collapse-referrer-categories" class="section level2">
 <h2>Collapse Referrer Categories</h2>
-<p>We want to group the referrers into 2 categories:</p>
+<p>We want to group some of the referrers into 2 categories:</p>
 <ul>
 <li>social</li>
 <li>search</li>
 </ul>
-<p>Use <code>fct_collapse()</code> to group categories.</p>
+<p>To group categories/levels, we will use <code>fct_collapse()</code>.</p>
 <p><br></p>
 <p><img src="/img/fct_collapse.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>traffic %&gt;%
-  pull(traffics) %&gt;%
+<pre class="r"><code>traffics %&gt;%
   fct_collapse(
     social = c(&quot;facebook&quot;, &quot;twitter&quot;, &quot;instagram&quot;),
     search = c(&quot;google&quot;, &quot;bing&quot;, &quot;yahoo&quot;)
@@ -305,6 +293,18 @@ traffic</code></pre>
 ## 3 direct      1350
 ## 4 social     16563
 ## 5 unknown     2657</code></pre>
+<p>The above result can be achieved using <code>fct_recode()</code> as shown below:</p>
+<p><br></p>
+<p><img src="/img/fct_recode.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>fct_recode(traffics, 
+  search = &quot;bing&quot;, 
+  search = &quot;yahoo&quot;, 
+  search = &quot;google&quot;,
+  social = &quot;facebook&quot;, 
+  social = &quot;twitter&quot;, 
+  social = &quot;instagram&quot;) %&gt;%
+  levels()</code></pre>
+<pre><code>## [1] &quot;affiliates&quot; &quot;search&quot;     &quot;direct&quot;     &quot;social&quot;     &quot;unknown&quot;</code></pre>
 </div>
 <div id="lump-infrequent-referrer-types" class="section level2">
 <h2>Lump Infrequent Referrer Types</h2>
@@ -312,9 +312,7 @@ traffic</code></pre>
 <p><br></p>
 <p><img src="/img/fct_lump_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<pre class="r"><code>traffic %&gt;%
-  pull(traffics) %&gt;% 
-  fct_count()
+<pre class="r"><code>fct_count(traffics)
 ## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -328,8 +326,7 @@ traffic</code></pre>
 ## 8 twitter     4521
 ## 9 unknown     2657
 
-traffic %&gt;%
-  pull(traffics) %&gt;% 
+traffics %&gt;% 
   fct_lump() %&gt;% 
   table()
 ## .
@@ -354,8 +351,7 @@ traffic %&gt;%
 ## 8 unknown     2657
 ## 9 direct      1350</code></pre>
 <p>Use <code>fct_lump()</code> and set the argument <code>n</code> to <code>3</code> indicating we want to retain top 3 categories and combine the rest.</p>
-<pre class="r"><code>traffic %&gt;% 
-  pull(traffics) %&gt;% 
+<pre class="r"><code>traffics %&gt;% 
   fct_lump(n = 3) %&gt;% 
   table()</code></pre>
 <pre><code>## .
@@ -381,8 +377,7 @@ traffic %&gt;%
 ## 8 twitter     4521    9.37
 ## 9 unknown     2657    5.51</code></pre>
 <p>Since we are looking at proportion of traffic driven to the website and not the actual numbers, we use the <code>prop</code> argument and set it to <code>0.1</code>, indicating that we want to retain only those categories which have a proportion of more than 10% and combine the rest.</p>
-<pre class="r"><code>traffic %&gt;%
-  pull(traffics) %&gt;% 
+<pre class="r"><code>traffics %&gt;%
   fct_lump(prop = 0.1) %&gt;% 
   table()</code></pre>
 <pre><code>## .
@@ -405,8 +400,7 @@ traffic %&gt;%
 ## 8 facebook    8135
 ## 9 google      9229</code></pre>
 <p>We will still use the <code>n</code> argument but instead of specifying <code>3</code>, we now specify <code>-3</code>.</p>
-<pre class="r"><code>traffic %&gt;% 
-  pull(traffics) %&gt;% 
+<pre class="r"><code>traffics %&gt;% 
   fct_lump(n = -3) %&gt;% 
   table()</code></pre>
 <pre><code>## .
@@ -429,8 +423,7 @@ traffic %&gt;%
 ## 8 twitter     4521    9.37
 ## 9 unknown     2657    5.51</code></pre>
 <p>Instead of setting <code>prop</code> to <code>0.1</code>, we will set it to <code>-0.1</code>.</p>
-<pre class="r"><code>traffic %&gt;% 
-  pull(traffics) %&gt;% 
+<pre class="r"><code>traffics %&gt;% 
   fct_lump(prop = -0.1) %&gt;% 
   table()</code></pre>
 <pre><code>## .
@@ -442,58 +435,54 @@ traffic %&gt;%
 <p><br></p>
 <p><img src="/img/fct_others_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
+<p>Let us assume we want to retain a couple of important categories and group the rest into a single category. In the below example, we retain <em>google</em> and <em>yahoo</em> while grouping the rest as others using <code>fct_other()</code>.</p>
 <pre class="r"><code>fct_other(traffics, keep = c(&quot;google&quot;, &quot;yahoo&quot;)) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;yahoo&quot;  &quot;google&quot; &quot;Other&quot;</code></pre>
-<p><br></p>
+</div>
+<div id="drop-levels" class="section level2">
+<h2>Drop Levels</h2>
 <p><img src="/img/fct_others_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
+<p>What if you want to drop a couple of categories instead of grouping them? Use the <code>drop</code> argument in <code>fct_other()</code> and specify the categories to be dropped. In the below example, we drop the following referrer categories:</p>
+<ul>
+<li>instagram</li>
+<li>twitter</li>
+</ul>
 <pre class="r"><code>fct_other(traffics, drop = c(&quot;instagram&quot;, &quot;twitter&quot;)) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;affiliates&quot; &quot;bing&quot;       &quot;direct&quot;     &quot;facebook&quot;   &quot;yahoo&quot;     
 ## [6] &quot;google&quot;     &quot;unknown&quot;    &quot;Other&quot;</code></pre>
 </div>
-<div id="recode-levels" class="section level2">
-<h2>Recode Levels</h2>
-<p><br></p>
-<p><img src="/img/fct_recode.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
-<pre class="r"><code>fct_recode(traffics, 
-  search = &quot;bing&quot;, 
-  search = &quot;yahoo&quot;, 
-  search = &quot;google&quot;,
-  social = &quot;facebook&quot;, 
-  social = &quot;twitter&quot;, 
-  social = &quot;instagram&quot;) %&gt;%
-  levels()</code></pre>
-<pre><code>## [1] &quot;affiliates&quot; &quot;search&quot;     &quot;direct&quot;     &quot;social&quot;     &quot;unknown&quot;</code></pre>
-</div>
 <div id="reorder-levels" class="section level2">
 <h2>Reorder Levels</h2>
+<p>The categories can be reordered using <code>fct_relevel()</code>. In the above example, we reorder the categories to ensure <em>google</em> appears first. Similarly in the below example, we reorder the levels to ensure <em>twitter</em> appears first irrespective of its frequency or order of appearance in the data.</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;twitter&quot;) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;twitter&quot;    &quot;affiliates&quot; &quot;bing&quot;       &quot;direct&quot;     &quot;facebook&quot;  
 ## [6] &quot;yahoo&quot;      &quot;google&quot;     &quot;instagram&quot;  &quot;unknown&quot;</code></pre>
+<p>If the category needs to appear at a particular position, use the <code>after</code> argument and specify the position after which it should appear. For example, if <em>google</em> should be the third category, we would specify <code>after = 2</code> i.e. <em>google</em> should come after the 2nd position (i.e. third position).</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;google&quot;, after = 2) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;affiliates&quot; &quot;bing&quot;       &quot;google&quot;     &quot;direct&quot;     &quot;facebook&quot;  
 ## [6] &quot;yahoo&quot;      &quot;instagram&quot;  &quot;twitter&quot;    &quot;unknown&quot;</code></pre>
+<p>If the category should appear last, supply the value <code>Inf</code> (infinity) to the <code>after</code> argument as shown below.</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_3.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;facebook&quot;, after = Inf) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;affiliates&quot; &quot;bing&quot;       &quot;direct&quot;     &quot;yahoo&quot;      &quot;google&quot;    
 ## [6] &quot;instagram&quot;  &quot;twitter&quot;    &quot;unknown&quot;    &quot;facebook&quot;</code></pre>
 </div>
-<div id="data-2" class="section level2">
-<h2>Data</h2>
+<div id="case-study-3" class="section level2">
+<h2>Case Study 3</h2>
+<p>In this case study, we deal with categorical data which is ordered and cyclical. It contains response to an imaginary survey.</p>
+<div id="data-2" class="section level3">
+<h3>Data</h3>
 <pre class="r"><code>response_data &lt;- 
   read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/response.csv&#39;,
     col_types = list(col_factor(levels = c(&quot;like&quot;, &quot;like somewhat&quot;, &quot;neutral&quot;, 
@@ -501,10 +490,15 @@ traffic %&gt;%
     )
   )</code></pre>
 <p>Since we will be using only one column from the above data set, let us extract it using <code>use_series()</code> and save it as <code>responses</code>.</p>
-<pre class="r"><code>responses &lt;- use_series(response_data, response)</code></pre>
+<pre class="r"><code>responses &lt;- use_series(response_data, response)
+levels(responses)</code></pre>
+<pre><code>## [1] &quot;like&quot;             &quot;like somewhat&quot;    &quot;neutral&quot;         
+## [4] &quot;dislike somewhat&quot; &quot;dislike&quot;</code></pre>
+</div>
 </div>
 <div id="shift-levels" class="section level2">
 <h2>Shift Levels</h2>
+<p>To shift the levels, we use <code>fct_shift()</code>. Use the <code>n</code> argument to indicate the direction of the shift. If <code>n</code> is positive, the levels are shifted to the left else to the right. In the below example, we shift the levels to the left by 2 positions.</p>
 <p><br></p>
 <p><img src="/img/fct_shift_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -512,6 +506,7 @@ traffic %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;neutral&quot;          &quot;dislike somewhat&quot; &quot;dislike&quot;         
 ## [4] &quot;like&quot;             &quot;like somewhat&quot;</code></pre>
+<p>To shift the levels to the right, supply a negative value to the <code>n</code> argument in <code>fct_shift()</code>. In the below example, we shift the levels to the right by 2 positions.</p>
 <p><br></p>
 <p><img src="/img/fct_shift_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -522,4 +517,8 @@ traffic %&gt;%
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
+<ul>
+<li><a href="https://forcats.tidyverse.org/index.html" class="uri">https://forcats.tidyverse.org/index.html</a></li>
+<li><a href="http://r4ds.had.co.nz/factors.html" class="uri">http://r4ds.had.co.nz/factors.html</a></li>
+</ul>
 </div>
