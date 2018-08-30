@@ -252,3 +252,8 @@ has_name(mtcars, 'gears')
 - use `has_rownames()` to check whether a data set has rownames
 - use `has_name()` to check if tibble has a specific column 
 - use `glimpse()` to get an overview of data
+
+## References
+
+- https://tibble.tidyverse.org/
+- http://r4ds.had.co.nz/tibbles.html

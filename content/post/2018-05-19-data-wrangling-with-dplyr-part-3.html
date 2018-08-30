@@ -196,18 +196,18 @@ ecom</code></pre>
 <p><br></p>
 <pre class="r"><code>sample_n(ecom, 700)</code></pre>
 <pre><code>## # A tibble: 700 x 11
-##       id referrer device bouncers n_visit n_pages duration country    
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
-##  1   802 direct   mobile false          8      15      180 Philippines
-##  2   329 bing     mobile true           3       1      490 Sweden     
-##  3   166 direct   tablet false          6      20      580 Sudan      
-##  4   141 yahoo    tablet true           1       1      949 Japan      
-##  5   958 direct   tablet true           4       1      136 Poland     
-##  6   688 social   mobile true           2       1       12 Botswana   
-##  7   803 yahoo    laptop true           8       1      630 Israel     
-##  8   433 social   tablet true          10       1       81 Brazil     
-##  9    19 social   tablet false          7      10      290 Colombia   
-## 10   648 yahoo    mobile true           3       1      151 Indonesia  
+##       id referrer device bouncers n_visit n_pages duration country 
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   
+##  1   536 google   mobile true          10       1      221 China   
+##  2   929 social   tablet true           3       1      111 China   
+##  3   613 bing     laptop false          0      12      144 China   
+##  4   364 bing     laptop true           3       1      369 Kenya   
+##  5   652 bing     tablet false          6       9      198 Thailand
+##  6   472 direct   tablet false          6      13      338 Poland  
+##  7   758 direct   tablet true           4       1      141 China   
+##  8    70 bing     mobile true           5       1      190 China   
+##  9   722 bing     mobile true          10       1      847 Yemen   
+## 10   887 google   tablet false          2      14      266 Japan   
 ## # ... with 690 more rows, and 3 more variables: purchase &lt;chr&gt;,
 ## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
 <p>We can combine the sampling functions with other dplyr functions as shown below where we sample observation after grouping them according to the source of traffic.</p>
@@ -218,33 +218,33 @@ ecom</code></pre>
 ## # Groups:   referrer [5]
 ##       id referrer device bouncers n_visit n_pages duration country    
 ##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
-##  1   765 bing     laptop false          8      10      260 China      
-##  2   914 bing     mobile false          4       2       46 Sweden     
-##  3   801 bing     mobile false          5      14      140 Peru       
-##  4   502 bing     laptop true           7       1      516 Portugal   
-##  5   600 bing     laptop false          9      13      299 China      
-##  6   975 bing     tablet false         10       2       38 Philippines
-##  7   243 bing     tablet false          6       1       22 Russia     
-##  8   500 bing     mobile true           9       1      574 Egypt      
-##  9   114 bing     tablet false          0      14      280 Brazil     
-## 10   618 bing     laptop true           6       1      384 Russia     
+##  1   114 bing     tablet false          0      14      280 Brazil     
+##  2   722 bing     mobile true          10       1      847 Yemen      
+##  3   963 bing     laptop true           4       1      857 Philippines
+##  4   389 bing     mobile false          6       5       55 Indonesia  
+##  5   379 bing     tablet true           2       1       24 China      
+##  6   657 bing     laptop true           3       1      396 Canada     
+##  7   293 bing     mobile true          10       1      480 Panama     
+##  8   969 bing     laptop true          10       1      210 Indonesia  
+##  9   385 bing     tablet false         10      15      150 Portugal   
+## 10     9 bing     mobile false          3      19      209 Netherlands
 ## # ... with 490 more rows, and 3 more variables: purchase &lt;chr&gt;,
 ## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
 <p><code>sample_frac()</code> allows a specific percentage of observations.</p>
 <pre class="r"><code>sample_frac(ecom, size = 0.7)</code></pre>
 <pre><code>## # A tibble: 700 x 11
-##       id referrer device bouncers n_visit n_pages duration country    
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
-##  1   332 google   laptop false          5       5      125 Nigeria    
-##  2   358 google   mobile false         10       5       50 Nicaragua  
-##  3   727 bing     mobile true           5       1      541 Cuba       
-##  4   348 social   laptop false         10      20      280 Japan      
-##  5   328 direct   mobile false          9      15      375 Nicaragua  
-##  6   803 yahoo    laptop true           8       1      630 Israel     
-##  7   195 direct   laptop true           3       1      510 Poland     
-##  8   472 direct   tablet false          6      13      338 Poland     
-##  9   361 bing     laptop true           4       1      913 Philippines
-## 10   205 yahoo    tablet true           0       1       28 South Korea
+##       id referrer device bouncers n_visit n_pages duration country   
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     
+##  1   375 social   laptop false          8      16      160 Kyrgyzstan
+##  2   466 direct   tablet true           5       1      581 China     
+##  3    89 direct   mobile false          4       8      144 Ecuador   
+##  4   475 google   tablet false          1      18      180 China     
+##  5   106 direct   mobile true           6       1      227 China     
+##  6   939 google   tablet true           5       1      391 Mali      
+##  7   676 bing     laptop true           8       1      585 China     
+##  8   903 google   laptop false          4       9      117 Iran      
+##  9   960 yahoo    laptop false          2       8      232 Russia    
+## 10   734 bing     mobile true           3       1      479 Peru      
 ## # ... with 690 more rows, and 3 more variables: purchase &lt;chr&gt;,
 ## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
 </div>
@@ -306,9 +306,9 @@ ecom</code></pre>
 ecom_sample %&gt;%
   pull(n_pages) %&gt;%
   between(5, 15) </code></pre>
-<pre><code>##  [1] FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
-## [23]  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<pre><code>##  [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
+## [12]  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+## [23]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE</code></pre>
 </div>
 <div id="case-when" class="section level2">
 <h2>Case When</h2>
@@ -335,4 +335,11 @@ ecom_sample %&gt;%
 ##  9       3 TRUE        
 ## 10       6 TRUE        
 ## # ... with 990 more rows</code></pre>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a></li>
+<li><a href="http://r4ds.had.co.nz/transform.html" class="uri">http://r4ds.had.co.nz/transform.html</a></li>
+</ul>
 </div>

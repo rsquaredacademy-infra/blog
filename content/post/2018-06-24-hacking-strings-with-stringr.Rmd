@@ -675,3 +675,8 @@ to extract the file type.
 urls %>% 
   str_sub(start = d, end = q)
 ```
+
+## References
+
+- https://stringr.tidyverse.org/
+- http://r4ds.had.co.nz/strings.html

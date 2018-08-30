@@ -283,3 +283,7 @@ ecom %>%
   select(n_visit, repeat_visit) 
 ```
 
+## References
+
+- https://dplyr.tidyverse.org/
+- http://r4ds.had.co.nz/transform.html

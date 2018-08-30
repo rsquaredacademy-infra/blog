@@ -254,3 +254,9 @@ read_sas('airline.sas7bdat')
 ```{r import78, echo=FALSE, out.width="100%", fig.align="center"}
 knitr::include_graphics("/img/readxl_summary_lucid.png")
 ```
+
+## References
+
+- https://readxl.tidyverse.org/
+- https://haven.tidyverse.org/
+- http://r4ds.had.co.nz/data-import.html

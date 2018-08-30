@@ -460,3 +460,8 @@ a few examples below.
 1:10 %>%
   is_weakly_greater_than(5)
 ```
+
+## References
+
+- https://magrittr.tidyverse.org/
+- http://r4ds.had.co.nz/pipes.html

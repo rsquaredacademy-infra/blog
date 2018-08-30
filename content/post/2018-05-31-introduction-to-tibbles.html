@@ -55,16 +55,16 @@ library(dplyr)</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    51
-##  2 b         2    65
-##  3 c         3    23
-##  4 d         4    84
-##  5 e         5    12
-##  6 f         6    21
-##  7 g         7     1
-##  8 h         8    16
-##  9 i         9    39
-## 10 j        10    78
+##  1 a         1    70
+##  2 b         2    67
+##  3 c         3    60
+##  4 d         4     7
+##  5 e         5    10
+##  6 f         6    71
+##  7 g         7    94
+##  8 h         8    72
+##  9 i         9    11
+## 10 j        10    32
 ## # ... with 16 more rows</code></pre>
 <p>We mentioned the column names followed by the data. If you do not specify the column names, <code>tibble()</code> will supply them. Ensure that the length of each column is same.</p>
 </div>
@@ -80,16 +80,16 @@ library(dplyr)</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    65
-##  2 b         2    19
-##  3 c         3    84
-##  4 d         4     6
-##  5 e         5    59
+##  1 a         1    40
+##  2 b         2    47
+##  3 c         3    95
+##  4 d         4    69
+##  5 e         5    51
 ##  6 f         6    77
-##  7 g         7    46
-##  8 h         8    38
-##  9 i         9    91
-## 10 j        10    33
+##  7 g         7    55
+##  8 h         8    84
+##  9 i         9    18
+## 10 j        10    99
 ## # ... with 16 more rows</code></pre>
 <ul>
 <li>never adjusts variable names</li>
@@ -110,16 +110,16 @@ tibble(x, y, z)</code></pre>
 <pre><code>## # A tibble: 100 x 3
 ##        x y     z    
 ##    &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
-##  1     1 a     FALSE
+##  1     1 a     TRUE 
 ##  2     2 a     FALSE
-##  3     3 a     TRUE 
-##  4     4 a     TRUE 
+##  3     3 a     FALSE
+##  4     4 a     FALSE
 ##  5     5 a     FALSE
 ##  6     6 a     TRUE 
-##  7     7 a     TRUE 
-##  8     8 a     TRUE 
-##  9     9 a     TRUE 
-## 10    10 a     TRUE 
+##  7     7 a     FALSE
+##  8     8 a     FALSE
+##  9     9 a     FALSE
+## 10    10 a     FALSE
 ## # ... with 90 more rows</code></pre>
 <ul>
 <li>never recycles vector of length greater than 1</li>
@@ -364,4 +364,11 @@ column_to_rownames(mtcars_tbl)</code></pre>
 <li>use <code>glimpse()</code> to get an overview of data</li>
 </ul>
 </div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="https://tibble.tidyverse.org/" class="uri">https://tibble.tidyverse.org/</a></li>
+<li><a href="http://r4ds.had.co.nz/tibbles.html" class="uri">http://r4ds.had.co.nz/tibbles.html</a></li>
+</ul>
 </div>

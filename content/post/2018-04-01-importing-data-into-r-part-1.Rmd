@@ -282,3 +282,7 @@ In this post, we explored:
     
 In the next post, we will explore reading data from excel spreadsheets and other statistical softwares.    
                                                                                 
+## References
+
+- https://readr.tidyverse.org/
+- http://r4ds.had.co.nz/data-import.html

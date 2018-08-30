@@ -538,9 +538,13 @@ Below we map the description of each step to dplyr verbs.
 knitr::include_graphics("/img/dplyr_aov_map.png")
 ```
 
-
 ## Your Turn
 
 - what is the average number of pages visited by purchasers and non-purchasers?
 - what is the average time on site for purchasers vs non-purchasers?
 - what is the average number of pages visited by purchasers and non-purchasers using mobile?
+
+## References
+
+- https://dplyr.tidyverse.org/
+- http://r4ds.had.co.nz/transform.html

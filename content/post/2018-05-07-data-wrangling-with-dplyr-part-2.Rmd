@@ -242,3 +242,8 @@ data with the `customer` data using `full_join`.
 ```{r dplyr8}
 full_join(customer, order, by = "id")
 ```
+
+## References
+
+- https://dplyr.tidyverse.org/
+- http://r4ds.had.co.nz/relational-data.html
