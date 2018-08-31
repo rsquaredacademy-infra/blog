@@ -305,7 +305,7 @@ str_sub(mockdata$currency, start = 1, end = 1)
 ```
 
 One final function that we will look at before the case study is `word()`. It extracts 
-word(s) from sentences. We do not have any senetences in the data set, but let us use it
+word(s) from sentences. We do not have any sentences in the data set, but let us use it
 to extract the first and last name from the `full_name` column.
 
 <br>
@@ -338,7 +338,7 @@ Let us take a look at the emails before we extract the domain names.
 emails <- 
   mockstring %>%
   pull(email) %>%
-  head
+  head()
 
 emails
 ```
@@ -424,7 +424,7 @@ Let us take a look at the URL of the image.
 img <- 
   mockstring %>%
   pull(imageurl) %>%
-  head
+  head()
 
 img
 ```
@@ -434,8 +434,7 @@ img
 Let us split imageurl using `str_split` and the pattern `\\.`.
 
 ```{r str22}
-img %>%
-  str_split(pattern = '\\.')
+str_split(img, pattern = '\\.')
 ```
 
 #### Step 2: Extract the third value from each element of the resulting list
@@ -500,8 +499,7 @@ which instructs to look for any number between and including 0
 and 9.
 
 ```{r str26}
-img %>%
-  str_locate(pattern = "[0-9]") 
+str_locate(img, pattern = "[0-9]") 
 ```
 
 #### Step 2: Extract url 
@@ -510,8 +508,7 @@ We know where the dimension is located in the url. Let us extract the
 part of the url that contains the image dimension using `str_sub()`.
 
 ```{r str27}
-img %>%
-  str_sub(start = 23) 
+str_sub(img, start = 23) 
 ```
 
 #### Step 3: Split the string using the pattern `\\.`.
@@ -550,7 +547,7 @@ img %>%
 url1 <- 
   mockstring %>%
   pull(url) %>%
-  first
+  first()
 
 url1
 ```
@@ -569,8 +566,7 @@ pattern `:`. Since `:` is a special character, we
 will escape it using `\\`.
 
 ```{r str31}
-url1 %>%
-  str_split(pattern = '://') 
+str_split(url1, pattern = '://') 
 ```
 
 #### Step 2: Extract the first element.
@@ -613,7 +609,7 @@ urls %>%
   str_locate_all(pattern = '\\.') %>%
   map_int(nrow) %>%
   is_greater_than(2) %>%
-  sum
+  sum()
 ```
 
 #### Step 2: Check if there is only 1 question mark in the URL
@@ -626,7 +622,7 @@ urls %>%
   str_locate_all(pattern = "[?]") %>%
   map_int(nrow) %>%
   is_greater_than(1) %>%
-  sum
+  sum()
 ```
 
 #### Step 3: Detect the staritng position of file type
@@ -672,8 +668,7 @@ first question mark in the url. Let us use them with `str_sub()`
 to extract the file type.
 
 ```{r str13}
-urls %>% 
-  str_sub(start = d, end = q)
+str_sub(urls, start = d, end = q)
 ```
 
 ## References

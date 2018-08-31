@@ -291,7 +291,7 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <p><br></p>
 <pre class="r"><code>str_sub(mockdata$currency, start = 1, end = 1)</code></pre>
 <pre><code>##  [1] &quot;¥&quot; &quot;$&quot; &quot;\200&quot; &quot;\200&quot; &quot;\200&quot; &quot;¥&quot; &quot;$&quot; &quot;¥&quot; &quot;\200&quot; &quot;\200&quot;</code></pre>
-<p>One final function that we will look at before the case study is <code>word()</code>. It extracts word(s) from sentences. We do not have any senetences in the data set, but let us use it to extract the first and last name from the <code>full_name</code> column.</p>
+<p>One final function that we will look at before the case study is <code>word()</code>. It extracts word(s) from sentences. We do not have any sentences in the data set, but let us use it to extract the first and last name from the <code>full_name</code> column.</p>
 <p><br></p>
 <p><img src="/img/word.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -317,7 +317,7 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <pre class="r"><code>emails &lt;- 
   mockstring %&gt;%
   pull(email) %&gt;%
-  head
+  head()
 
 emails</code></pre>
 <pre><code>## [1] &quot;mnewburn0@fastcompany.com&quot;    &quot;mdankersley1@digg.com&quot;       
@@ -416,7 +416,7 @@ emails</code></pre>
 <pre class="r"><code>img &lt;- 
   mockstring %&gt;%
   pull(imageurl) %&gt;%
-  head
+  head()
 
 img</code></pre>
 <pre><code>## [1] &quot;http://dummyimage.com/130x183.jpg/dddddd/000000&quot;
@@ -428,8 +428,7 @@ img</code></pre>
 <div id="step-1-split-imageurl-using-pattern-." class="section level4">
 <h4>Step 1: Split imageurl using pattern <code>\\.</code></h4>
 <p>Let us split imageurl using <code>str_split</code> and the pattern <code>\\.</code>.</p>
-<pre class="r"><code>img %&gt;%
-  str_split(pattern = &#39;\\.&#39;)</code></pre>
+<pre class="r"><code>str_split(img, pattern = &#39;\\.&#39;)</code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;http://dummyimage&quot; &quot;com/130x183&quot;       &quot;jpg/dddddd/000000&quot;
 ## 
@@ -493,8 +492,7 @@ img</code></pre>
 <div id="step-1-locate-numbers-between-0-and-9." class="section level4">
 <h4>Step 1: Locate numbers between 0 and 9.</h4>
 <p>Let us inspect the image url. The dimension of the image appears after the domain extension and there are no numbers in the url before. We will locate the position or index of the first number in the url using <code>str_locate()</code> and using the pattern <code>[0-9]</code> which instructs to look for any number between and including 0 and 9.</p>
-<pre class="r"><code>img %&gt;%
-  str_locate(pattern = &quot;[0-9]&quot;) </code></pre>
+<pre class="r"><code>str_locate(img, pattern = &quot;[0-9]&quot;) </code></pre>
 <pre><code>##      start end
 ## [1,]    23  23
 ## [2,]    23  23
@@ -506,8 +504,7 @@ img</code></pre>
 <div id="step-2-extract-url" class="section level4">
 <h4>Step 2: Extract url</h4>
 <p>We know where the dimension is located in the url. Let us extract the part of the url that contains the image dimension using <code>str_sub()</code>.</p>
-<pre class="r"><code>img %&gt;%
-  str_sub(start = 23) </code></pre>
+<pre class="r"><code>str_sub(img, start = 23) </code></pre>
 <pre><code>## [1] &quot;130x183.jpg/dddddd/000000&quot; &quot;106x217.bmp/dddddd/000000&quot;
 ## [3] &quot;146x127.bmp/cc0000/ffffff&quot; &quot;181x194.png/5fa2dd/ffffff&quot;
 ## [5] &quot;220x123.jpg/ff4444/ffffff&quot; &quot;118x176.bmp/dddddd/000000&quot;</code></pre>
@@ -552,7 +549,7 @@ img</code></pre>
 <pre class="r"><code>url1 &lt;- 
   mockstring %&gt;%
   pull(url) %&gt;%
-  first
+  first()
 
 url1</code></pre>
 <pre><code>## [1] &quot;https://engadget.com/nascetur/ridiculus/mus/vivamus/vestibulum.jsp?eu=est&amp;tincidunt=risus&amp;in=auctor&amp;leo=sed&amp;maecenas=tristique&amp;pulvinar=in&amp;lobortis=tempus&amp;est=sit&amp;phasellus=amet&amp;sit=sem&amp;amet=fusce&amp;erat=consequat&amp;nulla=nulla&amp;tempus=nisl&amp;vivamus=nunc&amp;in=nisl&amp;felis=duis&amp;eu=bibendum&amp;sapien=felis&amp;cursus=sed&amp;vestibulum=interdum&amp;proin=venenatis&amp;eu=turpis&amp;mi=enim&amp;nulla=blandit&amp;ac=mi&amp;enim=in&amp;in=porttitor&amp;tempor=pede&amp;turpis=justo&amp;nec=eu&amp;euismod=massa&amp;scelerisque=donec&amp;quam=dapibus&amp;turpis=duis&amp;adipiscing=at&amp;lorem=velit&amp;vitae=eu&amp;mattis=est&amp;nibh=congue&amp;ligula=elementum&amp;nec=in&amp;sem=hac&amp;duis=habitasse&amp;aliquam=platea&amp;convallis=dictumst&amp;nunc=morbi&amp;proin=vestibulum&amp;at=velit&amp;turpis=id&amp;a=pretium&amp;pede=iaculis&amp;posuere=diam&amp;nonummy=erat&amp;integer=fermentum&amp;non=justo&amp;velit=nec&amp;donec=condimentum&amp;diam=neque&amp;neque=sapien&amp;vestibulum=placerat&amp;eget=ante&amp;vulputate=nulla&amp;ut=justo&amp;ultrices=aliquam&amp;vel=quis&amp;augue=turpis&amp;vestibulum=eget&amp;ante=elit&amp;ipsum=sodales&amp;primis=scelerisque&amp;in=mauris&amp;faucibus=sit&amp;orci=amet&amp;luctus=eros&amp;et=suspendisse&amp;ultrices=accumsan&amp;posuere=tortor&amp;cubilia=quis&amp;curae=turpis&amp;donec=sed&amp;pharetra=ante&amp;magna=vivamus&amp;vestibulum=tortor&amp;aliquet=duis&amp;ultrices=mattis&amp;erat=egestas&amp;tortor=metus&amp;sollicitudin=aenean&amp;mi=fermentum&amp;sit=donec&quot;</code></pre>
@@ -565,8 +562,7 @@ url1</code></pre>
 <div id="step-1-split-the-url-using-the-pattern-." class="section level4">
 <h4>Step 1: Split the url using the pattern <code>://</code>.</h4>
 <p>The HTTP protocol is the first part of the url and is separated from the rest of the url by <code>:</code>. Let us split the url using <code>str_split()</code> and using the pattern <code>:</code>. Since <code>:</code> is a special character, we will escape it using <code>\\</code>.</p>
-<pre class="r"><code>url1 %&gt;%
-  str_split(pattern = &#39;://&#39;) </code></pre>
+<pre class="r"><code>str_split(url1, pattern = &#39;://&#39;) </code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;https&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 ## [2] &quot;engadget.com/nascetur/ridiculus/mus/vivamus/vestibulum.jsp?eu=est&amp;tincidunt=risus&amp;in=auctor&amp;leo=sed&amp;maecenas=tristique&amp;pulvinar=in&amp;lobortis=tempus&amp;est=sit&amp;phasellus=amet&amp;sit=sem&amp;amet=fusce&amp;erat=consequat&amp;nulla=nulla&amp;tempus=nisl&amp;vivamus=nunc&amp;in=nisl&amp;felis=duis&amp;eu=bibendum&amp;sapien=felis&amp;cursus=sed&amp;vestibulum=interdum&amp;proin=venenatis&amp;eu=turpis&amp;mi=enim&amp;nulla=blandit&amp;ac=mi&amp;enim=in&amp;in=porttitor&amp;tempor=pede&amp;turpis=justo&amp;nec=eu&amp;euismod=massa&amp;scelerisque=donec&amp;quam=dapibus&amp;turpis=duis&amp;adipiscing=at&amp;lorem=velit&amp;vitae=eu&amp;mattis=est&amp;nibh=congue&amp;ligula=elementum&amp;nec=in&amp;sem=hac&amp;duis=habitasse&amp;aliquam=platea&amp;convallis=dictumst&amp;nunc=morbi&amp;proin=vestibulum&amp;at=velit&amp;turpis=id&amp;a=pretium&amp;pede=iaculis&amp;posuere=diam&amp;nonummy=erat&amp;integer=fermentum&amp;non=justo&amp;velit=nec&amp;donec=condimentum&amp;diam=neque&amp;neque=sapien&amp;vestibulum=placerat&amp;eget=ante&amp;vulputate=nulla&amp;ut=justo&amp;ultrices=aliquam&amp;vel=quis&amp;augue=turpis&amp;vestibulum=eget&amp;ante=elit&amp;ipsum=sodales&amp;primis=scelerisque&amp;in=mauris&amp;faucibus=sit&amp;orci=amet&amp;luctus=eros&amp;et=suspendisse&amp;ultrices=accumsan&amp;posuere=tortor&amp;cubilia=quis&amp;curae=turpis&amp;donec=sed&amp;pharetra=ante&amp;magna=vivamus&amp;vestibulum=tortor&amp;aliquet=duis&amp;ultrices=mattis&amp;erat=egestas&amp;tortor=metus&amp;sollicitudin=aenean&amp;mi=fermentum&amp;sit=donec&quot;</code></pre>
@@ -603,7 +599,7 @@ url1</code></pre>
   str_locate_all(pattern = &#39;\\.&#39;) %&gt;%
   map_int(nrow) %&gt;%
   is_greater_than(2) %&gt;%
-  sum</code></pre>
+  sum()</code></pre>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div id="step-2-check-if-there-is-only-1-question-mark-in-the-url" class="section level4">
@@ -613,7 +609,7 @@ url1</code></pre>
   str_locate_all(pattern = &quot;[?]&quot;) %&gt;%
   map_int(nrow) %&gt;%
   is_greater_than(1) %&gt;%
-  sum</code></pre>
+  sum()</code></pre>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div id="step-3-detect-the-staritng-position-of-file-type" class="section level4">
@@ -643,8 +639,7 @@ q</code></pre>
 <div id="step-5-specify-the-index-position-for-extracting-file-type" class="section level4">
 <h4>Step 5: Specify the index position for extracting file type</h4>
 <p>From steps 3 and 4, we have the location of the second dot and the first question mark in the url. Let us use them with <code>str_sub()</code> to extract the file type.</p>
-<pre class="r"><code>urls %&gt;% 
-  str_sub(start = d, end = q)</code></pre>
+<pre class="r"><code>str_sub(urls, start = d, end = q)</code></pre>
 <pre><code>## [1] &quot;jsp&quot;  &quot;json&quot; &quot;json&quot;</code></pre>
 </div>
 </div>
