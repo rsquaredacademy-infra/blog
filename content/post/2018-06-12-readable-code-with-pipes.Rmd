@@ -59,23 +59,30 @@ library(purrr)
 ## Data
 
 ```{r show, message=FALSE}
-ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom <- 
+  read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv',
+    col_types = cols_only(
+      referrer = col_factor(levels = c("bing", "direct", "social", "yahoo", "google")),
+      n_pages = col_double(), duration = col_double(), purchase = col_logical()
+    )
+  )
+
 ecom
+```
+
+We will create a smaller data set from the above data to be used in some examples:
+
+```{r show_mini, message=FALSE}
+ecom_mini <- sample_n(ecom, size = 10)
+ecom_mini
 ```
 
 #### Data Dictionary
 
-- id: row id
 - referrer: referrer website/search engine
-- os: operating system
-- browser: browser
-- device: device used to visit the website
 - n_pages: number of pages visited
 - duration: time spent on the website (in seconds)
-- repeat: frequency of visits
-- country: country of origin
 - purchase: whether visitor purchased
-- order_value: order value of visitor (in dollars)
 
 ## First Example
 
@@ -103,7 +110,7 @@ Time to try a slightly  more challenging example. We want the square root of
 the page, we will view the first few observations using `head()`.
 
 ```{r mag3}
-y <- head(sqrt(ecom$n_pages))
+y <- sqrt(ecom_mini$n_pages)
 ```
 
 Let us break down the above computation into small steps:
@@ -126,24 +133,20 @@ Let us reproduce `y` using pipes.
 ```{r mag4}
 # select n_pages variable and assign it to y
 y <-
-    ecom %$%
+    ecom_mini %$%
     n_pages
 
 # compute square root of y and assign it to y 
 y %<>% sqrt
-
-head(y)
 ```
 
 Another way to compute the square root of y is shown below.
 
 ```{r mag5}
 y <-
-  ecom %$% 
+  ecom_mini %$% 
   n_pages %>% 
   sqrt 
-
-head(y)
 ```
 
 ## Visualization
@@ -158,7 +161,7 @@ to the website. Let us look at the steps involved in creating the bar plot:
 - use the tabulated data to create bar plot using `barplot()`
 
 ```{r mag21, fig.align='center', fig.height=4, fig.width=6}
-barplot(table(subset(ecom, purchase == 'true')$referrer))
+barplot(table(subset(ecom, purchase)$referrer))
 ```
 
 #### Using pipe
@@ -173,10 +176,10 @@ knitr::include_graphics("/img/pipes_data_visualization.png")
 
 ```{r mag7, fig.align='center', fig.height=4, fig.width=6}
 ecom %>%
-  subset(purchase == 'true') %>%
+  subset(purchase) %>%
   extract('referrer') %>%
-  table %>%
-  barplot
+  table() %>%
+  barplot()
 ```
 
 ## Correlation
@@ -200,17 +203,17 @@ knitr::include_graphics("/img/pipes_correlation.png")
 
 ```{r mag6, collpase = TRUE}
 # without pipe
-ecom1 <- subset(ecom, purchase == 'true')
+ecom1 <- subset(ecom, purchase)
 cor(ecom1$n_pages, ecom1$duration)
 
 # with pipe
 ecom %>%
-  subset(purchase == 'true') %$% 
+  subset(purchase) %$% 
   cor(n_pages, duration)
 
 # with pipe
 ecom %>%
-  filter(purchase == 'true') %$% 
+  filter(purchase) %$% 
   cor(n_pages, duration)
 ```
 
@@ -233,7 +236,7 @@ summary(lm(duration ~ n_pages, data = ecom))
 ```{r mag22}
 ecom %$%
   lm(duration ~ n_pages) %>%
-  summary
+  summary()
 ```
 
 ## String Manipulation
@@ -298,26 +301,26 @@ we do not use quotes.
 Let us extract the first 3 observations of `n_pages` column.
 
 ```{r mag10}
-head(ecom['n_pages'], 3)
+# base 
+ecom_mini['n_pages']
 
-ecom %>%
-  extract('n_pages') %>%
-  head(3)
+# magrittr
+extract(ecom_mini, 'n_pages') 
 ```
 
 #### Extract Column By Position
 
 We can extract columns using their index position. Keep in mind that index 
 position starts from **1** in R. In the below example, we show how to 
-extract the first 3 observations of `n_pages` column but instead of using
-the column name, we use the column position.
+extract `n_pages` column but instead of using the column name, we use the 
+column position.
 
 ```{r mag23}
-head(ecom[6], 3)
+# base 
+ecom_mini[2]
 
-ecom %>%
-  extract(6) %>%
-  head(3)
+# magrittr
+extract(ecom_mini, 2) 
 ```
 
 #### Extract Column (as vector)
@@ -328,36 +331,40 @@ a atomic vector. In magrittr, we can use `use_series()` in place of
 `$`.
 
 ```{r mag11}
-head(ecom$n_pages)
+# base 
+ecom_mini$n_pages
 
-ecom %>%
-  use_series('n_pages') %>%
-  head
+# magrittr
+use_series(ecom_mini, 'n_pages') 
 ```
 
 #### Extract List Element By Name
 
-To extract elements of a list, we can use `extract2()`. If is an
+Let us convert `ecom_mini` into a list using as.list() as shown below:
+
+```{r mag12a}
+ecom_list <- as.list(ecom_mini)
+```
+
+To extract elements of a list, we can use `extract2()`. It is an
 alternative for `[[`.
 
 ```{r mag12}
-mt <- as.list(mtcars)
+# base 
+ecom_list[['n_pages']]
 
-mt[['mpg']]
-
-mt %>%
-  extract2('mpg')
+# magrittr
+extract2(ecom_list, 'n_pages')
 ```
 
 #### Extract List Element By Position
 
 ```{r mag13}
-mt <- as.list(mtcars)
+# base 
+ecom_list[[1]]
 
-mt[[1]]
-
-mt %>%
-  extract2(1)
+# magrittr
+extract2(ecom_list, 1)
 ```
 
 #### Extract List Element 
@@ -365,12 +372,11 @@ mt %>%
 We can extract the elements of a list using `use_series()` as well.
 
 ```{r mag14}
-mt <- as.list(mtcars)
+# base 
+ecom_list$n_pages
 
-mt$mpg
-
-mt %>%
-  use_series(mpg)
+# magrittr
+use_series(ecom_list, n_pages)
 ```
 
 ## Arithmetic Operations
@@ -390,41 +396,41 @@ a few examples below.
 #### Addition
 
 ```{r mag15}
-1:10 %>%
-  `+`(1)
+1:10 + 1
 
-1:10 %>%
-  add(1)
+add(1:10, 1)
+
+`+`(1:10, 1)
 ```
 
 #### Multiplication
 
 ```{r mag16}
-1:10 %>%
-  `*`(3)
+1:10 * 3
 
-1:10 %>%
-  multiply_by(3)
+multiply_by(1:10, 3)
+
+`*`(1:10, 3)
 ```
 
 #### Division
 
 ```{r mag17}
-1:10 %>%
-  `/`(2)
+1:10 / 2
 
-1:10 %>%
-  divide_by(2)
+divide_by(1:10, 2)
+
+`/`(1:10, 2)
 ```
 
 #### Power
 
 ```{r mag18}
-1:10 %>%
-  `^`(2)
+1:10 ^ 2
 
-1:10 %>%
-  raise_to_power(2)
+raise_to_power(1:10, 2)
+
+`^`(1:10, 2)
 ```
 
 ## Logical Operators
@@ -444,21 +450,21 @@ a few examples below.
 #### Greater Than
 
 ```{r mag19}
-1:10 %>%
-  `>`(5)
+1:10 > 5
 
-1:10 %>%
-  is_greater_than(5)
+is_greater_than(1:10, 5)
+
+`>`(1:10, 5)
 ```
 
 #### Weakly Greater Than
 
 ```{r mag20}
-1:10 %>%
-  `>=`(5)
+1:10 >= 5
 
-1:10 %>%
-  is_weakly_greater_than(5)
+is_weakly_greater_than(1:10, 5)
+
+`>=`(1:10, 5)
 ```
 
 ## References

@@ -58,37 +58,71 @@ library(purrr)</code></pre>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<pre class="r"><code>ecom &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;)
-ecom</code></pre>
-<pre><code>## # A tibble: 1,000 x 11
-##       id referrer device bouncers n_visit n_pages duration country       
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
-##  1     1 google   laptop true          10       1      693 Czech Republic
-##  2     2 yahoo    tablet true           9       1      459 Yemen         
-##  3     3 direct   laptop true           0       1      996 Brazil        
-##  4     4 bing     tablet false          3      18      468 China         
-##  5     5 yahoo    mobile true           9       1      955 Poland        
-##  6     6 yahoo    laptop false          5       5      135 South Africa  
-##  7     7 yahoo    mobile true          10       1       75 Bangladesh    
-##  8     8 direct   mobile true          10       1      908 Indonesia     
-##  9     9 bing     mobile false          3      19      209 Netherlands   
-## 10    10 google   mobile true           6       1      208 Czech Republic
-## # ... with 990 more rows, and 3 more variables: purchase &lt;chr&gt;,
-## #   order_items &lt;dbl&gt;, order_value &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ecom &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
+    col_types = cols_only(
+      referrer = col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)),
+      n_pages = col_double(), duration = col_double(), purchase = col_logical()
+    )
+  )</code></pre>
+<pre><code>## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed
+
+## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
+## length of NULL cannot be changed</code></pre>
+<pre class="r"><code>ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE   
+## # ... with 990 more rows</code></pre>
+<p>We will create a smaller data set from the above data to be used in some examples:</p>
+<pre class="r"><code>ecom_mini &lt;- sample_n(ecom, size = 10)
+ecom_mini</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 direct         1      207 FALSE   
+##  2 direct         1      158 FALSE   
+##  3 google         2       44 FALSE   
+##  4 yahoo         11      286 TRUE    
+##  5 social        14      406 FALSE   
+##  6 social         1       12 FALSE   
+##  7 social         1      576 FALSE   
+##  8 social         1      157 FALSE   
+##  9 google         1       86 FALSE   
+## 10 yahoo         11      231 FALSE</code></pre>
 <div id="data-dictionary" class="section level4">
 <h4>Data Dictionary</h4>
 <ul>
-<li>id: row id</li>
 <li>referrer: referrer website/search engine</li>
-<li>os: operating system</li>
-<li>browser: browser</li>
-<li>device: device used to visit the website</li>
 <li>n_pages: number of pages visited</li>
 <li>duration: time spent on the website (in seconds)</li>
-<li>repeat: frequency of visits</li>
-<li>country: country of origin</li>
 <li>purchase: whether visitor purchased</li>
-<li>order_value: order value of visitor (in dollars)</li>
 </ul>
 </div>
 </div>
@@ -96,46 +130,42 @@ ecom</code></pre>
 <h2>First Example</h2>
 <p>Let us start with a simple example. You must be aware of <code>head()</code>. If not, do not worry. It returns the first few observations/rows of data. We can specify the number of observations it should return as well. Let us use it to view the first 10 rows of our data set.</p>
 <pre class="r"><code>head(ecom, 10)</code></pre>
-<pre><code>## # A tibble: 10 x 11
-##       id referrer device bouncers n_visit n_pages duration country       
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
-##  1     1 google   laptop true          10       1      693 Czech Republic
-##  2     2 yahoo    tablet true           9       1      459 Yemen         
-##  3     3 direct   laptop true           0       1      996 Brazil        
-##  4     4 bing     tablet false          3      18      468 China         
-##  5     5 yahoo    mobile true           9       1      955 Poland        
-##  6     6 yahoo    laptop false          5       5      135 South Africa  
-##  7     7 yahoo    mobile true          10       1       75 Bangladesh    
-##  8     8 direct   mobile true          10       1      908 Indonesia     
-##  9     9 bing     mobile false          3      19      209 Netherlands   
-## 10    10 google   mobile true           6       1      208 Czech Republic
-## # ... with 3 more variables: purchase &lt;chr&gt;, order_items &lt;dbl&gt;,
-## #   order_value &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE</code></pre>
 <div id="using-pipe" class="section level4">
 <h4>Using Pipe</h4>
 <p>Now let us do the same but with <code>%&gt;%</code>.</p>
 <pre class="r"><code>ecom %&gt;% head(10)</code></pre>
-<pre><code>## # A tibble: 10 x 11
-##       id referrer device bouncers n_visit n_pages duration country       
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
-##  1     1 google   laptop true          10       1      693 Czech Republic
-##  2     2 yahoo    tablet true           9       1      459 Yemen         
-##  3     3 direct   laptop true           0       1      996 Brazil        
-##  4     4 bing     tablet false          3      18      468 China         
-##  5     5 yahoo    mobile true           9       1      955 Poland        
-##  6     6 yahoo    laptop false          5       5      135 South Africa  
-##  7     7 yahoo    mobile true          10       1       75 Bangladesh    
-##  8     8 direct   mobile true          10       1      908 Indonesia     
-##  9     9 bing     mobile false          3      19      209 Netherlands   
-## 10    10 google   mobile true           6       1      208 Czech Republic
-## # ... with 3 more variables: purchase &lt;chr&gt;, order_items &lt;dbl&gt;,
-## #   order_value &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE</code></pre>
 </div>
 </div>
 <div id="square-root" class="section level2">
 <h2>Square Root</h2>
 <p>Time to try a slightly more challenging example. We want the square root of <code>n_pages</code> column from the data set. To ensure the output does not clutter the page, we will view the first few observations using <code>head()</code>.</p>
-<pre class="r"><code>y &lt;- head(sqrt(ecom$n_pages))</code></pre>
+<pre class="r"><code>y &lt;- sqrt(ecom_mini$n_pages)</code></pre>
 <p>Let us break down the above computation into small steps:</p>
 <ul>
 <li>select/expose the <code>n_pages</code> column from <code>ecom</code> data</li>
@@ -148,22 +178,16 @@ ecom</code></pre>
 <p>Let us reproduce <code>y</code> using pipes.</p>
 <pre class="r"><code># select n_pages variable and assign it to y
 y &lt;-
-    ecom %$%
+    ecom_mini %$%
     n_pages
 
 # compute square root of y and assign it to y 
-y %&lt;&gt;% sqrt
-
-head(y)</code></pre>
-<pre><code>## [1] 1.000000 1.000000 1.000000 4.242641 1.000000 2.236068</code></pre>
+y %&lt;&gt;% sqrt</code></pre>
 <p>Another way to compute the square root of y is shown below.</p>
 <pre class="r"><code>y &lt;-
-  ecom %$% 
+  ecom_mini %$% 
   n_pages %&gt;% 
-  sqrt 
-
-head(y)</code></pre>
-<pre><code>## [1] 1.000000 1.000000 1.000000 4.242641 1.000000 2.236068</code></pre>
+  sqrt </code></pre>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
@@ -174,7 +198,7 @@ head(y)</code></pre>
 <li>tabulate referrer data using <code>table()</code></li>
 <li>use the tabulated data to create bar plot using <code>barplot()</code></li>
 </ul>
-<pre class="r"><code>barplot(table(subset(ecom, purchase == &#39;true&#39;)$referrer))</code></pre>
+<pre class="r"><code>barplot(table(subset(ecom, purchase)$referrer))</code></pre>
 <p><img src="/post/2018-06-12-readable-code-with-pipes_files/figure-html/mag21-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div id="using-pipe-1" class="section level4">
 <h4>Using pipe</h4>
@@ -182,10 +206,10 @@ head(y)</code></pre>
 <p><img src="/img/pipes_data_visualization.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>ecom %&gt;%
-  subset(purchase == &#39;true&#39;) %&gt;%
+  subset(purchase) %&gt;%
   extract(&#39;referrer&#39;) %&gt;%
-  table %&gt;%
-  barplot</code></pre>
+  table() %&gt;%
+  barplot()</code></pre>
 <p><img src="/post/2018-06-12-readable-code-with-pipes_files/figure-html/mag7-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -201,17 +225,17 @@ head(y)</code></pre>
 <p><img src="/img/pipes_correlation.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code># without pipe
-ecom1 &lt;- subset(ecom, purchase == &#39;true&#39;)
+ecom1 &lt;- subset(ecom, purchase)
 cor(ecom1$n_pages, ecom1$duration)</code></pre>
 <pre><code>## [1] 0.4290905</code></pre>
 <pre class="r"><code># with pipe
 ecom %&gt;%
-  subset(purchase == &#39;true&#39;) %$% 
+  subset(purchase) %$% 
   cor(n_pages, duration)</code></pre>
 <pre><code>## [1] 0.4290905</code></pre>
 <pre class="r"><code># with pipe
 ecom %&gt;%
-  filter(purchase == &#39;true&#39;) %$% 
+  filter(purchase) %$% 
   cor(n_pages, duration)</code></pre>
 <pre><code>## [1] 0.4290905</code></pre>
 </div>
@@ -246,7 +270,7 @@ ecom %&gt;%
 <h4>Using pipe</h4>
 <pre class="r"><code>ecom %$%
   lm(duration ~ n_pages) %&gt;%
-  summary</code></pre>
+  summary()</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = duration ~ n_pages)
@@ -313,96 +337,113 @@ email %&gt;%
 <h4>Extract Column By Name</h4>
 <p>To extract a specific column using the column name, we mention the name of the column in single/double quotes within <code>[</code> or <code>[[</code>. In case of <code>$</code>, we do not use quotes.</p>
 <p>Let us extract the first 3 observations of <code>n_pages</code> column.</p>
-<pre class="r"><code>head(ecom[&#39;n_pages&#39;], 3)</code></pre>
-<pre><code>## # A tibble: 3 x 1
-##   n_pages
-##     &lt;dbl&gt;
-## 1       1
-## 2       1
-## 3       1</code></pre>
-<pre class="r"><code>ecom %&gt;%
-  extract(&#39;n_pages&#39;) %&gt;%
-  head(3)</code></pre>
-<pre><code>## # A tibble: 3 x 1
-##   n_pages
-##     &lt;dbl&gt;
-## 1       1
-## 2       1
-## 3       1</code></pre>
+<pre class="r"><code># base 
+ecom_mini[&#39;n_pages&#39;]</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3       2
+##  4      11
+##  5      14
+##  6       1
+##  7       1
+##  8       1
+##  9       1
+## 10      11</code></pre>
+<pre class="r"><code># magrittr
+extract(ecom_mini, &#39;n_pages&#39;) </code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3       2
+##  4      11
+##  5      14
+##  6       1
+##  7       1
+##  8       1
+##  9       1
+## 10      11</code></pre>
 </div>
 <div id="extract-column-by-position" class="section level4">
 <h4>Extract Column By Position</h4>
-<p>We can extract columns using their index position. Keep in mind that index position starts from <strong>1</strong> in R. In the below example, we show how to extract the first 3 observations of <code>n_pages</code> column but instead of using the column name, we use the column position.</p>
-<pre class="r"><code>head(ecom[6], 3)</code></pre>
-<pre><code>## # A tibble: 3 x 1
-##   n_pages
-##     &lt;dbl&gt;
-## 1       1
-## 2       1
-## 3       1</code></pre>
-<pre class="r"><code>ecom %&gt;%
-  extract(6) %&gt;%
-  head(3)</code></pre>
-<pre><code>## # A tibble: 3 x 1
-##   n_pages
-##     &lt;dbl&gt;
-## 1       1
-## 2       1
-## 3       1</code></pre>
+<p>We can extract columns using their index position. Keep in mind that index position starts from <strong>1</strong> in R. In the below example, we show how to extract <code>n_pages</code> column but instead of using the column name, we use the column position.</p>
+<pre class="r"><code># base 
+ecom_mini[2]</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3       2
+##  4      11
+##  5      14
+##  6       1
+##  7       1
+##  8       1
+##  9       1
+## 10      11</code></pre>
+<pre class="r"><code># magrittr
+extract(ecom_mini, 2) </code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3       2
+##  4      11
+##  5      14
+##  6       1
+##  7       1
+##  8       1
+##  9       1
+## 10      11</code></pre>
 </div>
 <div id="extract-column-as-vector" class="section level4">
 <h4>Extract Column (as vector)</h4>
 <p>One important differentiator between <code>[</code> and <code>[[</code> is that <code>[[</code> will return a atomic vector and not a <code>data.frame</code>. <code>$</code> will also return a atomic vector. In magrittr, we can use <code>use_series()</code> in place of <code>$</code>.</p>
-<pre class="r"><code>head(ecom$n_pages)</code></pre>
-<pre><code>## [1]  1  1  1 18  1  5</code></pre>
-<pre class="r"><code>ecom %&gt;%
-  use_series(&#39;n_pages&#39;) %&gt;%
-  head</code></pre>
-<pre><code>## [1]  1  1  1 18  1  5</code></pre>
+<pre class="r"><code># base 
+ecom_mini$n_pages</code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre class="r"><code># magrittr
+use_series(ecom_mini, &#39;n_pages&#39;) </code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
 </div>
 <div id="extract-list-element-by-name" class="section level4">
 <h4>Extract List Element By Name</h4>
-<p>To extract elements of a list, we can use <code>extract2()</code>. If is an alternative for <code>[[</code>.</p>
-<pre class="r"><code>mt &lt;- as.list(mtcars)
-
-mt[[&#39;mpg&#39;]]</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
-<pre class="r"><code>mt %&gt;%
-  extract2(&#39;mpg&#39;)</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
+<p>Let us convert <code>ecom_mini</code> into a list using as.list() as shown below:</p>
+<pre class="r"><code>ecom_list &lt;- as.list(ecom_mini)</code></pre>
+<p>To extract elements of a list, we can use <code>extract2()</code>. It is an alternative for <code>[[</code>.</p>
+<pre class="r"><code># base 
+ecom_list[[&#39;n_pages&#39;]]</code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre class="r"><code># magrittr
+extract2(ecom_list, &#39;n_pages&#39;)</code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
 </div>
 <div id="extract-list-element-by-position" class="section level4">
 <h4>Extract List Element By Position</h4>
-<pre class="r"><code>mt &lt;- as.list(mtcars)
-
-mt[[1]]</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
-<pre class="r"><code>mt %&gt;%
-  extract2(1)</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
+<pre class="r"><code># base 
+ecom_list[[1]]</code></pre>
+<pre><code>##  [1] direct direct google yahoo  social social social social google yahoo 
+## Levels: bing direct social yahoo google</code></pre>
+<pre class="r"><code># magrittr
+extract2(ecom_list, 1)</code></pre>
+<pre><code>##  [1] direct direct google yahoo  social social social social google yahoo 
+## Levels: bing direct social yahoo google</code></pre>
 </div>
 <div id="extract-list-element" class="section level4">
 <h4>Extract List Element</h4>
 <p>We can extract the elements of a list using <code>use_series()</code> as well.</p>
-<pre class="r"><code>mt &lt;- as.list(mtcars)
-
-mt$mpg</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
-<pre class="r"><code>mt %&gt;%
-  use_series(mpg)</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
+<pre class="r"><code># base 
+ecom_list$n_pages</code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre class="r"><code># magrittr
+use_series(ecom_list, n_pages)</code></pre>
+<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
 </div>
 </div>
 <div id="arithmetic-operations" class="section level2">
@@ -420,38 +461,43 @@ mt$mpg</code></pre>
 </ul>
 <div id="addition" class="section level4">
 <h4>Addition</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `+`(1)</code></pre>
+<pre class="r"><code>1:10 + 1</code></pre>
 <pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  add(1)</code></pre>
+<pre class="r"><code>add(1:10, 1)</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
+<pre class="r"><code>`+`(1:10, 1)</code></pre>
 <pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
 </div>
 <div id="multiplication" class="section level4">
 <h4>Multiplication</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `*`(3)</code></pre>
+<pre class="r"><code>1:10 * 3</code></pre>
 <pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  multiply_by(3)</code></pre>
+<pre class="r"><code>multiply_by(1:10, 3)</code></pre>
+<pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
+<pre class="r"><code>`*`(1:10, 3)</code></pre>
 <pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
 </div>
 <div id="division" class="section level4">
 <h4>Division</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `/`(2)</code></pre>
+<pre class="r"><code>1:10 / 2</code></pre>
 <pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  divide_by(2)</code></pre>
+<pre class="r"><code>divide_by(1:10, 2)</code></pre>
+<pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
+<pre class="r"><code>`/`(1:10, 2)</code></pre>
 <pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
 </div>
 <div id="power" class="section level4">
 <h4>Power</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `^`(2)</code></pre>
+<pre class="r"><code>1:10 ^ 2</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
+##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
+##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
+##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
+##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
+##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
+<pre class="r"><code>raise_to_power(1:10, 2)</code></pre>
 <pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  raise_to_power(2)</code></pre>
+<pre class="r"><code>`^`(1:10, 2)</code></pre>
 <pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
 </div>
 </div>
@@ -470,20 +516,20 @@ mt$mpg</code></pre>
 </ul>
 <div id="greater-than" class="section level4">
 <h4>Greater Than</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `&gt;`(5)</code></pre>
+<pre class="r"><code>1:10 &gt; 5</code></pre>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  is_greater_than(5)</code></pre>
+<pre class="r"><code>is_greater_than(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>`&gt;`(1:10, 5)</code></pre>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
 </div>
 <div id="weakly-greater-than" class="section level4">
 <h4>Weakly Greater Than</h4>
-<pre class="r"><code>1:10 %&gt;%
-  `&gt;=`(5)</code></pre>
+<pre class="r"><code>1:10 &gt;= 5</code></pre>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
-<pre class="r"><code>1:10 %&gt;%
-  is_weakly_greater_than(5)</code></pre>
+<pre class="r"><code>is_weakly_greater_than(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>`&gt;=`(1:10, 5)</code></pre>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
 </div>
 </div>
