@@ -55,14 +55,14 @@ Let us import both the data sets using `read_csv`.
 ### Data: Orders
 
 ```{r dplyr2, message=FALSE}
-order <- readr::read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv', delim = ';')
+order <- read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv', delim = ';')
 order
 ```
 
 ### Data: Customers
 
 ```{r dplyr, message=FALSE}
-customer <- readr::read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv', delim = ';')
+customer <- read_delim('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv', delim = ';')
 customer
 ```
 

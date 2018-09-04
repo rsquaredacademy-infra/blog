@@ -106,16 +106,16 @@ ecom_mini</code></pre>
 <pre><code>## # A tibble: 10 x 4
 ##    referrer n_pages duration purchase
 ##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 direct         1      207 FALSE   
-##  2 direct         1      158 FALSE   
-##  3 google         2       44 FALSE   
-##  4 yahoo         11      286 TRUE    
-##  5 social        14      406 FALSE   
-##  6 social         1       12 FALSE   
-##  7 social         1      576 FALSE   
-##  8 social         1      157 FALSE   
-##  9 google         1       86 FALSE   
-## 10 yahoo         11      231 FALSE</code></pre>
+##  1 social         1      387 FALSE   
+##  2 yahoo          1       47 FALSE   
+##  3 yahoo          8      224 FALSE   
+##  4 yahoo         18      270 TRUE    
+##  5 google         1      239 FALSE   
+##  6 direct         1      217 FALSE   
+##  7 google        18      252 TRUE    
+##  8 google        10      190 FALSE   
+##  9 direct         4       52 FALSE   
+## 10 social        18      486 FALSE</code></pre>
 <div id="data-dictionary" class="section level4">
 <h4>Data Dictionary</h4>
 <ul>
@@ -187,7 +187,7 @@ y %&lt;&gt;% sqrt</code></pre>
 <pre class="r"><code>y &lt;-
   ecom_mini %$% 
   n_pages %&gt;% 
-  sqrt </code></pre>
+  sqrt()</code></pre>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
@@ -344,14 +344,14 @@ ecom_mini[&#39;n_pages&#39;]</code></pre>
 ##      &lt;dbl&gt;
 ##  1       1
 ##  2       1
-##  3       2
-##  4      11
-##  5      14
+##  3       8
+##  4      18
+##  5       1
 ##  6       1
-##  7       1
-##  8       1
-##  9       1
-## 10      11</code></pre>
+##  7      18
+##  8      10
+##  9       4
+## 10      18</code></pre>
 <pre class="r"><code># magrittr
 extract(ecom_mini, &#39;n_pages&#39;) </code></pre>
 <pre><code>## # A tibble: 10 x 1
@@ -359,14 +359,14 @@ extract(ecom_mini, &#39;n_pages&#39;) </code></pre>
 ##      &lt;dbl&gt;
 ##  1       1
 ##  2       1
-##  3       2
-##  4      11
-##  5      14
+##  3       8
+##  4      18
+##  5       1
 ##  6       1
-##  7       1
-##  8       1
-##  9       1
-## 10      11</code></pre>
+##  7      18
+##  8      10
+##  9       4
+## 10      18</code></pre>
 </div>
 <div id="extract-column-by-position" class="section level4">
 <h4>Extract Column By Position</h4>
@@ -378,14 +378,14 @@ ecom_mini[2]</code></pre>
 ##      &lt;dbl&gt;
 ##  1       1
 ##  2       1
-##  3       2
-##  4      11
-##  5      14
+##  3       8
+##  4      18
+##  5       1
 ##  6       1
-##  7       1
-##  8       1
-##  9       1
-## 10      11</code></pre>
+##  7      18
+##  8      10
+##  9       4
+## 10      18</code></pre>
 <pre class="r"><code># magrittr
 extract(ecom_mini, 2) </code></pre>
 <pre><code>## # A tibble: 10 x 1
@@ -393,24 +393,24 @@ extract(ecom_mini, 2) </code></pre>
 ##      &lt;dbl&gt;
 ##  1       1
 ##  2       1
-##  3       2
-##  4      11
-##  5      14
+##  3       8
+##  4      18
+##  5       1
 ##  6       1
-##  7       1
-##  8       1
-##  9       1
-## 10      11</code></pre>
+##  7      18
+##  8      10
+##  9       4
+## 10      18</code></pre>
 </div>
 <div id="extract-column-as-vector" class="section level4">
 <h4>Extract Column (as vector)</h4>
 <p>One important differentiator between <code>[</code> and <code>[[</code> is that <code>[[</code> will return a atomic vector and not a <code>data.frame</code>. <code>$</code> will also return a atomic vector. In magrittr, we can use <code>use_series()</code> in place of <code>$</code>.</p>
 <pre class="r"><code># base 
 ecom_mini$n_pages</code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 <pre class="r"><code># magrittr
 use_series(ecom_mini, &#39;n_pages&#39;) </code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 </div>
 <div id="extract-list-element-by-name" class="section level4">
 <h4>Extract List Element By Name</h4>
@@ -419,20 +419,20 @@ use_series(ecom_mini, &#39;n_pages&#39;) </code></pre>
 <p>To extract elements of a list, we can use <code>extract2()</code>. It is an alternative for <code>[[</code>.</p>
 <pre class="r"><code># base 
 ecom_list[[&#39;n_pages&#39;]]</code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 <pre class="r"><code># magrittr
 extract2(ecom_list, &#39;n_pages&#39;)</code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 </div>
 <div id="extract-list-element-by-position" class="section level4">
 <h4>Extract List Element By Position</h4>
 <pre class="r"><code># base 
 ecom_list[[1]]</code></pre>
-<pre><code>##  [1] direct direct google yahoo  social social social social google yahoo 
+<pre><code>##  [1] social yahoo  yahoo  yahoo  google direct google google direct social
 ## Levels: bing direct social yahoo google</code></pre>
 <pre class="r"><code># magrittr
 extract2(ecom_list, 1)</code></pre>
-<pre><code>##  [1] direct direct google yahoo  social social social social google yahoo 
+<pre><code>##  [1] social yahoo  yahoo  yahoo  google direct google google direct social
 ## Levels: bing direct social yahoo google</code></pre>
 </div>
 <div id="extract-list-element" class="section level4">
@@ -440,10 +440,10 @@ extract2(ecom_list, 1)</code></pre>
 <p>We can extract the elements of a list using <code>use_series()</code> as well.</p>
 <pre class="r"><code># base 
 ecom_list$n_pages</code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 <pre class="r"><code># magrittr
 use_series(ecom_list, n_pages)</code></pre>
-<pre><code>##  [1]  1  1  2 11 14  1  1  1  1 11</code></pre>
+<pre><code>##  [1]  1  1  8 18  1  1 18 10  4 18</code></pre>
 </div>
 </div>
 <div id="arithmetic-operations" class="section level2">

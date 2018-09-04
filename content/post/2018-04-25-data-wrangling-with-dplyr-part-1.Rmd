@@ -67,7 +67,15 @@ using mobile?
 ## Data
 
 ```{r show, message=FALSE}
-ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom <- 
+  read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv',
+    col_types = cols_only(device = col_factor(levels = c("laptop", "tablet", "mobile")),
+      referrer = col_factor(levels = c("bing", "direct", "social", "yahoo", "google")),
+      purchase = col_logical(), n_pages = col_double(), n_visit = col_double(), 
+      duration = col_double(), order_value = col_double(), order_items = col_double()
+    )
+  )
+
 ecom
 ```
 
@@ -75,17 +83,14 @@ ecom
 
 Below is the description of the data set:
 
-- id: row id
 - referrer: referrer website/search engine
-- os: operating system
-- browser: browser
 - device: device used to visit the website
 - n_pages: number of pages visited
 - duration: time spent on the website (in seconds)
-- repeat: frequency of visits
-- country: country of origin
 - purchase: whether visitor purchased
 - order_value: order value of visitor (in dollars)
+- order_items: number of items ordered
+- n_visit: number of visits
 
 ## Average Order Value
 
@@ -102,7 +107,7 @@ knitr::include_graphics("/img/aov_flow2.png")
 
 ```{r case}
 ecom %>%
-  filter(purchase == 'true') %>%
+  filter(purchase) %>%
   select(device, order_value, order_items) %>%
   group_by(device) %>%
   summarise_all(funs(sum)) %>%
@@ -162,7 +167,7 @@ knitr::include_graphics("/img/filter_2.png")
 <br>
 
 ```{r dplyr3}
-filter(ecom, device == "mobile", purchase == "true")
+filter(ecom, device == "mobile", purchase)
 ```
 
 Here is another example where we specify multiple conditions: 
@@ -172,7 +177,7 @@ Here is another example where we specify multiple conditions:
 - browsed less than 15 pages 
 
 ```{r dplyr4}
-filter(ecom, device == "tablet", purchase == "true", n_pages < 15)
+filter(ecom, device == "tablet", purchase, n_pages < 15)
 ```
 
 ##### Case Study
@@ -181,7 +186,7 @@ Let us apply what we have learnt to the case study. We want to filter all
 visits that resulted in a purchase. 
 
 ```{r dplyr5}
-filter(ecom, purchase == "true")
+filter(ecom, purchase)
 ```
 
 ## Select Columns
@@ -192,7 +197,7 @@ metric (in our case, AOV). The `select()` function allows us to select a subset
 of columns. The first argument is the name of the data frame and the subsequent 
 arguments specify the columns by name or position. 
 
-To select the `device` and `purchase` columns, we specify the data set i.e. 
+To select the `device` and `duration` columns, we specify the data set i.e. 
 `ecom` followed by the name of the columns.
 
 <br>
@@ -204,11 +209,11 @@ knitr::include_graphics("/img/select_1.png")
 <br>
 
 ```{r dplyr6}
-select(ecom, device, purchase)
+select(ecom, device, duration)
 ```
 
 We can select a set of columns using `:`. In the below example, we select all 
-the columns starting from `referrer` up to `purchase`. Remember that we can use `:` only when
+the columns starting from `referrer` up to `order_items`. Remember that we can use `:` only when
 the columns are adjacent to each other in the data set.
 
 <br>
@@ -220,15 +225,15 @@ knitr::include_graphics("/img/select_2.png")
 <br>
 
 ```{r dplyr7}
-select(ecom, referrer:purchase)
+select(ecom, referrer:order_items)
 ```
 
 What if you want to select all columns except a few? Typing the name of many
 columns can be cumbersome and may also result in spelling errors. We may use `:`
 only if the columns are adjacent to each other but that may not always be
 the case. dplyr allows us to specify columns that need not be
-selected using `-`. In the below example, we select all columns except `id` and 
-`country`. Notice the `-` before both of them.
+selected using `-`. In the below example, we select all columns except `n_pages` and 
+`duration`. Notice the `-` before both of them.
 
 <br>
 
@@ -239,7 +244,7 @@ knitr::include_graphics("/img/select_3.png")
 <br>
 
 ```{r dplyr8}
-select(ecom, -id, -country)
+select(ecom, -n_pages, -duration)
 ```
 
 ##### Case Study
@@ -501,7 +506,7 @@ arrange(ecom6, aov)
 Let us combine all the code from the above steps:
 
 ```{r dplyr17}
-ecom1 <- filter(ecom, purchase == "true")
+ecom1 <- filter(ecom, purchase)
 ecom2 <- select(ecom1, device, order_value, order_items)
 ecom3 <- group_by(ecom2, device)
 ecom4 <- summarise_all(ecom3, funs(sum))
@@ -519,7 +524,7 @@ to chain the steps and get rid of the intermediate data.
 
 ```{r dplyr18}
 ecom %>%
-  filter(purchase == 'true') %>%
+  filter(purchase) %>%
   select(device, order_value, order_items) %>%
   group_by(device) %>%
   summarise_all(funs(sum)) %>%

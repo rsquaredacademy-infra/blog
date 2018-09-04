@@ -126,7 +126,7 @@ supply column names as shown in the below example. Let us reread `hsb3`
 and specify column names.
 
 ```{r col_names2, message=FALSE}
-cnames <- c("id", "female", "race", "ses", "schtyp", "prog", "read", "write", "math", "science", "socst")
+cnames <- c("id", "gender", "race", "socio_economic_status", "school_type", "program", "read", "write", "math", "science", "socst")
 read_csv('hsb3.csv', col_names = cnames)
 ```
 

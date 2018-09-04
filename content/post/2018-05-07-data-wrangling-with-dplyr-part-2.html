@@ -41,7 +41,7 @@ library(readr)</code></pre>
 <p>Let us import both the data sets using <code>read_csv</code>.</p>
 <div id="data-orders" class="section level3">
 <h3>Data: Orders</h3>
-<pre class="r"><code>order &lt;- readr::read_delim(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv&#39;, delim = &#39;;&#39;)
+<pre class="r"><code>order &lt;- read_delim(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/order.csv&#39;, delim = &#39;;&#39;)
 order</code></pre>
 <pre><code>## # A tibble: 300 x 3
 ##       id order_date amount
@@ -60,7 +60,7 @@ order</code></pre>
 </div>
 <div id="data-customers" class="section level3">
 <h3>Data: Customers</h3>
-<pre class="r"><code>customer &lt;- readr::read_delim(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv&#39;, delim = &#39;;&#39;)
+<pre class="r"><code>customer &lt;- read_delim(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/customer.csv&#39;, delim = &#39;;&#39;)
 customer</code></pre>
 <pre><code>## # A tibble: 91 x 3
 ##       id first_name city      

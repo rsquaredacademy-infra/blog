@@ -146,7 +146,7 @@ Another way to compute the square root of y is shown below.
 y <-
   ecom_mini %$% 
   n_pages %>% 
-  sqrt 
+  sqrt()
 ```
 
 ## Visualization
