@@ -39,7 +39,6 @@ tags:
 <p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/55c4f40476028c09949b73af97bb1619">here</a>.</p>
 <pre class="r"><code>library(dplyr)
 library(readr)</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 3.5.1</code></pre>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
@@ -210,16 +209,16 @@ library(readr)</code></pre>
 <pre><code>## # A tibble: 700 x 7
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 bing     tablet FALSE         10      15      150 FALSE   
-##  2 google   laptop TRUE           5       1      951 FALSE   
-##  3 direct   laptop TRUE           2       1      624 FALSE   
-##  4 google   tablet TRUE           5       1      978 FALSE   
-##  5 social   tablet FALSE          3      15      435 FALSE   
-##  6 google   tablet FALSE          9      14      308 TRUE    
-##  7 bing     tablet TRUE           8       1      577 FALSE   
-##  8 direct   tablet FALSE          6      12      132 FALSE   
-##  9 bing     tablet TRUE           2       1      292 FALSE   
-## 10 bing     tablet TRUE           2       1      489 FALSE   
+##  1 bing     laptop FALSE          0       1       21 FALSE   
+##  2 social   mobile FALSE          3      13      208 FALSE   
+##  3 bing     mobile FALSE          2      18      198 FALSE   
+##  4 bing     tablet FALSE          9       2       50 FALSE   
+##  5 direct   mobile FALSE          4      18      324 TRUE    
+##  6 bing     laptop FALSE          1      19      380 TRUE    
+##  7 bing     laptop TRUE           1       1      995 FALSE   
+##  8 google   tablet FALSE          6       6      114 FALSE   
+##  9 yahoo    laptop FALSE         10      18      180 FALSE   
+## 10 google   tablet FALSE          7      12      324 TRUE    
 ## # ... with 690 more rows</code></pre>
 <p>We can combine the sampling functions with other dplyr functions as shown below where we sample observation after grouping them according to the source of traffic.</p>
 <pre class="r"><code>ecom %&gt;%
@@ -229,32 +228,32 @@ library(readr)</code></pre>
 ## # Groups:   referrer [5]
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 bing     tablet TRUE           0       1      985 FALSE   
-##  2 bing     mobile TRUE           3       1      119 FALSE   
-##  3 bing     laptop TRUE           4       1      857 FALSE   
-##  4 bing     tablet FALSE          0       2       52 FALSE   
-##  5 bing     laptop TRUE           7       1      811 FALSE   
-##  6 bing     mobile TRUE           6       1      966 FALSE   
-##  7 bing     mobile TRUE           5       1      541 FALSE   
-##  8 bing     tablet FALSE          7       2       34 FALSE   
-##  9 bing     mobile FALSE          0       7      196 FALSE   
-## 10 bing     tablet TRUE           2       1       24 FALSE   
+##  1 bing     mobile FALSE          6      18      342 TRUE    
+##  2 bing     mobile FALSE          5      15      405 TRUE    
+##  3 bing     tablet FALSE          4      15      405 FALSE   
+##  4 bing     tablet FALSE          3      15      390 TRUE    
+##  5 bing     mobile TRUE           9       1      574 FALSE   
+##  6 bing     laptop TRUE           3       1      271 FALSE   
+##  7 bing     mobile FALSE          8      20      380 FALSE   
+##  8 bing     mobile FALSE         10      20      560 FALSE   
+##  9 bing     laptop TRUE           3       1      422 FALSE   
+## 10 bing     mobile FALSE          4       2       46 FALSE   
 ## # ... with 490 more rows</code></pre>
 <p><code>sample_frac()</code> allows a specific percentage of observations.</p>
 <pre class="r"><code>sample_frac(ecom, size = 0.7)</code></pre>
 <pre><code>## # A tibble: 700 x 7
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 direct   tablet FALSE          8      17      255 FALSE   
-##  2 yahoo    mobile FALSE          1      17      442 TRUE    
-##  3 yahoo    mobile TRUE           0       1      287 FALSE   
-##  4 google   tablet TRUE           6       1      966 FALSE   
-##  5 google   tablet FALSE          5       2       54 FALSE   
-##  6 bing     laptop TRUE           1       1      995 FALSE   
-##  7 yahoo    laptop TRUE           2       1      653 FALSE   
-##  8 direct   laptop FALSE          3      13      260 TRUE    
-##  9 social   laptop TRUE           2       1      806 FALSE   
-## 10 bing     laptop TRUE           1       1      148 FALSE   
+##  1 social   tablet TRUE           4       1       53 FALSE   
+##  2 direct   laptop FALSE          4       5       65 FALSE   
+##  3 social   laptop TRUE           2       1      550 FALSE   
+##  4 direct   tablet FALSE          7      15      240 FALSE   
+##  5 google   tablet TRUE           7       1      406 FALSE   
+##  6 direct   laptop FALSE          9      17      425 TRUE    
+##  7 yahoo    mobile TRUE           9       1      565 FALSE   
+##  8 google   tablet FALSE          3      13      338 FALSE   
+##  9 google   tablet FALSE         10       8      200 FALSE   
+## 10 direct   mobile TRUE           7       1      764 FALSE   
 ## # ... with 690 more rows</code></pre>
 </div>
 <div id="data-extraction" class="section level2">
@@ -268,11 +267,11 @@ library(readr)</code></pre>
 <p><img src="/img/pull_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>pull(ecom_mini, device)</code></pre>
-<pre><code>##  [1] laptop tablet tablet laptop laptop tablet tablet laptop laptop mobile
+<pre><code>##  [1] tablet laptop laptop tablet mobile mobile laptop mobile laptop tablet
 ## Levels: laptop tablet mobile</code></pre>
 <p>Let us extract the first column from <code>ecom</code> using column position instead of name.</p>
 <pre class="r"><code>pull(ecom_mini, 1) </code></pre>
-<pre><code>##  [1] bing   bing   direct yahoo  google social google google social yahoo 
+<pre><code>##  [1] bing   yahoo  direct bing   google social bing   yahoo  bing   bing  
 ## Levels: bing direct social yahoo google</code></pre>
 <p>You can use <code>-</code> before the column position to indicate the position in reverse. The below example extracts data from the last column.</p>
 <pre class="r"><code>pull(ecom_mini, -1) </code></pre>
@@ -312,9 +311,9 @@ library(readr)</code></pre>
 ecom_sample %&gt;%
   pull(n_pages) %&gt;%
   between(5, 15) </code></pre>
-<pre><code>##  [1]  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
-## [12] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
-## [23] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+## [12]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23]  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE</code></pre>
 </div>
 <div id="case-when" class="section level2">
 <h2>Case When</h2>
