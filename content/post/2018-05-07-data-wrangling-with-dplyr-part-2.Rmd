@@ -103,9 +103,7 @@ Inner join return all rows from `Age` where there are matching values in
 `Height`, and all columns from `Age` and `Height`. If there are multiple matches 
 between `Age` and `Height`, all combination of the matches are returned.
 
-#### Case Study
-
-###### Details of customers who have placed orders and their order details
+#### Case Study: Details of customers who have placed orders and their order details
 
 To get data for all those customers who have placed orders in the past let us 
 join the `order` data with the `customer` data using `inner_join`. 
@@ -129,9 +127,7 @@ Rows in `Age` with  no match in `Height` will have NA values in the new columns.
 If there are multiple  matches between `Age` and `Height`, all combinations of 
 the matches are returned.
 
-#### Case Study
-
-###### Details of customers and their orders irrespective of whether a customer has 
+#### Case Study: Details of customers and their orders irrespective of whether a customer has 
 placed orders or not.
 
 To get data for all those customers and their orders irrespective of whether a 
@@ -158,9 +154,7 @@ Right join return all rows from `Height`, and all columns from `Age` and
 new columns. If there are multiple matches between `Age` and `Height`, all 
 combinations of the matches are returned.
 
-#### Case Study
-
-###### Customer details for each order
+#### Case Study: Customer details for each order
 
 To get customer data for all orders, let us join the `order` data with the 
 `customer` data using `right_join`. 
@@ -184,12 +178,11 @@ keeping just columns from `Age`. A semi join differs from an inner join because
 an inner join will return one row of `Age` for each matching row of `Height`, 
 where a semi join will never duplicate rows of `Age`.
 
-#### Case Study
+#### Case Study: Details of customers who have placed orders
 
-###### Details of customers who have placed orders
-
-To get customer data for all orders, let us join the `order` data with the 
-`customer` data using `semi_join`. 
+To get customer data for all orders where customer data exists, let us join the `order` data with the 
+`customer` data using `semi_join`. You can observe that data is returned only for those
+cases where customer data is present.
 
 ```{r dplyr6}
 semi_join(customer, order, by = "id")
@@ -208,9 +201,7 @@ knitr::include_graphics("/img/draw_anti.png")
 Anti join return all rows from `Age` where there are not matching values in 
 `Height`, keeping just columns from `Age`.
 
-#### Case Study
-
-###### Details of customers who have not placed orders
+#### Case Study: Details of customers who have not placed orders
 
 To get details of customers who have not placed orders, let us join the `order` 
 data with the `customer` data using `anti_join`. 
@@ -232,9 +223,7 @@ knitr::include_graphics("/img/draw_full.png")
 Full join return all rows and all columns from both `Age` and `Height`. Where 
 there are not matching values, returns NA for the one missing.
 
-#### Case Study
-
-###### Details of all customers and all orders
+#### Case Study: Details of all customers and all orders
 
 To get details of all customers and all orders, let us join the `order` 
 data with the `customer` data using `full_join`. 
