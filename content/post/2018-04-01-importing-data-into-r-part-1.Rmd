@@ -111,6 +111,16 @@ knitr::include_graphics('/img/mtcars_column_false.png')
 
 <br>
 
+We will first read the data set without indicating the presence or absence of
+column names.
+
+```{r col_names_1, message=FALSE}
+read_csv('hsb3.csv')
+```
+
+As you can see, in the absence of column names, `readr` has converted the 
+first row of the data into the column names. As a result, the data is 
+not read properly and there are lots of missing values and warnings. 
 If the column names are absent (i.e. the column names are provided in a 
 seprate file), use the `col_names` argument and set it to `FALSE`. Now `readr`
 will not convert the first row of data into column name and instead it 
@@ -148,6 +158,12 @@ knitr::include_graphics('/img/mtcars_skip.png')
 ```
 
 <br>
+
+Let us read the data without skipping any lines/rows and observe the result.
+
+```{r skip_1, message=FALSE}
+read_csv('hsb4.csv')
+```
 
 Use `skip` argument to indicate the number of lines/rows to be skipped while 
 reading data from a file. For example, if the file has contents other than data 
