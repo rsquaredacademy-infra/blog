@@ -78,15 +78,19 @@ Let us begin by reading data from a `csv` file using `read_csv()`.
 read_csv('hsb2.csv')
 ```
 
-Great! If you see the above output, you have successfully read data into R. If you see an error message (which most of us see when
-we are trying to read data for the first time), follow the below instructions:
+Great! If you see the above output, you have successfully read data into R. If 
+you see an error message (which most of us see when we are trying to read data 
+for the first time), follow the below instructions:
 
 - check the separator in the file and ensure it is a `comma`
 - check the file name
 - check the file path i.e. location of the file
 - ensure that the file name or path is enclosed in single or double quotes
 
-When you read data using `readr`, it will display the data type detected for each column/variable in the data set. If you want to check the data types before reading the data, use `spec_csv()`. We will learn to specify the column types in the next section.
+When you read data using `readr`, it will display the data type detected for 
+each column/variable in the data set. If you want to check the data types 
+before reading the data, use `spec_csv()`. We will learn to specify the column 
+types in the next section.
 
 ```{r spec_csv, message=FALSE}
 spec_csv('hsb2.csv')

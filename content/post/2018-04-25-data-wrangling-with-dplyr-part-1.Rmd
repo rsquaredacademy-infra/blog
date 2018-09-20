@@ -108,13 +108,14 @@ knitr::include_graphics("/img/aov_flow2.png")
 ```{r case}
 ecom %>%
   filter(purchase) %>%
-  select(device, order_value, order_items) %>%
+  select(device, order_value) %>%
   group_by(device) %>%
-  summarise_all(funs(sum)) %>%
+  summarise_all(funs(revenue = sum, orders = n())) %>%
   mutate(
-    aov = order_value / order_items
+    aov = revenue / orders
   ) %>%
-  select(device, aov)
+  select(device, aov) %>%
+  arrange(aov)
 ```
 
 ## Syntax
@@ -249,12 +250,12 @@ select(ecom, -n_pages, -duration)
 
 ##### Case Study
 
-For our case study, we need to select the columns `order_value` and `order_items` 
+For our case study, we need to select the column `order_value`
 to calculate the AOV. We also need to select the `device` column as we are 
 computing the AOV for each device type.
 
 ```{r dplyr9}
-select(ecom, device, order_value, order_items)
+select(ecom, device, order_value)
 ```
 
 But we want the above data only for purchasers. Let us combine `filter()` and 
@@ -263,10 +264,10 @@ visis that resulted in a purchase.
 
 ```{r dplyr10}
 # filter all visits that resulted in a purchase
-ecom1 <- filter(ecom, purchase == "true")
+ecom1 <- filter(ecom, purchase)
 
 # select the relevant columns
-ecom2 <- select(ecom1, device, order_value, order_items)
+ecom2 <- select(ecom1, device, order_value)
 
 # view data
 ecom2
@@ -355,7 +356,7 @@ the columns
 
 ```{r sumall_eg}
 # select relevant columns
-step_1 <- select(ecom, referrer, order_value, order_items)
+step_1 <- select(ecom, referrer, order_value)
 
 # split data by referrer type
 step_2 <- group_by(step_1, referrer)
@@ -370,7 +371,7 @@ Let us compute `mean` and `median` number of pages for each referre type using
 
 ```{r sumall_eg2}
 # select relevant columns
-step_1 <- select(ecom, referrer, order_value, order_items)
+step_1 <- select(ecom, referrer, order_value)
 
 # split data by referrer type
 step_2 <- group_by(step_1, referrer)
@@ -390,8 +391,8 @@ generate the sum of the values and hence we will use it inside the `summarise()`
 function. Remember, we need to provide a name to the summary being generated. 
 
 ```{r dplyr13}
-ecom4 <- summarise(ecom3, total_value = sum(order_value),
-          total_items = sum(order_items))
+ecom4 <- summarise(ecom3, revenue = sum(order_value),
+          orders = n())
 ecom4
 ```
 
@@ -402,7 +403,7 @@ need to use another argument `funs` and it can take any number of valid
 functions.
 
 ```{r dplyr14}
-ecom4 <- summarise_all(ecom3, funs(sum))
+ecom4 <- summarise_all(ecom3, funs(revenue = sum, orders = n()))
 ecom4
 ```
 
@@ -446,7 +447,7 @@ knitr::include_graphics("/img/mutate_1.png")
 <br>
 
 ```{r dplyr15}
-ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom5 <- mutate(ecom4, aov = revenue / orders)
 ecom5
 ```
 
@@ -507,10 +508,10 @@ Let us combine all the code from the above steps:
 
 ```{r dplyr17}
 ecom1 <- filter(ecom, purchase)
-ecom2 <- select(ecom1, device, order_value, order_items)
+ecom2 <- select(ecom1, device, order_value)
 ecom3 <- group_by(ecom2, device)
-ecom4 <- summarise_all(ecom3, funs(sum))
-ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom4 <- summarise_all(ecom3, funs(revenue = sum, orders = n()))
+ecom5 <- mutate(ecom4, aov = revenue / orders)
 ecom6 <- select(ecom5, device, aov)
 ecom7 <- arrange(ecom6, aov)
 ecom7
@@ -525,11 +526,11 @@ to chain the steps and get rid of the intermediate data.
 ```{r dplyr18}
 ecom %>%
   filter(purchase) %>%
-  select(device, order_value, order_items) %>%
+  select(device, order_value) %>%
   group_by(device) %>%
-  summarise_all(funs(sum)) %>%
+  summarise_all(funs(revenue = sum, orders = n())) %>%
   mutate(
-    aov = order_value / order_items
+    aov = revenue / orders
   ) %>%
   select(device, aov) %>%
   arrange(aov)
