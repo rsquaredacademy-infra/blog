@@ -22,6 +22,12 @@ post = "/:slug/"
   brand = "![Rsquared Academy Logo](/img/logos.png)"
   googleAnalytics = "UA-57270671-6"
   disqus = ""
+  [params.logo]
+    url = "logo.jpeg"
+    width = 50
+    height = 50
+    alt = "Aravind Hebbali"
+
   # CSS name for highlight.js
   highlightjs = "Github"
   highlightjs_extra_languages = ["r", "yaml"]
