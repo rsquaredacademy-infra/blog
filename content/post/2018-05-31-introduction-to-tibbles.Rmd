@@ -64,7 +64,7 @@ is same.
 
 `tibble()` will never alter the input's type. For example, if you supply a 
 character vector it will not be converted to factor unlike data.frame where
-you need to `stringsAsFactors` to `FALSE`.
+you need to set `stringsAsFactors` to `FALSE`.
 
 ```{r tibble3}
 tibble(x = letters,

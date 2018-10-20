@@ -55,16 +55,16 @@ library(dplyr)</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    73
-##  2 b         2    62
-##  3 c         3     3
-##  4 d         4    23
-##  5 e         5     5
-##  6 f         6    57
-##  7 g         7    29
-##  8 h         8    96
-##  9 i         9    84
-## 10 j        10    28
+##  1 a         1    12
+##  2 b         2    38
+##  3 c         3    14
+##  4 d         4    39
+##  5 e         5    62
+##  6 f         6    85
+##  7 g         7     7
+##  8 h         8    78
+##  9 i         9    65
+## 10 j        10    73
 ## # ... with 16 more rows</code></pre>
 <p>We mentioned the column names followed by the data. If you do not specify the column names, <code>tibble()</code> will supply them. Ensure that the length of each column is same.</p>
 </div>
@@ -73,23 +73,23 @@ library(dplyr)</code></pre>
 <ul>
 <li>never changes input’s types</li>
 </ul>
-<p><code>tibble()</code> will never alter the input’s type. For example, if you supply a character vector it will not be converted to factor unlike data.frame where you need to <code>stringsAsFactors</code> to <code>FALSE</code>.</p>
+<p><code>tibble()</code> will never alter the input’s type. For example, if you supply a character vector it will not be converted to factor unlike data.frame where you need to set <code>stringsAsFactors</code> to <code>FALSE</code>.</p>
 <pre class="r"><code>tibble(x = letters,
        y = 1:26,
        z = sample(100, 26))</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    11
-##  2 b         2    16
-##  3 c         3    28
-##  4 d         4    27
-##  5 e         5    14
-##  6 f         6    72
-##  7 g         7    41
-##  8 h         8     2
-##  9 i         9    83
-## 10 j        10    46
+##  1 a         1    72
+##  2 b         2    29
+##  3 c         3    78
+##  4 d         4    15
+##  5 e         5    90
+##  6 f         6     1
+##  7 g         7    99
+##  8 h         8    80
+##  9 i         9    63
+## 10 j        10    62
 ## # ... with 16 more rows</code></pre>
 <ul>
 <li>never adjusts variable names</li>
@@ -112,14 +112,14 @@ tibble(x, y, z)</code></pre>
 ##    &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
 ##  1     1 a     TRUE 
 ##  2     2 a     FALSE
-##  3     3 a     TRUE 
+##  3     3 a     FALSE
 ##  4     4 a     TRUE 
-##  5     5 a     TRUE 
-##  6     6 a     TRUE 
-##  7     7 a     FALSE
-##  8     8 a     FALSE
-##  9     9 a     TRUE 
-## 10    10 a     FALSE
+##  5     5 a     FALSE
+##  6     6 a     FALSE
+##  7     7 a     TRUE 
+##  8     8 a     TRUE 
+##  9     9 a     FALSE
+## 10    10 a     TRUE 
 ## # ... with 90 more rows</code></pre>
 <ul>
 <li>never recycles vector of length greater than 1</li>

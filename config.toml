@@ -20,7 +20,6 @@ post = "/:slug/"
   twitterAuthor = "@hebbaliaravind"
   twitterSite = "@rsquaredacademy"
   brand = "![Rsquared Academy Logo](/img/logos.png)"
-  googleAnalytics = "UA-57270671-6"
   disqus = ""
   [params.logo]
     url = "logo.jpeg"

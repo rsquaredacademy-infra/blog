@@ -111,7 +111,7 @@ knitr::include_graphics("/img/readxl_anchored_lucid.png")
 <br>
 
 In the second method, we start from a particular cell and specify the number 
-of rows and columns to be covered keeping the inital cell as anchorage. 
+of rows and columns to be covered keeping the initial cell as anchorage. 
 In the below example, we want to read 3 rows and 2 columns starting from the 
 cell `A4`.
 

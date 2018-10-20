@@ -89,7 +89,6 @@ Below is the description of the data set:
 - duration: time spent on the website (in seconds)
 - purchase: whether visitor purchased
 - order_value: order value of visitor (in dollars)
-- order_items: number of items ordered
 - n_visit: number of visits
 
 ## Average Order Value

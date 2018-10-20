@@ -106,8 +106,7 @@ ecom %>% head(10)
 ## Square Root 
 
 Time to try a slightly  more challenging example. We want the square root of 
-`n_pages` column from the data set. To ensure the output does not clutter 
-the page, we will view the first few observations using `head()`.
+`n_pages` column from the data set. 
 
 ```{r mag3}
 y <- sqrt(ecom_mini$n_pages)
@@ -155,7 +154,7 @@ Let us look at a data visualization example. We will create a bar plot to
 visualize the frequency of different referrer types that drove purchasers
 to the website. Let us look at the steps involved in creating the bar plot:
 
-- extract rows where purchase == true
+- extract rows where purchase is TRUE
 - select/expose `referrer` column
 - tabulate referrer data using `table()`
 - use the tabulated data to create bar plot using `barplot()`
@@ -189,7 +188,7 @@ fluctuate together. In R, correlation is computed using `cor()`. Let us look at 
 correlation between the number of pages browsed and time spent on the site for
 visitors who purchased some product. Below are the steps for computing correlation:
 
-- extract rows where purchase == true
+- extract rows where purchase is TRUE
 - select/expose `n_pages` and `duration` columns
 - use `cor()` to compute the correlation
 
@@ -223,7 +222,7 @@ ecom %>%
 Let us look at a regression example. We regress time spent on the site on 
 number of pages visited. Below are the steps involved in running the regression:
 
-- use `duration` and `n_pages` columns from econ data
+- use `duration` and `n_pages` columns from ecom data
 - pass the above data to `lm()`
 - pass the output from `lm()` to `summary()` 
 
@@ -297,8 +296,6 @@ alternatives to `$`, `[` and `[[`.
 To extract a specific column using the column name, we mention the name 
 of the column in single/double quotes within `[` or `[[`. In case of `$`,
 we do not use quotes.
-
-Let us extract the first 3 observations of `n_pages` column.
 
 ```{r mag10}
 # base 

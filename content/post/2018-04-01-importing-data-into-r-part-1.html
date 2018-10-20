@@ -111,7 +111,7 @@ topics:
 </div>
 <div id="column-names" class="section level2">
 <h2>Column Names</h2>
-<p>In some cases, files do not include column names or headers. If we do not indicate the absence of column names, <code>readr</code> will treat the first row from th data as the column name. Like we said before, it is a good practice to take a quick look at the data to check for the presence/absence of column names.</p>
+<p>In some cases, files do not include column names or headers. If we do not indicate the absence of column names, <code>readr</code> will treat the first row from the data as the column name. Like we said before, it is a good practice to take a quick look at the data to check for the presence/absence of column names.</p>
 <p><img src="/img/mtcars_comma.png" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p><img src="/img/mtcars_column_false.png" style="display: block; margin: auto;" /></p>
@@ -134,7 +134,7 @@ topics:
 ##  9    48     0     3     2     1     2    57    55    52    50     51
 ## 10    75     0     4     2     1     3    60    46    51    53     61
 ## # ... with 189 more rows</code></pre>
-<p>As you can see, in the absence of column names, <code>readr</code> has converted the first row of the data into the column names. As a result, the data is not read properly and there are lots of missing values and warnings. If the column names are absent (i.e. the column names are provided in a seprate file), use the <code>col_names</code> argument and set it to <code>FALSE</code>. Now <code>readr</code> will not convert the first row of data into column name and instead it will generate new column names.</p>
+<p>As you can see, in the absence of column names, <code>readr</code> has converted the first row of the data into the column names. As a result, the data is not read properly and there are lots of missing values and warnings. If the column names are absent (i.e. the column names are provided in a separate file), use the <code>col_names</code> argument and set it to <code>FALSE</code>. Now <code>readr</code> will not convert the first row of data into column name and instead it will generate new column names.</p>
 <pre class="r"><code>read_csv(&#39;hsb3.csv&#39;, col_names = FALSE)</code></pre>
 <pre><code>## # A tibble: 200 x 11
 ##       X1    X2    X3    X4    X5    X6    X7    X8    X9   X10   X11

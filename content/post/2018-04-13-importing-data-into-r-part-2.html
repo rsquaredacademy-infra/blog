@@ -100,7 +100,7 @@ topics:
 <h3>Method 2</h3>
 <p><img src="/img/readxl_anchored_lucid.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>In the second method, we start from a particular cell and specify the number of rows and columns to be covered keeping the inital cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell <code>A4</code>.</p>
+<p>In the second method, we start from a particular cell and specify the number of rows and columns to be covered keeping the initial cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell <code>A4</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, col_names = FALSE,
   range = anchored(&quot;A4&quot;, dim = c(3, 2)))</code></pre>
 <pre><code>## # A tibble: 3 x 2

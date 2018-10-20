@@ -100,7 +100,7 @@ spec_csv('hsb2.csv')
 
 In some cases, files do not include column names or headers. If we do not 
 indicate the absence of column names, `readr` will treat the first row from 
-th data as the column name. Like we said before, it is a good practice to take 
+the data as the column name. Like we said before, it is a good practice to take 
 a quick look at the data to check for the presence/absence of column names.
 
 ```{r img5, fig.align='center', echo=FALSE}
@@ -126,7 +126,7 @@ As you can see, in the absence of column names, `readr` has converted the
 first row of the data into the column names. As a result, the data is 
 not read properly and there are lots of missing values and warnings. 
 If the column names are absent (i.e. the column names are provided in a 
-seprate file), use the `col_names` argument and set it to `FALSE`. Now `readr`
+separate file), use the `col_names` argument and set it to `FALSE`. Now `readr`
 will not convert the first row of data into column name and instead it 
 will generate new column names.
 
