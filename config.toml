@@ -41,12 +41,6 @@ post = "/:slug/"
     identifier = "home"
     url = "/"
   [[menu.main]]
-    name = "New? Start Here"
-    pre = "<i class='fa fa-play fa-fw'></i>"
-    weight = 2
-    identifier = "start"
-    url = "/start-here"
-  [[menu.main]]
     name = "Topics"
     pre = "<i class='fa fa-bars fa-fw'></i>"
     weight = 4
