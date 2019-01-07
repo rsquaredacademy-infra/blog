@@ -43,7 +43,7 @@ post = "/:slug/"
   [[menu.main]]
     name = "Start here"
     pre = "<i class='fa fa-home fa-fw'></i>"
-    weight = 1
+    weight = 2
     identifier = "home"
     url = "/start-here"
   [[menu.main]]
