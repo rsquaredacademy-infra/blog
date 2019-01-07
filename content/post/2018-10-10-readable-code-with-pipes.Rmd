@@ -3,7 +3,7 @@ title: Readable Code with Pipes
 author: Aravind Hebbali
 twitterImg: /img/pipes.png
 description: "Readable Code with Pipes"
-date: '2018-06-12'
+date: '2018-10-10'
 slug: readable-code-with-pipes
 topics:
   - pipes

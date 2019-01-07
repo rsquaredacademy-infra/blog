@@ -3,7 +3,7 @@ title: Data Wrangling with dplyr - Part 2
 author: Aravind Hebali
 twitterImg: /img/dplyr.png
 description: "Learn to join tables using dplyr."
-date: '2018-05-07'
+date: '2018-09-04'
 slug: data-wrangling-with-dplyr-part-2
 topics:
   - data wrangling
@@ -17,7 +17,9 @@ tags:
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In the previous post we learnt about dplyr verbs and used them to compute average order value for an online retail company data. In this post, we will learn to combine tables using different <code>*_join</code> functions provided in dplyr.</p>
+<p>In the previous post we learnt about dplyr verbs and used them to compute
+average order value for an online retail company data. In this post, we will
+learn to combine tables using different <code>*_join</code> functions provided in dplyr.</p>
 </div>
 <div id="libraries-code-data" class="section level2">
 <h2>Libraries, Code &amp; Data</h2>
@@ -26,14 +28,18 @@ tags:
 <li><a href="http://dplyr.tidyverse.org/index.html">dplyr</a></li>
 <li><a href="http://readr.tidyverse.org/index.html">readr</a></li>
 </ul>
-<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/3e31f13a4194a8f1003034aa7d70d5ee">here</a>.</p>
+<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a>
+and the codes from <a href="https://gist.github.com/aravindhebbali/3e31f13a4194a8f1003034aa7d70d5ee">here</a>.</p>
 <pre class="r"><code>library(dplyr)
 library(readr)
 options(tibble.width = Inf)</code></pre>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
-<p>For our case study, we will use two data sets. The first one, <code>order</code>, contains details of orders placed by different customers. The second data set, <code>customer</code> contains details of each customer. The below table displays the details stored in each data set.</p>
+<p>For our case study, we will use two data sets. The first one, <code>order</code>, contains
+details of orders placed by different customers. The second data set, <code>customer</code>
+contains details of each customer. The below table displays the details stored
+in each data set.</p>
 <p><br></p>
 <p><img src="/img/join_data.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -44,7 +50,7 @@ options(tibble.width = Inf)</code></pre>
 order</code></pre>
 <pre><code>## # A tibble: 300 x 3
 ##       id order_date amount
-##    &lt;int&gt; &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
 ##  1   368 7/2/2016     365.
 ##  2   286 11/2/2016   2064.
 ##  3    28 2/22/2017    432.
@@ -63,7 +69,7 @@ order</code></pre>
 customer</code></pre>
 <pre><code>## # A tibble: 91 x 3
 ##       id first_name city      
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
 ##  1     1 Elbertine  California
 ##  2     2 Marcella   Colorado  
 ##  3     3 Daria      Florida   
@@ -78,7 +84,8 @@ customer</code></pre>
 <p>We will explore the following in the case study:</p>
 <ul>
 <li>details of customers who have placed orders and their order details</li>
-<li>details of customers and their orders irrespective of whether a customer has placed orders or not</li>
+<li>details of customers and their orders irrespective of whether a customer has
+placed orders or not</li>
 <li>customer details for each order</li>
 <li>details of customers who have placed orders</li>
 <li>details of customers who have not placed orders</li>
@@ -88,7 +95,8 @@ customer</code></pre>
 </div>
 <div id="example-data" class="section level2">
 <h2>Example Data</h2>
-<p>We will use another data set to illustrate how the different joins work. You can view the example data sets below.</p>
+<p>We will use another data set to illustrate how the different joins work. You can
+view the example data sets below.</p>
 <p><br></p>
 <p><img src="/img/join.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -98,14 +106,17 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_inner.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Inner join return all rows from <code>Age</code> where there are matching values in <code>Height</code>, and all columns from <code>Age</code> and <code>Height</code>. If there are multiple matches between <code>Age</code> and <code>Height</code>, all combination of the matches are returned.</p>
+<p>Inner join return all rows from <code>Age</code> where there are matching values in
+<code>Height</code>, and all columns from <code>Age</code> and <code>Height</code>. If there are multiple matches
+between <code>Age</code> and <code>Height</code>, all combination of the matches are returned.</p>
 <div id="case-study-details-of-customers-who-have-placed-orders-and-their-order-details" class="section level4">
 <h4>Case Study: Details of customers who have placed orders and their order details</h4>
-<p>To get data for all those customers who have placed orders in the past let us join the <code>order</code> data with the <code>customer</code> data using <code>inner_join</code>.</p>
+<p>To get data for all those customers who have placed orders in the past let us
+join the <code>order</code> data with the <code>customer</code> data using <code>inner_join</code>.</p>
 <pre class="r"><code>inner_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 55 x 5
 ##       id first_name city       order_date amount
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
 ##  1     2 Marcella   Colorado   12/28/2016   235.
 ##  2     2 Marcella   Colorado   8/31/2016   1150.
 ##  3     5 Ketty      Texas      1/17/2017    346.
@@ -124,15 +135,20 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_left.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Left join return all rows from <code>Age</code>, and all columns from <code>Age</code> and <code>Height</code>. Rows in <code>Age</code> with no match in <code>Height</code> will have NA values in the new columns. If there are multiple matches between <code>Age</code> and <code>Height</code>, all combinations of the matches are returned.</p>
+<p>Left join return all rows from <code>Age</code>, and all columns from <code>Age</code> and <code>Height</code>.
+Rows in <code>Age</code> with no match in <code>Height</code> will have NA values in the new columns.
+If there are multiple matches between <code>Age</code> and <code>Height</code>, all combinations of
+the matches are returned.</p>
 <div id="case-study-details-of-customers-and-their-orders-irrespective-of-whether-a-customer-has" class="section level4">
 <h4>Case Study: Details of customers and their orders irrespective of whether a customer has</h4>
 <p>placed orders or not.</p>
-<p>To get data for all those customers and their orders irrespective of whether a customer has placed orders or not let us join the <code>order</code> data with the <code>customer</code> data using <code>left_join</code>.</p>
+<p>To get data for all those customers and their orders irrespective of whether a
+customer has placed orders or not let us join the <code>order</code> data with the
+<code>customer</code> data using <code>left_join</code>.</p>
 <pre class="r"><code>left_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 104 x 5
 ##       id first_name city       order_date amount
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
 ##  1     1 Elbertine  California &lt;NA&gt;          NA 
 ##  2     2 Marcella   Colorado   12/28/2016   235.
 ##  3     2 Marcella   Colorado   8/31/2016   1150.
@@ -151,14 +167,18 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_right.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Right join return all rows from <code>Height</code>, and all columns from <code>Age</code> and <code>Height</code>. Rows in <code>Height</code> with no match in <code>Age</code> will have NA values in the new columns. If there are multiple matches between <code>Age</code> and <code>Height</code>, all combinations of the matches are returned.</p>
+<p>Right join return all rows from <code>Height</code>, and all columns from <code>Age</code> and
+<code>Height</code>. Rows in <code>Height</code> with no match in <code>Age</code> will have NA values in the
+new columns. If there are multiple matches between <code>Age</code> and <code>Height</code>, all
+combinations of the matches are returned.</p>
 <div id="case-study-customer-details-for-each-order" class="section level4">
 <h4>Case Study: Customer details for each order</h4>
-<p>To get customer data for all orders, let us join the <code>order</code> data with the <code>customer</code> data using <code>right_join</code>.</p>
+<p>To get customer data for all orders, let us join the <code>order</code> data with the
+<code>customer</code> data using <code>right_join</code>.</p>
 <pre class="r"><code>right_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 300 x 5
 ##       id first_name city      order_date amount
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
 ##  1   368 &lt;NA&gt;       &lt;NA&gt;      7/2/2016     365.
 ##  2   286 &lt;NA&gt;       &lt;NA&gt;      11/2/2016   2064.
 ##  3    28 Avrit      Texas     2/22/2017    432.
@@ -177,14 +197,19 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_semi.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Semi join return all rows from <code>Age</code> where there are matching values in <code>Height</code>, keeping just columns from <code>Age</code>. A semi join differs from an inner join because an inner join will return one row of <code>Age</code> for each matching row of <code>Height</code>, where a semi join will never duplicate rows of <code>Age</code>.</p>
+<p>Semi join return all rows from <code>Age</code> where there are matching values in <code>Height</code>,
+keeping just columns from <code>Age</code>. A semi join differs from an inner join because
+an inner join will return one row of <code>Age</code> for each matching row of <code>Height</code>,
+where a semi join will never duplicate rows of <code>Age</code>.</p>
 <div id="case-study-details-of-customers-who-have-placed-orders" class="section level4">
 <h4>Case Study: Details of customers who have placed orders</h4>
-<p>To get customer data for all orders where customer data exists, let us join the <code>order</code> data with the <code>customer</code> data using <code>semi_join</code>. You can observe that data is returned only for those cases where customer data is present.</p>
+<p>To get customer data for all orders where customer data exists, let us join the <code>order</code> data with the
+<code>customer</code> data using <code>semi_join</code>. You can observe that data is returned only for those
+cases where customer data is present.</p>
 <pre class="r"><code>semi_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 42 x 3
 ##       id first_name city      
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
 ##  1     2 Marcella   Colorado  
 ##  2     5 Ketty      Texas     
 ##  3     6 Jethro     California
@@ -203,14 +228,16 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_anti.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Anti join return all rows from <code>Age</code> where there are not matching values in <code>Height</code>, keeping just columns from <code>Age</code>.</p>
+<p>Anti join return all rows from <code>Age</code> where there are not matching values in
+<code>Height</code>, keeping just columns from <code>Age</code>.</p>
 <div id="case-study-details-of-customers-who-have-not-placed-orders" class="section level4">
 <h4>Case Study: Details of customers who have not placed orders</h4>
-<p>To get details of customers who have not placed orders, let us join the <code>order</code> data with the <code>customer</code> data using <code>anti_join</code>.</p>
+<p>To get details of customers who have not placed orders, let us join the <code>order</code>
+data with the <code>customer</code> data using <code>anti_join</code>.</p>
 <pre class="r"><code>anti_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 49 x 3
 ##       id first_name city      
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
 ##  1     1 Elbertine  California
 ##  2     3 Daria      Florida   
 ##  3     4 Sherilyn   Distric...
@@ -229,14 +256,16 @@ customer</code></pre>
 <p><br></p>
 <p><img src="/img/draw_full.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Full join return all rows and all columns from both <code>Age</code> and <code>Height</code>. Where there are not matching values, returns NA for the one missing.</p>
+<p>Full join return all rows and all columns from both <code>Age</code> and <code>Height</code>. Where
+there are not matching values, returns NA for the one missing.</p>
 <div id="case-study-details-of-all-customers-and-all-orders" class="section level4">
 <h4>Case Study: Details of all customers and all orders</h4>
-<p>To get details of all customers and all orders, let us join the <code>order</code> data with the <code>customer</code> data using <code>full_join</code>.</p>
+<p>To get details of all customers and all orders, let us join the <code>order</code>
+data with the <code>customer</code> data using <code>full_join</code>.</p>
 <pre class="r"><code>full_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 349 x 5
 ##       id first_name city       order_date amount
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
 ##  1     1 Elbertine  California &lt;NA&gt;          NA 
 ##  2     2 Marcella   Colorado   12/28/2016   235.
 ##  3     2 Marcella   Colorado   8/31/2016   1150.

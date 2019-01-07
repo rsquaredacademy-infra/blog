@@ -3,7 +3,7 @@ title: Introduction to tibbles
 author: Aravind Hebbali
 twitterImg: /img/tibble_intro.png
 description: "Introduction to tibbles"
-date: '2018-05-31'
+date: '2018-09-28'
 slug: introduction-to-tibbles
 topics:
   - data wrangling

@@ -1,7 +1,7 @@
 ---
 title: "Import Data into R - Part 2"
 author: "Aravind Hebbali"
-date: '2018-04-13'
+date: '2018-08-11'
 twitterImg: /img/import.png
 description: "Learn to read data from excel spreadsheets & statistical softwares into R."
 slug: import-data-into-r-part-2
@@ -17,30 +17,42 @@ topics:
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This is the second post in the series <strong>Importing Data into R</strong>. In the previous post, we explored reading data from flat/delimited files. In this post, we will:</p>
+<p>This is the second post in the series <strong>Importing Data into R</strong>. In the
+previous post, we explored reading data from flat/delimited files. In this
+post, we will:</p>
 <ul>
 <li>list sheets in an excel file</li>
 <li>read data from an excel sheet</li>
 <li>read specific cells from an excel sheet</li>
 <li>read specific rows</li>
 <li>read specific columns</li>
-<li>read data from - SAS - SPSS - STATA</li>
+<li>read data from
+- SAS
+- SPSS
+- STATA</li>
 </ul>
 </div>
 <div id="libraries-data-code" class="section level2">
 <h2>Libraries, Data &amp; Code</h2>
-<p>We will use the <a href="http://readr.tidyverse.org/index.html">readxl</a> package. It has no external dependencies as compared to other packages available for reading data from Excel. The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4">here</a>.</p>
+<p>We will use the <a href="http://readr.tidyverse.org/index.html">readxl</a> package. It has
+no external dependencies as compared to other packages available for reading
+data from Excel. The data sets can be downloaded from
+<a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from
+<a href="https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4">here</a>.</p>
 <pre class="r"><code>library(readxl)</code></pre>
 </div>
 <div id="list-sheets" class="section level2">
 <h2>List Sheets</h2>
-<p>An excel file may contain several sheets. Let us see how many sheets are present in <code>sample.xls</code> file and their respective names using <code>excel_sheets()</code>.</p>
+<p>An excel file may contain several sheets. Let us see how many sheets are
+present in <code>sample.xls</code> file and their respective names using <code>excel_sheets()</code>.</p>
 <pre class="r"><code>excel_sheets(&#39;sample.xls&#39;)</code></pre>
 <pre><code>## [1] &quot;ecom&quot;</code></pre>
 </div>
 <div id="read-sheet" class="section level2">
 <h2>Read Sheet</h2>
-<p>Now that we know the number of sheets and their names, let us read data from the <code>ecom</code> sheet of the <code>sample.xls</code> file using <code>read_excel()</code>. We will specify the file name, and the sheet name or sheet number.</p>
+<p>Now that we know the number of sheets and their names, let us read data from
+the <code>ecom</code> sheet of the <code>sample.xls</code> file using <code>read_excel()</code>. We will specify
+the file name, and the sheet name or sheet number.</p>
 <div id="case-1-specify-the-sheet-number" class="section level3">
 <h3>Case 1: Specify the sheet number</h3>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1)</code></pre>
@@ -68,17 +80,24 @@ topics:
 ## 5 Display         5564      4790     7220 83.30%     
 ## 6 Paid Search     2687      2205     3438 38.02%     
 ## 7 Affiliates      1773      1585     2167 55.75%</code></pre>
-<p>Notice when you use the sheet name, the name should be enclosed in single/double quotes.</p>
+<p>Notice when you use the sheet name, the name should be enclosed in
+single/double quotes.</p>
 </div>
 </div>
 <div id="read-specific-cells" class="section level2">
 <h2>Read Specific Cells</h2>
-<p>You may not always want to read all the columns or rows from the excel sheet. In such cases, you can specify the cells from which the data must be read which can be achieved using the <code>range</code> argument. So how do we specify the cells from which to read data? There are different ways of specifying the cell range and we will look at them one by one:</p>
+<p>You may not always want to read all the columns or rows from the excel sheet.
+In such cases, you can specify the cells from which the data must be read
+which can be achieved using the <code>range</code> argument. So how do we specify the
+cells from which to read data? There are different ways of specifying the
+cell range and we will look at them one by one:</p>
 <div id="method-1" class="section level3">
 <h3>Method 1</h3>
 <p><img src="/img/readxl_range.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>The first method uses the cell names along with <code>:</code> to specify the cell range. For example, to read data from first 4 rows of columns <strong>B</strong> and <strong>C</strong>, we will specify the range as <code>&quot;B1:C4&quot;</code>.</p>
+<p>The first method uses the cell names along with <code>:</code> to specify the cell range.
+For example, to read data from first 4 rows of columns <strong>B</strong> and <strong>C</strong>, we will
+specify the range as <code>&quot;B1:C4&quot;</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = &quot;B1:C4&quot;)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   users new_users
@@ -100,7 +119,10 @@ topics:
 <h3>Method 2</h3>
 <p><img src="/img/readxl_anchored_lucid.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>In the second method, we start from a particular cell and specify the number of rows and columns to be covered keeping the initial cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell <code>A4</code>.</p>
+<p>In the second method, we start from a particular cell and specify the number
+of rows and columns to be covered keeping the initial cell as anchorage.
+In the below example, we want to read 3 rows and 2 columns starting from the
+cell <code>A4</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, col_names = FALSE,
   range = anchored(&quot;A4&quot;, dim = c(3, 2)))</code></pre>
 <pre><code>## # A tibble: 3 x 2
@@ -112,7 +134,9 @@ topics:
 </div>
 <div id="method-3" class="section level3">
 <h3>Method 3</h3>
-<p>In this method, we use the <code>cell_limit()</code> and specify the location of two ends of a rectangle covering the cells we want to read. For example, to read data from the first 6 rows and 4 columns, we will specify the range as following:</p>
+<p>In this method, we use the <code>cell_limit()</code> and specify the location of two ends
+of a rectangle covering the cells we want to read. For example, to read data
+from the first 6 rows and 4 columns, we will specify the range as following:</p>
 <ul>
 <li>start from the first row of the first column</li>
 <li>cover all cells upto the 6th row of the 4th column</li>
@@ -129,7 +153,8 @@ topics:
 ## 3 Referral       10983      7636    18105
 ## 4 Social         10346     10029    11101
 ## 5 Display         5564      4790     7220</code></pre>
-<p>You can use <code>NA</code> to indicate the first and last row/column. For example, to read data from all the rows from the second column onwards:</p>
+<p>You can use <code>NA</code> to indicate the first and last row/column. For example, to
+read data from all the rows from the second column onwards:</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1,
   range = cell_limits(c(1, 2), c(NA, NA)))</code></pre>
 <pre><code>## # A tibble: 7 x 4
@@ -142,7 +167,8 @@ topics:
 ## 5  5564      4790     7220 83.30%     
 ## 6  2687      2205     3438 38.02%     
 ## 7  1773      1585     2167 55.75%</code></pre>
-<p>Let us quickly look at how we will specify range of cells using the above 3 methods when we want to read data from the first 4 rows of columns <code>B</code> and <code>C</code>:</p>
+<p>Let us quickly look at how we will specify range of cells using the above 3
+methods when we want to read data from the first 4 rows of columns <code>B</code> and <code>C</code>:</p>
 <div id="method-1-1" class="section level4">
 <h4>Method 1</h4>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1,
@@ -180,7 +206,9 @@ topics:
 </div>
 <div id="read-specific-rows" class="section level2">
 <h2>Read Specific Rows</h2>
-<p>When you want to read a subset of rows from the data, use <code>cell_rows()</code> and specify the row numbers or the range. In the below example, we want to read the first 4 rows of data from the file.</p>
+<p>When you want to read a subset of rows from the data, use <code>cell_rows()</code> and
+specify the row numbers or the range. In the below example, we want to read
+the first 4 rows of data from the file.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_rows(1:4))</code></pre>
 <pre><code>## # A tibble: 3 x 5
 ##   channel        users new_users sessions bounce_rate
@@ -191,7 +219,9 @@ topics:
 </div>
 <div id="read-single-column" class="section level2">
 <h2>Read Single Column</h2>
-<p>If you want to read a single column from the data, use <code>cell_cols()</code> and specify the column number. In the below example, we read the second column from the <code>sample.xls</code> file.</p>
+<p>If you want to read a single column from the data, use <code>cell_cols()</code> and
+specify the column number. In the below example, we read the second column
+from the <code>sample.xls</code> file.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(2))</code></pre>
 <pre><code>## # A tibble: 7 x 1
 ##   users
@@ -206,7 +236,9 @@ topics:
 </div>
 <div id="read-multiple-columns" class="section level2">
 <h2>Read Multiple Columns</h2>
-<p>In case of multiple columns, we need to specify the column numbers or the column range. In the below example, we want to read the 2nd, 4th and 6th column from the <code>sample.xls</code> file.</p>
+<p>In case of multiple columns, we need to specify the column numbers or the
+column range. In the below example, we want to read the 2nd, 4th and 6th column from
+the <code>sample.xls</code> file.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(c(2, 4, 6)))</code></pre>
 <pre><code>## # A tibble: 7 x 5
 ##   users new_users sessions bounce_rate X__1 
@@ -218,7 +250,8 @@ topics:
 ## 5  5564      4790     7220 83.30%      NA   
 ## 6  2687      2205     3438 38.02%      NA   
 ## 7  1773      1585     2167 55.75%      NA</code></pre>
-<p>In the next example, we want to read data from the 2nd column upto and including the 6th column.</p>
+<p>In the next example, we want to read data from the 2nd column upto and
+including the 6th column.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(c(2:6)))</code></pre>
 <pre><code>## # A tibble: 7 x 5
 ##   users new_users sessions bounce_rate X__1 
@@ -270,18 +303,18 @@ topics:
 <h3>SPSS</h3>
 <pre class="r"><code>read_spss(&#39;employee.sav&#39;)  </code></pre>
 <pre><code>## # A tibble: 474 x 9
-##       id gender    educ   jobcat  salary salbegin jobtime prevexp minority
-##    &lt;dbl&gt; &lt;chr+lbl&gt; &lt;dbl+&gt; &lt;dbl+l&gt; &lt;dbl+&gt; &lt;dbl+lb&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt;
-##  1     1 m         15     3       57000  27000    98      144     0       
-##  2     2 m         16     1       40200  18750    98      36      0       
-##  3     3 f         12     1       21450  12000    98      381     0       
-##  4     4 f         8      1       21900  13200    98      190     0       
-##  5     5 m         15     1       45000  21000    98      138     0       
-##  6     6 m         15     1       32100  13500    98      67      0       
-##  7     7 m         15     1       36000  18750    98      114     0       
-##  8     8 f         12     1       21900  9750     98      0       0       
-##  9     9 f         15     1       27900  12750    98      115     0       
-## 10    10 f         12     1       24000  13500    98      244     0       
+##       id gender  educ    jobcat  salary  salbegin  jobtime prevexp minority
+##    &lt;dbl&gt; &lt;chr+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lbl&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt;
+##  1     1 m       15      3       57000   27000     98      144     0       
+##  2     2 m       16      1       40200   18750     98       36     0       
+##  3     3 f       12      1       21450   12000     98      381     0       
+##  4     4 f        8      1       21900   13200     98      190     0       
+##  5     5 m       15      1       45000   21000     98      138     0       
+##  6     6 m       15      1       32100   13500     98       67     0       
+##  7     7 m       15      1       36000   18750     98      114     0       
+##  8     8 f       12      1       21900    9750     98        0     0       
+##  9     9 f       15      1       27900   12750     98      115     0       
+## 10    10 f       12      1       24000   13500     98      244     0       
 ## # ... with 464 more rows</code></pre>
 </div>
 <div id="sas" class="section level3">

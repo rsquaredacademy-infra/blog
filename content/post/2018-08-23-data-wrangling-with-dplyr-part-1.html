@@ -3,7 +3,7 @@ title: Data Wrangling with dplyr - Part 1
 author: Aravind Hebbali
 twitterImg: /img/dplyr.png
 description: "Introduction to data wrangling with dplyr."
-date: '2018-04-25'
+date: '2018-08-23'
 slug: data-wrangling-with-dplyr-part-1
 topics:
   - data wrangling
@@ -16,7 +16,11 @@ tags:
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>According to a <a href="http://visit.crowdflower.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf">survey</a> by <a href="https://www.crowdflower.com/">CrowdFlower</a>, data scientists spend most of their time cleaning and manipulating data rather than mining or modeling them for insights. As such, it becomes important to have tools that make data manipulation faster and easier. In today’s post, we introduce you to <a href="http://dplyr.tidyverse.org/">dplyr</a>, a grammar of data manipulation.</p>
+<p>According to a <a href="http://visit.crowdflower.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf">survey</a> by <a href="https://www.crowdflower.com/">CrowdFlower</a>, data scientists spend most of their
+time cleaning and manipulating data rather than mining or modeling them for
+insights. As such, it becomes important to have tools that make data
+manipulation faster and easier. In today’s post, we introduce you to
+<a href="http://dplyr.tidyverse.org/">dplyr</a>, a grammar of data manipulation.</p>
 <p><img src="/img/crowd_flower.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="libraries-code-data" class="section level2">
@@ -26,13 +30,15 @@ tags:
 <li><a href="http://dplyr.tidyverse.org/index.html">dplyr</a></li>
 <li>and <a href="http://readr.tidyverse.org/index.html">readr</a></li>
 </ul>
-<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes from <a href="https://gist.github.com/aravindhebbali/7758b86c2bc13ff1e5d88d9d1c204f8c">here</a>.</p>
+<p>The data sets can be downloaded from <a href="https://github.com/rsquaredacademy/datasets">here</a>
+and the codes from <a href="https://gist.github.com/aravindhebbali/7758b86c2bc13ff1e5d88d9d1c204f8c">here</a>.</p>
 <pre class="r"><code>library(dplyr)
 library(readr)</code></pre>
 </div>
 <div id="dplyr-verbs" class="section level2">
 <h2>dplyr Verbs</h2>
-<p>dplyr provides a set of verbs that help us solve the most common data manipulation challenges while working with tabular data (dataframes, tibbles):</p>
+<p>dplyr provides a set of verbs that help us solve the most common data
+manipulation challenges while working with tabular data (dataframes, tibbles):</p>
 <ul>
 <li><code>select</code>: returns subset of columns</li>
 <li><code>filter</code>: returns a subset of rows</li>
@@ -43,12 +49,16 @@ library(readr)</code></pre>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
-<p>We will explore a dummy data set that resembles web logs of an online retail company. You can download the data from <a href="https://github.com/rsquaredacademy/datasets/blob/master/web.csv">here</a> or import it directly using <code>read_csv()</code> from the <a href="readr.tidyverse.org">readr</a> package. We will use dplyr to answer the following:</p>
+<p>We will explore a dummy data set that resembles web logs of an online retail
+company. You can download the data from <a href="https://github.com/rsquaredacademy/datasets/blob/master/web.csv">here</a>
+or import it directly using <code>read_csv()</code> from the <a href="readr.tidyverse.org">readr</a>
+package. We will use dplyr to answer the following:</p>
 <ul>
 <li>what is the average order value by device types?</li>
 <li>what is the average number of pages visited by purchasers and non-purchasers?</li>
 <li>what is the average time on site for purchasers vs non-purchasers?</li>
-<li>what is the average number of pages visited by purchasers and non-purchasers using mobile?</li>
+<li>what is the average number of pages visited by purchasers and non-purchasers
+using mobile?</li>
 </ul>
 </div>
 <div id="data" class="section level2">
@@ -60,16 +70,9 @@ library(readr)</code></pre>
       purchase = col_logical(), n_pages = col_double(), n_visit = col_double(), 
       duration = col_double(), order_value = col_double(), order_items = col_double()
     )
-  )</code></pre>
-<pre><code>## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
+  )
 
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed</code></pre>
-<pre class="r"><code>ecom</code></pre>
+ecom</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
 ##    referrer device n_visit n_pages duration purchase order_items
 ##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
@@ -127,14 +130,22 @@ library(readr)</code></pre>
 <p>Before we start exploring the dplyr verbs, let us look at their syntax:</p>
 <ul>
 <li>the first argument is always a <code>data.frame</code> or <code>tibble</code></li>
-<li>the subsequent arguments provide the information required for the verbs to take action</li>
+<li>the subsequent arguments provide the information required for the verbs to
+take action</li>
 <li>the name of columns in the data need not be surrounded by quotes</li>
 </ul>
 </div>
 <div id="filter-rows" class="section level2">
 <h2>Filter Rows</h2>
-<p>In order to compute the AOV, we must first separate the purchasers from non-purchasers. We will do this by filtering the data related to purchasers using the <code>filter()</code> function. It allows us to filter rows that meet a specific criteria/condition. The first argument is the name of the data frame and the rest of the arguments are expressions for filtering the data. Let us look at a few examples:</p>
-<p>The first example we will look at filters all visits from device <strong>mobile</strong>. As we had learnt in the previous section, the first argument is our data set <code>ecom</code> and the next argument is the condition for filtering rows.</p>
+<p>In order to compute the AOV, we must first separate the purchasers from
+non-purchasers. We will do this by filtering the data related to purchasers
+using the <code>filter()</code> function. It allows us to filter rows that meet a specific
+criteria/condition. The first argument is the name of the data frame and the
+rest of the arguments are expressions for filtering the data. Let us look at a
+few examples:</p>
+<p>The first example we will look at filters all visits from device <strong>mobile</strong>. As
+we had learnt in the previous section, the first argument is our data set <code>ecom</code>
+and the next argument is the condition for filtering rows.</p>
 <p><br></p>
 <p><img src="/img/filter_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -153,7 +164,8 @@ library(readr)</code></pre>
 ##  9 bing     mobile       0       7      196 FALSE              4
 ## 10 google   mobile      10       1      338 FALSE              0
 ## # ... with 334 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
-<p>We can specify multiple filtering conditions as well. In the below example, we specify two filter conditions:</p>
+<p>We can specify multiple filtering conditions as well. In the below example, we
+specify two filter conditions:</p>
 <ul>
 <li>visit from device <strong>mobile</strong></li>
 <li>resulted in a purchase or conversion</li>
@@ -201,7 +213,8 @@ library(readr)</code></pre>
 ## # ... with 1 more variable: order_value &lt;dbl&gt;</code></pre>
 <div id="case-study-1" class="section level5">
 <h5>Case Study</h5>
-<p>Let us apply what we have learnt to the case study. We want to filter all visits that resulted in a purchase.</p>
+<p>Let us apply what we have learnt to the case study. We want to filter all
+visits that resulted in a purchase.</p>
 <pre class="r"><code>filter(ecom, purchase)</code></pre>
 <pre><code>## # A tibble: 103 x 8
 ##    referrer device n_visit n_pages duration purchase order_items
@@ -221,8 +234,13 @@ library(readr)</code></pre>
 </div>
 <div id="select-columns" class="section level2">
 <h2>Select Columns</h2>
-<p>After filtering the data, we need to select relevent variables to compute the AOV. Remember, we do not need all the columns in the data to compute a required metric (in our case, AOV). The <code>select()</code> function allows us to select a subset of columns. The first argument is the name of the data frame and the subsequent arguments specify the columns by name or position.</p>
-<p>To select the <code>device</code> and <code>duration</code> columns, we specify the data set i.e. <code>ecom</code> followed by the name of the columns.</p>
+<p>After filtering the data, we need to select relevent variables to compute the
+AOV. Remember, we do not need all the columns in the data to compute a required
+metric (in our case, AOV). The <code>select()</code> function allows us to select a subset
+of columns. The first argument is the name of the data frame and the subsequent
+arguments specify the columns by name or position.</p>
+<p>To select the <code>device</code> and <code>duration</code> columns, we specify the data set i.e.
+<code>ecom</code> followed by the name of the columns.</p>
 <p><br></p>
 <p><img src="/img/select_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -241,7 +259,9 @@ library(readr)</code></pre>
 ##  9 mobile      209
 ## 10 mobile      208
 ## # ... with 990 more rows</code></pre>
-<p>We can select a set of columns using <code>:</code>. In the below example, we select all the columns starting from <code>referrer</code> up to <code>order_items</code>. Remember that we can use <code>:</code> only when the columns are adjacent to each other in the data set.</p>
+<p>We can select a set of columns using <code>:</code>. In the below example, we select all
+the columns starting from <code>referrer</code> up to <code>order_items</code>. Remember that we can use <code>:</code> only when
+the columns are adjacent to each other in the data set.</p>
 <p><br></p>
 <p><img src="/img/select_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -260,7 +280,12 @@ library(readr)</code></pre>
 ##  9 bing     mobile       3      19      209 FALSE              0
 ## 10 google   mobile       6       1      208 FALSE              0
 ## # ... with 990 more rows</code></pre>
-<p>What if you want to select all columns except a few? Typing the name of many columns can be cumbersome and may also result in spelling errors. We may use <code>:</code> only if the columns are adjacent to each other but that may not always be the case. dplyr allows us to specify columns that need not be selected using <code>-</code>. In the below example, we select all columns except <code>n_pages</code> and <code>duration</code>. Notice the <code>-</code> before both of them.</p>
+<p>What if you want to select all columns except a few? Typing the name of many
+columns can be cumbersome and may also result in spelling errors. We may use <code>:</code>
+only if the columns are adjacent to each other but that may not always be
+the case. dplyr allows us to specify columns that need not be
+selected using <code>-</code>. In the below example, we select all columns except <code>n_pages</code> and
+<code>duration</code>. Notice the <code>-</code> before both of them.</p>
 <p><br></p>
 <p><img src="/img/select_3.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -281,7 +306,9 @@ library(readr)</code></pre>
 ## # ... with 990 more rows</code></pre>
 <div id="case-study-2" class="section level5">
 <h5>Case Study</h5>
-<p>For our case study, we need to select the column <code>order_value</code> to calculate the AOV. We also need to select the <code>device</code> column as we are computing the AOV for each device type.</p>
+<p>For our case study, we need to select the column <code>order_value</code>
+to calculate the AOV. We also need to select the <code>device</code> column as we are
+computing the AOV for each device type.</p>
 <pre class="r"><code>select(ecom, device, order_value)</code></pre>
 <pre><code>## # A tibble: 1,000 x 2
 ##    device order_value
@@ -297,7 +324,9 @@ library(readr)</code></pre>
 ##  9 mobile           0
 ## 10 mobile           0
 ## # ... with 990 more rows</code></pre>
-<p>But we want the above data only for purchasers. Let us combine <code>filter()</code> and <code>select()</code> functions to extract <code>order_value</code> and <code>order_items</code> only for those visis that resulted in a purchase.</p>
+<p>But we want the above data only for purchasers. Let us combine <code>filter()</code> and
+<code>select()</code> functions to extract <code>order_value</code> and <code>order_items</code> only for those
+visis that resulted in a purchase.</p>
 <pre class="r"><code># filter all visits that resulted in a purchase
 ecom1 &lt;- filter(ecom, purchase)
 
@@ -324,8 +353,14 @@ ecom2</code></pre>
 </div>
 <div id="grouping-data" class="section level2">
 <h2>Grouping Data</h2>
-<p>We need to compute the total order value and total order items for each device in order to compute their AOV. To achieve this, we need to group the selected <code>order_value</code> and <code>order_items</code> by device type. <code>group_by()</code> allows us to group or split data based on particular (discrete) variable. The first argument is the name of the data set and the second argument is the name of the column based on which the data will be split.</p>
-<p>To split the data by referrer type, we use <code>group_by</code> and specify the data set i.e. <code>ecom</code> and the column based on which to split the data i.e. <code>referrer</code>.</p>
+<p>We need to compute the total order value and total order items for each device
+in order to compute their AOV. To achieve this, we need to group the selected
+<code>order_value</code> and <code>order_items</code> by device type. <code>group_by()</code> allows us to group
+or split data based on particular (discrete) variable. The first argument is the
+name of the data set and the second argument is the name of the column based on
+which the data will be split.</p>
+<p>To split the data by referrer type, we use <code>group_by</code> and specify the data set
+i.e. <code>ecom</code> and the column based on which to split the data i.e. <code>referrer</code>.</p>
 <pre class="r"><code>group_by(ecom, referrer)</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
 ## # Groups:   referrer [5]
@@ -344,7 +379,9 @@ ecom2</code></pre>
 ## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
 <div id="case-study-3" class="section level5">
 <h5>Case Study</h5>
-<p>In the second line in the previous output, you can observe <code>Groups: referrer [5]</code> . The data is split into 5 groups as the referrer variable has 5 distinct values. For our case study, we need to group the data by <code>device</code> type.</p>
+<p>In the second line in the previous output, you can observe <code>Groups: referrer [5]</code>
+. The data is split into 5 groups as the referrer variable has 5 distinct values.
+For our case study, we need to group the data by <code>device</code> type.</p>
 <pre class="r"><code># split ecom2 by device type
 ecom3 &lt;- group_by(ecom2, device)
 ecom3</code></pre>
@@ -367,7 +404,11 @@ ecom3</code></pre>
 </div>
 <div id="summarise-data" class="section level2">
 <h2>Summarise Data</h2>
-<p>The next step is to compute the total order value and total order items for each device. i.e. we need to reduce the order value and order items data to a single summary. We can achieve this using <code>summarise()</code>. As usual, the first argument is the name of a data set and the subsequent arguments are functions that can summarise data. For example, we can use <code>min</code>, <code>max</code>, <code>sum</code>, <code>mean</code> etc.</p>
+<p>The next step is to compute the total order value and total order items for each
+device. i.e. we need to reduce the order value and order items data to a single
+summary. We can achieve this using <code>summarise()</code>. As usual, the first argument
+is the name of a data set and the subsequent arguments are functions that can
+summarise data. For example, we can use <code>min</code>, <code>max</code>, <code>sum</code>, <code>mean</code> etc.</p>
 <p>Let us compute the average number of pages browsed by referrer type:</p>
 <ul>
 <li>split data by <code>referrer</code> type</li>
@@ -405,11 +446,16 @@ step_2</code></pre>
 ## 3 social              5.42                 1
 ## 4 yahoo               5.99                 2
 ## 5 google              5.73                 1</code></pre>
-<p>Another way to achieve the above result is to use the <code>summarise_all()</code> function. How does that work? It generates the specified summary for all the columns in the data set except for the column based on which the data has been grouped or split. So we need to ensure that the data does not have any irrelevant columns.</p>
+<p>Another way to achieve the above result is to use the
+<code>summarise_all()</code> function. How does that work? It generates the specified
+summary for all the columns in the data set except for the column based on
+which the data has been grouped or split. So we need to ensure that the data
+does not have any irrelevant columns.</p>
 <ul>
 <li>split data by <code>referrer</code> type</li>
 <li>select <code>order_value</code> and <code>order_items</code></li>
-<li>compute the average number of pages by applying the <code>mean</code> function to all the columns</li>
+<li>compute the average number of pages by applying the <code>mean</code> function to all
+the columns</li>
 </ul>
 <pre class="r"><code># select relevant columns
 step_1 &lt;- select(ecom, referrer, order_value)
@@ -428,7 +474,8 @@ step_3</code></pre>
 ## 3 social          380.
 ## 4 yahoo           470.
 ## 5 google          328.</code></pre>
-<p>Let us compute <code>mean</code> and <code>median</code> number of pages for each referre type using <code>summarise_all</code>.</p>
+<p>Let us compute <code>mean</code> and <code>median</code> number of pages for each referre type using
+<code>summarise_all</code>.</p>
 <pre class="r"><code># select relevant columns
 step_1 &lt;- select(ecom, referrer, order_value)
 
@@ -448,7 +495,11 @@ step_3</code></pre>
 ## 5 google    328.      0</code></pre>
 <div id="case-study-4" class="section level5">
 <h5>Case Study</h5>
-<p>So far, we have split the data based on the <code>device</code> type and we have selected 2 columns, <code>order_value</code> and <code>order_items</code>. We need the sum of order value and order items. What function can we use to obtain them? The <code>sum()</code> function will generate the sum of the values and hence we will use it inside the <code>summarise()</code> function. Remember, we need to provide a name to the summary being generated.</p>
+<p>So far, we have split the data based on the <code>device</code> type and we have selected 2
+columns, <code>order_value</code> and <code>order_items</code>. We need the sum of order value and
+order items. What function can we use to obtain them? The <code>sum()</code> function will
+generate the sum of the values and hence we will use it inside the <code>summarise()</code>
+function. Remember, we need to provide a name to the summary being generated.</p>
 <pre class="r"><code>ecom4 &lt;- summarise(ecom3, revenue = sum(order_value),
           orders = n())
 ecom4</code></pre>
@@ -458,7 +509,11 @@ ecom4</code></pre>
 ## 1 laptop   56531     31
 ## 2 tablet   51321     36
 ## 3 mobile   51504     36</code></pre>
-<p>There you go, we have the total order value and total order items for each device type. If we use <code>summarise_all()</code>, it will generate the summary for the selected columns based on the function specified. To specify the functions, we need to use another argument <code>funs</code> and it can take any number of valid functions.</p>
+<p>There you go, we have the total order value and total order items for each
+device type. If we use <code>summarise_all()</code>, it will generate the summary for the
+selected columns based on the function specified. To specify the functions, we
+need to use another argument <code>funs</code> and it can take any number of valid
+functions.</p>
 <pre class="r"><code>ecom4 &lt;- summarise_all(ecom3, funs(revenue = sum, orders = n()))
 ecom4</code></pre>
 <pre><code>## # A tibble: 3 x 3
@@ -471,8 +526,11 @@ ecom4</code></pre>
 </div>
 <div id="create-columns" class="section level2">
 <h2>Create Columns</h2>
-<p>To create a new column, we will use <code>mutate()</code>. The first argument is the name of the data set and the subsequent arguments are expressions for creating new columns based out of existing columns.</p>
-<p>Let us add a new column <code>avg_page_time</code> i.e. time on site divided by number of pages visited.</p>
+<p>To create a new column, we will use <code>mutate()</code>. The first argument is the name
+of the data set and the subsequent arguments are expressions for creating new
+columns based out of existing columns.</p>
+<p>Let us add a new column <code>avg_page_time</code> i.e. time on site divided by number of
+pages visited.</p>
 <pre class="r"><code># select duration and n_pages from ecom
 mutate_1 &lt;- select(ecom, n_pages, duration)
 mutate(mutate_1, avg_page_time = duration / n_pages)</code></pre>
@@ -490,7 +548,9 @@ mutate(mutate_1, avg_page_time = duration / n_pages)</code></pre>
 ##  9      19      209            11
 ## 10       1      208           208
 ## # ... with 990 more rows</code></pre>
-<p>We can create new columns based on other columns created using <code>mutate</code>. Let us create another column <code>sqrt_avg_page_time</code> i.e. square root of the average time on page using <code>avg_page_time</code>.</p>
+<p>We can create new columns based on other columns created using <code>mutate</code>. Let us
+create another column <code>sqrt_avg_page_time</code> i.e. square root of the average time
+on page using <code>avg_page_time</code>.</p>
 <pre class="r"><code>mutate(mutate_1,
        avg_page_time = duration / n_pages,
        sqrt_avg_page_time = sqrt(avg_page_time))</code></pre>
@@ -510,7 +570,9 @@ mutate(mutate_1, avg_page_time = duration / n_pages)</code></pre>
 ## # ... with 990 more rows</code></pre>
 <div id="case-study-5" class="section level5">
 <h5>Case Study</h5>
-<p>Back to our case study, from the last step we have the total order value and total order items for each device category and can compute the AOV. We will create a new column to store AOV.</p>
+<p>Back to our case study, from the last step we have the total order value and
+total order items for each device category and can compute the AOV. We will
+create a new column to store AOV.</p>
 <p><br></p>
 <p><img src="/img/mutate_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -526,7 +588,9 @@ ecom5</code></pre>
 </div>
 <div id="select-columns-1" class="section level2">
 <h2>Select Columns</h2>
-<p>The last step is to select the relevant columns. We will select the device type and the corresponding aov while getting rid of other columns. Use <code>select()</code> to extract the relevant columns.</p>
+<p>The last step is to select the relevant columns. We will select the device type
+and the corresponding aov while getting rid of other columns. Use <code>select()</code>
+to extract the relevant columns.</p>
 <pre class="r"><code>ecom6 &lt;- select(ecom5, device, aov)
 ecom6</code></pre>
 <pre><code>## # A tibble: 3 x 2
@@ -538,7 +602,9 @@ ecom6</code></pre>
 </div>
 <div id="arrange-data" class="section level2">
 <h2>Arrange Data</h2>
-<p>Arranging data in ascending or descending order is one of the most common tasks in data manipulation. We can use <code>arrange</code> to arrange data by different columns. Let us say we want to arrange data by the number of pages browsed.</p>
+<p>Arranging data in ascending or descending order is one of the most common tasks
+in data manipulation. We can use <code>arrange</code> to arrange data by different columns.
+Let us say we want to arrange data by the number of pages browsed.</p>
 <p><br></p>
 <p><img src="arrange_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -557,7 +623,8 @@ ecom6</code></pre>
 ##  9 yahoo    mobile       7       1       19 FALSE              7
 ## 10 bing     laptop       1       1      995 FALSE              0
 ## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
-<p>If we want to arrange the data in descending order, we can use <code>desc()</code>. Let us arrange the data in descending order.</p>
+<p>If we want to arrange the data in descending order, we can use <code>desc()</code>. Let us
+arrange the data in descending order.</p>
 <pre class="r"><code>arrange(ecom , desc(n_pages))</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
 ##    referrer device n_visit n_pages duration purchase order_items
@@ -573,7 +640,8 @@ ecom6</code></pre>
 ##  9 social   laptop      10      20      280 TRUE               1
 ## 10 yahoo    mobile       2      20      240 FALSE              0
 ## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
-<p>Data can be arranged by multiple variables as well. Let us arrange data first by number of visits and then by number of pages in a descending order.</p>
+<p>Data can be arranged by multiple variables as well. Let us arrange data first by
+number of visits and then by number of pages in a descending order.</p>
 <pre class="r"><code>arrange(ecom, n_visit, desc(n_pages))</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
 ##    referrer device n_visit n_pages duration purchase order_items
@@ -618,7 +686,11 @@ ecom7</code></pre>
 ## 1 tablet 1426.
 ## 2 mobile 1431.
 ## 3 laptop 1824.</code></pre>
-<p>If you observe, at each step we create a new variable(data frame) and then use it as an input in the next step i.e. the output from one step becomes the input for the next. Can we achieve the final outcome i.e. <code>ecom7</code> without creating the intermediate data (ecom1 - ecom6)? Yes, we can. We will use the <code>%&gt;%</code> operator to chain the steps and get rid of the intermediate data.</p>
+<p>If you observe, at each step we create a new variable(data frame) and then use
+it as an input in the next step i.e. the output from one step becomes the input
+for the next. Can we achieve the final outcome i.e. <code>ecom7</code> without creating the
+intermediate data (ecom1 - ecom6)? Yes, we can. We will use the <code>%&gt;%</code> operator
+to chain the steps and get rid of the intermediate data.</p>
 <pre class="r"><code>ecom %&gt;%
   filter(purchase) %&gt;%
   select(device, order_value) %&gt;%

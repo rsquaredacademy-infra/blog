@@ -1,7 +1,7 @@
 ---
 title: "Import Data into R - Part 2"
 author: "Aravind Hebbali"
-date: '2018-04-13'
+date: '2018-08-11'
 twitterImg: /img/import.png
 description: "Learn to read data from excel spreadsheets & statistical softwares into R."
 slug: import-data-into-r-part-2

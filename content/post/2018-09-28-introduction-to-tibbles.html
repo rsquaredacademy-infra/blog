@@ -3,7 +3,7 @@ title: Introduction to tibbles
 author: Aravind Hebbali
 twitterImg: /img/tibble_intro.png
 description: "Introduction to tibbles"
-date: '2018-05-31'
+date: '2018-09-28'
 slug: introduction-to-tibbles
 topics:
   - data wrangling
@@ -55,46 +55,52 @@ library(dplyr)</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    12
-##  2 b         2    38
-##  3 c         3    14
-##  4 d         4    39
-##  5 e         5    62
-##  6 f         6    85
-##  7 g         7     7
-##  8 h         8    78
-##  9 i         9    65
-## 10 j        10    73
+##  1 a         1     5
+##  2 b         2    45
+##  3 c         3    58
+##  4 d         4    26
+##  5 e         5    76
+##  6 f         6    37
+##  7 g         7    87
+##  8 h         8    94
+##  9 i         9    28
+## 10 j        10    84
 ## # ... with 16 more rows</code></pre>
-<p>We mentioned the column names followed by the data. If you do not specify the column names, <code>tibble()</code> will supply them. Ensure that the length of each column is same.</p>
+<p>We mentioned the column names followed by the data. If you do not specify the
+column names, <code>tibble()</code> will supply them. Ensure that the length of each column
+is same.</p>
 </div>
 <div id="tibble-features" class="section level2">
 <h2>tibble features</h2>
 <ul>
 <li>never changes input’s types</li>
 </ul>
-<p><code>tibble()</code> will never alter the input’s type. For example, if you supply a character vector it will not be converted to factor unlike data.frame where you need to set <code>stringsAsFactors</code> to <code>FALSE</code>.</p>
+<p><code>tibble()</code> will never alter the input’s type. For example, if you supply a
+character vector it will not be converted to factor unlike data.frame where
+you need to set <code>stringsAsFactors</code> to <code>FALSE</code>.</p>
 <pre class="r"><code>tibble(x = letters,
        y = 1:26,
        z = sample(100, 26))</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    72
-##  2 b         2    29
-##  3 c         3    78
-##  4 d         4    15
-##  5 e         5    90
-##  6 f         6     1
-##  7 g         7    99
-##  8 h         8    80
-##  9 i         9    63
-## 10 j        10    62
+##  1 a         1    79
+##  2 b         2     7
+##  3 c         3    24
+##  4 d         4    68
+##  5 e         5    37
+##  6 f         6    91
+##  7 g         7    53
+##  8 h         8    77
+##  9 i         9    66
+## 10 j        10    25
 ## # ... with 16 more rows</code></pre>
 <ul>
 <li>never adjusts variable names</li>
 </ul>
-<p><code>tibble()</code> will never modify the column names. In the below example, you can observe that while <code>data.frame</code> adds a <code>.</code>, <code>tibble()</code> retains the column names as is.</p>
+<p><code>tibble()</code> will never modify the column names. In the below example, you can
+observe that while <code>data.frame</code> adds a <code>.</code>, <code>tibble()</code> retains the column names
+as is.</p>
 <pre class="r"><code>names(data.frame(`order value` = 10))</code></pre>
 <pre><code>## [1] &quot;order.value&quot;</code></pre>
 <pre class="r"><code>names(tibble(`order value` = 10))</code></pre>
@@ -102,7 +108,9 @@ library(dplyr)</code></pre>
 <ul>
 <li>never prints all rows</li>
 </ul>
-<p><code>tibble()</code> will never print all the rows and clutter your console. It will only print the first 10 rows and only as many columns that fit the width of the console.</p>
+<p><code>tibble()</code> will never print all the rows and clutter your console. It will only
+print the first 10 rows and only as many columns that fit the width of the
+console.</p>
 <pre class="r"><code>x &lt;- 1:100
 y &lt;- letters[1]
 z &lt;- sample(c(TRUE, FALSE), 100, replace = TRUE)
@@ -114,17 +122,18 @@ tibble(x, y, z)</code></pre>
 ##  2     2 a     FALSE
 ##  3     3 a     FALSE
 ##  4     4 a     TRUE 
-##  5     5 a     FALSE
-##  6     6 a     FALSE
-##  7     7 a     TRUE 
-##  8     8 a     TRUE 
+##  5     5 a     TRUE 
+##  6     6 a     TRUE 
+##  7     7 a     FALSE
+##  8     8 a     FALSE
 ##  9     9 a     FALSE
-## 10    10 a     TRUE 
+## 10    10 a     FALSE
 ## # ... with 90 more rows</code></pre>
 <ul>
 <li>never recycles vector of length greater than 1</li>
 </ul>
-<p>Recycling vectors of length greater than 1 often leads to errors and as such <code>tibble()</code> will only recycle vectors of length 1.</p>
+<p>Recycling vectors of length greater than 1 often leads to errors and as such
+<code>tibble()</code> will only recycle vectors of length 1.</p>
 <pre class="r"><code>x &lt;- 1:100
 y &lt;- letters
 z &lt;- sample(c(TRUE, FALSE), 100, replace = TRUE)
@@ -162,7 +171,9 @@ Error in overscope_eval_next(overscope, expr) : object &#39;y&#39; not found</co
 </div>
 <div id="column-names" class="section level2">
 <h2>Column Names</h2>
-<p>Names of the columns in tibbles need not be valid R variable names. They can contain unusual characters like a space or a smiley but must be enclosed in ticks.</p>
+<p>Names of the columns in tibbles need not be valid R variable names. They can
+contain unusual characters like a space or a smiley but must be enclosed in
+ticks.</p>
 <pre class="r"><code>tibble(
   ` ` = &#39;space&#39;,
   `2` = &#39;integer&#39;,
@@ -175,7 +186,8 @@ Error in overscope_eval_next(overscope, expr) : object &#39;y&#39; not found</co
 </div>
 <div id="add-rows" class="section level2">
 <h2>Add Rows</h2>
-<p>Let us add data related to <strong>Safari</strong> browser to the web traffic data using <code>add_row()</code>.</p>
+<p>Let us add data related to <strong>Safari</strong> browser to the web traffic data using
+<code>add_row()</code>.</p>
 <pre class="r"><code>browsers &lt;- enframe(c(chrome = 40, firefox = 20, edge = 30))
 browsers</code></pre>
 <pre><code>## # A tibble: 3 x 2
@@ -192,7 +204,9 @@ browsers</code></pre>
 ## 2 firefox    20
 ## 3 edge       30
 ## 4 safari     10</code></pre>
-<p>If we want to add the data at a particular row, we can specify the row number using the <code>.before</code> argument. Let us add the data related to <strong>Safari</strong> browser in the second row instead of the last row.</p>
+<p>If we want to add the data at a particular row, we can specify the row number
+using the <code>.before</code> argument. Let us add the data related to <strong>Safari</strong> browser
+in the second row instead of the last row.</p>
 <pre class="r"><code>add_row(browsers, name = &#39;safari&#39;, value = 10, .before = 2)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   name    value
@@ -217,7 +231,9 @@ add_column(browsers, visits = c(4000, 2000, 3000, 1000))</code></pre>
 </div>
 <div id="rownames" class="section level2">
 <h2>Rownames</h2>
-<p>The <a href="tibble.tidyverse.org">tibble</a> package provides a set of functions to deal with rownames. Remember, <code>tibble</code> does not have <code>rownames</code> unlike <code>data.frame</code>. To check whether a data set has rownames, use <code>has_rownames()</code>.</p>
+<p>The <a href="tibble.tidyverse.org">tibble</a> package provides a set of functions to deal
+with rownames. Remember, <code>tibble</code> does not have <code>rownames</code> unlike <code>data.frame</code>.
+To check whether a data set has rownames, use <code>has_rownames()</code>.</p>
 <pre class="r"><code>has_rownames(mtcars)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <div id="remove-rownames" class="section level4">

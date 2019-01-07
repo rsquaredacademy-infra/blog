@@ -3,7 +3,7 @@ title: Categorical Data Analysis using forcats
 author: Aravind Hebbali
 twitterImg: /img/forcats.png
 description: "Learn to work with categorical data in R using forcats"
-date: '2018-07-18'
+date: '2018-11-15'
 slug: working-with-categorical-data-using-forcats
 topics:
   - data wrangling
@@ -18,7 +18,9 @@ tags:
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In this post, we will learn to work with categorical/qualitative data in R using <a href="https://forcats.tidyverse.org">forcats</a>. Let us begin by installing and loading forcats and a set of other pacakges we will be using.</p>
+<p>In this post, we will learn to work with categorical/qualitative data in R
+using <a href="https://forcats.tidyverse.org">forcats</a>. Let us begin by installing
+and loading forcats and a set of other pacakges we will be using.</p>
 </div>
 <div id="libraries-code" class="section level2">
 <h2>Libraries &amp; Code</h2>
@@ -43,7 +45,11 @@ library(readr)</code></pre>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
-<p>We will use a case study to explore the various features of the forcats package. You can download the data for the case study from <a href="https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv">here</a> or directly import the data using the readr package. We will do the following in this case study:</p>
+<p>We will use a case study to explore the various features of the forcats
+package. You can download the data for the case study from
+<a href="https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv">here</a>
+or directly import the data using the readr package. We will do the following
+in this case study:</p>
 <ul>
 <li>compute the frequency of different referrers</li>
 <li>plot average number of pages browsed for different referrers</li>
@@ -59,31 +65,9 @@ library(readr)</code></pre>
       referrer = col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)),
       n_pages = col_double(), duration = col_double()
     )
-  )</code></pre>
-<pre><code>## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
+  )
 
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed
-
-## Warning in read_tokens_(data, tokenizer, col_specs, col_names, locale_, :
-## length of NULL cannot be changed</code></pre>
-<pre class="r"><code>ecom</code></pre>
+ecom</code></pre>
 <pre><code>## # A tibble: 1,000 x 3
 ##    referrer n_pages duration
 ##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;
@@ -98,7 +82,10 @@ library(readr)</code></pre>
 ##  9 bing          19      209
 ## 10 google         1      208
 ## # ... with 990 more rows</code></pre>
-<p>Let us extract the <code>referrer</code> column from the above data using <code>use_series</code> and save it in a new variable <code>referrers</code>. Instead of using ecom which is a tibble, we will use <code>referrers</code> which is a vector. We do this to avoid extracting the <code>referrer</code> column from the above data in later examples.</p>
+<p>Let us extract the <code>referrer</code> column from the above data using <code>use_series</code>
+and save it in a new variable <code>referrers</code>. Instead of using ecom which is
+a tibble, we will use <code>referrers</code> which is a vector. We do this to avoid
+extracting the <code>referrer</code> column from the above data in later examples.</p>
 <pre class="r"><code>referrers &lt;- use_series(ecom, referrer)</code></pre>
 </div>
 </div>
@@ -157,16 +144,18 @@ refer_summary</code></pre>
 <pre class="r"><code>refer_summary %&gt;%
   ggplot() +
   geom_point(aes(page, referrer))</code></pre>
-<p><img src="/post/2018-07-18-working-with-categorical-data-using-forcats_files/figure-html/cat10-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Use <code>fct_reorder</code> to reorder the referrer types by the average number of pages visited.</p>
+<p><img src="/post/2018-11-15-working-with-categorical-data-using-forcats_files/figure-html/cat10-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Use <code>fct_reorder</code> to reorder the referrer types by the average number of pages
+visited.</p>
 <pre class="r"><code>refer_summary %&gt;%
   ggplot() +
   geom_point(aes(page, fct_reorder(referrer, page)))</code></pre>
-<p><img src="/post/2018-07-18-working-with-categorical-data-using-forcats_files/figure-html/cat11-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="/post/2018-11-15-working-with-categorical-data-using-forcats_files/figure-html/cat11-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plot-referrer-frequency-descending-order" class="section level2">
 <h2>Plot Referrer Frequency (Descending Order)</h2>
-<p>Since we want to plot the referrers in descending order of frequency, we will use <code>fct_infreq()</code> to reorder by frequency.</p>
+<p>Since we want to plot the referrers in descending order of frequency, we will
+use <code>fct_infreq()</code> to reorder by frequency.</p>
 <p><br></p>
 <p><img src="/img/fct_infreq.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -175,7 +164,8 @@ refer_summary</code></pre>
   fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social bing   direct
 ## Levels: google yahoo social bing direct</code></pre>
-<p>Now that we know how to reorder categories/levels by frequency, let us reorder the referrers by frequency and plot them.</p>
+<p>Now that we know how to reorder categories/levels by frequency, let us reorder
+the referrers by frequency and plot them.</p>
 <pre class="r"><code>ecom %&gt;%
   mutate(
     ref = referrer %&gt;% 
@@ -183,7 +173,7 @@ refer_summary</code></pre>
   ) %&gt;%
   ggplot(aes(ref)) +
   geom_bar()</code></pre>
-<p><img src="/post/2018-07-18-working-with-categorical-data-using-forcats_files/figure-html/cat4-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="/post/2018-11-15-working-with-categorical-data-using-forcats_files/figure-html/cat4-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plot-referrer-frequency-ascending-order" class="section level2">
 <h2>Plot Referrer Frequency (Ascending Order)</h2>
@@ -191,7 +181,8 @@ refer_summary</code></pre>
 <pre class="r"><code>fct_unique(referrers)</code></pre>
 <pre><code>## [1] bing   direct social yahoo  google
 ## Levels: bing direct social yahoo google</code></pre>
-<p>Since we want to plot the referrers in ascending order of frequency, we will use <code>fct_rev()</code> to reverse the order.</p>
+<p>Since we want to plot the referrers in ascending order of frequency, we will
+use <code>fct_rev()</code> to reverse the order.</p>
 <p><br></p>
 <p><img src="/img/fct_rev.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -200,7 +191,8 @@ refer_summary</code></pre>
   fct_unique()</code></pre>
 <pre><code>## [1] google yahoo  social direct bing  
 ## Levels: google yahoo social direct bing</code></pre>
-<p>Let us reorder the referrers by frequency first and then reverse the order before plotting their frequencies.</p>
+<p>Let us reorder the referrers by frequency first and then reverse the order
+before plotting their frequencies.</p>
 <pre class="r"><code>ecom %&gt;%
   mutate(
     ref = referrer %&gt;% 
@@ -209,7 +201,7 @@ refer_summary</code></pre>
   ) %&gt;%
   ggplot(aes(ref)) +
   geom_bar()</code></pre>
-<p><img src="/post/2018-07-18-working-with-categorical-data-using-forcats_files/figure-html/cat5-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="/post/2018-11-15-working-with-categorical-data-using-forcats_files/figure-html/cat5-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="case-study-2" class="section level2">
 <h2>Case Study 2</h2>
@@ -218,7 +210,8 @@ refer_summary</code></pre>
 <li>combine categories</li>
 <li>recategorize</li>
 </ul>
-<p>The data set we will use has just one column <code>traffics</code> i.e. the source of traffic for a imaginary website.</p>
+<p>The data set we will use has just one column <code>traffics</code> i.e. the source
+of traffic for a imaginary website.</p>
 <div id="data-1" class="section level3">
 <h3>Data</h3>
 <pre class="r"><code>traffic &lt;- 
@@ -245,7 +238,11 @@ traffic</code></pre>
 ##  9 google  
 ## 10 google  
 ## # ... with 48,222 more rows</code></pre>
-<p>Let us extract the <code>traffics</code> column from the above data using <code>use_series</code> and save it in a new variable <code>traffics</code>. Instead of using traffic which is a tibble, we will use <code>traffics</code> which is a vector. We do this to avoid extracting the <code>traffics</code> column from the above data in all the examples shown below.</p>
+<p>Let us extract the <code>traffics</code> column from the above data using <code>use_series</code>
+and save it in a new variable <code>traffics</code>. Instead of using traffic which is
+a tibble, we will use <code>traffics</code> which is a vector. We do this to avoid
+extracting the <code>traffics</code> column from the above data in all the examples
+shown below.</p>
 <pre class="r"><code>traffics &lt;- use_series(traffic, traffics)</code></pre>
 </div>
 </div>
@@ -306,7 +303,8 @@ traffic</code></pre>
 </div>
 <div id="lump-infrequent-referrer-types" class="section level2">
 <h2>Lump Infrequent Referrer Types</h2>
-<p>Let us group together referrer types that drive low traffic to the website. Use <code>fct_lump()</code> to lump together categories.</p>
+<p>Let us group together referrer types that drive low traffic to the website.
+Use <code>fct_lump()</code> to lump together categories.</p>
 <p><br></p>
 <p><img src="/img/fct_lump_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -335,7 +333,8 @@ traffics %&gt;%
 </div>
 <div id="retain-top-3-referrers" class="section level2">
 <h2>Retain top 3 referrers</h2>
-<p>We want to retain the top 3 referrers and combine the rest of them into a single category.</p>
+<p>We want to retain the top 3 referrers and combine the rest of them into a
+single category.</p>
 <pre><code>## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -348,7 +347,8 @@ traffics %&gt;%
 ## 7 instagram   3907
 ## 8 unknown     2657
 ## 9 direct      1350</code></pre>
-<p>Use <code>fct_lump()</code> and set the argument <code>n</code> to <code>3</code> indicating we want to retain top 3 categories and combine the rest.</p>
+<p>Use <code>fct_lump()</code> and set the argument <code>n</code> to <code>3</code> indicating we want to
+retain top 3 categories and combine the rest.</p>
 <pre class="r"><code>traffics %&gt;% 
   fct_lump(n = 3) %&gt;% 
   table()</code></pre>
@@ -374,7 +374,10 @@ traffics %&gt;%
 ## 7 instagram   3907    8.1 
 ## 8 twitter     4521    9.37
 ## 9 unknown     2657    5.51</code></pre>
-<p>Since we are looking at proportion of traffic driven to the website and not the actual numbers, we use the <code>prop</code> argument and set it to <code>0.1</code>, indicating that we want to retain only those categories which have a proportion of more than 10% and combine the rest.</p>
+<p>Since we are looking at proportion of traffic driven to the website and
+not the actual numbers, we use the <code>prop</code> argument and set it to <code>0.1</code>,
+indicating that we want to retain only those categories which have a
+proportion of more than 10% and combine the rest.</p>
 <pre class="r"><code>traffics %&gt;%
   fct_lump(prop = 0.1) %&gt;% 
   table()</code></pre>
@@ -384,7 +387,8 @@ traffics %&gt;%
 </div>
 <div id="retain-3-referrer-types-with-lowest-traffic" class="section level2">
 <h2>Retain 3 Referrer Types with lowest traffic</h2>
-<p>What if we want to retain 3 referrers which drive the lowest traffic to the website and combine the rest?</p>
+<p>What if we want to retain 3 referrers which drive the lowest traffic
+to the website and combine the rest?</p>
 <pre><code>## # A tibble: 9 x 2
 ##   f              n
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -407,7 +411,8 @@ traffics %&gt;%
 </div>
 <div id="retain-3-referrer-types-with-less-than-10-traffic" class="section level2">
 <h2>Retain 3 Referrer Types with less than 10% traffic</h2>
-<p>Let us see how to retain referrers that drive less than 10 % traffic to the website and combine the rest into a single group.</p>
+<p>Let us see how to retain referrers that drive less than 10 % traffic to
+the website and combine the rest into a single group.</p>
 <pre><code>## # A tibble: 9 x 3
 ##   f              n percent
 ##   &lt;fct&gt;      &lt;int&gt;   &lt;dbl&gt;
@@ -433,7 +438,9 @@ traffics %&gt;%
 <p><br></p>
 <p><img src="/img/fct_others_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Let us assume we want to retain a couple of important categories and group the rest into a single category. In the below example, we retain <em>google</em> and <em>yahoo</em> while grouping the rest as others using <code>fct_other()</code>.</p>
+<p>Let us assume we want to retain a couple of important categories and group
+the rest into a single category. In the below example, we retain <em>google</em> and
+<em>yahoo</em> while grouping the rest as others using <code>fct_other()</code>.</p>
 <pre class="r"><code>fct_other(traffics, keep = c(&quot;google&quot;, &quot;yahoo&quot;)) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;yahoo&quot;  &quot;google&quot; &quot;Other&quot;</code></pre>
@@ -442,7 +449,9 @@ traffics %&gt;%
 <h2>Drop Levels</h2>
 <p><img src="/img/fct_others_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>What if you want to drop a couple of categories instead of grouping them? Use the <code>drop</code> argument in <code>fct_other()</code> and specify the categories to be dropped. In the below example, we drop the following referrer categories:</p>
+<p>What if you want to drop a couple of categories instead of grouping them?
+Use the <code>drop</code> argument in <code>fct_other()</code> and specify the categories to be
+dropped. In the below example, we drop the following referrer categories:</p>
 <ul>
 <li>instagram</li>
 <li>twitter</li>
@@ -454,21 +463,28 @@ traffics %&gt;%
 </div>
 <div id="reorder-levels" class="section level2">
 <h2>Reorder Levels</h2>
-<p>The categories can be reordered using <code>fct_relevel()</code>. In the above example, we reorder the categories to ensure <em>google</em> appears first. Similarly in the below example, we reorder the levels to ensure <em>twitter</em> appears first irrespective of its frequency or order of appearance in the data.</p>
+<p>The categories can be reordered using <code>fct_relevel()</code>. In the above example,
+we reorder the categories to ensure <em>google</em> appears first. Similarly in
+the below example, we reorder the levels to ensure <em>twitter</em> appears first
+irrespective of its frequency or order of appearance in the data.</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;twitter&quot;) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;twitter&quot;    &quot;affiliates&quot; &quot;bing&quot;       &quot;direct&quot;     &quot;facebook&quot;  
 ## [6] &quot;yahoo&quot;      &quot;google&quot;     &quot;instagram&quot;  &quot;unknown&quot;</code></pre>
-<p>If the category needs to appear at a particular position, use the <code>after</code> argument and specify the position after which it should appear. For example, if <em>google</em> should be the third category, we would specify <code>after = 2</code> i.e. <em>google</em> should come after the 2nd position (i.e. third position).</p>
+<p>If the category needs to appear at a particular position, use the <code>after</code>
+argument and specify the position after which it should appear. For example,
+if <em>google</em> should be the third category, we would specify <code>after = 2</code> i.e.
+<em>google</em> should come after the 2nd position (i.e. third position).</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;google&quot;, after = 2) %&gt;%
   levels()</code></pre>
 <pre><code>## [1] &quot;affiliates&quot; &quot;bing&quot;       &quot;google&quot;     &quot;direct&quot;     &quot;facebook&quot;  
 ## [6] &quot;yahoo&quot;      &quot;instagram&quot;  &quot;twitter&quot;    &quot;unknown&quot;</code></pre>
-<p>If the category should appear last, supply the value <code>Inf</code> (infinity) to the <code>after</code> argument as shown below.</p>
+<p>If the category should appear last, supply the value <code>Inf</code> (infinity) to the
+<code>after</code> argument as shown below.</p>
 <p><br></p>
 <p><img src="/img/fct_relevel_3.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>fct_relevel(traffics, &quot;facebook&quot;, after = Inf) %&gt;%
@@ -478,7 +494,8 @@ traffics %&gt;%
 </div>
 <div id="case-study-3" class="section level2">
 <h2>Case Study 3</h2>
-<p>In this case study, we deal with categorical data which is ordered and cyclical. It contains response to an imaginary survey.</p>
+<p>In this case study, we deal with categorical data which is ordered and cyclical.
+It contains response to an imaginary survey.</p>
 <div id="data-2" class="section level3">
 <h3>Data</h3>
 <pre class="r"><code>response_data &lt;- 
@@ -487,7 +504,8 @@ traffics %&gt;%
       &quot;dislike somewhat&quot;, &quot;dislike&quot;), ordered = TRUE)
     )
   )</code></pre>
-<p>Since we will be using only one column from the above data set, let us extract it using <code>use_series()</code> and save it as <code>responses</code>.</p>
+<p>Since we will be using only one column from the above data set, let us extract it using
+<code>use_series()</code> and save it as <code>responses</code>.</p>
 <pre class="r"><code>responses &lt;- use_series(response_data, response)
 levels(responses)</code></pre>
 <pre><code>## [1] &quot;like&quot;             &quot;like somewhat&quot;    &quot;neutral&quot;         
@@ -496,7 +514,10 @@ levels(responses)</code></pre>
 </div>
 <div id="shift-levels" class="section level2">
 <h2>Shift Levels</h2>
-<p>To shift the levels, we use <code>fct_shift()</code>. Use the <code>n</code> argument to indicate the direction of the shift. If <code>n</code> is positive, the levels are shifted to the left else to the right. In the below example, we shift the levels to the left by 2 positions.</p>
+<p>To shift the levels, we use <code>fct_shift()</code>. Use the <code>n</code> argument to indicate
+the direction of the shift. If <code>n</code> is positive, the levels are shifted to
+the left else to the right. In the below example, we shift the levels to
+the left by 2 positions.</p>
 <p><br></p>
 <p><img src="/img/fct_shift_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -504,7 +525,9 @@ levels(responses)</code></pre>
   levels()</code></pre>
 <pre><code>## [1] &quot;neutral&quot;          &quot;dislike somewhat&quot; &quot;dislike&quot;         
 ## [4] &quot;like&quot;             &quot;like somewhat&quot;</code></pre>
-<p>To shift the levels to the right, supply a negative value to the <code>n</code> argument in <code>fct_shift()</code>. In the below example, we shift the levels to the right by 2 positions.</p>
+<p>To shift the levels to the right, supply a negative value to the <code>n</code> argument
+in <code>fct_shift()</code>. In the below example, we shift the levels to the right by
+2 positions.</p>
 <p><br></p>
 <p><img src="/img/fct_shift_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>

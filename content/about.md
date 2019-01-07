@@ -4,9 +4,10 @@ date: "2016-05-05T21:48:51-07:00"
 ---
 
 
-Rsquared Academy is an e-learning platform offering self paced and instructor led courses. Our 
-main area of focus are data science and business analytics. Our courses are curated by experts from 
-the industry and delivered by a team passionate about online education. We offer 24/7 on-demand support for all our courses.
+Rsquared Academy is a free and open source education initiative with focus on data science and analytics. We
+use [R](http://r-project.org/) for delivering all our courses. We are dedicated to open source and have developed
+several R packages aimed at beginner and intermediate R users. To sustain our work, we offer a few premium courses
+along with corporate & university training.
 
 ## Vision
 

@@ -3,7 +3,7 @@ title: Categorical Data Analysis using forcats
 author: Aravind Hebbali
 twitterImg: /img/forcats.png
 description: "Learn to work with categorical data in R using forcats"
-date: '2018-07-18'
+date: '2018-11-15'
 slug: working-with-categorical-data-using-forcats
 topics:
   - data wrangling

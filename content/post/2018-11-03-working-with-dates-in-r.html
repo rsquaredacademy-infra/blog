@@ -3,7 +3,7 @@ title: 'Working with Date and Time in R '
 author: Aravind Hebbali
 twitterImg: /img/lubridate.png
 description: "Learn to handle dates & time in R using lubridate"
-date: '2018-07-06'
+date: '2018-11-03'
 slug: working-with-dates-in-r
 topics:
   - data wrangling
@@ -18,7 +18,8 @@ tags:
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In this post, we will learn to work with date/time data in R using <a href="http://lubridate.tidyverse.org/">lubridate</a>, an R package that makes it easy to work with dates and time. Let us begin by installing and loading the pacakge.</p>
+<p>In this post, we will learn to work with date/time data in R using <a href="http://lubridate.tidyverse.org/">lubridate</a>, an R package that makes it easy to work with dates and time.
+Let us begin by installing and loading the pacakge.</p>
 </div>
 <div id="libraries-code-data" class="section level2">
 <h2>Libraries, Code &amp; Data</h2>
@@ -39,17 +40,20 @@ library(readr)</code></pre>
 <h2>Quick Intro</h2>
 <div id="origin" class="section level4">
 <h4>Origin</h4>
-<p>Let us look at the origin for the numbering system used for date and time calculations in R.</p>
+<p>Let us look at the origin for the numbering system used for date and time
+calculations in R.</p>
 <pre class="r"><code>origin</code></pre>
 <pre><code>## [1] &quot;1970-01-01 UTC&quot;</code></pre>
 </div>
 <div id="current-datetime" class="section level4">
 <h4>Current Date/Time</h4>
-<p>Next, let us check out the current date, time and whether it occurs in the am or pm. <code>now()</code> returns the date time as well as the time zone whereas <code>today()</code> will return only the current date. <code>am()</code> and <code>pm()</code> return <code>TRUE</code> or <code>FALSE</code>.</p>
+<p>Next, let us check out the current date, time and whether it occurs in the am
+or pm. <code>now()</code> returns the date time as well as the time zone whereas <code>today()</code>
+will return only the current date. <code>am()</code> and <code>pm()</code> return <code>TRUE</code> or <code>FALSE</code>.</p>
 <pre class="r"><code>now()</code></pre>
-<pre><code>## [1] &quot;2018-09-08 16:38:16 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2019-01-07 13:13:20 IST&quot;</code></pre>
 <pre class="r"><code>today()</code></pre>
-<pre><code>## [1] &quot;2018-09-08&quot;</code></pre>
+<pre><code>## [1] &quot;2019-01-07&quot;</code></pre>
 <pre class="r"><code>am(now())  </code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>pm(now())</code></pre>
@@ -84,7 +88,8 @@ library(readr)</code></pre>
 <li>Due: due date</li>
 <li>Payment: payment date</li>
 </ul>
-<p>We will use the functions in the lubridate package to answer a few questions we have about the transact data.</p>
+<p>We will use the functions in the lubridate package to answer a few
+questions we have about the transact data.</p>
 <ul>
 <li>extract date, month and year from Due</li>
 <li>compute the number of days to settle invoice</li>
@@ -134,7 +139,8 @@ day(this_day)</code></pre>
 </div>
 <div id="compute-days-to-settle-invoice" class="section level2">
 <h2>Compute days to settle invoice</h2>
-<p>Time to do some arithmetic with the dates. Let us calculate the duration of a course by subtracting the course start date from the course end date.</p>
+<p>Time to do some arithmetic with the dates. Let us calculate the duration of a
+course by subtracting the course start date from the course end date.</p>
 <p><br></p>
 <p><img src="/img/course_duration.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -143,7 +149,8 @@ course_end      &lt;- as_date(&#39;2017-04-21&#39;)
 course_duration &lt;- course_end - course_start
 course_duration
 ## Time difference of 9 days</code></pre>
-<p>Let us estimate the number of days to settle the invoice by subtracting the date of invoice from the date of payment.</p>
+<p>Let us estimate the number of days to settle the invoice by subtracting the
+date of invoice from the date of payment.</p>
 <pre class="r"><code>transact %&gt;%
   mutate(
     days_to_pay = Payment - Invoice
@@ -151,16 +158,16 @@ course_duration
 <pre><code>## # A tibble: 2,466 x 4
 ##    Invoice    Due        Payment    days_to_pay
 ##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;time&gt;     
-##  1 2013-01-02 2013-02-01 2013-01-15 13         
-##  2 2013-01-26 2013-02-25 2013-03-03 36         
-##  3 2013-07-03 2013-08-02 2013-07-08 5          
-##  4 2013-02-10 2013-03-12 2013-03-17 35         
-##  5 2012-10-25 2012-11-24 2012-11-28 34         
-##  6 2012-01-27 2012-02-26 2012-02-22 26         
-##  7 2013-08-13 2013-09-12 2013-09-09 27         
-##  8 2012-12-16 2013-01-15 2013-01-12 27         
-##  9 2012-05-14 2012-06-13 2012-07-01 48         
-## 10 2013-07-01 2013-07-31 2013-07-26 25         
+##  1 2013-01-02 2013-02-01 2013-01-15 13 days    
+##  2 2013-01-26 2013-02-25 2013-03-03 36 days    
+##  3 2013-07-03 2013-08-02 2013-07-08  5 days    
+##  4 2013-02-10 2013-03-12 2013-03-17 35 days    
+##  5 2012-10-25 2012-11-24 2012-11-28 34 days    
+##  6 2012-01-27 2012-02-26 2012-02-22 26 days    
+##  7 2013-08-13 2013-09-12 2013-09-09 27 days    
+##  8 2012-12-16 2013-01-15 2013-01-12 27 days    
+##  9 2012-05-14 2012-06-13 2012-07-01 48 days    
+## 10 2013-07-01 2013-07-31 2013-07-26 25 days    
 ## # ... with 2,456 more rows</code></pre>
 </div>
 <div id="compute-days-over-due" class="section level2">
@@ -205,7 +212,9 @@ course_duration
 </div>
 <div id="if-due-day-is-february-29-is-it-a-leap-year" class="section level2">
 <h2>If due day is February 29, is it a leap year?</h2>
-<p>Let us do some data sanitization. If the due day happens to be February 29, let us ensure that the due year is a leap year. Below are the steps to check if the due year is a leap year:</p>
+<p>Let us do some data sanitization. If the due day happens to be February 29,
+let us ensure that the due year is a leap year. Below are the steps to check
+if the due year is a leap year:</p>
 <ul>
 <li>we will extract the following from the due date:
 <ul>
@@ -213,7 +222,8 @@ course_duration
 <li>month</li>
 <li>year</li>
 </ul></li>
-<li>we will then create a new column <code>is_leap</code> which will have be set to <code>TRUE</code> if the year is a leap year else it will be set to <code>FALSE</code></li>
+<li>we will then create a new column <code>is_leap</code> which will have be set to <code>TRUE</code> if
+the year is a leap year else it will be set to <code>FALSE</code></li>
 <li>filter all the payments due on 29th Feb</li>
 <li>select the following columns:
 <ul>
@@ -240,7 +250,8 @@ course_duration
 </div>
 <div id="shift-date" class="section level2">
 <h2>Shift Date</h2>
-<p>Time to shift some dates. We can shift a date by days, weeks or months. Let us shift the course start date by:</p>
+<p>Time to shift some dates. We can shift a date by days, weeks or months. Let us
+shift the course start date by:</p>
 <ul>
 <li>2 days</li>
 <li>3 weeks</li>
@@ -258,7 +269,9 @@ course_start + years(1)
 </div>
 <div id="interval" class="section level2">
 <h2>Interval</h2>
-<p>Let us calculate the duration of the course using <code>interval</code>. If you observe carefully, the result is not the duration in days but an object of class <code>interval</code>. Now let us learn how we can use intervals.</p>
+<p>Let us calculate the duration of the course using <code>interval</code>. If you observe
+carefully, the result is not the duration in days but an object of class
+<code>interval</code>. Now let us learn how we can use intervals.</p>
 <p><br></p>
 <p><img src="/img/course_interval.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -267,12 +280,15 @@ course_start + years(1)
 </div>
 <div id="intervals-overlap" class="section level2">
 <h2>Intervals Overlap</h2>
-<p>Let us say you are planning a vacation and want to check if the vacation dates overlap with the course dates. You can do this by:</p>
+<p>Let us say you are planning a vacation and want to check if the vacation
+dates overlap with the course dates. You can do this by:</p>
 <ul>
 <li>creating vacation and course intervals</li>
-<li>use <code>int_overlaps()</code> to check if two intervals overlap. It returns <code>TRUE</code> if the intervals overlap else <code>FALSE</code>.</li>
+<li>use <code>int_overlaps()</code> to check if two intervals overlap. It returns <code>TRUE</code>
+if the intervals overlap else <code>FALSE</code>.</li>
 </ul>
-<p>Let us use the vacation start and end dates to create <code>vacation_interval</code> and then check if it overlaps with <code>course_interval</code>.</p>
+<p>Let us use the vacation start and end dates to create <code>vacation_interval</code>
+and then check if it overlaps with <code>course_interval</code>.</p>
 <p><br></p>
 <p><img src="/img/interval_overlap.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -285,7 +301,8 @@ int_overlaps(course_interval, vacation_interval)
 </div>
 <div id="how-many-invoices-were-settled-within-due-date" class="section level2">
 <h2>How many invoices were settled within due date?</h2>
-<p>Let us use intervals to count the number of invoices that were settled within the due date. To do this, we will:</p>
+<p>Let us use intervals to count the number of invoices that were settled within
+the due date. To do this, we will:</p>
 <ul>
 <li>create an interval for the invoice and due date</li>
 <li>create a new column <code>due_next</code> by incrementing the due date by 1 day</li>
@@ -314,7 +331,9 @@ int_overlaps(course_interval, vacation_interval)
 ##  9 2012-05-14 2012-06-13 2012-07-01 FALSE   
 ## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
 ## # ... with 2,456 more rows</code></pre>
-<p>Below we show another method to count the number of invoices paid within the due date. Instead of using <code>days</code> to change the due date, we use <code>int_shift</code> to shift it by 1 day.</p>
+<p>Below we show another method to count the number of invoices paid within the
+due date. Instead of using <code>days</code> to change the due date, we use <code>int_shift</code>
+to shift it by 1 day.</p>
 <pre class="r"><code>transact %&gt;%
   mutate(
     inv_due_interval = interval(Invoice, Due),
@@ -337,7 +356,10 @@ int_overlaps(course_interval, vacation_interval)
 ##  9 2012-05-14 2012-06-13 2012-07-01 FALSE   
 ## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
 ## # ... with 2,456 more rows</code></pre>
-<p>You might be thinking why we incremented the due date by a day before creating the interval between the due day and the payment day. If we do not increment, both the intervals will share a common date i.e. the due date and they will always overlap as shown below:</p>
+<p>You might be thinking why we incremented the due date by a day before creating
+the interval between the due day and the payment day. If we do not increment,
+both the intervals will share a common date i.e. the due date and they will
+always overlap as shown below:</p>
 <pre class="r"><code>transact %&gt;%
   mutate(
     inv_due_interval = interval(Invoice, Due),
@@ -362,7 +384,8 @@ int_overlaps(course_interval, vacation_interval)
 </div>
 <div id="shift-interval" class="section level2">
 <h2>Shift Interval</h2>
-<p>Intervals can be shifted too. In the below example, we shift the course interval by:</p>
+<p>Intervals can be shifted too. In the below example, we shift the course
+interval by:</p>
 <ul>
 <li>1 day</li>
 <li>3 weeks</li>
@@ -381,7 +404,9 @@ int_shift(course_interval, by = years(1))
 </div>
 <div id="within" class="section level2">
 <h2>Within</h2>
-<p>Let us assume that we have to attend a conference in April 2017. Does it occur during the course duration? We can answer this using <code>%within%</code> which will return <code>TRUE</code> if a date falls within an interval.</p>
+<p>Let us assume that we have to attend a conference in April 2017. Does it occur
+during the course duration? We can answer this using <code>%within%</code> which will
+return <code>TRUE</code> if a date falls within an interval.</p>
 <p><br></p>
 <p><img src="/img/within.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -390,7 +415,8 @@ conference %within% course_interval
 ## [1] TRUE</code></pre>
 <div id="how-many-invoices-were-settled-within-due-date-1" class="section level4">
 <h4>How many invoices were settled within due date?</h4>
-<p>Let us use <code>%within%</code> to count the number of invoices that were settled within the due date. We will do this by:</p>
+<p>Let us use <code>%within%</code> to count the number of invoices that were settled within
+the due date. We will do this by:</p>
 <ul>
 <li>creating an interval for the invoice and due date</li>
 <li>check if the payment date falls within the above interval</li>

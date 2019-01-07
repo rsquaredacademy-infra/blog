@@ -3,7 +3,7 @@ title: Hacking strings with stringr
 author: Aravind Hebbali
 twitterImg: /img/stringr.png
 description: "Learn to manipulate strings in R using stringr"
-date: '2018-06-24'
+date: '2018-10-22'
 slug: hacking-strings-with-stringr
 categories:
   - data wrangling

@@ -3,7 +3,7 @@ title: Hacking strings with stringr
 author: Aravind Hebbali
 twitterImg: /img/stringr.png
 description: "Learn to manipulate strings in R using stringr"
-date: '2018-06-24'
+date: '2018-10-22'
 slug: hacking-strings-with-stringr
 categories:
   - data wrangling
@@ -53,18 +53,18 @@ library(readr)</code></pre>
 <pre class="r"><code>mockstring &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/mock_strings.csv&#39;)
 mockstring</code></pre>
 <pre><code>## # A tibble: 1,000 x 12
-##       id image_url  domain imageurl email filename phone address url      
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    
-##  1     1 https://r~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ https://~
-##  2     2 https://r~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http://d~
-##  3     3 https://r~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ https://~
-##  4     4 https://r~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http://i~
-##  5     5 https://r~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ https://~
-##  6     6 https://r~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ https://~
-##  7     7 https://r~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http://v~
-##  8     8 https://r~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ https://~
-##  9     9 https://r~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ https://~
-## 10    10 https://r~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ https://~
+##       id image_url domain imageurl email filename phone address url  
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
+##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~
+##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~
+##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~
+##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~
+##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~
+##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~
+##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~
+##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~
+##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~
+## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~
 ## # ... with 990 more rows, and 3 more variables: full_name &lt;chr&gt;,
 ## #   currency &lt;chr&gt;, passwords &lt;chr&gt;</code></pre>
 </div>
@@ -86,33 +86,38 @@ mockstring</code></pre>
 </div>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Before we start with the case study, let us take a quick tour of <strong>stringr</strong> and introduce ourselves to some of the functions we will be using later in the case study. One of the columns in the case study data is <code>email</code>. It contains random email ids. We want to ensure that the email ids adher to a particular format .i.e</p>
+<p>Before we start with the case study, let us take a quick tour of <strong>stringr</strong> and introduce
+ourselves to some of the functions we will be using later in the case study. One of the
+columns in the case study data is <code>email</code>. It contains random email ids. We want to ensure
+that the email ids adher to a particular format .i.e</p>
 <ul>
 <li>they contain <code>@</code></li>
 <li>they contain only one <code>@</code></li>
 </ul>
-<p>Let us first detect if the email ids contain <code>@</code>. Since the data set has 1000 rows, we will use a smaller sample in the examples.</p>
+<p>Let us first detect if the email ids contain <code>@</code>. Since the data set has 1000 rows, we will
+use a smaller sample in the examples.</p>
 <pre class="r"><code>mockdata &lt;- slice(mockstring, 1:10)
 mockdata</code></pre>
 <pre><code>## # A tibble: 10 x 12
-##       id image_url  domain imageurl email filename phone address url      
-##    &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    
-##  1     1 https://r~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ https://~
-##  2     2 https://r~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http://d~
-##  3     3 https://r~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ https://~
-##  4     4 https://r~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http://i~
-##  5     5 https://r~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ https://~
-##  6     6 https://r~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ https://~
-##  7     7 https://r~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http://v~
-##  8     8 https://r~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ https://~
-##  9     9 https://r~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ https://~
-## 10    10 https://r~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ https://~
+##       id image_url domain imageurl email filename phone address url  
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
+##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~
+##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~
+##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~
+##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~
+##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~
+##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~
+##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~
+##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~
+##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~
+## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~
 ## # ... with 3 more variables: full_name &lt;chr&gt;, currency &lt;chr&gt;,
 ## #   passwords &lt;chr&gt;</code></pre>
 <p><br></p>
 <p><img src="/img/str_count.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Use <code>str_detect()</code> to detect <code>@</code> and <code>str_count()</code> to count the number of times <code>@</code> appears in the email ids.</p>
+<p>Use <code>str_detect()</code> to detect <code>@</code> and <code>str_count()</code> to count the number of times
+<code>@</code> appears in the email ids.</p>
 <p><br></p>
 <p><img src="/img/str_detect.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -122,7 +127,8 @@ str_detect(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <pre class="r"><code># count @
 str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <pre><code>##  [1] 1 1 1 1 1 1 1 1 1 1</code></pre>
-<p>We can use <code>str_c()</code> to concatenate strings. Let us add the string <code>email id:</code> before each email id in the data set.</p>
+<p>We can use <code>str_c()</code> to concatenate strings. Let us add the string <code>email id:</code> before each
+email id in the data set.</p>
 <p><br></p>
 <p><img src="/img/str_c.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -137,7 +143,10 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 ##  [8] &quot;email id:vhourihane7@ovh.net&quot;         
 ##  [9] &quot;email id:rdike8@timesonline.co.uk&quot;    
 ## [10] &quot;email id:tdudbridge9@clickbank.net&quot;</code></pre>
-<p>If we want to split a string into two parts using a particular pattern, we use <code>str_split()</code>. Let us split the domain name and extension from the domain column in the data. The domain name and extension are separated by <code>.</code> and we will use it to split the domain column. Since <code>.</code> is a special character, we will use two slashes to escape the special character.</p>
+<p>If we want to split a string into two parts using a particular pattern, we use <code>str_split()</code>.
+Let us split the domain name and extension from the domain column in the data. The domain name
+and extension are separated by <code>.</code> and we will use it to split the domain column. Since <code>.</code> is
+a special character, we will use two slashes to escape the special character.</p>
 <p><br></p>
 <p><img src="/img/str_split.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -171,7 +180,8 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 ## 
 ## [[10]]
 ## [1] &quot;jugem&quot; &quot;jp&quot;</code></pre>
-<p>We can truncate a string using <code>str_trunc()</code>. The default truncation happens at the beggining of the string but we can truncate the central part or the end of the string as well.</p>
+<p>We can truncate a string using <code>str_trunc()</code>. The default truncation happens at the beggining
+of the string but we can truncate the central part or the end of the string as well.</p>
 <pre class="r"><code>str_trunc(mockdata$email, width = 10)</code></pre>
 <pre><code>##  [1] &quot;mnewbur...&quot; &quot;mdanker...&quot; &quot;hgirhar...&quot; &quot;pmcmena...&quot; &quot;drisbro...&quot;
 ##  [6] &quot;cphlipp...&quot; &quot;kdodswe...&quot; &quot;vhourih...&quot; &quot;rdike8@...&quot; &quot;tdudbri...&quot;</code></pre>
@@ -184,7 +194,8 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <p><br></p>
 <p><img src="/img/str_sort_descending.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
-<p>Strings can be sorted using <code>str_sort()</code>. Let us quickly sort the emails in both ascending and descending orders.</p>
+<p>Strings can be sorted using <code>str_sort()</code>. Let us quickly sort the emails in both
+ascending and descending orders.</p>
 <p><br></p>
 <p><img src="/img/str_sort.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -214,7 +225,8 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 ##  [4] &quot;terencio mcillrick&quot; &quot;debee mcerlaine&quot;    &quot;fran painten&quot;      
 ##  [7] &quot;frasco bowich&quot;      &quot;car ponten&quot;         &quot;tades checcucci&quot;   
 ## [10] &quot;wilton kemmey&quot;</code></pre>
-<p>Parts of a string can be replaced using <code>str_replace()</code>. In the <code>address</code> column of the data set, let us replace:</p>
+<p>Parts of a string can be replaced using <code>str_replace()</code>. In the <code>address</code> column of the data set,
+let us replace:</p>
 <ul>
 <li>Street with ST</li>
 <li>Road with RD</li>
@@ -240,7 +252,8 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 <p><br></p>
 <pre class="r"><code>str_extract(mockdata$email, pattern = &quot;org&quot;)</code></pre>
 <pre><code>##  [1] NA    NA    &quot;org&quot; NA    NA    NA    &quot;org&quot; NA    NA    NA</code></pre>
-<p>Before we extract, we need to know whether the string contains text that match our pattern. Use <code>str_match()</code> to see if the pattern is present in the string.</p>
+<p>Before we extract, we need to know whether the string contains text that match our pattern.
+Use <code>str_match()</code> to see if the pattern is present in the string.</p>
 <p><br></p>
 <p><img src="/img/str_match.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -256,13 +269,17 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 ##  [8,] NA   
 ##  [9,] NA   
 ## [10,] NA</code></pre>
-<p>If we are dealing with a character vector and know that the pattern we are looking at is present in the vector, we might want to know the index of the strings in which it is present. Use <code>str_which()</code> to identify the index of the strings that match our pattern.</p>
+<p>If we are dealing with a character vector and know that the pattern we are looking at
+is present in the vector, we might want to know the index of the strings in which it is
+present. Use <code>str_which()</code> to identify the index of the strings that match our pattern.</p>
 <p><br></p>
 <p><img src="/img/str_which.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>str_which(mockdata$email, pattern = &quot;org&quot;)</code></pre>
 <pre><code>## [1] 3 7</code></pre>
-<p>Another objective might be to locate the position of the pattern we are looking for in the string. For example, if we want to know the position of <code>@</code> in the email ids, we can use <code>str_locate()</code>.</p>
+<p>Another objective might be to locate the position of the pattern we are looking for in the
+string. For example, if we want to know the position of <code>@</code> in the email ids, we can use
+<code>str_locate()</code>.</p>
 <p><br></p>
 <p><img src="/img/str_locate.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -278,19 +295,23 @@ str_count(mockdata$email, pattern = &quot;@&quot;)</code></pre>
 ##  [8,]    12  12
 ##  [9,]     7   7
 ## [10,]    12  12</code></pre>
-<p>The length of the string can be computed using <code>str_length()</code>. Let us ensure that the length of the strings in the <code>password</code> column is 16.</p>
+<p>The length of the string can be computed using <code>str_length()</code>. Let us ensure that the length
+of the strings in the <code>password</code> column is 16.</p>
 <p><br></p>
 <p><img src="/img/str_length.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>str_length(mockdata$passwords)</code></pre>
 <pre><code>##  [1] 16 16 16 16 16 16 16 16 16 16</code></pre>
-<p>We can extract parts of a string by specifying the starting and ending position using <code>str_sub()</code>. Let us extract the currency type from the <code>currency</code> column.</p>
+<p>We can extract parts of a string by specifying the starting and ending position using
+<code>str_sub()</code>. Let us extract the currency type from the <code>currency</code> column.</p>
 <p><br></p>
 <p><img src="/img/str_sub.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>str_sub(mockdata$currency, start = 1, end = 1)</code></pre>
 <pre><code>##  [1] &quot;¥&quot; &quot;$&quot; &quot;\200&quot; &quot;\200&quot; &quot;\200&quot; &quot;¥&quot; &quot;$&quot; &quot;¥&quot; &quot;\200&quot; &quot;\200&quot;</code></pre>
-<p>One final function that we will look at before the case study is <code>word()</code>. It extracts word(s) from sentences. We do not have any sentences in the data set, but let us use it to extract the first and last name from the <code>full_name</code> column.</p>
+<p>One final function that we will look at before the case study is <code>word()</code>. It extracts
+word(s) from sentences. We do not have any sentences in the data set, but let us use it
+to extract the first and last name from the <code>full_name</code> column.</p>
 <p><br></p>
 <p><img src="/img/word.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -324,7 +345,8 @@ emails</code></pre>
 ## [5] &quot;drisbrough4@bandcamp.com&quot;     &quot;cphlippi5@surveymonkey.com&quot;</code></pre>
 <div id="step-1-split-email-using-pattern-." class="section level4">
 <h4>Step 1: Split email using pattern <code>@</code>.</h4>
-<p>We will split the email using <code>str_split</code>. It will split a string using the pattern supplied. In our case the pattern is <code>@</code>.</p>
+<p>We will split the email using <code>str_split</code>. It will split a string
+using the pattern supplied. In our case the pattern is <code>@</code>.</p>
 <pre class="r"><code> str_split(emails, pattern = &#39;@&#39;)</code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;mnewburn0&quot;       &quot;fastcompany.com&quot;
@@ -346,8 +368,13 @@ emails</code></pre>
 </div>
 <div id="step-2-extract-the-second-element-from-the-resulting-list." class="section level4">
 <h4>Step 2: Extract the second element from the resulting list.</h4>
-<p>Step 1 returned a list. Each element of the list has two values. The first one is the username and the second is the domain name. Since we are extracting the domain name, we want the second value from each element of the list.</p>
-<p>We will use <code>map_chr()</code> from purrr to extract the domain names. It will return the second value from each element in the list. Since the domain name is a string, <code>map_chr()</code> will return a character vector.</p>
+<p>Step 1 returned a list. Each element of the list has two values. The first
+one is the username and the second is the domain name. Since we are
+extracting the domain name, we want the second value from each element of
+the list.</p>
+<p>We will use <code>map_chr()</code> from purrr to extract the domain names. It will
+return the second value from each element in the list. Since the domain
+name is a string, <code>map_chr()</code> will return a character vector.</p>
 <pre class="r"><code>emails %&gt;%
   str_split(pattern = &#39;@&#39;) %&gt;%
   map_chr(2)</code></pre>
@@ -356,7 +383,11 @@ emails</code></pre>
 </div>
 <div id="step-3-split-the-above-using-pattern-.." class="section level4">
 <h4>Step 3: Split the above using pattern <code>\\.</code>.</h4>
-<p>We want the domain name and not the extension. Step 2 returned a character vector and we need to split the domain name and the domain extension. They are separated by <code>.</code>. Since <code>.</code> is a special character, we will use <code>\\</code> before <code>.</code> to escape it. Let us split the domain name and domain extension using <code>str_split</code> and <code>\\.</code> as the pattern.</p>
+<p>We want the domain name and not the extension. Step 2 returned a
+character vector and we need to split the domain name and the domain
+extension. They are separated by <code>.</code>. Since <code>.</code> is a special character,
+we will use <code>\\</code> before <code>.</code> to escape it. Let us split the domain
+name and domain extension using <code>str_split</code> and <code>\\.</code> as the pattern.</p>
 <pre class="r"><code>emails %&gt;%
   str_split(pattern = &#39;@&#39;) %&gt;%
   map_chr(2) %&gt;%
@@ -381,7 +412,9 @@ emails</code></pre>
 </div>
 <div id="step-4-extract-the-first-element-from-the-resulting-list." class="section level4">
 <h4>Step 4: Extract the first element from the resulting list.</h4>
-<p>Now that we have separated the domain name from its extension, let us extract the first value from each element in the list returned in step 3. We will again use <code>map_chr</code> to achieve this.</p>
+<p>Now that we have separated the domain name from its extension, let us extract
+the first value from each element in the list returned in step 3. We will again
+use <code>map_chr</code> to achieve this.</p>
 <pre class="r"><code>emails %&gt;%
   str_split(pattern = &#39;@&#39;) %&gt;%
   map_chr(2) %&gt;%
@@ -448,7 +481,9 @@ img</code></pre>
 </div>
 <div id="step-2-extract-the-third-value-from-each-element-of-the-resulting-list" class="section level4">
 <h4>Step 2: Extract the third value from each element of the resulting list</h4>
-<p>Step 1 returned a list the elements of which have 3 values each. If you observe the list, the image type is in the 3rd value. We will now extract the third value from each element of the list using <code>map_chr</code>.</p>
+<p>Step 1 returned a list the elements of which have 3 values each. If you
+observe the list, the image type is in the 3rd value. We will now
+extract the third value from each element of the list using <code>map_chr</code>.</p>
 <pre class="r"><code>img %&gt;%
   str_split(pattern = &#39;\\.&#39;) %&gt;%
   map_chr(extract(3))</code></pre>
@@ -460,15 +495,20 @@ img</code></pre>
 <p>We can now extract the image type in two ways:</p>
 <ul>
 <li>subset the first 3 characters of the string</li>
-<li>split the string using pattern <code>/</code> and extract the first value from the elements of the resulting list</li>
+<li>split the string using pattern <code>/</code> and extract the first value from the
+elements of the resulting list</li>
 </ul>
-<p>Below is the first method. We know that the image type is 3 characters. So we use <code>str_sub</code> to subset the first 3 characters. The index positions are mentioned using <code>start</code> and <code>stop</code>.</p>
+<p>Below is the first method. We know that the image type is 3 characters. So
+we use <code>str_sub</code> to subset the first 3 characters. The index positions
+are mentioned using <code>start</code> and <code>stop</code>.</p>
 <pre class="r"><code>img %&gt;%
   str_split(pattern = &#39;\\.&#39;) %&gt;%
   map_chr(extract(3)) %&gt;%
   str_sub(start = 1, end = 3)</code></pre>
 <pre><code>## [1] &quot;jpg&quot; &quot;bmp&quot; &quot;bmp&quot; &quot;png&quot; &quot;jpg&quot; &quot;bmp&quot;</code></pre>
-<p>In case you are not sure about the length of the image type. In such cases, we will split the string using pattern <code>/</code> and then use <code>map_chr</code> to extract the first value of each element of the resulting list.</p>
+<p>In case you are not sure about the length of the image type. In such cases,
+we will split the string using pattern <code>/</code> and then use <code>map_chr</code> to
+extract the first value of each element of the resulting list.</p>
 <pre class="r"><code>img %&gt;%
   str_split(pattern = &#39;\\.&#39;) %&gt;%
   map_chr(extract(3)) %&gt;%
@@ -490,7 +530,12 @@ img</code></pre>
 </ul>
 <div id="step-1-locate-numbers-between-0-and-9." class="section level4">
 <h4>Step 1: Locate numbers between 0 and 9.</h4>
-<p>Let us inspect the image url. The dimension of the image appears after the domain extension and there are no numbers in the url before. We will locate the position or index of the first number in the url using <code>str_locate()</code> and using the pattern <code>[0-9]</code> which instructs to look for any number between and including 0 and 9.</p>
+<p>Let us inspect the image url. The dimension of the image appears
+after the domain extension and there are no numbers in the url
+before. We will locate the position or index of the first number
+in the url using <code>str_locate()</code> and using the pattern <code>[0-9]</code>
+which instructs to look for any number between and including 0
+and 9.</p>
 <pre class="r"><code>str_locate(img, pattern = &quot;[0-9]&quot;) </code></pre>
 <pre><code>##      start end
 ## [1,]    23  23
@@ -502,7 +547,8 @@ img</code></pre>
 </div>
 <div id="step-2-extract-url" class="section level4">
 <h4>Step 2: Extract url</h4>
-<p>We know where the dimension is located in the url. Let us extract the part of the url that contains the image dimension using <code>str_sub()</code>.</p>
+<p>We know where the dimension is located in the url. Let us extract the
+part of the url that contains the image dimension using <code>str_sub()</code>.</p>
 <pre class="r"><code>str_sub(img, start = 23) </code></pre>
 <pre><code>## [1] &quot;130x183.jpg/dddddd/000000&quot; &quot;106x217.bmp/dddddd/000000&quot;
 ## [3] &quot;146x127.bmp/cc0000/ffffff&quot; &quot;181x194.png/5fa2dd/ffffff&quot;
@@ -510,7 +556,11 @@ img</code></pre>
 </div>
 <div id="step-3-split-the-string-using-the-pattern-.." class="section level4">
 <h4>Step 3: Split the string using the pattern <code>\\.</code>.</h4>
-<p>From the previous step, we have the part of the url that contains the image dimension. To extract the dimension, we will split it from the rest of the url using <code>str_split()</code> and using the pattern <code>\\.</code> as it separates the dimension and the image extension.</p>
+<p>From the previous step, we have the part of the url that
+contains the image dimension. To extract the dimension, we
+will split it from the rest of the url using <code>str_split()</code>
+and using the pattern <code>\\.</code> as it separates the dimension
+and the image extension.</p>
 <pre class="r"><code>img %&gt;%
   str_sub(start = 23) %&gt;%
   str_split(pattern = &#39;\\.&#39;) </code></pre>
@@ -534,7 +584,12 @@ img</code></pre>
 </div>
 <div id="step-4-extract-the-first-element." class="section level4">
 <h4>Step 4: Extract the first element.</h4>
-<p>The above step resulted in a list which contains the image dimension and the rest of the url. Each element of the list is a character vector. We want to extract the first value in the character vector. Let us use <code>map_chr()</code> to extract the first value from each element of the list.</p>
+<p>The above step resulted in a list which contains the
+image dimension and the rest of the url. Each element
+of the list is a character vector. We want to extract
+the first value in the character vector. Let us use
+<code>map_chr()</code> to extract the first value from each
+element of the list.</p>
 <pre class="r"><code>img %&gt;%
   str_sub(start = 23) %&gt;%
   str_split(pattern = &#39;\\.&#39;) %&gt;%
@@ -560,7 +615,11 @@ url1</code></pre>
 </ul>
 <div id="step-1-split-the-url-using-the-pattern-." class="section level4">
 <h4>Step 1: Split the url using the pattern <code>://</code>.</h4>
-<p>The HTTP protocol is the first part of the url and is separated from the rest of the url by <code>:</code>. Let us split the url using <code>str_split()</code> and using the pattern <code>:</code>. Since <code>:</code> is a special character, we will escape it using <code>\\</code>.</p>
+<p>The HTTP protocol is the first part of the url and is
+separated from the rest of the url by <code>:</code>. Let us
+split the url using <code>str_split()</code> and using the
+pattern <code>:</code>. Since <code>:</code> is a special character, we
+will escape it using <code>\\</code>.</p>
 <pre class="r"><code>str_split(url1, pattern = &#39;://&#39;) </code></pre>
 <pre><code>## [[1]]
 ## [1] &quot;https&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
@@ -568,7 +627,9 @@ url1</code></pre>
 </div>
 <div id="step-2-extract-the-first-element." class="section level4">
 <h4>Step 2: Extract the first element.</h4>
-<p>The HTTP protocol is the first value in each element of the list. As we did in the previous example, we will extact it using <code>map_chr()</code> and <code>extract()</code>.</p>
+<p>The HTTP protocol is the first value in each element
+of the list. As we did in the previous example, we
+will extact it using <code>map_chr()</code> and <code>extract()</code>.</p>
 <pre class="r"><code>url1 %&gt;%
   str_split(pattern = &#39;://&#39;) %&gt;%
   map_chr(extract(1))</code></pre>
@@ -593,7 +654,8 @@ url1</code></pre>
 </ul>
 <div id="step-1-check-if-there-are-only-2-dots-in-the-url" class="section level4">
 <h4>Step 1: Check if there are only 2 dots in the URL</h4>
-<p>Let us locate all the dots in the url using <code>str_locate_all()</code> and see if any of them contain more than 2 dots.</p>
+<p>Let us locate all the dots in the url using <code>str_locate_all()</code> and see
+if any of them contain more than 2 dots.</p>
 <pre class="r"><code>urls %&gt;%
   str_locate_all(pattern = &#39;\\.&#39;) %&gt;%
   map_int(nrow) %&gt;%
@@ -603,7 +665,8 @@ url1</code></pre>
 </div>
 <div id="step-2-check-if-there-is-only-1-question-mark-in-the-url" class="section level4">
 <h4>Step 2: Check if there is only 1 question mark in the URL</h4>
-<p>The next step is to check if there is only one <code>?</code> (question mark) in the url.</p>
+<p>The next step is to check if there is only one <code>?</code> (question mark)
+in the url.</p>
 <pre class="r"><code>urls %&gt;%
   str_locate_all(pattern = &quot;[?]&quot;) %&gt;%
   map_int(nrow) %&gt;%
@@ -613,7 +676,10 @@ url1</code></pre>
 </div>
 <div id="step-3-detect-the-staritng-position-of-file-type" class="section level4">
 <h4>Step 3: Detect the staritng position of file type</h4>
-<p>Since the file type is located between the second dot and the first quesiton mark in the url, let us extract the location of the second dot and add 1 as the file type starts after the dot.</p>
+<p>Since the file type is located between the second dot and
+the first quesiton mark in the url, let us extract the
+location of the second dot and add 1 as the file type
+starts after the dot.</p>
 <pre class="r"><code>d &lt;- 
   urls %&gt;%
   str_locate_all(pattern = &#39;\\.&#39;) %&gt;%
@@ -625,7 +691,11 @@ d  </code></pre>
 </div>
 <div id="step-4-detect-the-ending-position-of-file-type" class="section level4">
 <h4>Step 4: Detect the ending position of file type</h4>
-<p>In step 2, we confirmed that the url has only one question mark. Let us locate the question mark in the url and subtract 1 (as the file type ends before the question mark) so that we get the ending postion of the file type. .</p>
+<p>In step 2, we confirmed that the url has only one question mark.
+Let us locate the question mark in the url and subtract 1 (as the
+file type ends before the question mark) so that we get the
+ending postion of the file type.
+.</p>
 <pre class="r"><code>q &lt;-  
   urls %&gt;%
   str_locate_all(pattern = &quot;[?]&quot;) %&gt;%
@@ -637,7 +707,9 @@ q</code></pre>
 </div>
 <div id="step-5-specify-the-index-position-for-extracting-file-type" class="section level4">
 <h4>Step 5: Specify the index position for extracting file type</h4>
-<p>From steps 3 and 4, we have the location of the second dot and the first question mark in the url. Let us use them with <code>str_sub()</code> to extract the file type.</p>
+<p>From steps 3 and 4, we have the location of the second dot and the
+first question mark in the url. Let us use them with <code>str_sub()</code>
+to extract the file type.</p>
 <pre class="r"><code>str_sub(urls, start = d, end = q)</code></pre>
 <pre><code>## [1] &quot;jsp&quot;  &quot;json&quot; &quot;json&quot;</code></pre>
 </div>

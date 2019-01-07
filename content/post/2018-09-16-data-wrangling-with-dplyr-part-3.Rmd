@@ -3,7 +3,7 @@ title: Data Wrangling with dplyr - Part 3
 author: Aravind Hebbali
 twitterImg: /img/dplyr.png
 description: "Use dplyr to extract, sample and summarize data."
-date: '2018-05-19'
+date: '2018-09-16'
 slug: data-wrangling-with-dplyr-part-3
 topics:
   - data wrangling
