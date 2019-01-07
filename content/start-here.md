@@ -7,7 +7,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Data Wrangling With R
 
-- [Import Data into R - Part 1](/import-data-into-r-part-1/){:target="_blank"}
+- [Import Data into R - Part 1](/import-data-into-r-part-1/)
 - [Import Data into R - Part 2](/import-data-into-r-part-2/)
 - [Data Wrangling with dplyr - Part 1](/data-manipulation-in-r-with-dplyr-part-1/)
 - [Data Wrangling with dplyr - Part 2](/data-manipulation-in-r-with-dplyr-part-2/)
