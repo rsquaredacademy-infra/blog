@@ -65,7 +65,7 @@ post = "/:slug/"
     identifier = "app"
     url = "https://apps.rsquaredacademy.com/" 
   [[menu.main]]
-    name = "Packages"
+    name = "R Packages"
     pre = "<i class='fa fa-code fa-fw'></i>"
     weight = 7
     identifier = "package"
@@ -80,13 +80,13 @@ post = "/:slug/"
     name = "R Bloggers"
     pre = "<i class='fa fa-cubes fa-fw'></i>"
     weight = 9
-    identifier = "package"
+    identifier = "r-blogger"
     url = "https://r-bloggers.com/" 
   [[menu.main]]
     name = "R Weekly"
     pre = "<i class='fa fa-cubes fa-fw'></i>"
     weight = 10
-    identifier = "package"
+    identifier = "r-weekly"
     url = "https://rweekly.org" 
 
 [social]
