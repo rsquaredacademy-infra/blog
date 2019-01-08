@@ -18,3 +18,6 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Working with strings in R using stringr](/hacking-strings-with-stringr/)
 - [Working with factors using forcats](/working-with-categorical-data-using-forcats/)
 
+## Databases
+
+- [Quick Guide: R & SQLite](/quick-guide-r-sqlite/)
