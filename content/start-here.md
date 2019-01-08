@@ -24,3 +24,9 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Data Wrangling with dbplyr](/data-wrangling-with-dbplyr)
 - [SQL for Data Science - Part 1](/sql-for-data-science-part-1)
 - [SQL for Data Science - Part 2](/sql-for-data-science-part-2)
+
+## Data Visualization With R
+
+### Base 
+
+- [Combine Plots](/data-visualization-with-r-combining-plots/)
