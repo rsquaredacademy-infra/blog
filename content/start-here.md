@@ -29,6 +29,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ### Base 
 
+- [Introduction](/data-visualization-with-r-introduction/)
 - [Title and Axis Labels](/data-visualization-with-r-title-and-axis-labels/)
 - [Scatter Plots](/data-visualization-with-r-scatter-plots/)
 - [Line Graphs](/data-visualization-with-r-line-graphs/)
