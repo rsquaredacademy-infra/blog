@@ -7,9 +7,10 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Introduction to R
 
+- [Variables](/variables-in-r/)
+- [Data Types](/data-types-in-r/)
 - [Getting Help in R](/getting-help-in-r/)
 - [Beginners Guide to R Pacakge Ecosystem](/beginners-guide-to-r-package-ecosystem/)
-
 
 ## Data Types/Structures
 
