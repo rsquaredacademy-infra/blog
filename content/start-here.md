@@ -5,6 +5,12 @@ date: "2016-05-05T21:48:51-07:00"
 
 New to our blog? Welcome aboard! There are posts on a wide variety of topics listed below. If you are new to R, we suggest you start with **Introduction to R** section. If you have been using R for a while, feel free to choose any of the topics.
 
+## Introduction to R
+
+
+- [Beginners Guide to R Pacakge Ecosystem](/beginners-guide-to-r-package-ecosystem/)
+
+
 ## Data Types/Structures
 
 - [Vectors - Part 1](/vectors-part-1/)
