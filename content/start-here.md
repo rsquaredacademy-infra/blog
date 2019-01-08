@@ -7,6 +7,9 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Data Types/Structures
 
+- [Vectors - Part 1](/vectors-part-1/)
+- [Vectors - Part 2](/vectors-part-2/)
+- [Vectors - Part 3](/vectors-part-3/)
 - [Matrix - Part 1](/matrix-part-1/)
 - [Matrix - Part 2](/matrix-part-2/)
 - [Lists](/introduction-to-lists/)

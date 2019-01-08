@@ -1,0 +1,191 @@
+---
+title: Vectors - Part 2
+date: '2017-03-29'
+slug: vectors-part-2
+topics:
+  - r-introduction
+tags:
+  - vectors
+---
+
+## Introduction
+
+In the previous post, we learnt to create vectors of different data types. In this post, we will learn to
+
+- coerce different data types
+- perform simple operations on vectors
+- handle missing data 
+- index/subset vectors
+
+## Naming Vector Elements
+
+It is possible to name the different elements of a vector. The advantage of naming vector elements is that we can later on use these names to access the elements. Use `names()` to specify the names of a vector. You can specify the names while creating the vector or add them later.
+
+#### Method 1: Create vector and add names later
+
+```{r vect8, collapse=TRUE}
+# create vector and add names later
+vect1 <- c(1, 2, 3)
+
+# name the elements of the vector
+names(vect1) <- c("One", "Two", "Three")
+
+# call vect1
+vect1
+```
+
+#### Method 2: Specify names while creating vector
+
+```{r vect9, collapse=TRUE}
+# specify names while creating vector
+vect2 <- c(John = 1, Jack = 2, Jill = 3, Jovial = 4)
+
+# call vect2
+vect2
+```
+
+## Vector Coercion
+
+Vectors are homogeneous i.e. all the elements of the vector must be of the same type. If we try to create a vector by combining different data types, the elements will be coerced to the most flexible type. The below table shows the order in which coercion occurs. 
+
+`character` data type is the most flexible while `logical` data type is the least flexible. If you try to combine any other data type with `character`, all the elements will be coerced to type `character`. In the absence of `character` data, all elements will be coerced to `numeric`. Finally, if the data does not include `character` or `numeric` types, all the elements will be coerced to `integer` type. 
+
+#### Case 1: Different Data Types
+
+```{r vect10, collapse=TRUE}
+# vector of different data types
+vect1 <- c(1, 1L, 'one', TRUE)
+
+# call vect1
+vect1
+
+# check data type
+class(vect1)
+``` 
+
+#### Case 2: Numeric, Integer and Logical
+
+```{r vect11, collapse=TRUE}
+# vector of different data types
+vect1 <- c(1, 1L, TRUE)
+
+# call vect1
+vect1
+
+# check data type
+class(vect1)
+``` 
+
+#### Case : Integer and Logical
+
+```{r vect12, collapse=TRUE}
+# vector of different data types
+vect1 <- c(1L, TRUE)
+
+# call vect1
+vect1
+
+# check data type
+class(vect1)
+``` 
+
+To summarize, below is the order in which coercion takes place:
+
+## Vector Operations
+
+In this section, we look at simple operations that can be performed on vectors in R. Remember that the nature of the operations depends upon the type of data. Below are a few examples:
+
+#### Case 1: Vectors of same length
+
+```{r vect13, collapse=TRUE}
+# create two vectors
+vect1 <- c(1, 3, 8, 4)
+vect2 <- c(2, 7, 1, 9)
+
+# addition
+vect1 + vect2
+
+# subtraction
+vect1 - vect2
+
+# multiplication
+vect1 * vect2
+
+# division
+vect1 / vect2
+```
+
+#### Case 2: Vectors of different length
+
+In the previous case, the length i.e. the number of elements in the vectors were same. What happens if the length of the vectors are unequal? In such cases, the shorter vector is recycled to match the length of the longer vector. The below example should clear this concept:
+
+```{r vect14, collapse=TRUE}
+# create two vectors
+vect1 <- c(2, 7)
+vect2 <- c(1, 8, 5, 2)
+
+# addition
+vect1 + vect2
+
+# subtraction
+vect1 - vect2
+
+# multiplication
+vect1 * vect2
+
+# division
+vect1 / vect2
+```
+
+## Missing Data
+
+Missing data is a reality. No matter how careful you are in collecting data for your analysis, chances are always high that you end up with some missing data. In R missing values are represented by `NA`. In this section, we will focus on the following:
+
+- test for missing data
+- remove missing data
+- exclude missing data from analysis
+
+#### Detect missing data
+
+We first create a vector with missing values. After that, we will use `is.na()` to test whether the data contains missing values. `is.na()` returns a logical vector equal to the length of the vector being tested. Another function that can be used for detecting missing values is `complete.cases()`. Below is an example:
+
+```{r vect15, collapse=TRUE}
+# vector with missing values
+vect1 <- c(1, 3, NA, 5, 2)
+
+# use is.na
+is.na(vect1)
+
+# use complete.cases
+complete.cases(vect1)
+```
+
+#### Omit missing data
+
+In the presensce of missing data, all computations in R will return `NA`. To avoid this, we might want to remove the missing data before doing any computation. `na.omit()` will remove all missing values from the data. Let us look at an example:
+
+```{r vect16, collapse=TRUE}
+# vector with missing values
+vect1 <- c(1, 3, NA, 5, 2)
+
+# call vect1
+vect1
+
+# omit missing values
+na.omit(vect1)
+```
+
+#### Exclude missing data
+
+To exclude missing values from computations, use `na.rm` and set it to `TRUE`. 
+
+```{r vect17, collapse=TRUE}
+# vector with missing values
+vect1 <- c(1, 3, NA, 5, 2)
+
+# compute mean
+mean(vect1)
+
+# compute mean by excluding missing value
+mean(vect1, na.rm = TRUE)
+```
