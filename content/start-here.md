@@ -5,6 +5,10 @@ date: "2016-05-05T21:48:51-07:00"
 
 New to our blog? Welcome aboard! There are posts on a wide variety of topics listed below. If you are new to R, we suggest you start with **Introduction to R** section. If you have been using R for a while, feel free to choose any of the topics.
 
+## Data Types/Structures
+
+- [Dataframes](/introduction-to-dataframes/)
+
 ## Data Wrangling With R
 
 - [Import Data into R - Part 1](/import-data-into-r-part-1/)
@@ -39,3 +43,4 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Legends](/data-visualization-with-r-legends/)
 - [Text Annotations](/data-visualization-with-r-text-annotations/)
 - [Combine Plots](/data-visualization-with-r-combining-plots/)
+
