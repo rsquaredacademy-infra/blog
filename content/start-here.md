@@ -29,4 +29,5 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ### Base 
 
+- [Text Annotations](/data-visualization-with-r-text-annotations/)
 - [Combine Plots](/data-visualization-with-r-combining-plots/)
