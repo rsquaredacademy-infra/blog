@@ -1,0 +1,214 @@
+---
+title: Getting Help In R
+author: Aravind Hebbali
+twitterImg: /img/help_banner.png
+description: "Getting Help in R."
+date: '2017-03-01'
+slug: getting-help-in-r
+categories:
+  - r-introduction
+tags:
+  - help
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In the previous post, we learnt about data types in R. In this post, we will learn about the different methods of getting help in R. Often we get stuck while doing some analysis as either we do not know the correct function to use or its syntax. It is important for anyone who is new to R to know the right place to look for help. There are two ways to look for help in R:</p>
+<ul>
+<li>built in help system</li>
+<li>online</li>
+</ul>
+<p>In the first section, we will look at various ways to access the built in help system of R. In the second section, we will look at various online resources that can supplement the built in help system. Let us get started!</p>
+</div>
+<div id="online-resources" class="section level2">
+<h2>Online Resources</h2>
+<div id="r-bloggers" class="section level5">
+<h5>R Bloggers</h5>
+<p><a href="https://www.r-bloggers.com/">R Bloggers</a> aggregates blogs written in english from across the globe. This is the first place you want to visit if you want help with R, data analysis, visualization and machine learning. There are blogs on a wide range of topics and the latest content is delivered to your inbox if you subscribe. If you are a blogger yourself, share it with th R community by adding your blog to R Bloggers.</p>
+</div>
+<div id="stack-overflow" class="section level5">
+<h5>Stack Overflow</h5>
+<p><a href="https://stackoverflow.com/questions/tagged/r">Stack Overflow</a> is a great place to visit if you are having trouble with R code or packages. Chances are high that someone has already encountered the same or similar problem and you can use the answers given by R experts. In case you have encountered a new problem or issue, you can ask for help by providing a reproducible example of your analysis along with the R code. Use the <a href="http://reprex.tidyverse.org/">reprex</a> package to create reproducible examples.</p>
+</div>
+<div id="twitter" class="section level5">
+<h5>Twitter</h5>
+<p>The R community is very active on Twitter and there are lot of R experts who are willing to help those who are new to R. Use the hashtag <a href="https://twitter.com/search?q=%23rstats">#rstats</a> if you are asking for help or guidance on Twitter.</p>
+</div>
+<div id="rstudio-community" class="section level4">
+<h4>RStudio Community</h4>
+<p><a href="https://community.rstudio.com/">RStudio Community</a> is similar to Stack Overflow. You can ask questions
+related to RStudio, Shiny and tidyverse.</p>
+<div id="rstudio" class="section level5">
+<h5>RStudio</h5>
+<p><a href="https://resources.rstudio.com/">RStudio</a> has very good resources including cheatsheets, webinars and blogs.</p>
+</div>
+<div id="reddit" class="section level5">
+<h5>Reddit</h5>
+<p><a href="https://www.reddit.com/r/rstats/">Reddit</a> is another place where you can look for help. The discussions are moderated by R experts. There are subreddits for <a href="https://www.reddit.com/r/rstats/">Rstats</a>, <a href="https://www.reddit.com/r/Rlanguage/">Rlanguage</a>, <a href="https://www.reddit.com/r/rshiny/">Rstudio</a> and <a href="https://www.reddit.com/r/RStudio/">Rshiny</a>.</p>
+</div>
+<div id="r-weekly" class="section level5">
+<h5>R Weekly</h5>
+<p>Visit <a href="https://rweekly.org/">RWeekly</a> to get regular updates about the R community. You can find information about new packages, blogs, conferences, workshops, tutorials and R jobs.</p>
+</div>
+<div id="r-user-groups" class="section level5">
+<h5>R User Groups</h5>
+<p>There are several R User Groups active across the globe. You can find the list <a href="https://jumpingrivers.github.io/meetingsR/r-user-groups.html">here</a>. Join the local user group to meet, discuss and learn from other R enthusiasts and experts.</p>
+</div>
+<div id="data-helpers" class="section level5">
+<h5>Data Helpers</h5>
+<p><a href="http://www.datahelpers.org/">Data Helpers</a> is a list of data analysts, scientists and engineers willing to offer guidance put together by <a href="https://twitter.com/AngeBassa/">Angela Bassa</a>. Visit the website to learn more about how you can approach for help and guidance.</p>
+</div>
+</div>
+</div>
+<div id="internal" class="section level2">
+<h2>Internal</h2>
+<p>In this section, we will look at the following functions:</p>
+<ul>
+<li><code>help.start()</code></li>
+<li><code>help()</code></li>
+<li><code>?</code></li>
+<li><code>??</code></li>
+<li><code>help.search()</code></li>
+<li><code>demo()</code></li>
+<li><code>example()</code></li>
+<li><code>library()</code></li>
+<li><code>vignette()</code></li>
+<li><code>browseVignettes()</code></li>
+</ul>
+<div id="help.start" class="section level3">
+<h3>help.start</h3>
+<p>The <code>help.start()</code> function opens the documetation page in your browser. Here you can find manuals, reference and other materials.</p>
+<pre class="r"><code>help.start()</code></pre>
+<pre><code>## starting httpd help server ... done</code></pre>
+<pre><code>## If nothing happens, you should open
+## &#39;http://127.0.0.1:21386/doc/html/index.html&#39; yourself</code></pre>
+</div>
+<div id="help" class="section level3">
+<h3>help</h3>
+<p>Use <code>help()</code> to access the documentation of functions and data sets. <code>?</code> is a shortcut for <code>help()</code> and returns the same information.</p>
+<pre class="r"><code>help(plot)
+?plot</code></pre>
+</div>
+<div id="help.search" class="section level3">
+<h3>help.search</h3>
+<p><code>help.search()</code> will search all sources of documentation and return those that match the search string. <code>??</code> is a shortcut for <code>help.search()</code> and returns the same information.</p>
+<pre class="r"><code>help.search(&#39;regression&#39;)
+??regression</code></pre>
+</div>
+<div id="demo" class="section level3">
+<h3>demo</h3>
+<p>demo displays an interactive demonstration of certain topics provided in a R package. Typing <code>demo()</code> in the console will list the demos available in all the R packages installed.</p>
+<pre class="r"><code>demo()
+demo(scoping)</code></pre>
+<pre><code>## 
+## 
+##  demo(scoping)
+##  ---- ~~~~~~~
+## 
+## &gt; ## Here is a little example which shows a fundamental difference between
+## &gt; ## R and S.  It is a little example from Abelson and Sussman which models
+## &gt; ## the way in which bank accounts work.    It shows how R functions can
+## &gt; ## encapsulate state information.
+## &gt; ##
+## &gt; ## When invoked, &quot;open.account&quot; defines and returns three functions
+## &gt; ## in a list.  Because the variable &quot;total&quot; exists in the environment
+## &gt; ## where these functions are defined they have access to its value.
+## &gt; ## This is even true when &quot;open.account&quot; has returned.  The only way
+## &gt; ## to access the value of &quot;total&quot; is through the accessor functions
+## &gt; ## withdraw, deposit and balance.  Separate accounts maintain their
+## &gt; ## own balances.
+## &gt; ##
+## &gt; ## This is a very nifty way of creating &quot;closures&quot; and a little thought
+## &gt; ## will show you that there are many ways of using this in statistics.
+## &gt; 
+## &gt; #  Copyright (C) 1997-8 The R Core Team
+## &gt; 
+## &gt; open.account &lt;- function(total) {
+## + 
+## +     list(
+## +     deposit = function(amount) {
+## +         if(amount &lt;= 0)
+## +         stop(&quot;Deposits must be positive!\n&quot;)
+## +         total &lt;&lt;- total + amount
+## +         cat(amount,&quot;deposited. Your balance is&quot;, total, &quot;\n\n&quot;)
+## +     },
+## +     withdraw = function(amount) {
+## +         if(amount &gt; total)
+## +         stop(&quot;You don&#39;t have that much money!\n&quot;)
+## +         total &lt;&lt;- total - amount
+## +         cat(amount,&quot;withdrawn.  Your balance is&quot;, total, &quot;\n\n&quot;)
+## +     },
+## +     balance = function() {
+## +         cat(&quot;Your balance is&quot;, total, &quot;\n\n&quot;)
+## +     }
+## +     )
+## + }
+## 
+## &gt; ross &lt;- open.account(100)
+## 
+## &gt; robert &lt;- open.account(200)
+## 
+## &gt; ross$withdraw(30)
+## 30 withdrawn.  Your balance is 70 
+## 
+## 
+## &gt; ross$balance()
+## Your balance is 70 
+## 
+## 
+## &gt; robert$balance()
+## Your balance is 200 
+## 
+## 
+## &gt; ross$deposit(50)
+## 50 deposited. Your balance is 120 
+## 
+## 
+## &gt; ross$balance()
+## Your balance is 120 
+## 
+## 
+## &gt; try(ross$withdraw(500)) # no way..</code></pre>
+</div>
+<div id="example" class="section level3">
+<h3>example</h3>
+<p><code>example()</code> displays examples of the specified topic if available.</p>
+<pre class="r"><code>example(&#39;mean&#39;)</code></pre>
+<pre><code>## 
+## mean&gt; x &lt;- c(0:10, 50)
+## 
+## mean&gt; xm &lt;- mean(x)
+## 
+## mean&gt; c(xm, mean(x, trim = 0.10))
+## [1] 8.75 5.50</code></pre>
+</div>
+</div>
+<div id="package-documentation" class="section level2">
+<h2>Package Documentation</h2>
+<div id="library" class="section level3">
+<h3>library</h3>
+<p>Access the documentation of a package using <code>help()</code> inside <code>library()</code>. The package need not be installed for accessing the documentation.</p>
+<pre class="r"><code>library(help = &#39;ggplot2&#39;)</code></pre>
+</div>
+<div id="vignette" class="section level3">
+<h3>vignette</h3>
+<p>A vignette is a long form guide to a R package. You can access the vignettes available using <code>vignette()</code>. It will display alist of vignettes available in installed packages.</p>
+<pre class="r"><code>vignette()</code></pre>
+<p>To access a specific vignette from a package, specify the name of the vignette and the package.</p>
+<pre class="r"><code>vignette(&#39;dplyr&#39;, package = &#39;dplyr&#39;)</code></pre>
+</div>
+<div id="browsevignettes" class="section level3">
+<h3>browseVignettes</h3>
+<p><code>browseVignettes()</code> is another way to access the vignettes in installed packages. It will list the vignettes in each package along with links to the web page and R code.</p>
+<pre class="r"><code>browseVignettes()</code></pre>
+</div>
+<div id="rsitesearch" class="section level3">
+<h3>RsiteSearch</h3>
+<p><code>RsiteSearch()</code> will search for a specified topics in help pages, vignettes and task views using the search engine at this <a href="http://search.r-project.org/">link</a> and return the result in a browser.</p>
+<pre class="r"><code>RSiteSearch(&#39;glm&#39;)</code></pre>
+<pre><code>## A search query has been submitted to http://search.r-project.org
+## The results page should open in your browser shortly</code></pre>
+</div>
+</div>

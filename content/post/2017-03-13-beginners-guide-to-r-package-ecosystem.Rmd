@@ -1,5 +1,8 @@
 ---
 title: Beginners Guide to R Package Ecosystem
+author: Aravind Hebbali
+twitterImg: /img/package_banner.png
+description: "Beginners Guide to R Package System."
 date: '2017-03-13'
 slug: beginners-guide-to-r-package-ecosystem
 categories:

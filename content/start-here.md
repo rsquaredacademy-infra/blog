@@ -7,7 +7,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Introduction to R
 
-
+- [Getting Help in R](/getting-help-in-r/)
 - [Beginners Guide to R Pacakge Ecosystem](/beginners-guide-to-r-package-ecosystem/)
 
 
