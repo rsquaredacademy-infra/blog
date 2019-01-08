@@ -1,7 +1,7 @@
 ---
 title: 'Quick Guide: R & SQLite'
 author: Aravind Hebbali
-twitterImg: /img/forcats.png
+twitterImg: /img/database.png
 description: "Learn to work with databases in R using DBI."
 date: '2018-11-27'
 slug: quick-guide-r-sqlite
