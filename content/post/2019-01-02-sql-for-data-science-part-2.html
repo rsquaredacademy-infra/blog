@@ -1,0 +1,189 @@
+---
+title: SQL for Data Science - Part 2
+author: Aravind Hebbali
+twitterImg: /img/sql_banner.png
+description: "Learn SQL for Data Science."
+date: '2019-01-02'
+slug: sql-for-data-science-part-2
+categories:
+  - database
+tags:
+  - sql
+  - sqlite
+---
+
+
+
+<div id="introduction" class="section level4">
+<h4>Introduction</h4>
+<p>This is the fourth post in the series <strong>R &amp; Databases</strong>. You can find the links to the other two posts of this series below:</p>
+<ul>
+<li><a href="https://blog.rsquaredacademy.com/quick-guide-r-sqlite/">Quick Guide: R &amp; SQLite</a></li>
+<li><a href="https://blog.rsquaredacademy.com/data-wrangling-with-dbplyr/">Data Wrangling with dbplyr</a></li>
+<li><a href="https://blog.rsquaredacademy.com/sql-for-data-science-part-1/">SQL for Data Science - Part 1</a></li>
+</ul>
+<p>In this post, we will learn to</p>
+<ul>
+<li>aggregate data</li>
+<li>order data</li>
+<li>and group data</li>
+</ul>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">DBI</a></li>
+<li><a href="https://rstats-db.github.io/RSQLite/">RSQLite</a></li>
+<li><a href="http://dbplyr.tidyverse.org/">dbplyr</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/691dba8e13873c648bfdb91aba65d4d7">here</a>.</p>
+<div id="set-up" class="section level4">
+<h4>Set Up</h4>
+<pre class="r"><code>ecom &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;)
+con &lt;- DBI::dbConnect(RSQLite::SQLite(), &quot;:memory:&quot;)
+copy_to(con, ecom)</code></pre>
+</div>
+<div id="aggregate" class="section level4">
+<h4>Aggregate</h4>
+<p>Let us combine the aggregate statements with WHERE statement to filter data.</p>
+<ul>
+<li>SUM() : returns the total sum of a numeric column</li>
+</ul>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT SUM(n_visit) FROM ecom&quot;)</code></pre>
+<pre><code>##   SUM(n_visit)
+## 1         4972</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT SUM(n_visit) 
+                 FROM ecom 
+                 WHERE n_visit &gt; 5&quot;)</code></pre>
+<pre><code>##   SUM(n_visit)
+## 1         3574</code></pre>
+<ul>
+<li>AVG() : returns the average value of a numeric column</li>
+</ul>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT AVG(n_visit) FROM ecom&quot;)</code></pre>
+<pre><code>##   AVG(n_visit)
+## 1        4.972</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT AVG(n_visit) 
+                 FROM ecom 
+                 WHERE country LIKE &#39;P%&#39;&quot;)</code></pre>
+<pre><code>##   AVG(n_visit)
+## 1     5.079137</code></pre>
+<ul>
+<li>MAX() : returns the largest value of the selected column</li>
+</ul>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MAX(n_visit) FROM ecom&quot;)</code></pre>
+<pre><code>##   MAX(n_visit)
+## 1           10</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MAX(n_visit) 
+                 FROM ecom 
+                 WHERE device == &#39;tablet&#39;&quot;)</code></pre>
+<pre><code>##   MAX(n_visit)
+## 1           10</code></pre>
+<ul>
+<li>MIN() : returns the smallest value of the selected column</li>
+</ul>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MIN(n_visit) FROM ecom&quot;)</code></pre>
+<pre><code>##   MIN(n_visit)
+## 1            0</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MIN(n_visit) 
+                 FROM ecom 
+                 WHERE duration BETWEEN 600 AND 900&quot;)</code></pre>
+<pre><code>##   MIN(n_visit)
+## 1            0</code></pre>
+</div>
+<div id="alias" class="section level4">
+<h4>Alias</h4>
+<p>SQL aliases are used to give a table, or a column in a table, a temporary name. They are often used to make column names more readable. An alias only exists for the duration of the query. Below are a
+few examples:</p>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT AVG(n_visit) AS avg_mobile 
+                 FROM ecom 
+                 WHERE device == &#39;mobile&#39;&quot;)</code></pre>
+<pre><code>##   avg_mobile
+## 1   5.479651</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MAX(n_visit) AS max_visit 
+                 FROM ecom&quot;)</code></pre>
+<pre><code>##   max_visit
+## 1        10</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT MIN(duration) AS min_duration 
+                 FROM ecom&quot;)</code></pre>
+<pre><code>##   min_duration
+## 1           10</code></pre>
+</div>
+<div id="order-by" class="section level4">
+<h4>Order By</h4>
+<p>The ORDER BY keyword is used to sort the records in ascending or descending order. By default, the records are sorted in ascending order. Use the DESC keyword if you want to sort the records in descending order,</p>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
+                 FROM ecom 
+                 ORDER BY country&quot;)</code></pre>
+<pre><code>##        id referrer device bouncers n_visit n_pages duration
+## 1     232   social laptop        0       8       2       60
+## 2     299    yahoo laptop        0      10      18      180
+## 3     570   social laptop        1       2       1      274
+## 4     677   direct tablet        1      10       1      682
+##                               country purchase order_items order_value
+## 1                         Afghanistan        0           0           0
+## 2                         Afghanistan        0           0           0
+## 3                         Afghanistan        0           0           0
+## 4                         Afghanistan        0           0           0
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 996 rows ]</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT *  
+                 FROM ecom 
+                 ORDER BY duration&quot;)</code></pre>
+<pre><code>##        id referrer device bouncers n_visit n_pages duration
+## 1     236    yahoo tablet        1       5       1       10
+## 2     615   social laptop        1       1       1       10
+## 3     392    yahoo laptop        0       0       1       12
+## 4     688   social mobile        1       2       1       12
+##                               country purchase order_items order_value
+## 1                              Poland        0           0           0
+## 2                             Finland        0           0           0
+## 3                           Indonesia        0           0           0
+## 4                            Botswana        0           0           0
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 996 rows ]</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
+                 FROM ecom 
+                 ORDER BY n_visit DESC&quot;)</code></pre>
+<pre><code>##        id referrer device bouncers n_visit n_pages duration
+## 1       1   google laptop        1      10       1      693
+## 2       7    yahoo mobile        1      10       1       75
+## 3       8   direct mobile        1      10       1      908
+## 4      29   google mobile        1      10       1      338
+##                               country purchase order_items order_value
+## 1                      Czech Republic        0           0           0
+## 2                          Bangladesh        0           0           0
+## 3                           Indonesia        0           0           0
+## 4                              Russia        0           0           0
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 996 rows ]</code></pre>
+</div>
+<div id="group-by" class="section level4">
+<h4>Group By</h4>
+<p>The GROUP BY statement is used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result by one or more columns.</p>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT device, 
+                 count(*) AS visits 
+                 FROM ecom 
+                 GROUP BY device 
+                 ORDER by visits DESC&quot;)</code></pre>
+<pre><code>##   device visits
+## 1 mobile    344
+## 2 tablet    331
+## 3 laptop    325</code></pre>
+<pre class="r"><code>dbGetQuery(con, &quot;SELECT device, MAX(duration) AS max_duration 
+                 FROM ecom 
+                 GROUP BY device 
+                 ORDER by max_duration DESC&quot;)</code></pre>
+<pre><code>##   device max_duration
+## 1 tablet          999
+## 2 laptop          997
+## 3 mobile          994</code></pre>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>In this post, we learnt to</p>
+<ul>
+<li>aggregate data</li>
+<li>order data</li>
+<li>and group data</li>
+</ul>
+</div>
