@@ -7,6 +7,8 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Data Types/Structures
 
+- [Matrix - Part 1](/matrix-part-1/)
+- [Matrix - Part 2](/matrix-part-2/)
 - [Lists](/introduction-to-lists/)
 - [Factors](/introduction-to-factors/)
 - [Dataframes](/introduction-to-dataframes/)
