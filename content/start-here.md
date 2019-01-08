@@ -29,6 +29,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ### Base 
 
+- [Line Graphs](/data-visualization-with-r-line-graphs/)
 - [Bar Plots](/data-visualization-with-r-bar-plots/)
 - [Box Plots](/data-visualization-with-r-box-plots/)
 - [Histogram](/data-visualization-with-r-histogram/)
