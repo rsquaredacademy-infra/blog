@@ -7,6 +7,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Data Types/Structures
 
+- [Factors](/introduction-to-factors/)
 - [Dataframes](/introduction-to-dataframes/)
 
 ## Data Wrangling With R
