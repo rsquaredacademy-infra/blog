@@ -104,11 +104,11 @@ view the example data sets below.</p>
 <div id="inner-join" class="section level2">
 <h2>Inner Join</h2>
 <p><br></p>
-<p><img src="/img/draw_inner.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Inner join return all rows from <code>Age</code> where there are matching values in
 <code>Height</code>, and all columns from <code>Age</code> and <code>Height</code>. If there are multiple matches
 between <code>Age</code> and <code>Height</code>, all combination of the matches are returned.</p>
+<p><br></p>
+<p><img src="/img/draw_inner.png" width="100%" style="display: block; margin: auto;" /></p>
 <div id="case-study-details-of-customers-who-have-placed-orders-and-their-order-details" class="section level4">
 <h4>Case Study: Details of customers who have placed orders and their order details</h4>
 <p>To get data for all those customers who have placed orders in the past let us
@@ -133,12 +133,12 @@ join the <code>order</code> data with the <code>customer</code> data using <code
 <div id="left-join" class="section level2">
 <h2>Left Join</h2>
 <p><br></p>
-<p><img src="/img/draw_left.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Left join return all rows from <code>Age</code>, and all columns from <code>Age</code> and <code>Height</code>.
 Rows in <code>Age</code> with no match in <code>Height</code> will have NA values in the new columns.
 If there are multiple matches between <code>Age</code> and <code>Height</code>, all combinations of
 the matches are returned.</p>
+<p><br></p>
+<p><img src="/img/draw_left.png" width="100%" style="display: block; margin: auto;" /></p>
 <div id="case-study-details-of-customers-and-their-orders-irrespective-of-whether-a-customer-has" class="section level4">
 <h4>Case Study: Details of customers and their orders irrespective of whether a customer has</h4>
 <p>placed orders or not.</p>
@@ -165,12 +165,12 @@ customer has placed orders or not let us join the <code>order</code> data with t
 <div id="right-join" class="section level2">
 <h2>Right Join</h2>
 <p><br></p>
-<p><img src="/img/draw_right.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Right join return all rows from <code>Height</code>, and all columns from <code>Age</code> and
 <code>Height</code>. Rows in <code>Height</code> with no match in <code>Age</code> will have NA values in the
 new columns. If there are multiple matches between <code>Age</code> and <code>Height</code>, all
 combinations of the matches are returned.</p>
+<p><br></p>
+<p><img src="/img/draw_right.png" width="100%" style="display: block; margin: auto;" /></p>
 <div id="case-study-customer-details-for-each-order" class="section level4">
 <h4>Case Study: Customer details for each order</h4>
 <p>To get customer data for all orders, let us join the <code>order</code> data with the
@@ -195,12 +195,12 @@ combinations of the matches are returned.</p>
 <div id="semi-join" class="section level2">
 <h2>Semi Join</h2>
 <p><br></p>
-<p><img src="/img/draw_semi.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Semi join return all rows from <code>Age</code> where there are matching values in <code>Height</code>,
 keeping just columns from <code>Age</code>. A semi join differs from an inner join because
 an inner join will return one row of <code>Age</code> for each matching row of <code>Height</code>,
 where a semi join will never duplicate rows of <code>Age</code>.</p>
+<p><br></p>
+<p><img src="/img/draw_semi.png" width="100%" style="display: block; margin: auto;" /></p>
 <div id="case-study-details-of-customers-who-have-placed-orders" class="section level4">
 <h4>Case Study: Details of customers who have placed orders</h4>
 <p>To get customer data for all orders where customer data exists, let us join the <code>order</code> data with the
@@ -226,10 +226,10 @@ cases where customer data is present.</p>
 <div id="anti-join" class="section level2">
 <h2>Anti Join</h2>
 <p><br></p>
-<p><img src="/img/draw_anti.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Anti join return all rows from <code>Age</code> where there are not matching values in
 <code>Height</code>, keeping just columns from <code>Age</code>.</p>
+<p><br></p>
+<p><img src="/img/draw_anti.png" width="100%" style="display: block; margin: auto;" /></p>
 <div id="case-study-details-of-customers-who-have-not-placed-orders" class="section level4">
 <h4>Case Study: Details of customers who have not placed orders</h4>
 <p>To get details of customers who have not placed orders, let us join the <code>order</code>
@@ -254,10 +254,11 @@ data with the <code>customer</code> data using <code>anti_join</code>.</p>
 <div id="full-join" class="section level2">
 <h2>Full Join</h2>
 <p><br></p>
-<p><img src="/img/draw_full.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <p>Full join return all rows and all columns from both <code>Age</code> and <code>Height</code>. Where
 there are not matching values, returns NA for the one missing.</p>
+<p><br></p>
+<p><img src="/img/draw_full.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
 <div id="case-study-details-of-all-customers-and-all-orders" class="section level4">
 <h4>Case Study: Details of all customers and all orders</h4>
 <p>To get details of all customers and all orders, let us join the <code>order</code>

@@ -40,25 +40,11 @@ library(readr)</code></pre>
 <p>dplyr provides a set of verbs that help us solve the most common data
 manipulation challenges while working with tabular data (dataframes, tibbles):</p>
 <ul>
-<li><code>select</code>: returns subset of columns</li>
-<li><code>filter</code>: returns a subset of rows</li>
-<li><code>arrange</code>: re-order or arrange rows according to single/multiple variables</li>
-<li><code>mutate</code>: create new columns from existing columns</li>
-<li><code>summarise</code>: reduce data to a single summary</li>
-</ul>
-</div>
-<div id="case-study" class="section level2">
-<h2>Case Study</h2>
-<p>We will explore a dummy data set that resembles web logs of an online retail
-company. You can download the data from <a href="https://github.com/rsquaredacademy/datasets/blob/master/web.csv">here</a>
-or import it directly using <code>read_csv()</code> from the <a href="readr.tidyverse.org">readr</a>
-package. We will use dplyr to answer the following:</p>
-<ul>
-<li>what is the average order value by device types?</li>
-<li>what is the average number of pages visited by purchasers and non-purchasers?</li>
-<li>what is the average time on site for purchasers vs non-purchasers?</li>
-<li>what is the average number of pages visited by purchasers and non-purchasers
-using mobile?</li>
+<li><code>select</code></li>
+<li><code>filter</code></li>
+<li><code>arrange</code></li>
+<li><code>mutate</code></li>
+<li><code>summarise</code></li>
 </ul>
 </div>
 <div id="data" class="section level2">
@@ -101,13 +87,23 @@ ecom</code></pre>
 </ul>
 </div>
 </div>
+<div id="case-study" class="section level2">
+<h2>Case Study</h2>
+<p>We will use dplyr to answer the following:</p>
+<ul>
+<li>what is the average order value by device types?</li>
+<li>what is the average number of pages visited by purchasers and non-purchasers?</li>
+<li>what is the average time on site for purchasers vs non-purchasers?</li>
+<li>what is the average number of pages visited by purchasers and non-purchasers
+using mobile?</li>
+</ul>
+</div>
 <div id="average-order-value" class="section level2">
 <h2>Average Order Value</h2>
 <p><img src="/img/image.jpg" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="aov-by-devices" class="section level2">
 <h2>AOV by Devices</h2>
-<p><img src="/img/aov_flow2.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ecom %&gt;%
   filter(purchase) %&gt;%
   select(device, order_value) %&gt;%
@@ -606,7 +602,7 @@ ecom6</code></pre>
 in data manipulation. We can use <code>arrange</code> to arrange data by different columns.
 Let us say we want to arrange data by the number of pages browsed.</p>
 <p><br></p>
-<p><img src="arrange_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="/img/arrange_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>arrange(ecom, n_pages)</code></pre>
 <pre><code>## # A tibble: 1,000 x 8

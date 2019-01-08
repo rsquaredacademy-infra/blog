@@ -55,16 +55,16 @@ library(dplyr)</code></pre>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1     5
-##  2 b         2    45
-##  3 c         3    58
-##  4 d         4    26
-##  5 e         5    76
-##  6 f         6    37
-##  7 g         7    87
-##  8 h         8    94
-##  9 i         9    28
-## 10 j        10    84
+##  1 a         1    72
+##  2 b         2    97
+##  3 c         3    30
+##  4 d         4    76
+##  5 e         5    87
+##  6 f         6     3
+##  7 g         7    84
+##  8 h         8    54
+##  9 i         9    14
+## 10 j        10    81
 ## # ... with 16 more rows</code></pre>
 <p>We mentioned the column names followed by the data. If you do not specify the
 column names, <code>tibble()</code> will supply them. Ensure that the length of each column
@@ -84,16 +84,16 @@ you need to set <code>stringsAsFactors</code> to <code>FALSE</code>.</p>
 <pre><code>## # A tibble: 26 x 3
 ##    x         y     z
 ##    &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-##  1 a         1    79
-##  2 b         2     7
-##  3 c         3    24
-##  4 d         4    68
-##  5 e         5    37
-##  6 f         6    91
-##  7 g         7    53
-##  8 h         8    77
-##  9 i         9    66
-## 10 j        10    25
+##  1 a         1    94
+##  2 b         2    91
+##  3 c         3     7
+##  4 d         4    21
+##  5 e         5    89
+##  6 f         6    34
+##  7 g         7    47
+##  8 h         8    32
+##  9 i         9    80
+## 10 j        10     3
 ## # ... with 16 more rows</code></pre>
 <ul>
 <li>never adjusts variable names</li>
@@ -118,14 +118,14 @@ tibble(x, y, z)</code></pre>
 <pre><code>## # A tibble: 100 x 3
 ##        x y     z    
 ##    &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
-##  1     1 a     TRUE 
-##  2     2 a     FALSE
+##  1     1 a     FALSE
+##  2     2 a     TRUE 
 ##  3     3 a     FALSE
 ##  4     4 a     TRUE 
 ##  5     5 a     TRUE 
 ##  6     6 a     TRUE 
-##  7     7 a     FALSE
-##  8     8 a     FALSE
+##  7     7 a     TRUE 
+##  8     8 a     TRUE 
 ##  9     9 a     FALSE
 ## 10    10 a     FALSE
 ## # ... with 90 more rows</code></pre>

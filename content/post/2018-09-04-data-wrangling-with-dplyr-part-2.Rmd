@@ -93,15 +93,15 @@ knitr::include_graphics("/img/join.png")
 
 <br>
 
-```{r img3, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/draw_inner.png")
-```
-
-<br>
-
 Inner join return all rows from `Age` where there are matching values in 
 `Height`, and all columns from `Age` and `Height`. If there are multiple matches 
 between `Age` and `Height`, all combination of the matches are returned.
+
+<br>
+
+```{r img3, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_inner.png")
+```
 
 #### Case Study: Details of customers who have placed orders and their order details
 
@@ -116,16 +116,16 @@ inner_join(customer, order, by = "id")
 
 <br>
 
-```{r img4, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/draw_left.png")
-```
-
-<br>
-
 Left join return all rows from `Age`, and all columns from `Age` and `Height`. 
 Rows in `Age` with  no match in `Height` will have NA values in the new columns. 
 If there are multiple  matches between `Age` and `Height`, all combinations of 
 the matches are returned.
+
+<br>
+
+```{r img4, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_left.png")
+```
 
 #### Case Study: Details of customers and their orders irrespective of whether a customer has 
 placed orders or not.
@@ -143,16 +143,16 @@ left_join(customer, order, by = "id")
 
 <br>
 
-```{r img5, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/draw_right.png")
-```
-
-<br>
-
 Right join return all rows from `Height`, and all columns from `Age` and 
 `Height`. Rows in `Height` with no match in `Age` will have NA values in the 
 new columns. If there are multiple matches between `Age` and `Height`, all 
 combinations of the matches are returned.
+
+<br>
+
+```{r img5, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_right.png")
+```
 
 #### Case Study: Customer details for each order
 
@@ -167,16 +167,16 @@ right_join(customer, order, by = "id")
 
 <br>
 
-```{r img6, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/draw_semi.png")
-```
-
-<br>
-
 Semi join return all rows from `Age` where there are matching values in `Height`, 
 keeping just columns from `Age`. A semi join differs from an inner join because 
 an inner join will return one row of `Age` for each matching row of `Height`, 
 where a semi join will never duplicate rows of `Age`.
+
+<br>
+
+```{r img6, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_semi.png")
+```
 
 #### Case Study: Details of customers who have placed orders
 
@@ -192,14 +192,14 @@ semi_join(customer, order, by = "id")
 
 <br>
 
-```{r img7, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/draw_anti.png")
-```
+Anti join return all rows from `Age` where there are not matching values in 
+`Height`, keeping just columns from `Age`.
 
 <br>
 
-Anti join return all rows from `Age` where there are not matching values in 
-`Height`, keeping just columns from `Age`.
+```{r img7, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("/img/draw_anti.png")
+```
 
 #### Case Study: Details of customers who have not placed orders
 
@@ -214,14 +214,16 @@ anti_join(customer, order, by = "id")
 
 <br>
 
+Full join return all rows and all columns from both `Age` and `Height`. Where 
+there are not matching values, returns NA for the one missing.
+
+<br>
+
 ```{r img8, echo=FALSE, out.width="100%", fig.align="center"}
 knitr::include_graphics("/img/draw_full.png")
 ```
 
 <br>
-
-Full join return all rows and all columns from both `Age` and `Height`. Where 
-there are not matching values, returns NA for the one missing.
 
 #### Case Study: Details of all customers and all orders
 

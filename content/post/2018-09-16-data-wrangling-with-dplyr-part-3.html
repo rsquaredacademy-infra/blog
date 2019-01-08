@@ -210,16 +210,16 @@ number of observations.</p>
 <pre><code>## # A tibble: 700 x 7
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 yahoo    laptop FALSE          7       4       88 FALSE   
-##  2 google   mobile TRUE          10       1      948 FALSE   
-##  3 bing     mobile TRUE          10       1      847 FALSE   
-##  4 bing     laptop TRUE           5       1      700 FALSE   
-##  5 social   tablet FALSE          2       8      208 FALSE   
-##  6 yahoo    mobile TRUE           7       1      561 FALSE   
-##  7 google   mobile FALSE          2       9      162 FALSE   
-##  8 google   mobile FALSE          2      15      210 FALSE   
-##  9 google   tablet TRUE           0       1      755 FALSE   
-## 10 bing     mobile FALSE          6       5       55 FALSE   
+##  1 yahoo    laptop TRUE           5       1      739 FALSE   
+##  2 direct   laptop FALSE          1      14      322 TRUE    
+##  3 google   mobile TRUE           9       1      409 FALSE   
+##  4 google   tablet FALSE          6      14      406 FALSE   
+##  5 yahoo    laptop FALSE          7       4       88 FALSE   
+##  6 bing     laptop TRUE           9       1      162 FALSE   
+##  7 social   tablet TRUE           4       1       53 FALSE   
+##  8 bing     tablet FALSE          1       8      144 FALSE   
+##  9 direct   mobile TRUE           6       1      937 FALSE   
+## 10 yahoo    mobile TRUE           7       1      561 FALSE   
 ## # ... with 690 more rows</code></pre>
 <p>We can combine the sampling functions with other dplyr functions as shown below
 where we sample observation after grouping them according to the source of
@@ -231,32 +231,32 @@ traffic.</p>
 ## # Groups:   referrer [5]
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 bing     laptop TRUE           8       1      585 FALSE   
-##  2 bing     tablet TRUE           7       1      718 FALSE   
-##  3 bing     tablet FALSE          9       2       50 FALSE   
-##  4 bing     laptop TRUE           7       1      362 FALSE   
-##  5 bing     tablet FALSE          3      18      468 TRUE    
-##  6 bing     tablet TRUE           0       1      352 FALSE   
-##  7 bing     tablet TRUE           1       1      406 FALSE   
-##  8 bing     mobile TRUE           4       1      366 FALSE   
-##  9 bing     tablet TRUE           0       1      356 FALSE   
-## 10 bing     laptop TRUE           3       1      422 FALSE   
+##  1 bing     laptop TRUE           3       1      396 FALSE   
+##  2 bing     mobile FALSE          0       7      196 FALSE   
+##  3 bing     laptop TRUE          10       1      777 FALSE   
+##  4 bing     laptop TRUE           9       1      709 FALSE   
+##  5 bing     tablet FALSE          7       3       42 FALSE   
+##  6 bing     laptop TRUE          10       1      210 FALSE   
+##  7 bing     laptop TRUE           1       1      148 FALSE   
+##  8 bing     laptop TRUE           4       1      748 FALSE   
+##  9 bing     mobile TRUE           1       1      905 FALSE   
+## 10 bing     mobile FALSE          0      16      272 FALSE   
 ## # ... with 490 more rows</code></pre>
 <p><code>sample_frac()</code> allows a specific percentage of observations.</p>
 <pre class="r"><code>sample_frac(ecom, size = 0.7)</code></pre>
 <pre><code>## # A tibble: 700 x 7
 ##    referrer device bouncers n_visit n_pages duration purchase
 ##    &lt;fct&gt;    &lt;fct&gt;  &lt;lgl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
-##  1 google   tablet TRUE           6       1      551 FALSE   
-##  2 yahoo    tablet FALSE          5       8       80 FALSE   
-##  3 social   tablet TRUE           3       1      225 FALSE   
-##  4 yahoo    mobile FALSE          5      12      252 FALSE   
-##  5 google   mobile TRUE           9       1      201 FALSE   
-##  6 yahoo    mobile TRUE           7       1      520 FALSE   
-##  7 bing     laptop TRUE           8       1      484 FALSE   
-##  8 social   mobile FALSE          9      19      304 TRUE    
-##  9 social   mobile TRUE           9       1      425 FALSE   
-## 10 google   mobile TRUE           1       1      934 FALSE   
+##  1 yahoo    tablet TRUE           4       1      804 FALSE   
+##  2 bing     mobile TRUE           8       1      195 FALSE   
+##  3 social   tablet FALSE         10      11      330 TRUE    
+##  4 yahoo    laptop FALSE          7       4       88 FALSE   
+##  5 google   laptop FALSE          8      16      464 FALSE   
+##  6 yahoo    tablet TRUE           7       1      889 FALSE   
+##  7 social   laptop FALSE          1       4       64 FALSE   
+##  8 direct   mobile FALSE          9      15      210 FALSE   
+##  9 yahoo    mobile TRUE           0       1      287 FALSE   
+## 10 social   laptop FALSE          0      11      187 FALSE   
 ## # ... with 690 more rows</code></pre>
 </div>
 <div id="data-extraction" class="section level2">
@@ -274,12 +274,12 @@ using <code>head</code> in addition to limit the output printed.</p>
 <p><img src="/img/pull_1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <pre class="r"><code>pull(ecom_mini, device)</code></pre>
-<pre><code>##  [1] tablet laptop tablet mobile mobile tablet mobile laptop mobile mobile
+<pre><code>##  [1] laptop mobile tablet laptop tablet laptop tablet mobile tablet laptop
 ## Levels: laptop tablet mobile</code></pre>
 <p>Let us extract the first column from <code>ecom</code> using column position instead of
 name.</p>
 <pre class="r"><code>pull(ecom_mini, 1) </code></pre>
-<pre><code>##  [1] bing   bing   yahoo  yahoo  yahoo  google yahoo  direct social social
+<pre><code>##  [1] social yahoo  social yahoo  bing   social social social yahoo  yahoo 
 ## Levels: bing direct social yahoo google</code></pre>
 <p>You can use <code>-</code> before the column position to indicate the position in reverse.
 The below example extracts data from the last column.</p>
@@ -323,9 +323,9 @@ and 15.</p>
 ecom_sample %&gt;%
   pull(n_pages) %&gt;%
   between(5, 15) </code></pre>
-<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [12] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
-## [23]  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+## [12] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
 </div>
 <div id="case-when" class="section level2">
 <h2>Case When</h2>

@@ -45,24 +45,11 @@ library(readr)
 dplyr provides a set of verbs that help us solve the most common data 
 manipulation challenges while working with tabular data (dataframes, tibbles):
 
-- `select`: returns subset of columns
-- `filter`: returns a subset of rows
-- `arrange`: re-order or arrange rows according to single/multiple variables
-- `mutate`: create new columns from existing columns
-- `summarise`: reduce data to a single summary
-
-## Case Study
-
-We will explore a dummy data set that resembles web logs of an online retail 
-company. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) 
-or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) 
-package. We will use dplyr to answer the following:
-
-- what is the average order value by device types?
-- what is the average number of pages visited by purchasers and non-purchasers?
-- what is the average time on site for purchasers vs non-purchasers?
-- what is the average number of pages visited by purchasers and non-purchasers 
-using mobile?
+- `select`
+- `filter`
+- `arrange`
+- `mutate`
+- `summarise`
 
 ## Data
 
@@ -91,6 +78,18 @@ Below is the description of the data set:
 - order_value: order value of visitor (in dollars)
 - n_visit: number of visits
 
+
+## Case Study
+
+We will use dplyr to answer the following:
+
+- what is the average order value by device types?
+- what is the average number of pages visited by purchasers and non-purchasers?
+- what is the average time on site for purchasers vs non-purchasers?
+- what is the average number of pages visited by purchasers and non-purchasers 
+using mobile?
+
+
 ## Average Order Value
 
 ```{r img2, echo=FALSE, out.width="80%", fig.align="center"}
@@ -99,10 +98,6 @@ knitr::include_graphics("/img/image.jpg")
 
 
 ## AOV by Devices
-
-```{r img3, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/aov_flow2.png")
-```
 
 ```{r case}
 ecom %>%
@@ -470,7 +465,7 @@ Let us say we want to arrange data by the number of pages browsed.
 <br>
 
 ```{r img13, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("arrange_1.png")
+knitr::include_graphics("/img/arrange_1.png")
 ```
 
 <br>
