@@ -10,7 +10,7 @@ tags:
 
 ## Introduction
 
-This is the eleventh post in the series **Introduction to R**. In the previous [post](), we learnt about dataframes. In this post, we will learn about factors.
+In the previous post, we learnt about dataframes. In this post, we will learn about factors.
 
 - create factors
 - order levels
