@@ -49,6 +49,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 - [Quick Tour](/ggplot2-quick-tour/)
 - [Geoms](/ggplot2-introduction-to-geoms/)
+- [Aesthetics](/ggplot2-introduction-to-aesthetics/)
 
 ### Base 
 
