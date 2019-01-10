@@ -45,6 +45,10 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Data Visualization With R
 
+### ggplot2
+
+- [Quick Tour](/ggplot2-quick-tour/)
+
 ### Base 
 
 - [Introduction](/data-visualization-with-r-introduction/)
