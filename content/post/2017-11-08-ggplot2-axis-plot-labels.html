@@ -1,0 +1,296 @@
+---
+title: ggplot2 - Axis and Plot Labels
+author: Aravind Hebbali
+twitterImg: /img/gg_axis_labels.png
+description: "ggplot2 - Axis and Plot Labels"
+date: '2017-11-08'
+slug: axis-plot-labels
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This is the fifth post in the series <strong>Elegant Data Visualization with
+ggplot2</strong>. In the previous post, we learnt about aesthetics. In this post, we
+will learn to:</p>
+<ul>
+<li>add title and subtitle to the plot</li>
+<li>modify axis labels</li>
+<li>modify axis range</li>
+<li>remove axis</li>
+<li>format axis</li>
+</ul>
+<p><br></p>
+<div id="basic-plot" class="section level4">
+<h4>Basic Plot</h4>
+<p>Let us start with a simple scatter plot. We will continue to use the mtcars
+data set and examine the relationship between displacement and miles per gallon
+using <code>geom_point()</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-subtitle" class="section level4">
+<h4>Title &amp; Subtitle</h4>
+<p>There are two ways to add title to a plot:</p>
+<ul>
+<li><code>ggtitle()</code></li>
+<li><code>labs()</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="ggtitle" class="section level4">
+<h4>ggtitle()</h4>
+<p>Let us explore the <code>ggtitle()</code> function first. It takes two arguments:</p>
+<ul>
+<li>label: title of the plot</li>
+<li>subtitle: subtitle of the plot</li>
+</ul>
+<p><br></p>
+</div>
+<div id="title-subtitle-1" class="section level4">
+<h4>Title &amp; Subtitle</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  ggtitle(label = &#39;Displacement vs Mileage&#39;, subtitle = &#39;disp vs mpg&#39;)</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="axis-labels" class="section level4">
+<h4>Axis Labels</h4>
+<p>You can add labels to the axis using:</p>
+<ul>
+<li><code>xlab()</code></li>
+<li><code>ylab()</code></li>
+<li><code>labs()</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="axis-labels-1" class="section level4">
+<h4>Axis Labels</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  xlab(&#39;Displacement&#39;) + ylab(&#39;Miles Per Gallon&#39;)</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="labs" class="section level4">
+<h4>Labs</h4>
+<p>The <code>labs()</code> function can be used to add the following to a plot:</p>
+<ul>
+<li>title</li>
+<li>subtitle</li>
+<li>X axis label</li>
+<li>Y axis label</li>
+</ul>
+<p><br></p>
+</div>
+<div id="labs-1" class="section level4">
+<h4>Labs</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  labs(title = &#39;Displacement vs Mileage&#39;, subtitle = &#39;disp vs mpg&#39;, 
+    x = &#39;Displacement&#39;, y = &#39;Miles Per Gallon&#39;)</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="axis-range" class="section level4">
+<h4>Axis Range</h4>
+<p>In certain scenarios, you may want to modify the range of the axis. In ggplot2,
+we can achieve this using:</p>
+<ul>
+<li><code>xlim()</code></li>
+<li><code>ylim()</code></li>
+<li><code>expand_limits()</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="axis-range-1" class="section level4">
+<h4>Axis Range</h4>
+<ul>
+<li><code>xlim()</code> and <code>ylim()</code> take a numeric vector of length 2 as input</li>
+<li><code>expand_limits()</code> takes two numeric vectors (each of length 2), one for each axis</li>
+<li>in all of the above functions, the first element represents the lower limit and the second element represents the upper limit</li>
+</ul>
+<p><br></p>
+</div>
+<div id="x-axis" class="section level4">
+<h4>X Axis</h4>
+<p>In the below example, we limit the range of the X axis between <code>0</code> and <code>600</code> using <code>xlim</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  xlim(c(0, 600))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="y-axis" class="section level4">
+<h4>Y Axis</h4>
+<p>Let us limit the range of the Y axis between <code>0</code> and <code>40</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  ylim(c(0, 40))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="expand-limits" class="section level4">
+<h4>Expand Limits</h4>
+<p>Let us use <code>expand_limits()</code> to limit the range of both the X and Y axis. The
+first input is the range for the X axis and the second input for the Y axis. In
+both the cases, we use a numeric vector of length 2 to specify the lower and
+upper limit.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  expand_limits(x = c(0, 600), y = c(0, 40))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="remove-axis-labels" class="section level4">
+<h4>Remove Axis Labels</h4>
+<p>If you want to remove the axis labels all together, use the <code>theme()</code> function.
+It allows us to modify every aspect of the theme of the plot. Within <code>theme()</code>,
+set the following to <code>element_blank()</code>.</p>
+<ul>
+<li><code>axis.title.x</code></li>
+<li><code>axis.title.y</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="remove-axis-labels-using-theme" class="section level4">
+<h4>Remove Axis Labels using theme()</h4>
+<p><code>element_blank()</code> will remove the title of the X and Y axis.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank())</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="format-title-axis-labels" class="section level4">
+<h4>Format Title &amp; Axis Labels</h4>
+<p>To format the title or the axis labels, we have to modify the theme of the plot
+using the <code>theme()</code> function. We can modify:</p>
+<ul>
+<li>color</li>
+<li>font family</li>
+<li>font face</li>
+<li>font size</li>
+<li>horizontal alignment</li>
+<li>and angle</li>
+</ul>
+<p>In addition to <code>theme()</code>, we will also use <code>element_text()</code>. It should be used
+whenever you want to modify the appearance of any text element of your plot.</p>
+<p><br></p>
+</div>
+<div id="color" class="section level4">
+<h4>Color</h4>
+<p>In the below example, we use the <code>color</code> argument within <code>element_text()</code> to
+modify the color of the title of the plot to <code>'blue'</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(color = &#39;blue&#39;))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="font-family" class="section level4">
+<h4>Font Family</h4>
+<p>Let us change the font family of the plot title to <code>'Arial'</code> by using the
+<code>family</code> argument.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(family = &#39;Arial&#39;))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="font-face" class="section level4">
+<h4>Font Face</h4>
+<p>The font face can be any of the following:</p>
+<ul>
+<li><code>plain</code></li>
+<li><code>bold</code></li>
+<li><code>italic</code></li>
+<li><code>bold.italic</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="font-face-1" class="section level4">
+<h4>Font Face</h4>
+<p>The <code>face</code> argument can be used to modify the font face of the title of the
+plot.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(face = &#39;bold&#39;))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="font-size" class="section level4">
+<h4>Font Size</h4>
+<p>The size of the title of the plot can be modified using the <code>size</code> argument.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(size = 8))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="horizontal-alignment" class="section level4">
+<h4>Horizontal Alignment</h4>
+<p>To modify the horizontal alignment of the title, use the <code>hjust</code> argument. It
+can take values between <code>0</code> and <code>1</code>. If the value is closer to <code>0</code>, the text
+will be left-aligned and viceversa.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(hjust = 0.3))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together…</h3>
+<div id="title" class="section level4">
+<h4>Title</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ggtitle(&#39;Diaplacement vs Mileage&#39;) +
+  theme(plot.title = element_text(color = &#39;blue&#39;, family = &#39;Arial&#39;,
+    face = &#39;bold&#39;, size = 12, hjust = 0.5))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="x-axis-label" class="section level4">
+<h4>X axis label</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + xlab(&#39;Diaplacement&#39;) +
+  theme(axis.title.x = element_text(color = &#39;blue&#39;, family = &#39;Arial&#39;,
+    face = &#39;bold&#39;, size = 8, hjust = 0.5, angle = 15))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="y-axis-label" class="section level4">
+<h4>Y axis label</h4>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) + ylab(&#39;Miles Per Gallon&#39;) +
+  theme(axis.title.y = element_text(color = &#39;blue&#39;, family = &#39;Arial&#39;,
+    face = &#39;italic&#39;, size = 8, vjust = 0.3, angle = 90))</code></pre>
+<p><img src="/post/2017-11-08-ggplot2-axis-plot-labels_files/figure-html/axis17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>In this post, we learnt to:</p>
+<ul>
+<li>add title and subtitle to the plot</li>
+<li>modify axis labels</li>
+<li>modify axis range</li>
+<li>remove axis</li>
+<li>format axis</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<p>In the next post, we will learn to add text annotations to plots.</p>
+</div>
