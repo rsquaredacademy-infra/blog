@@ -56,6 +56,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Line Graphs](/ggplot2-line-graphs/)
 - [Bar Plots](/ggplot2-bar-plots/)
 - [Box Plots](/ggplot2-box-plots/)
+- [Histogram](/ggplot2-histogram/)
 
 ### Base 
 
