@@ -1,0 +1,246 @@
+---
+title: "ggplot2: Guides - Axes"
+author: Aravind Hebbali
+twitterImg: /img/gg_axes_guide.png
+description: "ggplot2 - Guides & Axes"
+date: '2018-01-31'
+slug: guides-axes
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+### Introduction
+
+This is the twelfth post in the series **Elegant Data Visualization with 
+ggplot2**. In the previous post, we learnt to build histograms. Now that we 
+have learnt to build different plots, let us look at different ways to modify 
+the axis. Along the way, we will also explore the `scale_*()` family of functions.
+
+Modify X and Y axis
+
+- title
+- labels
+- limits
+- breaks
+- position
+
+In this module, we will learn how to modify the X and Y axis using the 
+following functions:
+
+- Continuous Axis
+    - `scale_x_continuous()`
+    - `scale_y_continuous()`
+
+- Discrete Axis
+    - `scale_x_discrete()`
+    - `scale_y_discrete()`
+
+<br>
+
+### Libraries, Code & Data
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) 
+and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/096bc745c18a9ba47b99260978189920).
+
+<br>
+
+```{r load, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+### Continuous Axis
+
+If the X and Y axis represent continuous data, we can use 
+`scale_x_continuous()` and `scale_y_continuous()` to modify the axis. They take
+the following arguments:
+
+- name
+- limits
+- breaks
+- labels
+- position
+
+<br>
+
+Let us continue with the scatter plot we have used in previous posts.
+
+```{r guide2, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg))
+```
+
+<br>
+
+The `name` argument is used to modify the X axis label. In the below example, 
+we change the X axis label to `'Displacement'`. In previous posts, we 
+have used `xlab()` to work with the X axis label.
+
+```{r guide3, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  scale_x_continuous(name = "Displacement")
+```
+
+<br>
+
+To modify the range, use the `limits` argument. It takes a vector of length
+2 i.e. 2 values, the lower and upper limit of the range. It is an alternative
+for `xlim()`.
+
+```{r guide4, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  scale_x_continuous(limits = c(0, 600))
+```
+
+<br>
+
+In the above plot, the ticks on the X axis appear at `0`, `200`, `400` and 
+`600`. Let us say we want the ticks to appear more closer i.e. the difference 
+between the tick should be reduced by `50`. The `breaks` argument will allow
+us to specify where the ticks appear. It takes a numeric vector equal to the 
+length of the number of ticks.
+
+```{r guide5, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  scale_x_continuous(breaks = c(150, 300, 450))
+```
+
+<br>
+
+We can change the tick labels using the `labels` argument. In the below 
+example, we use words instead of numbers.
+
+```{r guide6, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  scale_x_continuous(breaks = c(150, 300, 450),
+    labels = c('One Hundred Fifty', 'Three Hundred', 'Four Hundred Fifity'))
+```
+
+<br>
+
+The position of the axes can be changed using the `position` argument. In the 
+below example, we can move the axes to the top of the plot by supplying the 
+value `'top'`.
+
+```{r guide7, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  scale_x_continuous(position = 'top')
+```
+
+<br>
+
+### Putting it all together..
+
+```{r guide8, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg)) +
+  scale_x_continuous(name = "Displacement", limits = c(0, 600),
+                     breaks = c(0, 150, 300, 450, 600), position = 'top',
+                     labels = c('0', '150', '300', '450', '600'))
+```
+
+<br>
+
+### Y Axis - Continuous
+
+```{r guide9, fig.align='center'}
+ggplot(mtcars) + geom_point(aes(disp, mpg)) +
+  scale_y_continuous(name = "Miles Per Gallon", limits = c(0, 45),
+                     breaks = c(0, 15, 30, 45), position = 'right',
+                     labels = c('0', '15', '30', '45'))
+```
+
+<br>
+
+### Discrete Axis
+
+If the X and Y axis represent discrete or categorical data, `scale_x_discrete()` 
+and `scale_y_discrete()` can be used to modify them. They take the following arguments:
+
+- name
+- labels
+- breaks
+- position
+
+The above options serve the same purpose as in the case of continuous scales.
+
+<br>
+
+#### Axis Label
+
+```{r guide11, fig.align='center'}
+ggplot(mtcars) +
+  geom_bar(aes(factor(cyl))) +
+  scale_x_discrete(name = "Number of Cylinders")
+```
+
+<br>
+
+#### Axis Tick Labels
+
+```{r guide12, fig.align='center'}
+ggplot(mtcars) +
+  geom_bar(aes(factor(cyl))) +
+  scale_x_discrete(labels = c("4" = "Four", "6" = "Six", "8" = "Eight"))
+```
+
+<br>
+
+#### Axis Breaks
+
+```{r guide13, fig.align='center'}
+ggplot(mtcars) +
+  geom_bar(aes(factor(cyl))) +
+  scale_x_discrete(breaks = c("4", "6", "8"))
+```
+
+<br>
+
+#### Axis Position
+
+```{r guide14, fig.align='center'}
+ggplot(mtcars) +
+  geom_bar(aes(factor(cyl))) +
+  scale_x_discrete(position = 'bottom')
+```
+
+<br>
+
+#### Putting it all together...
+
+```{r guide15, fig.align='center'}
+ggplot(mtcars) + geom_bar(aes(factor(cyl))) +
+  scale_x_discrete(name = "Number of Cylinders",
+    labels = c("4" = "Four", "6" = "Six", "8" = "Eight"),
+    breaks = c("4", "6", "8"), position = "bottom")
+```
+
+<br>
+
+### Summary
+
+In this post, we learnt to modify
+
+- title
+- labels
+- limits
+- breaks
+- position
+
+<br>
+
+### Up Next..
+
+In the next post, we will learn to modify the legend when `color` is mapped to a variable.
+
