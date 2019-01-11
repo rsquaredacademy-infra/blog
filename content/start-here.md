@@ -52,6 +52,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Aesthetics](/ggplot2-introduction-to-aesthetics/)
 - [Axis & Plot Labels](/post/axis-plot-labels/)
 - [Text Annotations](/ggplot2-text-annotations/)
+- [Scatter Plots](/post/ggplot2-scatter-plots/)
 
 ### Base 
 
