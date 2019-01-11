@@ -1,0 +1,221 @@
+---
+title: 'ggplot2: Line Graphs'
+author: Aravind Hebbali
+twitterImg: /img/gg_line.png
+description: "ggplot2 - Line Graphs"
+date: '2017-12-14'
+slug: ggplot2-line-graphs
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This is the 8th post in the series <strong>Elegant Data Visualization with
+ggplot2</strong>. In the previous post, we learnt to build scatter plots. In this
+post, we will learn to:</p>
+<ul>
+<li>build
+<ul>
+<li>simple line chart</li>
+<li>grouped line chart</li>
+</ul></li>
+<li>map aesthetics to variables</li>
+<li>modify line
+<ul>
+<li>color</li>
+<li>type</li>
+<li>size</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a>
+and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/84b3204eee81d6e804f10a73900809b5">here</a>.</p>
+<p><br></p>
+<div id="case-study" class="section level4">
+<h4>Case Study</h4>
+<p>We will use a data set related to GDP growth rate. You can download it from
+<a href="https://github.com/rsquaredacademy/datasets/blob/master/gdp.csv">here</a>. It
+contains GDP (Gross Domestic Product) growth data for the BRICS (Brazil,
+Russia, India, China, South Africa) for the years 2000 to 2005.</p>
+<p><br></p>
+</div>
+<div id="data" class="section level4">
+<h4>Data</h4>
+<pre class="r"><code>gdp &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/gdp.csv&#39;)</code></pre>
+<pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
+<pre class="r"><code>gdp</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##      X1     X year       growth india china
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     1 2000-01-01      6     5     8
+## 2     2     2 2001-01-01      9     9     5
+## 3     3     3 2002-01-01      8     8     6
+## 4     4     4 2003-01-01      9     8     8
+## 5     5     5 2004-01-01      9     5     9
+## 6     6     6 2005-01-01      8     7     8</code></pre>
+<p><br></p>
+</div>
+<div id="line-chart" class="section level4">
+<h4>Line Chart</h4>
+<p>To create a line chart, use <code>geom_line()</code>. In the below example, we examine the
+GDP growth rate trend of India for the years 2000 to 2005.</p>
+<pre class="r"><code>ggplot(gdp, aes(year, india)) +
+  geom_line()</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line100-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line-color" class="section level4">
+<h4>Line Color</h4>
+<p>To modify the color of the line, use the <code>color</code> argument and supply it a valid
+color name. In the below example, we modify the color of the line to <code>'blue'</code>.
+Remember that the <code>color</code> argument should be outside <code>aes()</code>.</p>
+<pre class="r"><code>ggplot(gdp, aes(year, india)) +
+  geom_line(color = &#39;blue&#39;)</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line-type" class="section level4">
+<h4>Line Type</h4>
+<p>The line type can be modified using the <code>linetype</code> argument. It can take 7 different
+values. You can specify the line type either using numbers or words as shown below:</p>
+<ul>
+<li>0 : blank</li>
+<li>1 : solid</li>
+<li>2 : dashed</li>
+<li>3 : dotted</li>
+<li>4 : dotdash</li>
+<li>5 : longdash</li>
+<li>6 : twodash</li>
+</ul>
+<p><br></p>
+<p>Let us modify the line type to dashed style by supplying the value <code>2</code> to the
+<code>linetype</code> argument.</p>
+<pre class="r"><code>ggplot(gdp, aes(year, india)) +
+  geom_line(linetype = 2)</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The above example can be recreated by supplying the value <code>'dashed'</code> instead
+of <code>2</code>.</p>
+<pre class="r"><code>ggplot(gdp, aes(year, india)) +
+  geom_line(linetype = &#39;dashed&#39;)</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line-size" class="section level4">
+<h4>Line Size</h4>
+<p>The width of the line can be modified using the <code>size</code> argument. It can take
+any value above 0 as input.</p>
+<pre class="r"><code>ggplot(gdp, aes(year, india)) +
+  geom_line(size = 2)</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="modify-data" class="section level4">
+<h4>Modify Data</h4>
+<p>Now let us map the aesthetics to the variables. The data used in the above
+example cannot be used as we need a variable with country names. We will use
+<code>gather()</code> function from the <code>tidyr</code> package to reshape the data.</p>
+<pre class="r"><code>gdp2 &lt;- gdp %&gt;% 
+  select(year, growth, india, china) %&gt;% 
+  gather(key = country, value = gdp, -year)
+
+gdp2</code></pre>
+<pre><code>## # A tibble: 18 x 3
+##    year       country   gdp
+##    &lt;date&gt;     &lt;chr&gt;   &lt;dbl&gt;
+##  1 2000-01-01 growth      6
+##  2 2001-01-01 growth      9
+##  3 2002-01-01 growth      8
+##  4 2003-01-01 growth      9
+##  5 2004-01-01 growth      9
+##  6 2005-01-01 growth      8
+##  7 2000-01-01 india       5
+##  8 2001-01-01 india       9
+##  9 2002-01-01 india       8
+## 10 2003-01-01 india       8
+## 11 2004-01-01 india       5
+## 12 2005-01-01 india       7
+## 13 2000-01-01 china       8
+## 14 2001-01-01 china       5
+## 15 2002-01-01 china       6
+## 16 2003-01-01 china       8
+## 17 2004-01-01 china       9
+## 18 2005-01-01 china       8</code></pre>
+<p><br></p>
+</div>
+<div id="grouped-line-chart" class="section level4">
+<h4>Grouped Line Chart</h4>
+<p>In the original data, to plot GDP trend of multiple countries we will have to
+use <code>geom_line()</code> multiple times. But in the reshaped data, we have the
+country names as one of the variables and this can be used along with the
+<code>group</code> argument to plot data of multiple countries with a single line of code
+as shown below. By mapping country to the <code>group</code> argument, we have plotted
+data of all countries.</p>
+<pre class="r"><code>ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line()</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>In the above plot, we cannot distinguish between the lines and there is no way
+to identify which line represents which country. To make it easier to identify
+the trend of different countries, let us map the <code>color</code> argument to the
+variable country as shown below. Now, each country will be represented by line
+of different color.</p>
+<pre class="r"><code>ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(color = country))</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>We can map <code>linetype</code> argument to country as well. In this case, each country
+will be represented by a different line type.</p>
+<pre class="r"><code>ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(linetype = country))</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>We can map the width of the line to the variable country as well. But in this
+case, the plot does not look either elegant or intuitive.</p>
+<pre class="r"><code>ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(size = country))</code></pre>
+<pre><code>## Warning: Using size for a discrete variable is not advised.</code></pre>
+<p><img src="/post/2017-12-14-ggplot2-line-graphs_files/figure-html/line9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Remember that in all the above cases, we mapped the arguments to a variable
+inside <code>aes()</code>.</p>
+<p><br></p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>In this post, we learnt to:</p>
+<ul>
+<li>build
+<ul>
+<li>simple line chart</li>
+<li>grouped line chart</li>
+</ul></li>
+<li>map aesthetics to variables</li>
+<li>modify line
+<ul>
+<li>color</li>
+<li>type</li>
+<li>size</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<p>In the next post, we will learn to build bar plots.</p>
+<p><br></p>
+</div>
