@@ -1,0 +1,280 @@
+---
+title: 'ggplot2: Box Plots'
+author: Aravind Hebbali
+twitterImg: /img/gg_box.png
+description: "ggplot2 - Box Plots"
+date: '2018-01-07'
+slug: ggplot2-box-plots
+topics:
+  - ggplot2
+tags:
+  - ggplot2
+  - visualization
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This is the 9th post in the series <strong>Elegant Data Visualization with
+ggplot2</strong>. In the previous post, we learnt how to build bar charts. In this
+post, we will learn to:</p>
+<ul>
+<li>build box plots</li>
+<li>modify box
+<ul>
+<li>color</li>
+<li>fill</li>
+<li>alpha</li>
+<li>line size</li>
+<li>line type</li>
+</ul></li>
+<li>modify outlier
+<ul>
+<li>color</li>
+<li>shape</li>
+<li>size</li>
+<li>alpha</li>
+</ul></li>
+</ul>
+<p>The box plot is a standardized way of displaying the distribution of data. It
+is useful for detecting outliers and for comparing distributions and shows the
+shape, central tendancy and variability of the data.</p>
+<p><br></p>
+</div>
+<div id="structure" class="section level2">
+<h2>Structure</h2>
+<ul>
+<li>the body of the boxplot consists of a “box” (hence, the name), which goes from the first quartile (Q1) to the third quartile (Q3)</li>
+<li>within the box, a vertical line is drawn at the Q2, the median of the data set</li>
+<li>two horizontal lines, called whiskers, extend from the front and back of the box</li>
+<li>the front whisker goes from Q1 to the smallest non-outlier in the data set, and the back whisker goes from Q3 to the largest non-outlier</li>
+<li>if the data set includes one or more outliers, they are plotted separately as points on the chart</li>
+</ul>
+<p><br></p>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/246091b512a6c006e68374e2d24caf7c">here</a>.</p>
+<p><br></p>
+</div>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>We are going to use two different data sets in this post. Both the data sets have the same data but are in
+different formats.</p>
+<pre class="r"><code>daily_returns &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/tickers.csv&#39;)
+daily_returns</code></pre>
+<pre><code>## # A tibble: 250 x 5
+##       AAPL   AMZN      FB    GOOG    MSFT
+##      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1  1.38    24.2   2.12    22.4    1.12  
+##  2  2.83     3.25 -0.860    5.99   0.767 
+##  3 -0.0394   9.91  1.45     6.75   0.973 
+##  4  0.108    3.76 -0.770  -10.7   -0.285 
+##  5  1.64    19.8   4.75     8.66   0.501 
+##  6  0.0689   5.33 -0.300   -0.930  0.256 
+##  7 -0.561   -5.21 -0.630   -7.28  -0.708 
+##  8  0.551    0.25 -0.460    0.690  0.128 
+##  9 -0.217  -13.6   0.0300   6.56   0.0786
+## 10 -0.108   -4.25  0.460    2.60   0.472 
+## # ... with 240 more rows</code></pre>
+<p><br></p>
+</div>
+<div id="univariate-box-plot" class="section level2">
+<h2>Univariate Box Plot</h2>
+<p>If you are not comparing the distribution of continuous data, you can create
+box plot for a single variable. Unlike <code>plot()</code>, where we could just use
+1 input, in ggplot2, we must specify a value for the X axis and it must be
+categorical data. Since we are not comparing distributions, we will use <code>1</code>
+as the value for the X axis and wrap it inside <code>factor()</code> to treat it as a
+categorical variable. In the below example, we examine the distribution of
+stock returns of Apple.</p>
+<pre class="r"><code>ggplot(daily_returns) +
+  geom_boxplot(aes(x = factor(1), y = AAPL))</code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="data-1" class="section level2">
+<h2>Data</h2>
+<p>For the rest of the post, we will use the below data set. Instead of 5 columns,
+we have two columns. One for the stock names and another for returns.</p>
+<pre class="r"><code>tidy_returns &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/tidy_tickers.csv&#39;,
+  col_types = list(col_factor(levels = c(&#39;AAPL&#39;, &#39;AMZN&#39;, &#39;FB&#39;, &#39;GOOG&#39;, &#39;MSFT&#39;)), col_double()))
+tidy_returns</code></pre>
+<pre><code>## # A tibble: 1,254 x 2
+##    stock returns
+##    &lt;fct&gt;   &lt;dbl&gt;
+##  1 AAPL   1.38  
+##  2 AAPL   2.83  
+##  3 AAPL  -0.0394
+##  4 AAPL   0.108 
+##  5 AAPL   1.64  
+##  6 AAPL   0.0689
+##  7 AAPL  -0.561 
+##  8 AAPL   0.551 
+##  9 AAPL  -0.217 
+## 10 AAPL  -0.108 
+## # ... with 1,244 more rows</code></pre>
+<p><br></p>
+</div>
+<div id="box-plot" class="section level2">
+<h2>Box Plot</h2>
+<p>With the above data, let us create a box plot where we compate the distribution
+of stock returns of different companies. We map X axis to the column with stock
+names and Y axis to the column with stock returns. Note that, the column names
+are wrapped inside <code>aes()</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns))</code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>To create a horizontal bar plot, we can use <code>coord_flip()</code> which will flip the
+coordinate axes.</p>
+</div>
+<div id="horizontal-box-plot" class="section level2">
+<h2>Horizontal Box Plot</h2>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns)) +
+  coord_flip()</code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="notch" class="section level2">
+<h2>Notch</h2>
+<p>Notches are used to compare medians. You can use the <code>notch</code> argument and set
+it to <code>TRUE</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns),
+    notch = TRUE) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="jitter" class="section level2">
+<h2>Jitter</h2>
+<p>Just for comparison, let us plot the returns as points on top of the box plot
+using <code>geom_jitter()</code>. We modify the color of the points using the <code>color</code>
+argument and the spread using the <code>width</code> argument.</p>
+<pre class="r"><code>ggplot(tidy_returns, aes(x = stock, y = returns)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, color = &#39;blue&#39;)</code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="outliers" class="section level2">
+<h2>Outliers</h2>
+<p>To highlight extreme observations, we can modify the appearance of outliers
+using the following:</p>
+<ul>
+<li>color</li>
+<li>shape</li>
+<li>size</li>
+<li>alpha</li>
+</ul>
+<p><br></p>
+<p>To modify the color of the outliers, use the <code>outlier.color</code> argument. The
+color can be specified either using its name or the associated hex code.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), outlier.color = &#39;red&#39;)</code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The shape of the outlier can be modified using the <code>outlier.shape</code> argument.
+It can take values between <code>0</code> and <code>25</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), outlier.shape = 23) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The size of the outlier can be modified using the <code>outlier.size</code> argument. It
+can take any value greater than <code>0</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), outlier.size = 3) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>You can play around with the transparency of the outlier using the
+<code>outlier.alpha</code> argument. It can take values between <code>0</code> and <code>1</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), outlier.color = &#39;blue&#39;, outlier.alpha = 0.3) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="box-aesthetics" class="section level2">
+<h2>Box Aesthetics</h2>
+<p>The appearance of the box can be controlled using the following:</p>
+<ul>
+<li>color</li>
+<li>fill</li>
+<li>alpha</li>
+<li>line type</li>
+<li>line width</li>
+</ul>
+<p><br></p>
+</div>
+<div id="specify-values" class="section level2">
+<h2>Specify Values</h2>
+<p>The background color of the box can be modified using the <code>fill</code> argument. The
+color can be specified either using its name or the associated hex code.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), fill = c(&#39;blue&#39;, &#39;red&#39;, &#39;green&#39;, &#39;yellow&#39;, &#39;brown&#39;)) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>To modify the transparency of the background color, use the <code>alpha</code> argument. It
+can take any value between <code>0</code> and <code>1</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), fill = &#39;blue&#39;, alpha = 0.3) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The color of the border can be modified using the <code>color</code> argument. The
+color can be specified either using its name or the associated hex code.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), color = c(&#39;blue&#39;, &#39;red&#39;, &#39;green&#39;, &#39;yellow&#39;, &#39;brown&#39;)) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The width of the border can be changed using the <code>size</code> argument. It can take
+any value greater than <code>0</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), size = 1.5) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>To change the line type of the border, use the <code>linetype</code> argument. It can take
+any value between <code>0</code> and <code>6</code>.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns), linetype = 2) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="map-variables" class="section level2">
+<h2>Map Variables</h2>
+<p>Instead of specifying values, we can map <code>fill</code> and <code>color</code> to variables as
+well. In the below example, we map <code>fill</code> to the variable stock. It assigns
+different colors to the different stocks.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns, fill = stock)) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>Let us map <code>color</code> to the variable stock. It will assign different colors
+to the box borders.</p>
+<pre class="r"><code>ggplot(tidy_returns) +
+  geom_boxplot(aes(x = stock, y = returns, color = stock)) </code></pre>
+<p><img src="/post/2018-01-07-ggplot2-box-plots_files/figure-html/box16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>In this post, we learnt to:</p>
+<ul>
+<li>build box plots</li>
+<li>modify outlier color, shape, size etc.</li>
+<li>modify box color</li>
+<li>modify box line color, size and line type</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<p>In the next post, we will learn to build histograms.</p>
+<p><br></p>
+</div>
+</div>

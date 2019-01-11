@@ -55,6 +55,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Scatter Plots](/ggplot2-scatter-plots/)
 - [Line Graphs](/ggplot2-line-graphs/)
 - [Bar Plots](/ggplot2-bar-plots/)
+- [Box Plots](/ggplot2-box-plots/)
 
 ### Base 
 
