@@ -1,0 +1,320 @@
+---
+title: 'ggplot2: Legend - Part 6'
+author: Aravind Hebbali
+twitterImg: /img/gg_leg_part_1.png
+description: "ggplot2 - Legend Part 6"
+date: '2018-04-13'
+slug: legend-part-6
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the 18th post in the series <strong>Elegant Data Visualization with ggplot2</strong>.
+In the previous post, we learnt how to modify the legend of plot when <code>alpha</code>
+is mapped to a categorical variable. In this post, we will learn to modify legend</p>
+<ul>
+<li>title</li>
+<li>label</li>
+<li>and bar</li>
+</ul>
+<p>So far, we have learnt to modify the components of a legend using <code>scale_*</code>
+family of functions. Now, we will use the <code>guide</code> argument and supply it
+values using the <code>guide_legend()</code> function.</p>
+<p><br></p>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/a77a836e7e06c61c28ba7db3a69e1510">here</a>.</p>
+<p><br></p>
+</div>
+<div id="title" class="section level3">
+<h3>Title</h3>
+<div id="title-alignment" class="section level4">
+<h4>Title Alignment</h4>
+<hr>
+<p>The horizontal alignment of the title can be managed using the <code>title.hjust</code>
+argument. It can take any value between <code>0</code> and <code>1</code>.</p>
+<ul>
+<li>0 (left)</li>
+<li>1 (right)</li>
+</ul>
+<p>In the below example, we align the title to the center by assigning the value
+<code>0.5</code>.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-alignment-vertical" class="section level4">
+<h4>Title Alignment (Vertical)</h4>
+<hr>
+<p>To manage the vertical alignment of the title, use <code>title.vjust</code>.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    title = &quot;Horsepower&quot;, title.position = &quot;top&quot;, title.vjust = 1))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title-position" class="section level4">
+<h4>Title Position</h4>
+<hr>
+<p>The position of the title can be managed using <code>title.posiiton</code> argument. It
+can be positioned at:</p>
+<ul>
+<li>top</li>
+<li>bottom</li>
+<li>left</li>
+<li>right</li>
+</ul>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5, 
+      title.position = &quot;top&quot;))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="label" class="section level2">
+<h2>Label</h2>
+<div id="label-position" class="section level3">
+<h3>Label Position</h3>
+<hr>
+<p>The position of the label can be managed using the <code>label.position</code> argument.
+It can be positioned at:</p>
+<ul>
+<li>top</li>
+<li>bottom</li>
+<li>left</li>
+<li>right</li>
+</ul>
+<p>In the below example, we position the label at right.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(label.position = &quot;right&quot;))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="label-alignment" class="section level3">
+<h3>Label Alignment</h3>
+<hr>
+<p>The horizontal alignment of the label can be managed using the <code>label.hjust</code>
+argument. It can take any value between <code>0</code> and <code>1</code>.</p>
+<ul>
+<li>0 (left)</li>
+<li>1 (right)</li>
+</ul>
+<p>In the below example, we align the label to the center by assigning the value
+<code>0.5</code>.</p>
+<ul>
+<li>alignment
+<ul>
+<li>0 (left)</li>
+<li>1 (right)</li>
+</ul></li>
+</ul>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(label.hjust = 0.5))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<div id="labels-alignment-vertical" class="section level4">
+<h4>Labels Alignment (Vertical)</h4>
+<hr>
+<p>The vertical alignment of the label can be managed using the <code>label.vjust</code>
+argument.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    label.vjust = 0.8))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="direction" class="section level3">
+<h3>Direction</h3>
+<hr>
+<p>The direction of the label can be either horizontal or veritcal and it can be
+set using the <code>direction</code> argument.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(direction = &quot;horizontal&quot;))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="rows" class="section level3">
+<h3>Rows</h3>
+<hr>
+<p>The label can be spread across multiple rows using the <code>nrow</code> argument. In the
+below example, the label is spread across 2 rows.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(nrow = 2))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="reverse" class="section level3">
+<h3>Reverse</h3>
+<hr>
+<p>The order of the labels can be reversed using the <code>reverse</code> argument. We need
+to supply logical values i.e. either <code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the order
+will be reversed.</p>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(reverse = TRUE))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together…</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) + geom_point(aes(disp, mpg, color = factor(cyl))) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),
+    guide = guide_legend(title = &quot;Cylinders&quot;, title.hjust = 0.5, 
+      title.position = &quot;top&quot;, label.position = &quot;right&quot;, 
+      direction = &quot;horizontal&quot;, label.hjust = 0.5, nrow = 2, reverse = TRUE)
+  )</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="legend-bar" class="section level3">
+<h3>Legend Bar</h3>
+<hr>
+<p>So far we have looked at modifying components of the legend when it acts as a
+guide for <code>color</code>, <code>fill</code> or <code>shape</code> i.e. when the aesthetics have been mapped
+to a categorical variable. In this section, you will learn about
+<code>guide_colorbar()</code> which will allow us to modify the legend when the aesthetics
+are mapped to a continuous variable.</p>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<hr>
+<p>Let us start with a scatter plot examining the relationship between displacement
+and miles per gallon from the mtcars data set. We will map the color of the points
+to the <code>hp</code> variable.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg36-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="width" class="section level3">
+<h3>Width</h3>
+<hr>
+<p>The width of the bar can be modified using the <code>barwidth</code> argument. It is used
+inside the <code>guide_colorbar()</code> function which itself is supplied to the <code>guide</code>
+argument of <code>scale_color_continuous()</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barwidth = 10))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="height" class="section level3">
+<h3>Height</h3>
+<hr>
+<p>Similarly, the height of the bar can be modified using the <code>barheight</code> argument.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    barheight = 3))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="bins" class="section level3">
+<h3>Bins</h3>
+<hr>
+<p>The <code>nbin</code> argument allows us to specify the number of bins in the bar.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    nbin = 4))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="ticks" class="section level3">
+<h3>Ticks</h3>
+<hr>
+<p>The ticks of the bar can be removed using the <code>ticks</code> argument and setting it
+to <code>FALSE</code>.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    ticks = FALSE))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg28-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="upperlower-limits" class="section level3">
+<h3>Upper/Lower Limits</h3>
+<hr>
+<p>The upper and lower limits of the bars can be drawn or undrawn using the
+<code>draw.ulim</code> and <code>draw.llim</code> arguments. They both accept logical values.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp)) +
+  scale_color_continuous(guide = guide_colorbar(
+    draw.ulim = TRUE, draw.llim = FALSE))</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="guides-color-shape-size" class="section level3">
+<h3>Guides: Color, Shape &amp; Size</h3>
+<hr>
+<p>The <code>guides()</code> function can be used to create multiple legends to act as a
+guide for <code>color</code>, <code>shape</code>, <code>size</code> etc. as shown below. First, we map color,
+shape and size to different variables. Next, in the <code>guides()</code> function, we
+supply values to each of the above aesthetics to indicate the type of legend.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, 
+    size = qsec, shape = factor(gear))) + 
+  guides(color = &quot;colorbar&quot;, shape = &quot;legend&quot;, size = &quot;legend&quot;)</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="guides-title" class="section level3">
+<h3>Guides: Title</h3>
+<hr>
+<p>To modify the components of the different legends, we must use the
+<code>guide_*</code> family of functions. In the below example, we use <code>guide_colorbar()</code>
+for the legend acting as guide for color mapped to a continuous variable and
+<code>guide_legend()</code> for the legends acting as guide for shape/size mapped to
+categorical variables.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp, size = wt, shape = factor(gear))) + 
+  guides(color = guide_colorbar(title = &quot;Horsepower&quot;),
+    shape = guide_legend(title = &quot;Weight&quot;), size = guide_legend(title = &quot;Gear&quot;)
+  )</code></pre>
+<p><img src="/post/2018-04-13-legend-part-6_files/figure-html/leg35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we will learn to modify legend</p>
+<ul>
+<li>title</li>
+<li>label</li>
+<li>and bar</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next post, we will learn faceting.</p>
+<p><br></p>
+</div>
+</div>

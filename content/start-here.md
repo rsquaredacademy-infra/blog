@@ -63,6 +63,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Legend - Part 3](/legend-part-3/)
 - [Legend - Part 4](/legend-part-4/)
 - [Legend - Part 5](/legend-part-5/)
+- [Legend - Part 6](/legend-part-6/)
 
 ### Base 
 
