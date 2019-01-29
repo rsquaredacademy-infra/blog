@@ -99,7 +99,8 @@ length of the number of ticks.</p>
 <p><img src="/post/2018-01-31-ggplot2-guides-axes_files/figure-html/guide5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p>We can change the tick labels using the <code>labels</code> argument. In the below
-example, we use words instead of numbers.</p>
+example, we use words instead of numbers. When adding labels, we need to
+ensure that the length of the <code>breaks</code> and <code>labels</code> are same.</p>
 <pre class="r"><code>ggplot(mtcars) +
   geom_point(aes(disp, mpg)) +
   scale_x_continuous(breaks = c(150, 300, 450),

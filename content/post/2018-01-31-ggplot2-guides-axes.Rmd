@@ -118,7 +118,8 @@ ggplot(mtcars) +
 <br>
 
 We can change the tick labels using the `labels` argument. In the below 
-example, we use words instead of numbers.
+example, we use words instead of numbers. When adding labels, we need to
+ensure that the length of the `breaks` and `labels` are same.
 
 ```{r guide6, fig.align='center'}
 ggplot(mtcars) +
