@@ -2,7 +2,7 @@
 title: 'ggplot2: Legend - Part 1'
 author: Aravind Hebbali
 twitterImg: /img/gg_leg_part_1.png
-description: "ggplot2 - Quick Tour"
+description: "ggplot2 - Legend Part 1"
 date: '2018-02-12'
 slug: legend-part-1
 topics:
@@ -115,7 +115,7 @@ the labels are intuitive and easy to interpret for the end user of the plot.</p>
 want the labels in the legend to represent all of them. In such cases, we can
 use the breaks argument and specify the labels to be used. In the below case,
 we use the <code>breaks</code> argument to ensure that the labels in legend represent
-two levels (4, 6) of the mapped variable.</p>
+two levels (4, 8) of the mapped variable.</p>
 <pre class="r"><code>ggplot(mtcars) +
   geom_point(aes(disp, mpg, color = factor(cyl))) +
   scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;),

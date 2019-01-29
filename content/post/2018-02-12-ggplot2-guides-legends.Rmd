@@ -2,7 +2,7 @@
 title: 'ggplot2: Legend - Part 1'
 author: Aravind Hebbali
 twitterImg: /img/gg_leg_part_1.png
-description: "ggplot2 - Quick Tour"
+description: "ggplot2 - Legend Part 1"
 date: '2018-02-12'
 slug: legend-part-1
 topics:
@@ -137,7 +137,7 @@ When there are large number of levels in the mapped variable, you may not
 want the labels in the legend to represent all of them. In such cases, we can 
 use the breaks argument and specify the labels to be used. In the below case, 
 we use the `breaks` argument to ensure that the labels in legend represent 
-two levels (4, 6) of the mapped variable.
+two levels (4, 8) of the mapped variable.
 
 ```{r leg20, fig.align='center'}
 ggplot(mtcars) +
