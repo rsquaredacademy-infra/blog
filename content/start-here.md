@@ -58,7 +58,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Box Plots](/ggplot2-box-plots/)
 - [Histogram](/ggplot2-histogram/)
 - [Guides - Axes](/guides-axes/)
-- [Modifying Legend - Part 1](/legend-part-1/)
+- [Legend - Part 1](/legend-part-1/)
 
 ### Base 
 
