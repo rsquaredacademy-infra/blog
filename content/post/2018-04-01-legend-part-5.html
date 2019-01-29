@@ -1,0 +1,159 @@
+---
+title: 'ggplot2: Legend - Part 5'
+author: Aravind Hebbali
+twitterImg: /img/gg_leg_part_1.png
+description: "ggplot2 - Legend Part 5"
+date: '2018-04-01'
+slug: legend-part-5
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the 17th post in the series <strong>Elegant Data Visualization with ggplot2</strong>.
+In the previous post, we learnt how to modify the legend of plot when <code>size</code> is
+mapped to continuous variable. In this post, we will learn to modify the
+following using <code>scale_alpha_continuous()</code> when <code>alpha</code> or transparency is
+mapped to variables:</p>
+<ul>
+<li>title</li>
+<li>breaks</li>
+<li>limits</li>
+<li>range</li>
+<li>labels</li>
+<li>values</li>
+</ul>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/ae9f6afd3c4818b3778ea008da7d2e92">here</a>.</p>
+<p><br></p>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<hr>
+<p>Let us start with a scatter plot examining the relationship between displacement
+and miles per gallon from the mtcars data set. We will map the transparency of
+the points to the <code>hp</code> variable. Remember, <code>alpha</code> must always be mapped to a
+continuous variable.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;)</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As you can see, the legend acts as a guide for the <code>alpha</code> aesthetic. Now, let
+us learn to modify the different aspects of the legend.</p>
+<p><br></p>
+</div>
+<div id="title" class="section level3">
+<h3>Title</h3>
+<hr>
+<p>The title of the legend (<code>hp</code>) is not very intuitive. If the user does
+not know the underlying data, they will not be able to make any sense out of it.
+Let us change it to <code>Horsepower</code> using the <code>name</code> argument.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(&quot;Horsepower&quot;)</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="breaks" class="section level3">
+<h3>Breaks</h3>
+<hr>
+<p>When the range of the variable mapped to size is large, you may not
+want the labels in the legend to represent all of them. In such cases, we can
+use the breaks argument and specify the labels to be used. In the below case,
+we use the <code>breaks</code> argument to ensure that the labels in legend represent
+certain midpoints (125, 200, 275) of the mapped variable.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(breaks = c(125, 200, 275))</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="limits" class="section level3">
+<h3>Limits</h3>
+<hr>
+<p>Let us assume that we want to modify the data to be displayed i.e. instead of
+examining the relationship between mileage and displacement for all cars, we
+desire to look at only cars whose horsepower is between <code>100</code> and <code>350</code>.
+One way to approach this would be to filter the data using <code>filter</code> from dplyr
+and then visualize it. Instead, we will use the <code>limits</code> argument and filter
+the data for visualization.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(limits = c(100, 350))</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="range" class="section level3">
+<h3>Range</h3>
+<hr>
+<p>The range of the transparency of points can be modified using the <code>range</code>
+argument. We need to specify a lower and upper range using a numeric vector.
+In the below example, we use <code>range</code> and supply the lower and upper limits as
+<code>0.4</code> and <code>0.8</code>. The transparency of the points will now lie between <code>0.4</code> and
+<code>0.8</code> only.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(range = c(0.4, 0.8))</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="labels" class="section level3">
+<h3>Labels</h3>
+<hr>
+<p>The labels in the legend can be modified using the <code>labels</code> argument. Let us
+change the labels to “1 Hundred”, “2 Hundred” and “3 Hundred” in the next example.
+Ensure that the labels are intuitive and easy to interpret for the end user of
+the plot.</p>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(breaks = c(100, 200, 300),
+    labels = c(&quot;1 Hundred&quot;, &quot;2 Hundred&quot;, 
+      &quot;3 Hundred&quot;))</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together</h3>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg, alpha = hp), color = &#39;blue&#39;) +
+  scale_alpha_continuous(&quot;Horsepower&quot;, breaks = c(100, 200, 300),
+    limits = c(100, 350), range = c(0.4, 0.8),
+    labels = c(&quot;1 Hundred&quot;, &quot;2 Hundred&quot;, &quot;3 Hundred&quot;))</code></pre>
+<p><img src="/post/2018-04-01-legend-part-5_files/figure-html/leg8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we learnt to modify the following aspects of legends:</p>
+<ul>
+<li>title</li>
+<li>breaks</li>
+<li>range</li>
+<li>limits</li>
+<li>labels</li>
+<li>values</li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next post, we will learn how to modify the title, label and bar of the legend.</p>
+<p><br></p>
+</div>
