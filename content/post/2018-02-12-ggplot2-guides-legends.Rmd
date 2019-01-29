@@ -119,7 +119,7 @@ only 4 and 6 cylinders.
 ### Labels
 
 The labels in the legend can be modified using the `labels` argument. Let us 
-change the labels to `Four`, `Six` and `Eight` in the next label. Ensure that
+change the labels to `Four`, `Six` and `Eight` in the next example. Ensure that
 the labels are intuitive and easy to interpret for the end user of the plot.
 
 ```{r leg19, fig.align='center'}
