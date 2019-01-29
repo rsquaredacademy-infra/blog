@@ -1,0 +1,202 @@
+---
+title: 'ggplot2: Legend - Part 2'
+author: Aravind Hebbali
+twitterImg: /img/gg_leg_part_2.png
+description: "ggplot2 - Legend Part 2"
+date: '2018-02-24'
+slug: legend-part-2
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+### Introduction
+
+<hr>
+
+This is the 14th post in the series **Elegant Data Visualization with ggplot2**. 
+In the previous post, we learnt how to modify the legend of plots when 
+aesthetics are mapped to variables. In this post, we will continue to explore 
+different ways to modify/customize the legend of plots.
+
+
+```{r gui1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+Specifically, we will learn to modify the following using `scale_fill_manual()` 
+when `fill` is mapped to categorical variables:
+
+- title
+- breaks
+- limits
+- labels
+- values
+
+<br>
+
+### Libraries, Code & Data
+
+<hr>
+
+We will use the following libraries in this post:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this post can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/ef2b665173cf7cfe17093f3dcb052035).
+
+<br>
+
+### Plot
+
+<hr>
+
+Let us start with a scatter plot examining the relationship between 
+displacement and miles per gallon from the mtcars data set. We will map `fill`
+to the `cyl` variable. 
+
+```{r leg22}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22)
+```
+
+As you can see, the legend acts as a guide for the `color` aesthetic. Now, let 
+us learn to modify the different aspects of the legend.
+
+<br>
+
+### Title
+
+<hr>
+
+The title of the legend (`factor(cyl)`) is not very intuitive. If the user 
+does not know the underlying data, they will not be able to make any sense out 
+of it. Let us change it to `Cylinders` using the `name` argument.
+
+
+```{r leg23}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(name = "Cylinders", 
+    values = c("red", "blue", "green"))
+```
+
+<br>
+
+### Values
+
+<hr>
+
+To change the default colors in the legend, use the `values` argument and
+supply a character vector of color names. The number of colors specified 
+must be equal to the number of levels in the categorical variable mapped.
+In the below example, `cyl` has 3 levels (4, 6, 8) and hence we have specified
+3 colors.
+
+```{r leg24}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"))
+```
+
+<br>
+
+### Labels
+
+<hr>
+
+The labels in the legend can be modified using the `labels` argument. Let us 
+change the labels to `Four`, `Six` and `Eight` in the next label. Ensure that
+the labels are intuitive and easy to interpret for the end user of the plot.
+
+```{r leg25}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    labels = c('Four', 'Six', 'Eight'))
+```
+
+<br>
+
+### Limits
+
+<hr>
+
+Let us assume that we want to modify the data to be displayed i.e. instead of 
+examining the relationship between mileage and displacement for all cars, we 
+desire to look at only cars with at least 6 cylinders. One way to approach this
+would be to filter the data using `filter` from dplyr and then visualize it. 
+Instead, we will use the `limits` argument and filter the data for visualization.
+
+```{r leg26}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    limits = c(6, 8))
+```
+
+As you can see above, `ggplot2` returns a warning message indicating data related
+to 4 cylinders has been dropped. If you observe the legend, it now represents 
+only 4 and 6 cylinders.
+
+<br>
+
+### Breaks
+
+<hr>
+
+When there are large number of levels in the mapped variable, you may not 
+want the labels in the legend to represent all of them. In such cases, we can 
+use the breaks argument and specify the labels to be used. In the below case, 
+we use the `breaks` argument to ensure that the labels in legend represent 
+two levels (4, 8) of the mapped variable.
+
+```{r leg27}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(values = c("red", "blue", "green"),
+    breaks = c(4, 8))
+```
+
+<br>
+
+### Putting it all together...
+
+<hr>
+
+```{r leg28}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, fill = factor(cyl)), shape = 22) +
+  scale_fill_manual(name = "Cylinders", values = c("red", "blue", "green"),
+    labels = c('Four', 'Six', 'Eight'), limits = c(4, 6, 8), breaks = c(4, 6, 8))
+```
+
+<br>
+
+### Summary
+
+<hr>
+
+In this post, we learnt to modify the following aspects of legends: 
+
+- title
+- breaks
+- limits
+- labels
+- values
+
+<br>
+
+### Up Next..
+
+<hr>
+
+In the next post, we will learn to modify the legend when `shape` is mapped to categorical variables.
+
+<br>
+
+
