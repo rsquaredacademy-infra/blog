@@ -65,6 +65,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Legend - Part 5](/legend-part-5/)
 - [Legend - Part 6](/legend-part-6/)
 - [Faceting](/faceting/)
+- [Themes](/themes/)
 
 ### Base 
 

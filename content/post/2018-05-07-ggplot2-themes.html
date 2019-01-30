@@ -1,0 +1,219 @@
+---
+title: 'ggplot2: Themes'
+author: Aravind Hebbali
+twitterImg: /img/gg_themes.png
+description: "ggplot2 - Themes"
+date: '2018-05-07'
+slug: themes
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the last post in the series <strong>Elegant Data Visualization with ggplot2</strong>.
+In the previous post, we learnt to combine multiple plots. In this post, we
+will learn to modify the appearance of all non data components of the plot such
+as:</p>
+<ul>
+<li>axis</li>
+<li>legend</li>
+<li>panel</li>
+<li>plot area</li>
+<li>background</li>
+<li>margin</li>
+<li>facets</li>
+</ul>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/a6722c54610578ddcadaeeaf1df7cbf3">here</a>.</p>
+<p><br></p>
+</div>
+<div id="basic-plot" class="section level3">
+<h3>Basic Plot</h3>
+<hr>
+<p>We will continue with the scatter plot examining the relationship between
+displacement and miles per gallon from the the mtcars data set.</p>
+<pre class="r"><code>p &lt;- ggplot(mtcars) +
+  geom_point(aes(disp, mpg))
+p</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="axis" class="section level3">
+<h3>Axis</h3>
+<div id="text" class="section level4">
+<h4>Text</h4>
+<hr>
+<p>The <code>axis.title.x</code> argument can be used to modify the appearance of the <code>X</code>
+axis. In the below example, we modify the color and size of the title using
+the <code>element_text()</code> function. Remember, whenever you are trying to modify the
+appearance of a theme element which is a text, you must use <code>element_text()</code>.</p>
+<p>You can use <code>axis.title.y</code> to modify the <code>Y</code> axis title and to modify the
+title of both the axis together, use <code>axis.title</code>.</p>
+<pre class="r"><code>p + theme(axis.title.x = element_text(color = &quot;red&quot;, size = 10, face = &quot;italic&quot;))</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="ticks" class="section level4">
+<h4>Ticks</h4>
+<hr>
+<p>To modify the appearance of the axis ticks, use the <code>axis.ticks</code> argument. You can
+change the color, size, linetype and length of the ticks using the <code>element_line()</code>
+function as shown below.</p>
+<pre class="r"><code>p + theme(axis.ticks = element_line(color = &#39;blue&#39;, size = 1.25, linetype = 2), 
+          axis.ticks.length = unit(1, &quot;cm&quot;))</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="line" class="section level4">
+<h4>Line</h4>
+<hr>
+<p>The <code>axis.line</code> argument should be used to modify the appearance of the
+axis lines. You can change the color, size and linetype of the line using
+the <code>element_line()</code> function.</p>
+<pre class="r"><code>p + theme(axis.line = element_line(color = &#39;red&#39;, size = 1.5, linetype = 3))</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="legend" class="section level3">
+<h3>Legend</h3>
+<hr>
+<p>Now, let us look at modifying the non-data components of a legend.</p>
+<pre class="r"><code>p &lt;- ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = factor(cyl), shape = factor(gear)))
+p</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<div id="background" class="section level4">
+<h4>Background</h4>
+<hr>
+<p>The background of the legend can be modified using the <code>legend.background</code>
+argument. You can change the background color, the border color and line type
+using <code>element_rect()</code>.</p>
+<pre class="r"><code>p + theme(legend.background = element_rect(fill = &#39;gray&#39;, linetype = 3,  
+          color = &quot;black&quot;))</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="text-1" class="section level4">
+<h4>Text</h4>
+<hr>
+<p>The appearance of the text can be modified using the <code>legend.text</code> argument.
+You can change the color, size and font using the <code>element_text()</code> function.</p>
+<pre class="r"><code>p + theme(legend.text = element_text(color = &#39;green&#39;, face = &#39;italic&#39;))</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="title" class="section level4">
+<h4>Title</h4>
+<hr>
+<p>The appearance fo the title of the legend can be modified using the
+<code>legend.title</code> argument. You can change the color, size, font and alignment
+using <code>element_text()</code>.</p>
+<pre class="r"><code>p + theme(legend.title = element_text(color = &#39;blue&#39;, face = &#39;bold&#39;),
+          legend.title.align = 0.1)</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="position" class="section level4">
+<h4>Position</h4>
+<hr>
+<p>The position and direction of the legend can be changed using:</p>
+<ul>
+<li><code>legend.position</code></li>
+<li>and <code>legend.direction</code></li>
+</ul>
+<pre class="r"><code>p + theme(legend.position = &quot;top&quot;, legend.direction = &quot;horizontal&quot;)</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme36-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="themes" class="section level3">
+<h3>Themes</h3>
+<div id="classic-dark-on-light" class="section level4">
+<h4>Classic Dark on Light</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_bw()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="default-gray" class="section level4">
+<h4>Default Gray</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_gray()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="light" class="section level4">
+<h4>Light</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_light()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="minimal" class="section level4">
+<h4>Minimal</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_minimal()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="dark" class="section level4">
+<h4>Dark</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_dark()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="classic" class="section level4">
+<h4>Classic</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_classic()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="void-empty" class="section level4">
+<h4>Void (Empty)</h4>
+<hr>
+<pre class="r"><code>ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  theme_void()</code></pre>
+<p><img src="/post/2018-05-07-ggplot2-themes_files/figure-html/theme23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we learnt to modify the appearance of all non data components
+of a plot and about the different themes available in ggplot2. This brings us
+to the end of the series <strong>Elegant Data Visualization with ggplot2</strong>.</p>
+<p><br></p>
+</div>
