@@ -1,0 +1,202 @@
+---
+title: 'ggplot2: Faceting'
+author: Aravind Hebbali
+twitterImg: /img/gg_facet.png
+description: "ggplot2 - Faceting"
+date: '2018-04-25'
+slug: faceting
+topics:
+  - data-visualization
+tags:
+  - ggplot2
+---
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<hr>
+<p>This is the 19th post in the series <strong>Elegant Data Visualization with ggplot2</strong>.
+In the previous post, we learnt to modify the title, label and bar of a legend.
+In this post, we will learn about faceting i.e. combining plots.</p>
+<p><br></p>
+</div>
+<div id="libraries-code-data" class="section level3">
+<h3>Libraries, Code &amp; Data</h3>
+<hr>
+<p>We will use the following libraries in this post:</p>
+<ul>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://ggplot2.tidyverse.org/">ggplot2</a></li>
+</ul>
+<p>All the data sets used in this post can be found <a href="https://github.com/rsquaredacademy/datasets">here</a> and code can be downloaded from <a href="https://gist.github.com/rsquaredacademy/733381d6b5773e1007a097aeca0f8f4d">here</a>.</p>
+<p><br></p>
+</div>
+<div id="faceting---intro" class="section level3">
+<h3>Faceting - Intro</h3>
+<hr>
+<p>Let us continue with the scatter plot examining the relationship between
+displacement and miles per gallon but let us make one additional change.
+We now want 3 sub plots for each type of cylinder. How can we do this? We can
+split or group the data by cylinder type and plot the subset of data which
+means dealing with 3 different data sets, plotting 3 plots and arranging them
+for comparison. ggplot2 offers the following 2 functions which allow us to plot
+subset of data with a simple formula based interface:</p>
+<ul>
+<li><code>facet_grid()</code></li>
+<li><code>facet_wrap()</code></li>
+</ul>
+<p>Faceting allows us to create multiple sub plots. It partitions a plot into a
+matrix of panels with each panel showing a different subset of data.</p>
+<p><br></p>
+</div>
+<div id="vertical" class="section level3">
+<h3>Vertical</h3>
+<hr>
+<p><code>facet_grid()</code> allows us to split up the data by one or two discrete variables
+and create sub plots. The sub plots can be arranged horizontally or vertically
+using a formula of the form <code>vertical ~ horizontal</code>. In the below example, 3
+sub plots are created, one each for the levels of the <code>cyl</code> variable and
+the sub plots are arranged vertically</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  facet_grid(cyl ~ .)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="horizontal" class="section level3">
+<h3>Horizontal</h3>
+<hr>
+<p>Below we reproduce the previous example but arrange the sub plots horizontally.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  facet_grid(. ~ cyl)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="vertical-horizontal" class="section level3">
+<h3>Vertical &amp; Horizontal</h3>
+<hr>
+<p>In certain cases, we might want different discrete variables to represent the
+horizontal and vertical direction. In the below example, we examine the
+relationship between displacement and miles per gallon for different combinations
+of <code>cyl</code> and <code>gear</code> variables.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  facet_grid(cyl ~ gear)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>Below, we switch the variables representing the vertical and horizontal
+directions.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  facet_grid(gear ~ cyl)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="scales" class="section level3">
+<h3>Scales</h3>
+<hr>
+<p>If you carefully observe the second example, the range of <code>X</code> axis is same for
+all the 3 sub plots i.e. it is a fixed range. You can allow each of the sub
+plots to have different range using the <code>scales</code> argument and supplying it the
+value <code>'free'</code>.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg, color = factor(cyl))) +
+  geom_point() + 
+  facet_grid(. ~ cyl, scales = &quot;free&quot;)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now, each of the sub plot has a different range.</p>
+<p><br></p>
+</div>
+<div id="switch-labels" class="section level3">
+<h3>Switch Labels</h3>
+<hr>
+<p>In the third example, the labels are displayed at the bottom for <code>X</code> axis and
+at the right for the <code>Y</code> axis. It can be changed using the <code>switch</code> argument
+and supplying the value <code>'both'</code>. The labels will now be displayed at the top
+for the <code>X</code> axis and at left for the <code>Y</code> axis. If you just want to change the
+labels for a particular axis, use the values <code>x</code> and <code>y</code> for the <code>X</code> and <code>Y</code>
+axis respectively.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) + 
+  geom_point() + 
+  facet_grid(cyl ~ gear, switch = &quot;both&quot;) </code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="wrap" class="section level3">
+<h3>Wrap</h3>
+<hr>
+<p><code>facet_wrap()</code> allows us to arrange sub plots in a certain number of rows and
+columns. In the below example, we will use <code>facet_wrap()</code> to arrange the sub
+plots in a single row.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(~cyl)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-rows" class="section level3">
+<h3>Specify Rows</h3>
+<hr>
+<p>To arrange the sub plots in a specific number of rows, use the <code>nrow</code> argument.
+In the below example, we arrange the sub plots in 2 rows.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(~cyl, nrow = 2)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="specify-columns" class="section level3">
+<h3>Specify Columns</h3>
+<hr>
+<p>Here, we arrange the sub plots in 3 columns instead of rows using the <code>ncol</code>
+argument.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(~cyl, ncol = 3)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="scales-1" class="section level3">
+<h3>Scales</h3>
+<hr>
+<p>You can allow each of the sub plots to have different range using the <code>scales</code>
+argument and supplying it the value <code>'free'</code>.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(~cyl, scales = &quot;free&quot;)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet12-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="rows-columns" class="section level3">
+<h3>Rows &amp; Columns</h3>
+<hr>
+<p>If 2 discrete variables are used to create the sub plots, we can either use
+the formula interface to specify the variables as shown below</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(~cyl + gear, nrow = 2)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>or use a character vector of variable names.</p>
+<pre class="r"><code>ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  facet_wrap(c(&quot;cyl&quot;, &quot;gear&quot;), ncol = 2)</code></pre>
+<p><img src="/post/2018-04-25-ggplot2-facets-combine-multiple-plots_files/figure-html/facet11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<hr>
+<p>In this post, we learnt to create sub plots using:</p>
+<ul>
+<li><code>facet_grid()</code></li>
+<li><code>facet_wrap()</code></li>
+</ul>
+<p><br></p>
+</div>
+<div id="up-next.." class="section level3">
+<h3>Up Next..</h3>
+<hr>
+<p>In the next post, we will learn to modify the theme of a plot.</p>
+<p><br></p>
+</div>
