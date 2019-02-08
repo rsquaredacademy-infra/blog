@@ -1,0 +1,175 @@
+---
+title: Introducing olsrr
+author: Aravind Hebbali
+twitterImg: /img/og_olsrr.png
+description: "Tools for linear regression."
+date: '2019-02-08'
+slug: introducing-olsrr
+topics:
+  - regression
+tags:
+  - olsrr
+---
+
+I am pleased to announce the **olsrr** package, a set of tools for improved 
+output from linear regression models, designed keeping in mind 
+beginner/intermediate R users. The package includes:
+
+- comprehensive regression output
+- variable selection procedures
+- heteroskedasticiy, collinearity diagnostics and measures of influence
+- various plots and underlying data
+
+If you know how to build models using `lm()`, you will find **olsrr** very 
+useful. Most of the functions use an object of class `lm` as input. So you 
+just need to build a model using `lm()` and then pass it onto the functions in 
+**olsrr**. Once you have picked up enough knowledge of R, you can move on to 
+more intuitive approach offered by tidymodels etc. as they offer more 
+flexibility, which **olsrr** does not.
+
+### Installation
+
+```{r cran-installation, eval = FALSE}
+# Install release version from CRAN
+install.packages("olsrr")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/olsrr")
+```
+
+### Shiny App
+
+**olsrr** includes a shiny app which can be launched using
+
+```{r app, eval=FALSE}
+ols_launch_app()
+```
+
+or try the live version [here](https://www.rsquaredcomputing.com/olsrr/).
+
+Read on to learn more about the features of **olsrr**, or see the 
+[olsrr website](https://olsrr.rsquaredacademy.com/) for 
+detailed documentation on using the package.
+
+### Regression Output
+
+```{r load, message=FALSE, echo=FALSE}
+library(olsrr)
+```
+
+```{r regress}
+model <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+ols_regress(model)
+```
+
+In the presence of interaction terms in the model, the predictors are scaled 
+and centered before computing the standardized betas. `ols_regress()` will 
+detect interaction terms automatically but in case you have created a new 
+variable instead of using the inline function, you can indicate the presence 
+of interaction terms by setting `iterm` to `TRUE`.
+
+### Residual Diagnostics
+
+**olsrr** offers tools for detecting violation of standard regression assumptions:
+
+- Residual QQ plot
+- Residual normality test
+- Residual vs Fitted plot
+- Residual histogram
+
+```{r residiag}
+ols_plot_resid_qq(model)
+```
+
+See [Residual Diagnostics](https://olsrr.rsquaredacademy.com/articles/residual_diagnostics.html) 
+for more details.
+
+### Heteroskedasticity
+
+**olsrr** provides the following 4 tests for detecting heteroscedasticity:
+
+- Bartlett Test
+- Breusch Pagan Test
+- Score Test
+- F Test
+
+```{r hetero}
+ols_test_breusch_pagan(model)
+```
+
+See [Heteroskedasticity](https://olsrr.rsquaredacademy.com/articles/heteroskedasticity.html) 
+for more details.
+
+### Collinearity Diagnostics
+
+VIF, Tolerance and condition indices to detect collinearity and plots for 
+assessing mode fit and contributions of variables.
+
+```{r collinearity}
+ols_coll_diag(model)
+```
+
+See [Collinearity Diagnostics](https://olsrr.rsquaredacademy.com/articles/regression_diagnostics.html) for more details.
+
+### Measures of Influence
+
+**olsrr** offers the following tools to detect influential observations:
+
+- Cook’s D Bar Plot
+- Cook’s D Chart
+- DFBETAs Panel
+- DFFITs Plot
+- Studentized Residual Plot
+- Standardized Residual Chart
+- Studentized Residuals vs Leverage Plot
+- Deleted Studentized Residual vs Fitted Values Plot
+- Hadi Plot
+- Potential Residual Plot
+
+```{r mof}
+ols_plot_resid_lev(model)
+```
+
+See [Measures of Influence](https://olsrr.rsquaredacademy.com/articles/influence_measures.html) for more details.
+
+### Variable Selection
+
+Different variable selection procedures such as all possible regression, best 
+subset regression, stepwise regression, stepwise forward regression and 
+stepwise backward regression.
+
+```{r varselect}
+model <- lm(y ~ ., data = stepdata)
+ols_step_both_aic(model)
+```
+
+See [Variable Selection](https://olsrr.rsquaredacademy.com/articles/variable_selection.html) for more details.
+
+### Learning More
+
+The [olsrr website](https://olsrr.rsquaredacademy.com/index.html) includes 
+comprehensive documentation on using the package, including the following
+articles that cover various aspects of using olsrr:
+
+- [Variable Selection](https://olsrr.rsquaredacademy.com/articles/variable_selection.html) - Different variable selection procedures such as all possible regression, best 
+subset regression, stepwise regression, stepwise forward regression and 
+stepwise backward regression.
+
+- [Residual Diagnostics](https://olsrr.rsquaredacademy.com/articles/residual_diagnostics.html) - Includes plots to examine residuals to validate OLS assumptions.
+
+- [Heteroskedasticity](https://olsrr.rsquaredacademy.com/articles/heteroskedasticity.html) - Tests for heteroskedasticity include bartlett test, breusch pagan test, score test and f test.
+
+- [Collinearity Diagnostics](https://olsrr.rsquaredacademy.com/articles/regression_diagnostics.html) - VIF, Tolerance and condition indices to detect collinearity and plots for assessing mode fit and contributions of variables.
+
+- [Measures of Influence](https://olsrr.rsquaredacademy.com/articles/influence_measures.html) - Includes 10 different plots to detect and identify influential observations.
+
+
+### Feedback
+
+**olsrr** has been on CRAN for more than an year while we were fixing bugs and 
+making the API stable. All feedback is welcome. Issues (bugs and feature 
+requests) can be posted to [github tracker](https://github.com/rsquaredacademy/olsrr/issues).
+For help with code or other related questions, feel free to reach me hebbali.aravind@gmail.com.
+
+

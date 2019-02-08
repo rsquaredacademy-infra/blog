@@ -1,0 +1,250 @@
+---
+title: Introducing olsrr
+author: Aravind Hebbali
+twitterImg: /img/og_olsrr.png
+description: "Tools for linear regression."
+date: '2019-02-08'
+slug: introducing-olsrr
+topics:
+  - regression
+tags:
+  - olsrr
+---
+
+
+
+<p>I am pleased to announce the <strong>olsrr</strong> package, a set of tools for improved
+output from linear regression models, designed keeping in mind
+beginner/intermediate R users. The package includes:</p>
+<ul>
+<li>comprehensive regression output</li>
+<li>variable selection procedures</li>
+<li>heteroskedasticiy, collinearity diagnostics and measures of influence</li>
+<li>various plots and underlying data</li>
+</ul>
+<p>If you know how to build models using <code>lm()</code>, you will find <strong>olsrr</strong> very
+useful. Most of the functions use an object of class <code>lm</code> as input. So you
+just need to build a model using <code>lm()</code> and then pass it onto the functions in
+<strong>olsrr</strong>. Once you have picked up enough knowledge of R, you can move on to
+more intuitive approach offered by tidymodels etc. as they offer more
+flexibility, which <strong>olsrr</strong> does not.</p>
+<div id="installation" class="section level3">
+<h3>Installation</h3>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;olsrr&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/olsrr&quot;)</code></pre>
+</div>
+<div id="shiny-app" class="section level3">
+<h3>Shiny App</h3>
+<p><strong>olsrr</strong> includes a shiny app which can be launched using</p>
+<pre class="r"><code>ols_launch_app()</code></pre>
+<p>or try the live version <a href="https://www.rsquaredcomputing.com/olsrr/">here</a>.</p>
+<p>Read on to learn more about the features of <strong>olsrr</strong>, or see the
+<a href="https://olsrr.rsquaredacademy.com/">olsrr website</a> for
+detailed documentation on using the package.</p>
+</div>
+<div id="regression-output" class="section level3">
+<h3>Regression Output</h3>
+<pre class="r"><code>model &lt;- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+ols_regress(model)</code></pre>
+<pre><code>##                         Model Summary                          
+## --------------------------------------------------------------
+## R                       0.914       RMSE                2.622 
+## R-Squared               0.835       Coef. Var          13.051 
+## Adj. R-Squared          0.811       MSE                 6.875 
+## Pred R-Squared          0.771       MAE                 1.858 
+## --------------------------------------------------------------
+##  RMSE: Root Mean Square Error 
+##  MSE: Mean Square Error 
+##  MAE: Mean Absolute Error 
+## 
+##                                ANOVA                                 
+## --------------------------------------------------------------------
+##                 Sum of                                              
+##                Squares        DF    Mean Square      F         Sig. 
+## --------------------------------------------------------------------
+## Regression     940.412         4        235.103    34.195    0.0000 
+## Residual       185.635        27          6.875                     
+## Total         1126.047        31                                    
+## --------------------------------------------------------------------
+## 
+##                                   Parameter Estimates                                    
+## ----------------------------------------------------------------------------------------
+##       model      Beta    Std. Error    Std. Beta      t        Sig      lower     upper 
+## ----------------------------------------------------------------------------------------
+## (Intercept)    27.330         8.639                  3.164    0.004     9.604    45.055 
+##        disp     0.003         0.011        0.055     0.248    0.806    -0.019     0.025 
+##          hp    -0.019         0.016       -0.212    -1.196    0.242    -0.051     0.013 
+##          wt    -4.609         1.266       -0.748    -3.641    0.001    -7.206    -2.012 
+##        qsec     0.544         0.466        0.161     1.166    0.254    -0.413     1.501 
+## ----------------------------------------------------------------------------------------</code></pre>
+<p>In the presence of interaction terms in the model, the predictors are scaled
+and centered before computing the standardized betas. <code>ols_regress()</code> will
+detect interaction terms automatically but in case you have created a new
+variable instead of using the inline function, you can indicate the presence
+of interaction terms by setting <code>iterm</code> to <code>TRUE</code>.</p>
+</div>
+<div id="residual-diagnostics" class="section level3">
+<h3>Residual Diagnostics</h3>
+<p><strong>olsrr</strong> offers tools for detecting violation of standard regression assumptions:</p>
+<ul>
+<li>Residual QQ plot</li>
+<li>Residual normality test</li>
+<li>Residual vs Fitted plot</li>
+<li>Residual histogram</li>
+</ul>
+<pre class="r"><code>ols_plot_resid_qq(model)</code></pre>
+<p><img src="/post/2019-02-08-introducing-olsrr_files/figure-html/residiag-1.png" width="672" /></p>
+<p>See <a href="https://olsrr.rsquaredacademy.com/articles/residual_diagnostics.html">Residual Diagnostics</a>
+for more details.</p>
+</div>
+<div id="heteroskedasticity" class="section level3">
+<h3>Heteroskedasticity</h3>
+<p><strong>olsrr</strong> provides the following 4 tests for detecting heteroscedasticity:</p>
+<ul>
+<li>Bartlett Test</li>
+<li>Breusch Pagan Test</li>
+<li>Score Test</li>
+<li>F Test</li>
+</ul>
+<pre class="r"><code>ols_test_breusch_pagan(model)</code></pre>
+<pre><code>## 
+##  Breusch Pagan Test for Heteroskedasticity
+##  -----------------------------------------
+##  Ho: the variance is constant            
+##  Ha: the variance is not constant        
+## 
+##              Data               
+##  -------------------------------
+##  Response : mpg 
+##  Variables: fitted values of mpg 
+## 
+##         Test Summary         
+##  ----------------------------
+##  DF            =    1 
+##  Chi2          =    0.5884673 
+##  Prob &gt; Chi2   =    0.4430124</code></pre>
+<p>See <a href="https://olsrr.rsquaredacademy.com/articles/heteroskedasticity.html">Heteroskedasticity</a>
+for more details.</p>
+</div>
+<div id="collinearity-diagnostics" class="section level3">
+<h3>Collinearity Diagnostics</h3>
+<p>VIF, Tolerance and condition indices to detect collinearity and plots for
+assessing mode fit and contributions of variables.</p>
+<pre class="r"><code>ols_coll_diag(model)</code></pre>
+<pre><code>## Tolerance and Variance Inflation Factor
+## ---------------------------------------
+## # A tibble: 4 x 3
+##   Variables Tolerance   VIF
+##   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;
+## 1 disp          0.125  7.99
+## 2 hp            0.194  5.17
+## 3 wt            0.145  6.92
+## 4 qsec          0.319  3.13
+## 
+## 
+## Eigenvalue and Condition Index
+## ------------------------------
+##    Eigenvalue Condition Index   intercept        disp          hp
+## 1 4.721487187        1.000000 0.000123237 0.001132468 0.001413094
+## 2 0.216562203        4.669260 0.002617424 0.036811051 0.027751289
+## 3 0.050416837        9.677242 0.001656551 0.120881424 0.392366164
+## 4 0.010104757       21.616057 0.025805998 0.777260487 0.059594623
+## 5 0.001429017       57.480524 0.969796790 0.063914571 0.518874831
+##             wt         qsec
+## 1 0.0005253393 0.0001277169
+## 2 0.0002096014 0.0046789491
+## 3 0.0377028008 0.0001952599
+## 4 0.7017528428 0.0024577686
+## 5 0.2598094157 0.9925403056</code></pre>
+<p>See <a href="https://olsrr.rsquaredacademy.com/articles/regression_diagnostics.html">Collinearity Diagnostics</a> for more details.</p>
+</div>
+<div id="measures-of-influence" class="section level3">
+<h3>Measures of Influence</h3>
+<p><strong>olsrr</strong> offers the following tools to detect influential observations:</p>
+<ul>
+<li>Cook’s D Bar Plot</li>
+<li>Cook’s D Chart</li>
+<li>DFBETAs Panel</li>
+<li>DFFITs Plot</li>
+<li>Studentized Residual Plot</li>
+<li>Standardized Residual Chart</li>
+<li>Studentized Residuals vs Leverage Plot</li>
+<li>Deleted Studentized Residual vs Fitted Values Plot</li>
+<li>Hadi Plot</li>
+<li>Potential Residual Plot</li>
+</ul>
+<pre class="r"><code>ols_plot_resid_lev(model)</code></pre>
+<p><img src="/post/2019-02-08-introducing-olsrr_files/figure-html/mof-1.png" width="672" /></p>
+<p>See <a href="https://olsrr.rsquaredacademy.com/articles/influence_measures.html">Measures of Influence</a> for more details.</p>
+</div>
+<div id="variable-selection" class="section level3">
+<h3>Variable Selection</h3>
+<p>Different variable selection procedures such as all possible regression, best
+subset regression, stepwise regression, stepwise forward regression and
+stepwise backward regression.</p>
+<pre class="r"><code>model &lt;- lm(y ~ ., data = stepdata)
+ols_step_both_aic(model)</code></pre>
+<pre><code>## Stepwise Selection Method 
+## -------------------------
+## 
+## Candidate Terms: 
+## 
+## 1 . x1 
+## 2 . x2 
+## 3 . x3 
+## 4 . x4 
+## 5 . x5 
+## 6 . x6 
+## 
+## 
+## Variables Entered/Removed: 
+## 
+## - x6 added 
+## - x1 added 
+## - x3 added 
+## - x2 added 
+## - x6 removed 
+## - x4 added 
+## 
+## No more variables to be added or removed.</code></pre>
+<pre><code>## 
+## 
+##                                   Stepwise Summary                                  
+## ----------------------------------------------------------------------------------
+## Variable     Method        AIC         RSS        Sum Sq       R-Sq      Adj. R-Sq 
+## ----------------------------------------------------------------------------------
+## x6          addition    33473.297    6241.497    13986.736    0.69145      0.69143 
+## x1          addition    32931.758    6074.156    14154.076    0.69972      0.69969 
+## x3          addition    31912.722    5771.842    14456.391    0.71466      0.71462 
+## x2          addition    29304.296    5065.587    15162.646    0.74958      0.74953 
+## x6          removal     29302.317    5065.592    15162.641    0.74958      0.74954 
+## x4          addition    29300.814    5064.705    15163.528    0.74962      0.74957 
+## ----------------------------------------------------------------------------------</code></pre>
+<p>See <a href="https://olsrr.rsquaredacademy.com/articles/variable_selection.html">Variable Selection</a> for more details.</p>
+</div>
+<div id="learning-more" class="section level3">
+<h3>Learning More</h3>
+<p>The <a href="https://olsrr.rsquaredacademy.com/index.html">olsrr website</a> includes
+comprehensive documentation on using the package, including the following
+articles that cover various aspects of using olsrr:</p>
+<ul>
+<li><p><a href="https://olsrr.rsquaredacademy.com/articles/variable_selection.html">Variable Selection</a> - Different variable selection procedures such as all possible regression, best
+subset regression, stepwise regression, stepwise forward regression and
+stepwise backward regression.</p></li>
+<li><p><a href="https://olsrr.rsquaredacademy.com/articles/residual_diagnostics.html">Residual Diagnostics</a> - Includes plots to examine residuals to validate OLS assumptions.</p></li>
+<li><p><a href="https://olsrr.rsquaredacademy.com/articles/heteroskedasticity.html">Heteroskedasticity</a> - Tests for heteroskedasticity include bartlett test, breusch pagan test, score test and f test.</p></li>
+<li><p><a href="https://olsrr.rsquaredacademy.com/articles/regression_diagnostics.html">Collinearity Diagnostics</a> - VIF, Tolerance and condition indices to detect collinearity and plots for assessing mode fit and contributions of variables.</p></li>
+<li><p><a href="https://olsrr.rsquaredacademy.com/articles/influence_measures.html">Measures of Influence</a> - Includes 10 different plots to detect and identify influential observations.</p></li>
+</ul>
+</div>
+<div id="feedback" class="section level3">
+<h3>Feedback</h3>
+<p><strong>olsrr</strong> has been on CRAN for more than an year while we were fixing bugs and
+making the API stable. All feedback is welcome. Issues (bugs and feature
+requests) can be posted to <a href="https://github.com/rsquaredacademy/olsrr/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach me <a href="mailto:hebbali.aravind@gmail.com">hebbali.aravind@gmail.com</a>.</p>
+</div>
