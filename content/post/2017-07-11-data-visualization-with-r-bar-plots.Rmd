@@ -14,8 +14,6 @@ tags:
 
 ### Introduction
 
-
-
 This is the fifth post in the series **Data Visualization With R**. In the previous post, we learnt how to build line graphs. In this post, we will visualize categorical data using univariate and bivariate bar plots.
 
 - create 

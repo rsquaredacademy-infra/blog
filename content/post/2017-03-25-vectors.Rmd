@@ -119,3 +119,4 @@ log_vect
 # check data type
 class(log_vect)
 ```
+
