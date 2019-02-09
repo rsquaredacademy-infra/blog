@@ -72,21 +72,27 @@ post = "/:slug/"
     identifier = "package"
     url = "https://pkgs.rsquaredacademy.com/" 
   [[menu.main]]
+    name = "e-books"
+    pre = "<i class='fa fa-book fa-fw'></i>"
+    weight = 8
+    identifier = "ebooks"
+    url = "https://ebooks.rsquaredacademy.com/"   
+  [[menu.main]]
     name = "About"
     pre = "<i class='fa fa-user fa-fw'></i>"
-    weight = 8
+    weight = 9
     identifier = "about"
     url = "/about/"
   [[menu.main]]
     name = "R Bloggers"
     pre = "<i class='fa fa-cubes fa-fw'></i>"
-    weight = 9
+    weight = 10
     identifier = "r-blogger"
     url = "https://r-bloggers.com/" 
   [[menu.main]]
     name = "R Weekly"
     pre = "<i class='fa fa-cubes fa-fw'></i>"
-    weight = 10
+    weight = 11
     identifier = "r-weekly"
     url = "https://rweekly.org" 
 
