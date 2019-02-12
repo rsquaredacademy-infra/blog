@@ -11,7 +11,7 @@ tags:
   - rfm
 ---
 
-I am pleased to announce the **rfm** package, a set of tools for recency,
+We are pleased to announce the **rfm** package, a set of tools for recency,
 frequency and monetary value analysis, designed keeping in mind 
 beginner/intermediate R users. It can handle:
 
