@@ -570,8 +570,6 @@ on page using <code>avg_page_time</code>.</p>
 total order items for each device category and can compute the AOV. We will
 create a new column to store AOV.</p>
 <p><br></p>
-<p><img src="/img/mutate_1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p><br></p>
 <pre class="r"><code>ecom5 &lt;- mutate(ecom4, aov = revenue / orders)
 ecom5</code></pre>
 <pre><code>## # A tibble: 3 x 4
@@ -703,9 +701,6 @@ to chain the steps and get rid of the intermediate data.</p>
 ## 1 tablet 1426.
 ## 2 mobile 1431.
 ## 3 laptop 1824.</code></pre>
-<p>Below we map the description of each step to dplyr verbs.</p>
-<p><br></p>
-<p><img src="/img/dplyr_aov_map.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="your-turn" class="section level2">
 <h2>Your Turn</h2>

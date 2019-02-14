@@ -434,12 +434,6 @@ create a new column to store AOV.
 
 <br>
 
-```{r img11, echo=FALSE, out.width="100%", fig.align="center"}
-knitr::include_graphics("/img/mutate_1.png")
-```
-
-<br>
-
 ```{r dplyr15}
 ecom5 <- mutate(ecom4, aov = revenue / orders)
 ecom5
@@ -528,14 +522,6 @@ ecom %>%
   ) %>%
   select(device, aov) %>%
   arrange(aov)
-```
-
-Below we map the description of each step to dplyr verbs.
-
-<br>
-
-```{r img12, echo=FALSE, out.width="80%", fig.align="center"}
-knitr::include_graphics("/img/dplyr_aov_map.png")
 ```
 
 ## Your Turn
