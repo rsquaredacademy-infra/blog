@@ -1,0 +1,305 @@
+---
+title: Descriptive/Summary Statistics with descriptr
+author: Aravind Hebbali
+twitterImg: /img/og_descriptr.png
+description: "Tools for descriptive statistics in R."
+date: '2019-02-19'
+slug: introducing-descriptr
+topics:
+  - summary statistics
+tags:
+  - descriptr
+---
+
+We are pleased to announce the **descriptr** package, a set of tools for 
+generating descriptive/summary statistics.
+
+## Installation
+
+```{r cran-installation, eval = FALSE}
+# Install release version from CRAN
+install.packages("descriptr")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/descriptr")
+```
+
+## Shiny App
+
+**descriptr** includes a shiny app which can be launched using
+
+```{r app, eval=FALSE}
+ds_launch_shiny_app()
+```
+
+or try the live version [here](https://www.rsquaredcomputing.com/descriptr/).
+
+Read on to learn more about the features of **descriptr**, or see the 
+[descriptr website](https://descriptr.rsquaredacademy.com/) for 
+detailed documentation on using the package.
+
+```{r, echo=FALSE, message=FALSE}
+library(descriptr)
+library(dplyr)
+```
+
+## Data
+
+We have modified the `mtcars` data to create a new data set `mtcarz`. The only
+difference between the two data sets is related to the variable types. 
+
+```{r egdata}
+str(mtcarz)
+```
+
+## Data Screening
+
+The `ds_screener()` function will screen a data set and return the following:
+- Column/Variable Names
+- Data Type
+- Levels (in case of categorical data)
+- Number of missing observations
+- % of missing observations
+
+```{r screener}
+ds_screener(mtcarz)
+```
+
+## Continuous Data
+
+### Summary Statistics
+
+The `ds_summary_stats` function returns a comprehensive set of statistics 
+including measures of location, variation, symmetry and extreme observations.
+
+```{r summary}
+ds_summary_stats(mtcarz, mpg)
+```
+
+You can pass multiple variables as shown below:
+
+```{r summary2}
+ds_summary_stats(mtcarz, mpg, disp)
+```
+
+If you do not specify any variables, it will detect all the continuous 
+variables in the data set and return summary statistics for each of them.
+
+### Frequency Distribution
+
+The `ds_freq_table` function creates frequency tables for continuous variables. 
+The default number of intervals is 5.
+
+```{r fcont}
+ds_freq_table(mtcarz, mpg, 4)
+```
+
+#### Histogram
+
+A `plot()` method has been defined which will generate a histogram.
+
+```{r fcont_hist, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_freq_table(mtcarz, mpg, 4)
+plot(k)
+```
+
+### Auto Summary
+
+If you want to view summary statistics and frequency tables of all or subset of
+variables in a data set, use `ds_auto_summary()`.
+
+```{r auto-summary}
+ds_auto_summary_stats(mtcarz, disp, mpg)
+```
+
+### Group Summary
+
+The `ds_group_summary()` function returns descriptive statistics of a continuous
+variable for the different levels of a categorical variable.
+
+```{r gsummary}
+k <- ds_group_summary(mtcarz, cyl, mpg)
+k
+```
+
+`ds_group_summary()` returns a tibble which can be used for further analysis.
+
+```{r gsummary_tibble}
+k$tidy_stats
+```
+
+#### Box Plot
+
+A `plot()` method has been defined for comparing distributions.
+
+```{r gsum_boxplot, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_group_summary(mtcarz, cyl, mpg)
+plot(k)
+```
+
+### Multiple Variables
+
+If you want grouped summary statistics for multiple variables in a data set, use
+`ds_auto_group_summary()`.
+
+```{r auto-group-summary}
+ds_auto_group_summary(mtcarz, cyl, gear, mpg)
+```
+
+## Multiple Variable Statistics 
+
+The `ds_tidy_stats()` function returns summary/descriptive statistics for 
+variables in a data frame/tibble.
+
+```{r multistats}
+ds_tidy_stats(mtcarz, mpg, disp, hp)
+```
+
+### Measures
+
+If you want to view the measure of location, variation, symmetry, percentiles 
+and extreme observations as tibbles, use the below functions. All of them, 
+except for `ds_extreme_obs()` will work with single or multiple variables. If 
+you do not specify the variables, they will return the results for all the 
+continuous variables in the data set.
+
+#### Measures of Location
+
+```{r mloc}
+ds_measures_location(mtcarz)
+```
+
+#### Measures of Variation
+
+```{r mvar}
+ds_measures_variation(mtcarz)
+```
+
+#### Measures of Symmetry
+
+```{r msym}
+ds_measures_symmetry(mtcarz)
+```
+
+#### Percentiles
+
+```{r mperc}
+ds_percentiles(mtcarz)
+```
+
+## Categorical Data
+
+### Cross Tabulation
+
+The `ds_cross_table()` function creates two way tables of categorical variables. 
+
+```{r cross}
+ds_cross_table(mtcarz, cyl, gear)
+```
+
+If you want the above result as a tibble, use `ds_twoway_table()`.
+
+```{r cross_tibble}
+ds_twoway_table(mtcarz, cyl, gear)
+```
+
+A `plot()` method has been defined which will generate:
+
+#### Grouped Bar Plots
+
+```{r cross_group, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k)
+```
+
+#### Stacked Bar Plots
+
+```{r cross_stack, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k, stacked = TRUE)
+```
+
+#### Proportional Bar Plots
+
+```{r cross_prop, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k, proportional = TRUE)
+```
+
+### Frequency Table 
+
+The `ds_freq_table()` function creates frequency tables.
+
+```{r ftable}
+ds_freq_table(mtcarz, cyl)
+```
+
+A `plot()` method has been defined which will create a bar plot.
+
+```{r ftable_bar, fig.width=7, fig.height=7, fig.align='centre'}
+k <- ds_freq_table(mtcarz, cyl)
+plot(k)
+```
+
+### Multiple One Way Tables
+
+The `ds_auto_freq_table()` function creates multiple one way tables by creating a 
+frequency table for each categorical variable in a data set. You can also 
+specify a subset of variables if you do not want all the variables in the data 
+set to be used.
+
+```{r oway}
+ds_auto_freq_table(mtcarz)
+```
+
+### Multiple Two Way Tables
+
+The `ds_auto_cross_table()` function creates multiple two way tables by creating a 
+cross table for each unique pair of categorical variables in a data set. You 
+can also specify a subset of variables if you do not want all the variables in 
+the data set to be used.
+
+```{r tway}
+ds_auto_cross_table(mtcarz, cyl, gear, am)
+```
+
+## Visualization
+
+**descriptr** can help visualize multiple variables by automatically
+detecting their data types. 
+
+### Continuous Data
+
+```{r scatter}
+ds_plot_scatter(mtcarz, mpg, disp, hp)
+```
+
+### Categorical Data
+
+```{r bar_stacked}
+ds_plot_bar_stacked(mtcarz, cyl, gear, am)
+```
+
+## Learning More
+
+The [descriptr website](https://descriptr.rsquaredacademy.com/index.html) includes 
+comprehensive documentation on using the package, including the following
+articles that cover various aspects of using rfm:
+
+- [Continuous Data](https://descriptr.rsquaredacademy.com/articles/continuous-data.html) - for 
+summarizing continuous data.
+
+- [Categorical Data](https://descriptr.rsquaredacademy.com/articles/categorical-data.html) - for 
+summarizing categorical data.
+
+- [Visualization](https://descriptr.rsquaredacademy.com/articles/visualization.html) - for 
+generating different types of plots.
+
+## Feedback
+
+All feedback is welcome. Issues (bugs and feature 
+requests) can be posted to [github tracker](https://github.com/rsquaredacademy/descriptr/issues).
+For help with code or other related questions, feel free to reach me hebbali.aravind@gmail.com.
+
+
