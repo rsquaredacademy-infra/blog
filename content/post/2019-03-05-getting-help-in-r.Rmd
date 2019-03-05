@@ -1,5 +1,5 @@
 ---
-title: Getting Help In R
+title: Getting Help in R
 author: Aravind Hebbali
 twitterImg: /img/help_banner.png
 description: "Getting Help in R."
