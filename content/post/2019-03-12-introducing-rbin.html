@@ -1,0 +1,347 @@
+---
+title: Binning Data with rbin 
+author: Aravind Hebbali
+description: "Binning Data with rbin (Includes RStudio Addins)"
+date: '2019-03-12'
+slug: binning-data-with-rbin
+categories:
+  - binning
+tags:
+  - rbin
+---
+
+
+
+<p>I am happy to introduce the <strong>rbin</strong> package, a set of tools for binning/discretization
+of data, designed keeping in mind beginner/intermediate R users. It includes
+two RStudio addins for interactive binning.</p>
+<div id="installation" class="section level3">
+<h3>Installation</h3>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;rbin&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/rbin&quot;)</code></pre>
+</div>
+<div id="rstudio-addins" class="section level3">
+<h3>RStudio Addins</h3>
+<p><strong>rbin</strong> includes two RStudio addins for manually binning data. Below
+is a demo:</p>
+{{% youtube "KQGPB1sL7R8" %}}
+<p>Read on to learn more about the features of <strong>rbin</strong>, or see the
+<a href="https://rbin.rsquaredacademy.com/">rbin website</a> for
+detailed documentation on using the package.</p>
+</div>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Binning is the process of transforming numerical or continuous data into
+categorical data. It is a common data pre-processing step of the model building
+process. <strong>rbin</strong> has the following features:</p>
+<ul>
+<li>manual binning using shiny app</li>
+<li>equal length binning method</li>
+<li>winsorized binning method</li>
+<li>quantile binning method</li>
+<li>combine levels of categorical data</li>
+<li>create dummy variables based on binning method</li>
+<li>calculates weight of evidence (WOE), entropy and information value (IV)</li>
+<li>provides summary information about binning process</li>
+</ul>
+</div>
+<div id="manual-binning" class="section level3">
+<h3>Manual Binning</h3>
+<p>For manual binning, you need to specify the cut points for the bins. <strong>rbin</strong>
+follows the left closed and right open interval (<code>[0,1) = {x | 0 ≤ x &lt; 1}</code>) for
+creating bins. The number of cut points you specify is one less than the number
+of bins you want to create i.e. if you want to create 10 bins, you need to
+specify only 9 cut points as shown in the below example. The accompanying
+RStudio addin, <code>rbinAddin()</code> can be used to iteratively bin the data and to
+enforce monotonic increasing/decreasing trend.</p>
+<p>After finalizing the bins, you can use <code>rbin_create()</code> to create the dummy
+variables.</p>
+<div id="bins" class="section level4">
+<h4>Bins</h4>
+<pre class="r"><code>bins &lt;- rbin_manual(mbank, y, age, c(29, 31, 34, 36, 39, 42, 46, 51, 56))
+bins</code></pre>
+<pre><code>## Binning Summary
+## ---------------------------
+## Method               Manual 
+## Response             y 
+## Predictor            age 
+## Bins                 10 
+## Count                4521 
+## Goods                517 
+## Bads                 4004 
+## Entropy              0.5 
+## Information Value    0.12 
+## 
+## 
+## # A tibble: 10 x 7
+##    cut_point bin_count  good   bad      woe         iv entropy
+##    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+##  1 &lt; 29            410    71   339 -0.484   0.0255       0.665
+##  2 &lt; 31            313    41   272 -0.155   0.00176      0.560
+##  3 &lt; 34            567    55   512  0.184   0.00395      0.459
+##  4 &lt; 36            396    45   351  0.00712 0.00000443   0.511
+##  5 &lt; 39            519    47   472  0.260   0.00701      0.438
+##  6 &lt; 42            431    33   398  0.443   0.0158       0.390
+##  7 &lt; 46            449    47   402  0.0993  0.000942     0.484
+##  8 &lt; 51            521    40   481  0.440   0.0188       0.391
+##  9 &lt; 56            445    49   396  0.0426  0.000176     0.500
+## 10 &gt;= 56           470    89   381 -0.593   0.0456       0.700</code></pre>
+</div>
+<div id="plot" class="section level4">
+<h4>Plot</h4>
+<pre class="r"><code>plot(bins)</code></pre>
+<p><img src="/post/2019-03-12-introducing-rbin_files/figure-html/manual_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dummy-variables" class="section level4">
+<h4>Dummy Variables</h4>
+<pre class="r"><code>bins &lt;- rbin_manual(mbank, y, age, c(29, 31, 34, 36, 39, 42, 46, 51, 56))
+rbin_create(mbank, age, bins)</code></pre>
+<pre><code>## # A tibble: 4,521 x 26
+##      age job           marital education default balance housing loan 
+##    &lt;int&gt; &lt;fct&gt;         &lt;fct&gt;   &lt;fct&gt;     &lt;fct&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;
+##  1    34 technician    married tertiary  no          297 yes     no   
+##  2    49 services      married secondary no          180 yes     yes  
+##  3    38 admin.        single  secondary no          262 no      no   
+##  4    47 services      married secondary no          367 yes     no   
+##  5    51 self-employed single  secondary no         1640 yes     no   
+##  6    40 unemployed    married secondary no         3382 yes     no   
+##  7    58 retired       married secondary no         1227 no      no   
+##  8    32 unemployed    married primary   no          309 yes     no   
+##  9    46 blue-collar   married secondary no          922 yes     no   
+## 10    32 services      married tertiary  no            0 no      no   
+##    contact     day month duration campaign pdays previous poutcome y    
+##    &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;    &lt;fct&gt;
+##  1 cellular     29 jan        375        2    -1        0 unknown  0    
+##  2 unknown       2 jun        392        3    -1        0 unknown  0    
+##  3 cellular      3 feb        315        2   180        6 failure  1    
+##  4 cellular     12 may        309        1   306        4 success  1    
+##  5 unknown      15 may         67        4    -1        0 unknown  0    
+##  6 unknown      14 may        125        1    -1        0 unknown  0    
+##  7 cellular     14 aug        182        2    37        2 failure  0    
+##  8 telephone    13 may        185        1   370        3 failure  0    
+##  9 telephone    18 nov        296        2    -1        0 unknown  0    
+## 10 cellular     21 nov         80        1    -1        0 unknown  0    
+##    `age_&lt;_31` `age_&lt;_34` `age_&lt;_36` `age_&lt;_39` `age_&lt;_42` `age_&lt;_46`
+##         &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1          0          0          1          0          0          0
+##  2          0          0          0          0          0          0
+##  3          0          0          0          1          0          0
+##  4          0          0          0          0          0          0
+##  5          0          0          0          0          0          0
+##  6          0          0          0          0          1          0
+##  7          0          0          0          0          0          0
+##  8          0          1          0          0          0          0
+##  9          0          0          0          0          0          0
+## 10          0          1          0          0          0          0
+##    `age_&lt;_51` `age_&lt;_56` `age_&gt;=_56`
+##         &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+##  1          0          0           0
+##  2          1          0           0
+##  3          0          0           0
+##  4          1          0           0
+##  5          0          1           0
+##  6          0          0           0
+##  7          0          0           1
+##  8          0          0           0
+##  9          1          0           0
+## 10          0          0           0
+## # ... with 4,511 more rows</code></pre>
+</div>
+</div>
+<div id="factor-binning" class="section level3">
+<h3>Factor Binning</h3>
+<p>You can collapse or combine levels of a factor/categorical variable using
+<code>rbin_factor_combine()</code> and then use <code>rbin_factor()</code> to look at weight of
+evidence, entropy and information value. After finalizing the bins, you can
+use <code>rbin_factor_create()</code> to create the dummy variables. You can use the
+RStudio addin, <code>rbinFactorAddin()</code> to interactively combine the levels and
+create dummy variables after finalizing the bins.</p>
+<div id="combine-levels" class="section level4">
+<h4>Combine Levels</h4>
+<pre class="r"><code>upper &lt;- c(&quot;secondary&quot;, &quot;tertiary&quot;)
+out &lt;- rbin_factor_combine(mbank, education, upper, &quot;upper&quot;)
+table(out$education)</code></pre>
+<pre><code>## 
+## primary unknown   upper 
+##     691     179    3651</code></pre>
+<pre class="r"><code>out &lt;- rbin_factor_combine(mbank, education, c(&quot;secondary&quot;, &quot;tertiary&quot;), &quot;upper&quot;)
+table(out$education)</code></pre>
+<pre><code>## 
+## primary unknown   upper 
+##     691     179    3651</code></pre>
+</div>
+<div id="bins-1" class="section level4">
+<h4>Bins</h4>
+<pre class="r"><code>bins &lt;- rbin_factor(mbank, y, education)
+bins</code></pre>
+<pre><code>## Binning Summary
+## ---------------------------
+## Method               Custom 
+## Response             y 
+## Predictor            education 
+## Levels               4 
+## Count                4521 
+## Goods                517 
+## Bads                 4004 
+## Entropy              0.51 
+## Information Value    0.05 
+## 
+## 
+## # A tibble: 4 x 7
+##   level     bin_count  good   bad    woe      iv entropy
+##   &lt;fct&gt;         &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 tertiary       1299   195  1104 -0.313 0.0318    0.610
+## 2 secondary      2352   231  2121  0.170 0.0141    0.463
+## 3 unknown         179    25   154 -0.229 0.00227   0.583
+## 4 primary         691    66   625  0.201 0.00572   0.455</code></pre>
+</div>
+<div id="plot-1" class="section level4">
+<h4>Plot</h4>
+<pre class="r"><code>plot(bins)</code></pre>
+<p><img src="/post/2019-03-12-introducing-rbin_files/figure-html/factor_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="create-bins" class="section level4">
+<h4>Create Bins</h4>
+<pre class="r"><code>upper &lt;- c(&quot;secondary&quot;, &quot;tertiary&quot;)
+out &lt;- rbin_factor_combine(mbank, education, upper, &quot;upper&quot;)
+rbin_factor_create(out, education)</code></pre>
+<pre><code>## # A tibble: 4,521 x 19
+##      age job           marital default balance housing loan  contact  
+##    &lt;int&gt; &lt;fct&gt;         &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt; &lt;fct&gt;    
+##  1    34 technician    married no          297 yes     no    cellular 
+##  2    49 services      married no          180 yes     yes   unknown  
+##  3    38 admin.        single  no          262 no      no    cellular 
+##  4    47 services      married no          367 yes     no    cellular 
+##  5    51 self-employed single  no         1640 yes     no    unknown  
+##  6    40 unemployed    married no         3382 yes     no    unknown  
+##  7    58 retired       married no         1227 no      no    cellular 
+##  8    32 unemployed    married no          309 yes     no    telephone
+##  9    46 blue-collar   married no          922 yes     no    telephone
+## 10    32 services      married no            0 no      no    cellular 
+##      day month duration campaign pdays previous poutcome y     education
+##    &lt;int&gt; &lt;fct&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;    &lt;fct&gt; &lt;fct&gt;    
+##  1    29 jan        375        2    -1        0 unknown  0     upper    
+##  2     2 jun        392        3    -1        0 unknown  0     upper    
+##  3     3 feb        315        2   180        6 failure  1     upper    
+##  4    12 may        309        1   306        4 success  1     upper    
+##  5    15 may         67        4    -1        0 unknown  0     upper    
+##  6    14 may        125        1    -1        0 unknown  0     upper    
+##  7    14 aug        182        2    37        2 failure  0     upper    
+##  8    13 may        185        1   370        3 failure  0     primary  
+##  9    18 nov        296        2    -1        0 unknown  0     upper    
+## 10    21 nov         80        1    -1        0 unknown  0     upper    
+##    education_unknown education_upper
+##                &lt;dbl&gt;           &lt;dbl&gt;
+##  1                 0               1
+##  2                 0               1
+##  3                 0               1
+##  4                 0               1
+##  5                 0               1
+##  6                 0               1
+##  7                 0               1
+##  8                 0               0
+##  9                 0               1
+## 10                 0               1
+## # ... with 4,511 more rows</code></pre>
+</div>
+</div>
+<div id="quantile-binning" class="section level3">
+<h3>Quantile Binning</h3>
+<p>Quantile binning aims to bin the data into roughly equal groups using quantiles.</p>
+<pre class="r"><code>bins &lt;- rbin_quantiles(mbank, y, age, 10)
+bins</code></pre>
+<pre><code>## Binning Summary
+## -----------------------------
+## Method               Quantile 
+## Response             y 
+## Predictor            age 
+## Bins                 10 
+## Count                4521 
+## Goods                517 
+## Bads                 4004 
+## Entropy              0.5 
+## Information Value    0.12 
+## 
+## 
+## # A tibble: 10 x 7
+##    cut_point bin_count  good   bad      woe         iv entropy
+##    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+##  1 &lt; 29            410    71   339 -0.484   0.0255       0.665
+##  2 &lt; 31            313    41   272 -0.155   0.00176      0.560
+##  3 &lt; 34            567    55   512  0.184   0.00395      0.459
+##  4 &lt; 36            396    45   351  0.00712 0.00000443   0.511
+##  5 &lt; 39            519    47   472  0.260   0.00701      0.438
+##  6 &lt; 42            431    33   398  0.443   0.0158       0.390
+##  7 &lt; 46            449    47   402  0.0993  0.000942     0.484
+##  8 &lt; 51            521    40   481  0.440   0.0188       0.391
+##  9 &lt; 56            445    49   396  0.0426  0.000176     0.500
+## 10 &gt;= 56           470    89   381 -0.593   0.0456       0.700</code></pre>
+<div id="plot-2" class="section level4">
+<h4>Plot</h4>
+<pre class="r"><code>plot(bins)</code></pre>
+<p><img src="/post/2019-03-12-introducing-rbin_files/figure-html/quantile_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="winsorized-binning" class="section level3">
+<h3>Winsorized Binning</h3>
+<p>Winsorized binning is similar to equal length binning except that both tails
+are cut off to obtain a smooth binning result. This technique is often used
+to remove outliers during the data pre-processing stage. For Winsorized
+binning, the Winsorized statistics are computed first. After the minimum and
+maximum have been found, the split points are calculated the same way as in
+equal length binning.</p>
+<pre class="r"><code>bins &lt;- rbin_winsorize(mbank, y, age, 10, winsor_rate = 0.05)
+bins</code></pre>
+<pre><code>## Binning Summary
+## ------------------------------
+## Method               Winsorize 
+## Response             y 
+## Predictor            age 
+## Bins                 10 
+## Count                4521 
+## Goods                517 
+## Bads                 4004 
+## Entropy              0.51 
+## Information Value    0.1 
+## 
+## 
+## # A tibble: 10 x 7
+##    cut_point bin_count  good   bad    woe       iv entropy
+##    &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+##  1 &lt; 30.2          723   112   611 -0.350 0.0224     0.622
+##  2 &lt; 33.4          567    55   512  0.184 0.00395    0.459
+##  3 &lt; 36.6          573    58   515  0.137 0.00225    0.473
+##  4 &lt; 39.8          497    44   453  0.285 0.00798    0.432
+##  5 &lt; 43            396    37   359  0.225 0.00408    0.448
+##  6 &lt; 46.2          461    43   418  0.227 0.00482    0.447
+##  7 &lt; 49.4          281    22   259  0.419 0.00927    0.396
+##  8 &lt; 52.6          309    32   277  0.111 0.000811   0.480
+##  9 &lt; 55.8          244    25   219  0.123 0.000781   0.477
+## 10 &gt;= 55.8         470    89   381 -0.593 0.0456     0.700</code></pre>
+<div id="plot-3" class="section level4">
+<h4>Plot</h4>
+<pre class="r"><code>plot(bins)</code></pre>
+<p><img src="/post/2019-03-12-introducing-rbin_files/figure-html/winsorize_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="learning-more" class="section level3">
+<h3>Learning More</h3>
+<p>The <a href="https://rbin.rsquaredacademy.com/">rbin website</a> includes
+comprehensive documentation on using the package, including the following
+article that gives a brief introduction to rbin:</p>
+<ul>
+<li><a href="https://rbin.rsquaredacademy.com/articles/introduction.html">Introduction to rbin</a></li>
+</ul>
+</div>
+<div id="feedback" class="section level3">
+<h3>Feedback</h3>
+<p><strong>rbin</strong> has been on CRAN for a few months now while we were fixing bugs and
+making the API stable. All feedback is welcome. Issues (bugs and feature
+requests) can be posted to <a href="https://github.com/rsquaredacademy/rbin/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach out to us
+at <a href="mailto:pkgs@rsquaredacademy.com">pkgs@rsquaredacademy.com</a>.</p>
+</div>

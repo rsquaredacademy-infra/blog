@@ -1,0 +1,188 @@
+---
+title: Binning Data with rbin 
+author: Aravind Hebbali
+description: "Binning Data with rbin (Includes RStudio Addins)"
+date: '2019-03-12'
+slug: binning-data-with-rbin
+categories:
+  - binning
+tags:
+  - rbin
+---
+
+We are happy to introduce the **rbin** package, a set of tools for binning/discretization
+of data, designed keeping in mind beginner/intermediate R users. It comes with
+two RStudio addins for interactive binning.
+
+### Installation
+
+```{r cran-installation, eval = FALSE}
+# Install release version from CRAN
+install.packages("rbin")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/rbin")
+```
+
+### RStudio Addins
+
+**rbin** includes two RStudio addins for manually binning data. Below
+is a demo:
+
+```{r tube1, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "KQGPB1sL7R8")
+```
+
+Read on to learn more about the features of **rbin**, or see the 
+[rbin website](https://rbin.rsquaredacademy.com/) for 
+detailed documentation on using the package.
+
+### Introduction
+
+```{r, echo=FALSE, message=FALSE}
+library(rbin)
+options(knitr.table.format = "html")
+options(tibble.width = Inf)
+```
+
+Binning is the process of transforming numerical or continuous data into 
+categorical data. It is a common data pre-processing step of the model building 
+process. **rbin** has the following features:
+
+- manual binning using shiny app
+- equal length binning method
+- winsorized binning method
+- quantile binning method
+- combine levels of categorical data
+- create dummy variables based on binning method
+- calculates weight of evidence (WOE), entropy and information value (IV)
+- provides summary information about binning process
+
+### Manual Binning
+
+For manual binning, you need to specify the cut points for the bins. **rbin** 
+follows the left closed and right open interval (`[0,1) = {x | 0 ≤ x < 1}`) for 
+creating bins. The number of cut points you specify is one less than the number 
+of bins you want to create i.e. if you want to create 10 bins, you need to 
+specify only 9 cut points as shown in the below example. The accompanying 
+RStudio addin, `rbinAddin()` can be used to iteratively bin the data and to 
+enforce monotonic increasing/decreasing trend.
+
+After finalizing the bins, you can use `rbin_create()` to create the dummy 
+variables.
+
+#### Bins
+
+```{r manual}
+bins <- rbin_manual(mbank, y, age, c(29, 31, 34, 36, 39, 42, 46, 51, 56))
+bins
+```
+
+#### Plot
+
+```{r manual_plot, fig.width=7, fig.height=5, fig.align='center'}
+plot(bins)
+```
+
+#### Dummy Variables
+
+```{r manual_dummy}
+bins <- rbin_manual(mbank, y, age, c(29, 31, 34, 36, 39, 42, 46, 51, 56))
+rbin_create(mbank, age, bins)
+```
+
+### Factor Binning
+
+You can collapse or combine levels of a factor/categorical variable using 
+`rbin_factor_combine()` and then use `rbin_factor()` to look at weight of 
+evidence, entropy and information value. After finalizing the bins, you can 
+use `rbin_factor_create()` to create the dummy variables. You can use the 
+RStudio addin, `rbinFactorAddin()` to interactively combine the levels and 
+create dummy variables after finalizing the bins.
+
+#### Combine Levels
+
+```{r factor_combine}
+upper <- c("secondary", "tertiary")
+out <- rbin_factor_combine(mbank, education, upper, "upper")
+table(out$education)
+
+out <- rbin_factor_combine(mbank, education, c("secondary", "tertiary"), "upper")
+table(out$education)
+```
+
+#### Bins
+
+```{r factor_bins}
+bins <- rbin_factor(mbank, y, education)
+bins
+```
+
+#### Plot
+
+```{r factor_plot, fig.width=7, fig.height=5, fig.align='center'}
+plot(bins)
+```
+
+#### Create Bins
+
+```{r factor_create}
+upper <- c("secondary", "tertiary")
+out <- rbin_factor_combine(mbank, education, upper, "upper")
+rbin_factor_create(out, education)
+```
+
+### Quantile Binning
+
+Quantile binning aims to bin the data into roughly equal groups using quantiles.
+
+```{r quantile}
+bins <- rbin_quantiles(mbank, y, age, 10)
+bins
+```
+
+#### Plot
+
+```{r quantile_plot, fig.width=7, fig.height=5, fig.align='center'}
+plot(bins)
+```
+
+
+### Winsorized Binning
+
+Winsorized binning is similar to equal length binning except that both tails 
+are cut off to obtain a smooth binning result. This technique is often used 
+to remove outliers during the data pre-processing stage. For Winsorized 
+binning, the Winsorized statistics are computed first. After the minimum and 
+maximum have been found, the split points are calculated the same way as in 
+equal length binning. 
+
+```{r winsorize}
+bins <- rbin_winsorize(mbank, y, age, 10, winsor_rate = 0.05)
+bins
+```
+
+#### Plot
+
+```{r winsorize_plot, fig.width=7, fig.height=5, fig.align='center'}
+plot(bins)
+```
+
+### Learning More
+
+The [rbin website](https://rbin.rsquaredacademy.com/) includes 
+comprehensive documentation on using the package, including the following
+article that gives a brief introduction to rbin:
+
+- [Introduction to rbin](https://rbin.rsquaredacademy.com/articles/introduction.html) 
+
+### Feedback
+
+**rbin** has been on CRAN for a few months now while we were fixing bugs and 
+making the API stable. All feedback is welcome. Issues (bugs and feature 
+requests) can be posted to [github tracker](https://github.com/rsquaredacademy/rbin/issues).
+For help with code or other related questions, feel free to reach out to us
+at pkgs@rsquaredacademy.com.
+
+
