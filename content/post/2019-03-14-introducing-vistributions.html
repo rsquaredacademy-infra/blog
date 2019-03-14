@@ -1,0 +1,375 @@
+---
+title: Visually explore Probability Distributions with vistributions
+author: Aravind Hebbali
+description: "Visually explore probability distributions with vistributions."
+date: '2019-03-14'
+slug: introducting-vistributions
+categories:
+  - distributions
+tags:
+  - vistributions
+---
+
+
+
+<p><img src="/img/vistributions_banner.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>We are happy to introduce the <strong>vistributions</strong> package, a set of tools for
+visually exploring probability distributions.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;vistributions&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/vistributions&quot;)</code></pre>
+</div>
+<div id="shiny-app" class="section level2">
+<h2>Shiny App</h2>
+<p><strong>vistributions</strong> includes a shiny app which can be launched using</p>
+<pre class="r"><code>vdist_launch_app()</code></pre>
+<p>or try the live version <a href="https://www.rsquaredcomputing.com/shiny/vistributions/">here</a>.</p>
+{{% youtube "Wa44jxAJvTE" %}}
+<p>Read on to learn more about the features of <strong>vistributions</strong>, or see the
+<a href="https://vistributions.rsquaredacademy.com/">vistributions website</a> for
+detailed documentation on using the package.</p>
+</div>
+<div id="tab-completion" class="section level2">
+<h2>Tab Completion</h2>
+<p>The common <code>vdist_</code> prefix will trigger autocomplete, allowing you to see all
+<strong>vistributions</strong> functions:</p>
+<p><img src="/img/tab_gif.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In exploring statistical distributions, we focus on the following:</p>
+<ul>
+<li>what influences the shape of a distribution</li>
+<li>calculate probability from a given quantile</li>
+<li>calculate quantiles out of given probability</li>
+</ul>
+<p>for the following distributions:</p>
+<ul>
+<li>Normal</li>
+<li>Binomial</li>
+<li>Chi Square</li>
+<li>F</li>
+<li>t</li>
+</ul>
+</div>
+<div id="normal-distribution" class="section level2">
+<h2>Normal Distribution</h2>
+<div id="distribution-shape" class="section level3">
+<h3>Distribution Shape</h3>
+<p>Visualize how changes in mean and standard deviation affect the shape of the
+normal distribution.</p>
+<div id="input" class="section level4">
+<h4>Input</h4>
+<ul>
+<li>mean: mean of the normal distribution</li>
+<li>sd: standard deviation of the normal distribution</li>
+</ul>
+<pre class="r"><code>vdist_normal_plot(mean = 2, sd = 0.6)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="percentiles" class="section level3">
+<h3>Percentiles</h3>
+<div id="calculate-and-visualize-quantiles-out-of-given-probability." class="section level4">
+<h4>Calculate and visualize quantiles out of given probability.</h4>
+<div id="input-1" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>probs: a probability value</li>
+<li>mean: mean of the normal distribution</li>
+<li>sd: standard deviation of the normal distribution</li>
+<li>type: lower/upper tail</li>
+</ul>
+<p>Suppose X, the grade on a exam, is normally distributed with mean 60
+and standard deviation 3. The teacher wants to give 10% of the class an A.
+What should be the cutoff to determine who gets an A?</p>
+<pre class="r"><code>vdist_normal_perc(0.10, 60, 3, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_per1-1.png" width="672" /></p>
+<p>The teacher wants to give lower 15% of the class a D. What cutoff should the
+teacher use to determine who gets an D?</p>
+<pre class="r"><code>vdist_normal_perc(0.85, 60, 3, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_per2-1.png" width="672" /></p>
+<p>The teacher wants to give middle 50% of the class a B. What cutoff should the
+teacher use to determine who gets an B?</p>
+<pre class="r"><code>vdist_normal_perc(0.5, 60, 3, &#39;both&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_per3-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="probabilities" class="section level3">
+<h3>Probabilities</h3>
+<div id="calculate-and-visualize-probability-from-a-given-quantile" class="section level4">
+<h4>Calculate and visualize probability from a given quantile</h4>
+<div id="input-2" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>perc: a quantile value</li>
+<li>mean: mean of the normal distribution</li>
+<li>sd: standard deviation of the normal distribution</li>
+<li>type: lower/upper/both tail</li>
+</ul>
+<p>Let X be the IQ of a randomly selected student of a school. Assume X ~ N(90, 4).
+What is the probability that a randomly selected student has an IQ below 80?</p>
+<pre class="r"><code>vdist_normal_prob(80, mean = 90, sd = 4)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_prob1-1.png" width="672" /></p>
+<p>What is the probability that a randomly selected student has an IQ above 100?</p>
+<pre class="r"><code>vdist_normal_prob(100, mean = 90, sd = 4, type = &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_prob2-1.png" width="672" /></p>
+<p>What is the probability that a randomly selected student has an IQ
+between 85 and 100?</p>
+<pre class="r"><code>vdist_normal_prob(c(85, 100), mean = 90, sd = 4, type = &#39;both&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/norm_prob3-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="binomial-distribution" class="section level2">
+<h2>Binomial Distribution</h2>
+<div id="distribution-shape-1" class="section level3">
+<h3>Distribution Shape</h3>
+<p>Visualize how changes in number of trials and the probability of success affect
+the shape of the binomial distribution.</p>
+<pre class="r"><code>vdist_binom_plot(10, 0.3)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_plot-1.png" width="672" /></p>
+</div>
+<div id="percentiles-1" class="section level3">
+<h3>Percentiles</h3>
+<div id="calculate-and-visualize-quantiles-out-of-given-probability" class="section level4">
+<h4>Calculate and visualize quantiles out of given probability</h4>
+<div id="input-3" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>p: a single aggregated probability of multiple trials</li>
+<li>n: the number of trials</li>
+<li>tp: the probability of success in a trial</li>
+<li>type: lower/upper tail</li>
+</ul>
+<pre class="r"><code>vdist_binom_perc(10, 0.5, 0.05)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_per1-1.png" width="672" /></p>
+<pre class="r"><code>vdist_binom_perc(10, 0.5, 0.05, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_per2-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="probabilities-1" class="section level3">
+<h3>Probabilities</h3>
+<div id="calculate-and-visualize-probability-from-a-given-quantile-1" class="section level4">
+<h4>Calculate and visualize probability from a given quantile</h4>
+<div id="input-4" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>p: probability of success</li>
+<li>n: the number of trials</li>
+<li>s: number of success in a trial</li>
+<li>type: lower/upper/interval/exact tail</li>
+</ul>
+<p>Assume twenty-percent (20%) of Magemill have no health insurance. Randomly
+sample n = 12 Magemillians. Let X denote the number in the sample with no
+health insurance. What is the probability that exactly 4 of the 15 sampled
+have no health insurance?</p>
+<pre class="r"><code>vdist_binom_prob(12, 0.2, 4, type = &#39;exact&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_prob1-1.png" width="672" /></p>
+<p>What is the probability that at most one of those sampled has no health
+insurance?</p>
+<pre class="r"><code>vdist_binom_prob(12, 0.2, 1, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_prob2-1.png" width="672" /></p>
+<p>What is the probability that more than seven have no health insurance?</p>
+<pre class="r"><code>vdist_binom_prob(12, 0.2, 8, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_prob3-1.png" width="672" /></p>
+<p>What is the probability that fewer than 5 have no health insurance?</p>
+<pre class="r"><code>vdist_binom_prob(12, 0.2, c(0, 4), &#39;interval&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/binom_prob4-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="chi-square-distribution" class="section level2">
+<h2>Chi Square Distribution</h2>
+<div id="distribution-shape-2" class="section level3">
+<h3>Distribution Shape</h3>
+<p>Visualize how changes in degrees of freedom affect the shape of the chi square
+distribution.</p>
+<pre class="r"><code>vdist_chisquare_plot(df = 5)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_plot-1.png" width="672" /></p>
+<pre class="r"><code>vdist_chisquare_plot(df = 5, normal = TRUE)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_plot-2.png" width="672" /></p>
+</div>
+<div id="percentiles-2" class="section level3">
+<h3>Percentiles</h3>
+<div id="calculate-quantiles-out-of-given-probability" class="section level4">
+<h4>Calculate quantiles out of given probability</h4>
+<div id="input-5" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>probs: a probability value</li>
+<li>df: degrees of freedom</li>
+<li>type: lower/upper tail</li>
+</ul>
+<p>Let X be a chi-square random variable with 8 degrees of freedom. What is the
+upper fifth percentile?</p>
+<pre class="r"><code>vdist_chisquare_perc(0.05, 8, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_per1-1.png" width="672" /></p>
+<p>What is the tenth percentile?</p>
+<pre class="r"><code>vdist_chisquare_perc(0.10, 8, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_per2-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="probability" class="section level3">
+<h3>Probability</h3>
+<div id="calculate-probability-from-a-given-quantile." class="section level4">
+<h4>Calculate probability from a given quantile.</h4>
+<div id="input-6" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>perc: a quantile value</li>
+<li>df: degrees of freedom</li>
+<li>type: lower/upper tail</li>
+</ul>
+<p>What is the probability that a chi-square random variable with 12 degrees of
+freedom is greater than 8.79?</p>
+<pre class="r"><code>vdist_chisquare_prob(8.79, 12, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_prob1-1.png" width="672" /></p>
+<p>What is the probability that a chi-square random variable with 12 degrees of
+freedom is greater than 8.62?</p>
+<pre class="r"><code>vdist_chisquare_prob(8.62, 12, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/chi_prob2-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="f-distribution" class="section level2">
+<h2>F Distribution</h2>
+<div id="distribution-shape-3" class="section level3">
+<h3>Distribution Shape</h3>
+<p>Visualize how changes in degrees of freedom affect the shape of the F
+distribution.</p>
+<pre class="r"><code>vdist_f_plot()</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_plot-1.png" width="672" /></p>
+<pre class="r"><code>vdist_f_plot(6, 10, normal = TRUE)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_plot-2.png" width="672" /></p>
+</div>
+<div id="percentiles-3" class="section level3">
+<h3>Percentiles</h3>
+<div id="calculate-quantiles-out-of-given-probability-1" class="section level4">
+<h4>Calculate quantiles out of given probability</h4>
+<div id="input-7" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>probs: a probability value</li>
+<li>num_df: nmerator degrees of freedom</li>
+<li>den_df: denominator degrees of freedom</li>
+<li>type: lower/upper tail</li>
+</ul>
+<p>Let X be an F random variable with 4 numerator degrees of freedom and 5
+denominator degrees of freedom. What is the upper twenth percentile?</p>
+<pre class="r"><code>vdist_f_perc(0.20, 4, 5, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_per1-1.png" width="672" /></p>
+<p>What is the 35th percentile?</p>
+<pre class="r"><code>vdist_f_perc(0.35, 4, 5, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_per2-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="probabilities-2" class="section level3">
+<h3>Probabilities</h3>
+<div id="calculate-probability-from-a-given-quantile.-1" class="section level4">
+<h4>Calculate probability from a given quantile.</h4>
+<div id="input-8" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>perc: a quantile value</li>
+<li>num_df: nmerator degrees of freedom</li>
+<li>den_df: denominator degrees of freedom</li>
+<li>type: lower/upper tail</li>
+</ul>
+<p>What is the probability that an F random variable with 4 numerator degrees of
+freedom and 5 denominator degrees of freedom is greater than 3.89?</p>
+<pre class="r"><code>vdist_f_prob(3.89, 4, 5, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_prob1-1.png" width="672" /></p>
+<p>What is the probability that an F random variable with 4 numerator degrees of
+freedom and 5 denominator degrees of freedom is less than 2.63?</p>
+<pre class="r"><code>vdist_f_prob(2.63, 4, 5, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/f_prob2-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="t-distribution" class="section level2">
+<h2>t Distribution</h2>
+<div id="distribution-shape-4" class="section level3">
+<h3>Distribution Shape</h3>
+<p>Visualize how degrees of freedom affect the shape of t distribution.</p>
+<pre class="r"><code>vdist_t_plot(df = 8)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_plot-1.png" width="672" /></p>
+</div>
+<div id="percentiles-4" class="section level3">
+<h3>Percentiles</h3>
+<div id="calculate-quantiles-out-of-given-probability-2" class="section level4">
+<h4>Calculate quantiles out of given probability</h4>
+<div id="input-9" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>probs: a probability value</li>
+<li>df: degrees of freedom</li>
+<li>type: lower/upper/both tail</li>
+</ul>
+<p>What is the upper fifteenth percentile?</p>
+<pre class="r"><code>vdist_t_perc(0.15, 8, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_per1-1.png" width="672" /></p>
+<p>What is the eleventh percentile?</p>
+<pre class="r"><code>vdist_t_perc(0.11, 8, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_per2-1.png" width="672" /></p>
+<p>What is the area of the curve that has 95% of the t values?</p>
+<pre class="r"><code>vdist_t_perc(0.8, 8, &#39;both&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_per3-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="probabilities-3" class="section level3">
+<h3>Probabilities</h3>
+<div id="calculate-probability-from-a-given-quantile.-2" class="section level4">
+<h4>Calculate probability from a given quantile.</h4>
+<div id="input-10" class="section level5">
+<h5>Input</h5>
+<ul>
+<li>perc: a quantile value</li>
+<li>df: degrees of freedom</li>
+<li>type: lower/upper/interval/both tail</li>
+</ul>
+<p>Let T follow a t-distribution with r = 6 df.</p>
+<p>What is the probability that the value of T is less than 2?</p>
+<pre class="r"><code>vdist_t_prob(2, 6, &#39;lower&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_prob1-1.png" width="672" /></p>
+<p>What is the probability that the value of T is greater than 2?</p>
+<pre class="r"><code>vdist_t_prob(2, 6, &#39;upper&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_prob2-1.png" width="672" /></p>
+<p>What is the probability that the value of T is between -2 and 2?</p>
+<pre class="r"><code>vdist_t_prob(2, 6, &#39;both&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_prob3-1.png" width="672" /></p>
+<p>What is the probability that the absolute value of T is greater than 2?</p>
+<pre class="r"><code>vdist_t_prob(2, 6, &#39;interval&#39;)</code></pre>
+<p><img src="/post/2019-03-14-introducing-vistributions_files/figure-html/t_prob4-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<p>The <a href="https://vistributions.rsquaredacademy.com/">vistributions website</a> includes
+comprehensive documentation on using the package, including the following
+article that gives a brief introduction to vistributions:</p>
+<ul>
+<li><a href="https://vistributions.rsquaredacademy.com/articles/introduction-to-vistributions.html">Introduction to vistributions</a></li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p><strong>vistributions</strong> has been on CRAN for a few months now while we were fixing bugs and
+making the API stable. All feedback is welcome. Issues (bugs and feature
+requests) can be posted to <a href="https://github.com/rsquaredacademy/vistributions/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach out to us
+at <a href="mailto:pkgs@rsquaredacademy.com">pkgs@rsquaredacademy.com</a>.</p>
+</div>
