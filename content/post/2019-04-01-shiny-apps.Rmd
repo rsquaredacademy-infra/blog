@@ -1,0 +1,62 @@
+---
+title: Shiny Apps for Interactive Data Analysis
+author: Aravind Hebbali
+description: "Shiny Apps for Interactive Data Analysis."
+date: '2019-04-01'
+slug: shiny-apps
+categories:
+  - shiny
+tags:
+  - shiny
+---
+
+```{r banner, echo=FALSE, out.width="80%", fig.align="center"}
+knitr::include_graphics("/img/apps_banner.png")
+```
+
+We are excited and happy to share a set of <a href="https://shiny.rstudio.com/" target="_blank">shiny</a>
+apps built for interactive data analysis and teaching at <a href="https://www.rsquaredacademy.com" target="_blank">Rsquared Academy</a>. The apps are part of our <a href="https://pkgs.rsquaredacademy.com" target="_blank">R packages</a> and presently cover the following topics:
+
+- Descriptive Statistics
+- Probability Distributions
+- Hypothesis Testing
+- Linear Regression
+- Logistic Regression
+- RFM Analysis
+- Data Visualization
+
+We would suggest that you explore the apps using sample data sets available 
+within the app before using your own data set so that you get comfortable
+with the user interface.
+
+## Demo
+
+```{r tube1, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "7lBEqrZLUOU")
+```
+
+## Details
+
+You can try the live version of the apps 
+<a href="https://apps.rsquaredacademy.com" target="_blank">here</a> or 
+locally launch these apps from the R packages mentioned in the below table. 
+**It will be easier to use the apps if you refer to the documentation of 
+the respective packages.**
+
+| Topic | Try App | R Package | API |
+|-------|-----|---------|-----|
+| Descriptive Statistics | <a href="https://www.rsquaredcomputing.com/shiny/olsrr/" target="_blank">Launch</a> | <a href="https://descriptr.rsquaredacademy.com/" target="_blank">descritpr</a> | `ds_launch_shiny_app()` |
+| Visualize Distributions | <a href="https://www.rsquaredcomputing.com/shiny/vistributions/" target="_blank">Launch</a> | <a href="https://vistributions.rsquaredacademy.com/" target="_blank">vistributions</a> | `vdist_launch_app()` |
+| Hypothesis Testing | <a href="https://www.rsquaredcomputing.com/shiny/inferr/" target="_blank">Launch</a> | <a href="https://inferr.rsquaredacademy.com/" target="_blank">inferr</a> | `infer_launch_shiny_app()` |
+| Linear Regression | <a href="https://www.rsquaredcomputing.com/shiny/olsrr/" target="_blank">Launch</a> | <a href="https://olsrr.rsquaredacademy.com/" target="_blank">olsrr</a> | `ols_launch_app()` |
+| Logistic Regression | <a href="https://www.rsquaredcomputing.com/shiny/blorr/" target="_blank">Launch</a> | <a href="https://blorr.rsquaredacademy.com/" target="_blank">blorr</a> | `blr_launch_app()` |
+| RFM Analysis | <a href="https://www.rsquaredcomputing.com/shiny/rfm/" target="_blank">Launch</a> | <a href="https://rfm.rsquaredacademy.com/" target="_blank">rfm</a> | `rfm_launch_app()` |
+| Data Visualization | <a href="https://www.rsquaredcomputing.com/shiny/xplorerr/" target="_blank">Launch</a> | <a href="https://xplorerr.rsquaredacademy.com/" target="_blank">xplorerr</a> | `app_visualizer()` |
+
+
+## Feedback
+
+All feedback is welcome. Issues (bugs and feature requests) can be posted to 
+[github tracker](https://github.com/rsquaredacademy/xplorerr/issues). For help 
+with code or other related questions, feel free to reach out to us
+at pkgs@rsquaredacademy.com.
