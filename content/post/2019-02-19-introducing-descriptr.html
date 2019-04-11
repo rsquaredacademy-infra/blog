@@ -3,7 +3,7 @@ title: Descriptive/Summary Statistics with descriptr
 author: Aravind Hebbali
 twitterImg: /img/og_descriptr.png
 description: "Tools for descriptive statistics in R."
-date: '2019-02-19'
+date: '2019-02-20'
 slug: introducing-descriptr
 topics:
   - summary statistics
@@ -13,7 +13,7 @@ tags:
 
 
 
-<p>We are pleased to announce the <strong>descriptr</strong> package, a set of tools for
+<p>We are pleased to introduce the <strong>descriptr</strong> package, a set of tools for
 generating descriptive/summary statistics.</p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
@@ -85,7 +85,7 @@ difference between the two data sets is related to the variable types.</p>
 <h2>Continuous Data</h2>
 <div id="summary-statistics" class="section level3">
 <h3>Summary Statistics</h3>
-<p>The <code>ds_summary_stats</code> function returns a comprehensive set of statistics
+<p>The <code>ds_summary_stats()</code> function returns a comprehensive set of statistics
 including measures of location, variation, symmetry and extreme observations.</p>
 <pre class="r"><code>ds_summary_stats(mtcarz, mpg)</code></pre>
 <pre><code>## ------------------------------ Variable: mpg ------------------------------
@@ -215,7 +215,7 @@ variables in the data set and return summary statistics for each of them.</p>
 </div>
 <div id="frequency-distribution" class="section level3">
 <h3>Frequency Distribution</h3>
-<p>The <code>ds_freq_table</code> function creates frequency tables for continuous variables.
+<p>The <code>ds_freq_table()</code> function creates frequency tables for continuous variables.
 The default number of intervals is 5.</p>
 <pre class="r"><code>ds_freq_table(mtcarz, mpg, 4)</code></pre>
 <pre><code>##                                 Variable: mpg                                 
