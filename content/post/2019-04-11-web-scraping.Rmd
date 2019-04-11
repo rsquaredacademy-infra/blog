@@ -148,7 +148,11 @@ average time on site, average pages browsed per vist and bounce rate.
 of RBI Governors from Wikipedia, and analyze the background from which they
 came i.e whether there were more economists or bureaucrats?
 
+<hr>
+
 <a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
+
+<hr>
 
 ## HTML Basics
 
@@ -221,9 +225,13 @@ style. The `id` attribute specifies a unique id for an HTML element. It can be
 used on any HTML element and is case sensitive. The `style` attribute sets the 
 style of an HTML element.
 
+<hr>
+
 <p>
 <a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
 </p>
+
+<hr>
 
 ## Libraries
 
@@ -551,7 +559,11 @@ best_sellers <- tibble(title = mobile_name, color = mobile_color,
 best_sellers
 ```
 
+<hr>
+
 <a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a>
+
+<hr>
 
 ## IMDB Top 50 
 
@@ -890,7 +902,11 @@ top_50 <- tibble(title = movie_title, release = movie_year,
 top_50
 ```
 
+<hr>
+
 <a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
+
+<hr>
 
 ## Top Websites
 

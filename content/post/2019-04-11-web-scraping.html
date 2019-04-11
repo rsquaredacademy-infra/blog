@@ -131,7 +131,9 @@ average time on site, average pages browsed per vist and bounce rate.</li>
 of RBI Governors from Wikipedia, and analyze the background from which they
 came i.e whether there were more economists or bureaucrats?</li>
 </ul>
+<hr>
 <p><a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a></p>
+<hr>
 </div>
 <div id="html-basics" class="section level2">
 <h2>HTML Basics</h2>
@@ -189,9 +191,11 @@ class name. HTML elements with same class name will have the same format and
 style. The <code>id</code> attribute specifies a unique id for an HTML element. It can be
 used on any HTML element and is case sensitive. The <code>style</code> attribute sets the
 style of an HTML element.</p>
+<hr>
 <p>
 <a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
 </p>
+<hr>
 </div>
 </div>
 <div id="libraries" class="section level2">
@@ -397,8 +401,8 @@ located within the following:</p>
 <pre class="r"><code>top_phones %&gt;%
   html_nodes(&quot;.crwProductDetail span.a-size-small .a-link-normal&quot;) %&gt;%
   html_text() </code></pre>
-<pre><code>##  [1] &quot;1,100&quot;  &quot;12,060&quot; &quot;553&quot;    &quot;23,487&quot; &quot;6,402&quot;  &quot;3,013&quot;  &quot;12,366&quot;
-##  [8] &quot;10,411&quot; &quot;822&quot;    &quot;14,377&quot;</code></pre>
+<pre><code>##  [1] &quot;1,100&quot;  &quot;12,060&quot; &quot;553&quot;    &quot;23,487&quot; &quot;6,403&quot;  &quot;3,013&quot;  &quot;12,366&quot;
+##  [8] &quot;10,413&quot; &quot;822&quot;    &quot;14,379&quot;</code></pre>
 <p>We use the above information within <code>html_nodes()</code> to extract the data. Now
 let us clean it up a bit and convert it into a number instead of leaving it
 as a character. If you use <code>as.numeric()</code> directly, you will see <code>NA</code> in
@@ -413,7 +417,7 @@ it into a number.</p>
   as.numeric() -&gt; mobile_review
 
 mobile_review</code></pre>
-<pre><code>##  [1]  1100 12060   553 23487  6402  3013 12366 10411   822 14377</code></pre>
+<pre><code>##  [1]  1100 12060   553 23487  6403  3013 12366 10413   822 14379</code></pre>
 </div>
 <div id="real-price" class="section level3">
 <h3>Real Price</h3>
@@ -506,13 +510,15 @@ best_sellers</code></pre>
 ##  2 Samsung Ga~ Ocean Bl~    3.7   12060            13390              12990
 ##  3 Samsung Ga~ Gradatio~    4.1     553            16490              14990
 ##  4 Redmi 6A    Black        4.2   23487             6999               5999
-##  5 Redmi 6 Pro Black        4.2    6402            11499               7999
+##  5 Redmi 6 Pro Black        4.2    6403            11499               7999
 ##  6 Samsung Ga~ Ocean Bl~    4.1    3013             9290               8990
 ##  7 Redmi 6 Pro Black        4.1   12366            13499              10000
-##  8 Realme U1   Ambitiou~    4.4   10411            12999               9999
+##  8 Realme U1   Ambitiou~    4.4   10413            12999               9999
 ##  9 Honor 8C    Blue         4.2     822            12999              10999
-## 10 OnePlus 6T  Mirror B~    4.5   14377            37999              34999</code></pre>
+## 10 OnePlus 6T  Mirror B~    4.5   14379            37999              34999</code></pre>
+<hr>
 <p><a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a></p>
+<hr>
 </div>
 </div>
 <div id="imdb-top-50" class="section level2">
@@ -992,7 +998,9 @@ top_50</code></pre>
 ##  9 12 Angr~    1957               96 Drama      8.9 5.85e5             4.36
 ## 10 Incepti~    2010              148 Action~    8.8 1.82e6           293.  
 ## # ... with 40 more rows</code></pre>
+<hr>
 <p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
+<hr>
 </div>
 </div>
 <div id="top-websites" class="section level2">
