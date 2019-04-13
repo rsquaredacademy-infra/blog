@@ -118,9 +118,6 @@ not blocked from accessing the website.</li>
 <h2>Case Studies</h2>
 <p><img src="/img/blog_ws_case_studies_border.png" width="80%" style="display: block; margin: auto;" /></p>
 <ul>
-<li><strong>Best selling mobile phones</strong>: In the first case study, we will scrape the
-best selling mobile phones from website of Amazon India and extract the name,
-color, rating, number of reviews, real and discounted price.</li>
 <li><strong>IMDB top 50 movies</strong>: In this case study we will scrape the IMDB website
 to extract the title, year of release, certificate, runtime, genre, rating,
 votes and revenue of the top 50 movies.</li>
@@ -215,312 +212,6 @@ library(lubridate)
 library(tibble)
 library(purrr)</code></pre>
 </div>
-<div id="best-selling-mobile-phones" class="section level2">
-<h2>Best Selling Mobile Phones</h2>
-<p><img src="/img/blog_ws_cs_top_mobiles_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>In this first case study, we will scrape the details of best selling smart
-phones from <a href="https://www.amazon.in/mobile-phones/b?ie=UTF8&amp;node=1389401031&amp;ref_=nav_shopall_sbc_mobcomp_all_mobiles">Amazon</a>.
-Our goal is to extract the following:</p>
-<ul>
-<li>Brand name</li>
-<li>Color</li>
-<li>Rating</li>
-<li>Number of reviews</li>
-<li>Real price</li>
-<li>Actual price (after discount)</li>
-</ul>
-<div id="robotstxt" class="section level3">
-<h3>robotstxt</h3>
-<p>As mentioned earlier, we will first check if we can scrape data from the web
-page using <code>paths_allowed()</code> from the <strong>robotstxt</strong> package. We need to
-specify the url of the web page using the <code>paths</code> argument. If we can access
-the web page, <code>paths_allowed()</code> will return <code>TRUE</code>, else <code>FALSE</code>.</p>
-<pre class="r"><code>paths_allowed(
-  paths = c(&quot;https://www.amazon.in/mobile-phones/b?ie=UTF8&amp;node=1389401031&amp;ref_=nav_shopall_sbc_mobcomp_all_mobiles&quot;)
-)</code></pre>
-<pre><code>## 
- www.amazon.in                      No encoding supplied: defaulting to UTF-8.</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>Since it has returned <code>TRUE</code>, let us go ahead and download the web page using
-<code>read_html()</code> from the <strong>xml2</strong> package and store it in <code>top_phones</code>. We do
-this to ensure not to make repeated requests to the website which may lead to
-our IP address being blocked.</p>
-<pre class="r"><code>top_phones &lt;- read_html(&quot;https://www.amazon.in/mobile-phones/b?ie=UTF8&amp;node=1389401031&amp;ref_=nav_shopall_sbc_mobcomp_all_mobiles&quot;)
-top_phones</code></pre>
-<pre><code>## {xml_document}
-## &lt;html class=&quot;a-no-js&quot; data-19ax5a9jf=&quot;dingo&quot;&gt;
-## [1] &lt;head&gt;\n&lt;script&gt;var aPageStart = (new Date()).getTime();&lt;/script&gt;&lt;me ...
-## [2] &lt;body class=&quot;a-aui_149818-c a-aui_152852-c a-aui_157141-c a-aui_1586 ...</code></pre>
-</div>
-<div id="brand-name" class="section level3">
-<h3>Brand Name</h3>
-<p><img src="/img/blog_ws_mobile_brand_name_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>The first detail we want to extract is the brand name of the phone. If you look
-at the HTML code, it is nested within a hyperlink, defined by <code>&lt;a&gt;</code>. The link
-is inside a section identified by the class <code>crwTitle</code>. We will use this
-information to ask <strong>rvest</strong> to extract text content which will give us the
-brand name.</p>
-<p>The location is specified using <code>html_nodes()</code> and the text extracted using
-<code>hmtl_text()</code>. Since <code>crwTitle</code> is a class, we use <code>.</code> before it but not for
-<code>a</code> as it is a HTML tag. Both the class and the tag are specified within quotes
-and separated by space.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwTitle a&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;Samsung Galaxy M30 (Gradation Blue, 4+64 GB)&quot;      
-##  [2] &quot;Samsung Galaxy M20 (Ocean Blue, 4+64GB)&quot;           
-##  [3] &quot;Samsung Galaxy M30 (Gradation Black, 4+64 GB)&quot;     
-##  [4] &quot;Redmi 6A (Black, 2GB RAM, 16GB Storage)&quot;           
-##  [5] &quot;Redmi 6 Pro (Black, 3GB RAM, 32GB Storage)&quot;        
-##  [6] &quot;Samsung Galaxy M10 (Ocean Blue, 3+32GB)&quot;           
-##  [7] &quot;Redmi 6 Pro (Black, 4GB RAM, 64GB Storage)&quot;        
-##  [8] &quot;Realme U1 (Ambitious Black, 3GB RAM, 32GB Storage)&quot;
-##  [9] &quot;Honor 8C (Blue, 4GB RAM, 32GB Storage)&quot;            
-## [10] &quot;OnePlus 6T (Mirror Black, 6GB RAM, 128GB Storage)&quot;</code></pre>
-<p>If you observe the output, it includes the following:</p>
-<ul>
-<li>brand name</li>
-<li>color</li>
-<li>RAM</li>
-<li>storage capacity</li>
-</ul>
-<p>To extract the brand name, we will do the following:</p>
-<ul>
-<li>use <code>str_split()</code> from <strong>stringr</strong> and specify the pattern <code>\\(</code> i.e split
-the string @ the first opening bracket. Since <code>(</code> is a special character, we
-use <code>\\</code> for escaping.</li>
-<li>next, we use <code>map_chr()</code> from the <strong>purrr</strong> package to extract the first
-element from the resulting list.</li>
-<li>finally, we remove the white space using <code>str_trim()</code>.</li>
-</ul>
-<p>The whole point of the above exercise is to show that extracting the data
-using <strong>rvest</strong> is just one part of web scraping. We need to spend enough
-time tidying and reshaping the data to get it into a format useful for data
-analysis.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwTitle a&quot;) %&gt;%
-  html_text() %&gt;%
-  str_split(&#39;\\(&#39;) %&gt;%
-  map_chr(1) %&gt;%
-  str_trim() -&gt; mobile_name
-
-mobile_name</code></pre>
-<pre><code>##  [1] &quot;Samsung Galaxy M30&quot; &quot;Samsung Galaxy M20&quot; &quot;Samsung Galaxy M30&quot;
-##  [4] &quot;Redmi 6A&quot;           &quot;Redmi 6 Pro&quot;        &quot;Samsung Galaxy M10&quot;
-##  [7] &quot;Redmi 6 Pro&quot;        &quot;Realme U1&quot;          &quot;Honor 8C&quot;          
-## [10] &quot;OnePlus 6T&quot;</code></pre>
-</div>
-<div id="color" class="section level3">
-<h3>Color</h3>
-<p><img src="/img/blog_ws_mobile_color_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>In the previous step, we observed that the data extracted from <code>top_mobiles</code>
-included the color of the mobile as well. So the location of the color in
-the HTML is same; within the hyperlink of the <code>crwTitle</code> section. But now,
-we want to extract the color and not the brand name.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwTitle a&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;Samsung Galaxy M30 (Gradation Blue, 4+64 GB)&quot;      
-##  [2] &quot;Samsung Galaxy M20 (Ocean Blue, 4+64GB)&quot;           
-##  [3] &quot;Samsung Galaxy M30 (Gradation Black, 4+64 GB)&quot;     
-##  [4] &quot;Redmi 6A (Black, 2GB RAM, 16GB Storage)&quot;           
-##  [5] &quot;Redmi 6 Pro (Black, 3GB RAM, 32GB Storage)&quot;        
-##  [6] &quot;Samsung Galaxy M10 (Ocean Blue, 3+32GB)&quot;           
-##  [7] &quot;Redmi 6 Pro (Black, 4GB RAM, 64GB Storage)&quot;        
-##  [8] &quot;Realme U1 (Ambitious Black, 3GB RAM, 32GB Storage)&quot;
-##  [9] &quot;Honor 8C (Blue, 4GB RAM, 32GB Storage)&quot;            
-## [10] &quot;OnePlus 6T (Mirror Black, 6GB RAM, 128GB Storage)&quot;</code></pre>
-<p>We will split the original string @ <code>(</code> and extract the second part which
-includes:</p>
-<ul>
-<li>color</li>
-<li>RAM</li>
-<li>storage capacity</li>
-</ul>
-<p>The color is separated from the rest by a comma. We will use the <code>,</code> to split
-the string and extract the color using <code>map_chr()</code> i.e. extract the first
-element from the resulting list.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwTitle a&quot;) %&gt;%
-  html_text() %&gt;%
-  str_split(&#39;\\(&#39;) %&gt;%
-  map_chr(2) %&gt;%
-  str_split(&quot;,&quot;) %&gt;%
-  map_chr(1) -&gt; mobile_color
-
-mobile_color</code></pre>
-<pre><code>##  [1] &quot;Gradation Blue&quot;  &quot;Ocean Blue&quot;      &quot;Gradation Black&quot;
-##  [4] &quot;Black&quot;           &quot;Black&quot;           &quot;Ocean Blue&quot;     
-##  [7] &quot;Black&quot;           &quot;Ambitious Black&quot; &quot;Blue&quot;           
-## [10] &quot;Mirror Black&quot;</code></pre>
-</div>
-<div id="rating" class="section level3">
-<h3>Rating</h3>
-<p><img src="/img/blog_ws_mobile_rating_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Let us extract the ratings for the phones now. If you look at the HTML code,
-we can locate rating within the following:</p>
-<ul>
-<li><code>&lt;span&gt;</code></li>
-<li><code>&lt;a&gt;</code></li>
-<li><code>.crwProductDetail</code></li>
-</ul>
-<p>It is wrapped within <code>&lt;span&gt;</code> identified by the class <code>.a-icon-alt</code> which is
-inside a hyperlink in the section identified by the class <code>.crwProductDetail</code>.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail span .a-icon-alt&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;4.0 out of 5 stars&quot; &quot;3.7 out of 5 stars&quot; &quot;4.1 out of 5 stars&quot;
-##  [4] &quot;4.2 out of 5 stars&quot; &quot;4.2 out of 5 stars&quot; &quot;4.1 out of 5 stars&quot;
-##  [7] &quot;4.1 out of 5 stars&quot; &quot;4.4 out of 5 stars&quot; &quot;4.2 out of 5 stars&quot;
-## [10] &quot;4.5 out of 5 stars&quot;</code></pre>
-<p>In the outptut, you can observe the text <strong>out of 5 stars</strong> for each rating.
-Let us get rid of this text by selecting the first 3 characters using
-<code>str_sub()</code>. We pick the first 3 characters using the <code>start</code> and <code>end</code>
-arguments and supply them the values <code>1</code> and <code>3</code>. Finally, we convert the
-rating to a number using <code>as.numeric()</code>.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail span .a-icon-alt&quot;) %&gt;%
-  html_text() %&gt;%
-  str_sub(start = 1, end = 3) %&gt;%
-  as.numeric() -&gt; mobile_rating
-
-mobile_rating</code></pre>
-<pre><code>##  [1] 4.0 3.7 4.1 4.2 4.2 4.1 4.1 4.4 4.2 4.5</code></pre>
-</div>
-<div id="number-of-reviews" class="section level3">
-<h3>Number of Reviews</h3>
-<p><img src="/img/blog_ws_mobile_reviews_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Now that we know the rating for each of the top 10 best selling smart phones,
-let us find out how many people have reviewed them. The number of reviews is
-located within the following:</p>
-<ul>
-<li>hyperlink identified by the class <code>.a-link-normal</code></li>
-<li><code>&lt;span&gt;</code> tag identified by the class <code>.a-size-small</code></li>
-<li>section identified by the class <code>.crwProductDetail</code></li>
-</ul>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail span.a-size-small .a-link-normal&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;1,100&quot;  &quot;12,060&quot; &quot;553&quot;    &quot;23,487&quot; &quot;6,403&quot;  &quot;3,013&quot;  &quot;12,366&quot;
-##  [8] &quot;10,413&quot; &quot;822&quot;    &quot;14,379&quot;</code></pre>
-<p>We use the above information within <code>html_nodes()</code> to extract the data. Now
-let us clean it up a bit and convert it into a number instead of leaving it
-as a character. If you use <code>as.numeric()</code> directly, you will see <code>NA</code> in
-the result, the reason being the presence of comma in the number of reviews.
-First, we need to get rid of the comma, which we will do using <code>str_replace()</code>.
-We replace the comma with nothing as shown in the code below and then convert
-it into a number.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail span.a-size-small .a-link-normal&quot;) %&gt;%
-  html_text() %&gt;%
-  str_replace(&quot;,&quot;, &quot;&quot;) %&gt;%
-  as.numeric() -&gt; mobile_review
-
-mobile_review</code></pre>
-<pre><code>##  [1]  1100 12060   553 23487  6403  3013 12366 10413   822 14379</code></pre>
-</div>
-<div id="real-price" class="section level3">
-<h3>Real Price</h3>
-<p><img src="/img/blog_ws_real_price_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>The price is one of the most important factor when it comes to choosing a
-smart phone. Let us look at the price of the best selling mobile phones. Again,
-looking at the HTML code, the price can be located within the following:</p>
-<ul>
-<li><code>&lt;span&gt;</code> tag identified by the class <code>.a-text-strike</code></li>
-<li>section identified by the class <code>crwPrice</code> and <code>.crwProductDetail</code></li>
-</ul>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail .crwPrice .a-text-strike&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;  Rs. 16,490.00&quot; &quot;  Rs. 13,390.00&quot; &quot;  Rs. 16,490.00&quot;
-##  [4] &quot;  Rs. 6,999.00&quot;  &quot;  Rs. 11,499.00&quot; &quot;  Rs. 9,290.00&quot; 
-##  [7] &quot;  Rs. 13,499.00&quot; &quot;  Rs. 12,999.00&quot; &quot;  Rs. 12,999.00&quot;
-## [10] &quot;  Rs. 37,999.00&quot;</code></pre>
-<p>Using the above information, we can extract the price of the mobile phones
-which is returned as a character vector but we need to convert it to numeric
-if we are to analyze it further. Let use convert the price to a number using
-the following steps:</p>
-<ul>
-<li>use <code>str_trim()</code> to remove the white spaces</li>
-<li>exclude the currency information using <code>str_sub()</code></li>
-<li>replace the comma using <code>str_replace()</code></li>
-<li>remove the decimal values using <code>str_split()</code></li>
-<li>extract the price from the resulting list using <code>map_chr()</code></li>
-<li>convert the price to a number <code>using as.numeric()</code></li>
-</ul>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail .crwPrice .a-text-strike&quot;) %&gt;%
-  html_text() %&gt;%
-  str_trim() %&gt;%
-  str_sub(start = 5) %&gt;%
-  str_replace(&quot;,&quot;, &quot;&quot;) %&gt;%
-  str_split(&quot;\\.&quot;) %&gt;%
-  map_chr(1) %&gt;%
-  as.numeric() -&gt; real_price
-
-real_price</code></pre>
-<pre><code>##  [1] 16490 13390 16490  6999 11499  9290 13499 12999 12999 37999</code></pre>
-</div>
-<div id="actual-price" class="section level3">
-<h3>Actual Price</h3>
-<p><img src="/img/blog_ws_actual_price_border.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Deep discounts are one of the strategies adopted by ecommerce firms to drive
-sales. Let us look at the actual price (after discount price) of the best
-selling mobile phones. The discounted price can be located within the
-following:</p>
-<ul>
-<li><code>&lt;span&gt;</code> tag identified by the class <code>.crwActualPrice</code></li>
-<li>section identified by the class <code>crwPrice</code> and <code>.crwProductDetail</code></li>
-</ul>
-<p>Using the above information, we can extract the discounted price of the mobile
-phones.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail .crwActualPrice&quot;) %&gt;%
-  html_text() </code></pre>
-<pre><code>##  [1] &quot;  Rs. 14,990.00&quot; &quot;  Rs. 12,990.00&quot; &quot;  Rs. 14,990.00&quot;
-##  [4] &quot;  Rs. 5,999.00&quot;  &quot;  Rs. 7,999.00&quot;  &quot;  Rs. 8,990.00&quot; 
-##  [7] &quot;  Rs. 10,000.00&quot; &quot;  Rs. 9,999.00&quot;  &quot;  Rs. 10,999.00&quot;
-## [10] &quot;  Rs. 34,999.00&quot;</code></pre>
-<p>Let use convert the price to a number using the same steps as in the
-case of real price.</p>
-<pre class="r"><code>top_phones %&gt;%
-  html_nodes(&quot;.crwProductDetail .crwActualPrice&quot;) %&gt;%
-  html_text() %&gt;%
-  str_trim() %&gt;%
-  str_sub(start = 5) %&gt;%
-  str_replace(&quot;,&quot;, &quot;&quot;) %&gt;%
-  str_split(&quot;\\.&quot;) %&gt;%
-  map_chr(1) %&gt;%
-  as.numeric() -&gt; discounted_price
-
-discounted_price</code></pre>
-<pre><code>##  [1] 14990 12990 14990  5999  7999  8990 10000  9999 10999 34999</code></pre>
-</div>
-<div id="putting-it-all-together" class="section level3">
-<h3>Putting it all together…</h3>
-<pre class="r"><code>best_sellers &lt;- tibble(title = mobile_name, color = mobile_color, 
-  rating = mobile_rating, reviews = mobile_review, `Real Price (Rs.)` = real_price,
-  `Discount Price (Rs.)` = discounted_price)
-
-best_sellers</code></pre>
-<pre><code>## # A tibble: 10 x 6
-##    title       color     rating reviews `Real Price (Rs~ `Discount Price (~
-##    &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;              &lt;dbl&gt;
-##  1 Samsung Ga~ Gradatio~    4      1100            16490              14990
-##  2 Samsung Ga~ Ocean Bl~    3.7   12060            13390              12990
-##  3 Samsung Ga~ Gradatio~    4.1     553            16490              14990
-##  4 Redmi 6A    Black        4.2   23487             6999               5999
-##  5 Redmi 6 Pro Black        4.2    6403            11499               7999
-##  6 Samsung Ga~ Ocean Bl~    4.1    3013             9290               8990
-##  7 Redmi 6 Pro Black        4.1   12366            13499              10000
-##  8 Realme U1   Ambitiou~    4.4   10413            12999               9999
-##  9 Honor 8C    Blue         4.2     822            12999              10999
-## 10 OnePlus 6T  Mirror B~    4.5   14379            37999              34999</code></pre>
-<hr>
-<p><a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a></p>
-<hr>
-</div>
-</div>
 <div id="imdb-top-50" class="section level2">
 <h2>IMDB Top 50</h2>
 <p><img src="/img/blog_ws_cs_imdb_top_50_border.png" width="80%" style="display: block; margin: auto;" /></p>
@@ -536,7 +227,7 @@ from the IMDB website:</p>
 <li>votes</li>
 <li>revenue</li>
 </ul>
-<div id="robotstxt-1" class="section level3">
+<div id="robotstxt" class="section level3">
 <h3>robotstxt</h3>
 <p>Let us check if we can scrape the data from the website using <code>paths_allowed()</code>
 from <strong>robotstxt</strong> package.</p>
@@ -826,7 +517,7 @@ movie_genre</code></pre>
 ## [47] &quot;Animation, Drama, War&quot;        &quot;Adventure, Comedy, Sci-Fi&quot;   
 ## [49] &quot;Action, Adventure&quot;            &quot;Drama, War&quot;</code></pre>
 </div>
-<div id="rating-1" class="section level3">
+<div id="rating" class="section level3">
 <h3>Rating</h3>
 <p><img src="/img/blog_ws_imdb_movie_rating_border.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>The rating of the movie can be located in the following way:</p>
@@ -859,6 +550,9 @@ movie_rating</code></pre>
 <pre><code>##  [1] 9.3 9.2 9.0 9.0 8.9 8.9 8.9 8.9 8.9 8.8 8.8 8.8 8.8 8.7 8.7 8.7 8.7
 ## [18] 8.7 8.7 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.5 8.5 8.5
 ## [35] 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5</code></pre>
+<hr>
+<p><a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a></p>
+<hr>
 </div>
 <div id="xpath" class="section level3">
 <h3>XPATH</h3>
@@ -888,14 +582,14 @@ using <code>html_text()</code>. Here, we need to extract the value assigned to t
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//meta[@itemprop=&quot;ratingCount&quot;]&#39;) %&gt;% 
   html_attr(&#39;content&#39;) </code></pre>
-<pre><code>##  [1] &quot;2072234&quot; &quot;1421858&quot; &quot;2038192&quot; &quot;986722&quot;  &quot;1475228&quot; &quot;1620525&quot; &quot;1073941&quot;
-##  [8] &quot;615037&quot;  &quot;585330&quot;  &quot;1816814&quot; &quot;1658255&quot; &quot;1491788&quot; &quot;1588549&quot; &quot;1334175&quot;
-## [15] &quot;1488615&quot; &quot;894737&quot;  &quot;1039788&quot; &quot;822026&quot;  &quot;279949&quot;  &quot;1276303&quot; &quot;637576&quot; 
-## [22] &quot;549215&quot;  &quot;1095877&quot; &quot;1000529&quot; &quot;545073&quot;  &quot;897347&quot;  &quot;1271115&quot; &quot;913037&quot; 
-## [29] &quot;1118408&quot; &quot;1109433&quot; &quot;352753&quot;  &quot;38978&quot;   &quot;118321&quot;  &quot;172855&quot;  &quot;616710&quot; 
-## [36] &quot;605162&quot;  &quot;666065&quot;  &quot;1052597&quot; &quot;1063762&quot; &quot;633432&quot;  &quot;1021256&quot; &quot;1197974&quot;
-## [43] &quot;941670&quot;  &quot;822889&quot;  &quot;897372&quot;  &quot;198316&quot;  &quot;192593&quot;  &quot;922864&quot;  &quot;802805&quot; 
-## [50] &quot;542139&quot;</code></pre>
+<pre><code>##  [1] &quot;2072893&quot; &quot;1422292&quot; &quot;2038787&quot; &quot;987020&quot;  &quot;1475650&quot; &quot;1621033&quot; &quot;1074273&quot;
+##  [8] &quot;615219&quot;  &quot;585562&quot;  &quot;1817393&quot; &quot;1658750&quot; &quot;1492209&quot; &quot;1589127&quot; &quot;1334563&quot;
+## [15] &quot;1489071&quot; &quot;895033&quot;  &quot;1040130&quot; &quot;822277&quot;  &quot;280024&quot;  &quot;1276946&quot; &quot;637716&quot; 
+## [22] &quot;549410&quot;  &quot;1096231&quot; &quot;1000909&quot; &quot;545280&quot;  &quot;897576&quot;  &quot;1271530&quot; &quot;913352&quot; 
+## [29] &quot;1118817&quot; &quot;1109777&quot; &quot;352837&quot;  &quot;39132&quot;   &quot;118413&quot;  &quot;174125&quot;  &quot;617621&quot; 
+## [36] &quot;605417&quot;  &quot;666327&quot;  &quot;1052901&quot; &quot;1064050&quot; &quot;633675&quot;  &quot;1021511&quot; &quot;1198326&quot;
+## [43] &quot;941917&quot;  &quot;823238&quot;  &quot;897607&quot;  &quot;198398&quot;  &quot;192715&quot;  &quot;923178&quot;  &quot;803033&quot; 
+## [50] &quot;542311&quot;</code></pre>
 <p>Finally, we convert the votes to a number using <code>as.numeric()</code>.</p>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//meta[@itemprop=&quot;ratingCount&quot;]&#39;) %&gt;% 
@@ -903,13 +597,13 @@ using <code>html_text()</code>. Here, we need to extract the value assigned to t
   as.numeric() -&gt; movie_votes
 
 movie_votes</code></pre>
-<pre><code>##  [1] 2072234 1421858 2038192  986722 1475228 1620525 1073941  615037
-##  [9]  585330 1816814 1658255 1491788 1588549 1334175 1488615  894737
-## [17] 1039788  822026  279949 1276303  637576  549215 1095877 1000529
-## [25]  545073  897347 1271115  913037 1118408 1109433  352753   38978
-## [33]  118321  172855  616710  605162  666065 1052597 1063762  633432
-## [41] 1021256 1197974  941670  822889  897372  198316  192593  922864
-## [49]  802805  542139</code></pre>
+<pre><code>##  [1] 2072893 1422292 2038787  987020 1475650 1621033 1074273  615219
+##  [9]  585562 1817393 1658750 1492209 1589127 1334563 1489071  895033
+## [17] 1040130  822277  280024 1276946  637716  549410 1096231 1000909
+## [25]  545280  897576 1271530  913352 1118817 1109777  352837   39132
+## [33]  118413  174125  617621  605417  666327 1052901 1064050  633675
+## [41] 1021511 1198326  941917  823238  897607  198398  192715  923178
+## [49]  803033  542311</code></pre>
 </div>
 <div id="revenue" class="section level3">
 <h3>Revenue</h3>
@@ -929,26 +623,26 @@ distinct way to identify either of them.</p>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//span[@name=&quot;nv&quot;]&#39;) %&gt;%
   html_text() </code></pre>
-<pre><code>##  [1] &quot;2,072,234&quot; &quot;$28.34M&quot;   &quot;1,421,858&quot; &quot;$134.97M&quot;  &quot;2,038,192&quot;
-##  [6] &quot;$534.86M&quot;  &quot;986,722&quot;   &quot;$57.30M&quot;   &quot;1,475,228&quot; &quot;$377.85M&quot; 
-## [11] &quot;1,620,525&quot; &quot;$107.93M&quot;  &quot;1,073,941&quot; &quot;$96.07M&quot;   &quot;615,037&quot;  
-## [16] &quot;$6.10M&quot;    &quot;585,330&quot;   &quot;$4.36M&quot;    &quot;1,816,814&quot; &quot;$292.58M&quot; 
-## [21] &quot;1,658,255&quot; &quot;$37.03M&quot;   &quot;1,491,788&quot; &quot;$315.54M&quot;  &quot;1,588,549&quot;
-## [26] &quot;$330.25M&quot;  &quot;1,334,175&quot; &quot;$342.55M&quot;  &quot;1,488,615&quot; &quot;$171.48M&quot; 
-## [31] &quot;894,737&quot;   &quot;$46.84M&quot;   &quot;1,039,788&quot; &quot;$290.48M&quot;  &quot;822,026&quot;  
-## [36] &quot;$112.00M&quot;  &quot;279,949&quot;   &quot;$0.27M&quot;    &quot;1,276,303&quot; &quot;$188.02M&quot; 
-## [41] &quot;637,576&quot;   &quot;$7.56M&quot;    &quot;549,215&quot;   &quot;$10.06M&quot;   &quot;1,095,877&quot;
-## [46] &quot;$216.54M&quot;  &quot;1,000,529&quot; &quot;$136.80M&quot;  &quot;545,073&quot;   &quot;$57.60M&quot;  
-## [51] &quot;897,347&quot;   &quot;$23.34M&quot;   &quot;1,271,115&quot; &quot;$100.13M&quot;  &quot;913,037&quot;  
-## [56] &quot;$19.50M&quot;   &quot;1,118,408&quot; &quot;$130.74M&quot;  &quot;1,109,433&quot; &quot;$322.74M&quot; 
-## [61] &quot;352,753&quot;   &quot;38,978&quot;    &quot;$1.19M&quot;    &quot;118,321&quot;   &quot;$12.39M&quot;  
-## [66] &quot;172,855&quot;   &quot;$190.24M&quot;  &quot;616,710&quot;   &quot;$678.82M&quot;  &quot;605,162&quot;  
-## [71] &quot;$13.09M&quot;   &quot;666,065&quot;   &quot;$13.18M&quot;   &quot;1,052,597&quot; &quot;$53.09M&quot;  
-## [76] &quot;1,063,762&quot; &quot;$132.38M&quot;  &quot;633,432&quot;   &quot;$32.57M&quot;   &quot;1,021,256&quot;
-## [81] &quot;$25.54M&quot;   &quot;1,197,974&quot; &quot;$187.71M&quot;  &quot;941,670&quot;   &quot;$6.72M&quot;   
-## [86] &quot;822,889&quot;   &quot;$312.90M&quot;  &quot;897,372&quot;   &quot;$204.84M&quot;  &quot;198,316&quot;  
-## [91] &quot;$11.99M&quot;   &quot;192,593&quot;   &quot;922,864&quot;   &quot;$210.61M&quot;  &quot;802,805&quot;  
-## [96] &quot;$248.16M&quot;  &quot;542,139&quot;   &quot;$83.47M&quot;</code></pre>
+<pre><code>##  [1] &quot;2,072,893&quot; &quot;$28.34M&quot;   &quot;1,422,292&quot; &quot;$134.97M&quot;  &quot;2,038,787&quot;
+##  [6] &quot;$534.86M&quot;  &quot;987,020&quot;   &quot;$57.30M&quot;   &quot;1,475,650&quot; &quot;$377.85M&quot; 
+## [11] &quot;1,621,033&quot; &quot;$107.93M&quot;  &quot;1,074,273&quot; &quot;$96.07M&quot;   &quot;615,219&quot;  
+## [16] &quot;$6.10M&quot;    &quot;585,562&quot;   &quot;$4.36M&quot;    &quot;1,817,393&quot; &quot;$292.58M&quot; 
+## [21] &quot;1,658,750&quot; &quot;$37.03M&quot;   &quot;1,492,209&quot; &quot;$315.54M&quot;  &quot;1,589,127&quot;
+## [26] &quot;$330.25M&quot;  &quot;1,334,563&quot; &quot;$342.55M&quot;  &quot;1,489,071&quot; &quot;$171.48M&quot; 
+## [31] &quot;895,033&quot;   &quot;$46.84M&quot;   &quot;1,040,130&quot; &quot;$290.48M&quot;  &quot;822,277&quot;  
+## [36] &quot;$112.00M&quot;  &quot;280,024&quot;   &quot;$0.27M&quot;    &quot;1,276,946&quot; &quot;$188.02M&quot; 
+## [41] &quot;637,716&quot;   &quot;$7.56M&quot;    &quot;549,410&quot;   &quot;$10.06M&quot;   &quot;1,096,231&quot;
+## [46] &quot;$216.54M&quot;  &quot;1,000,909&quot; &quot;$136.80M&quot;  &quot;545,280&quot;   &quot;$57.60M&quot;  
+## [51] &quot;897,576&quot;   &quot;$23.34M&quot;   &quot;1,271,530&quot; &quot;$100.13M&quot;  &quot;913,352&quot;  
+## [56] &quot;$19.50M&quot;   &quot;1,118,817&quot; &quot;$130.74M&quot;  &quot;1,109,777&quot; &quot;$322.74M&quot; 
+## [61] &quot;352,837&quot;   &quot;39,132&quot;    &quot;$1.19M&quot;    &quot;118,413&quot;   &quot;$12.39M&quot;  
+## [66] &quot;174,125&quot;   &quot;$190.24M&quot;  &quot;617,621&quot;   &quot;$678.82M&quot;  &quot;605,417&quot;  
+## [71] &quot;$13.09M&quot;   &quot;666,327&quot;   &quot;$13.18M&quot;   &quot;1,052,901&quot; &quot;$53.09M&quot;  
+## [76] &quot;1,064,050&quot; &quot;$132.38M&quot;  &quot;633,675&quot;   &quot;$32.57M&quot;   &quot;1,021,511&quot;
+## [81] &quot;$25.54M&quot;   &quot;1,198,326&quot; &quot;$187.71M&quot;  &quot;941,917&quot;   &quot;$6.72M&quot;   
+## [86] &quot;823,238&quot;   &quot;$312.90M&quot;  &quot;897,607&quot;   &quot;$204.84M&quot;  &quot;198,398&quot;  
+## [91] &quot;$11.99M&quot;   &quot;192,715&quot;   &quot;923,178&quot;   &quot;$210.61M&quot;  &quot;803,033&quot;  
+## [96] &quot;$248.16M&quot;  &quot;542,311&quot;   &quot;$83.47M&quot;</code></pre>
 <p>To extract the revenue as a number, we need to do some string hacking as
 follows:</p>
 <ul>
@@ -977,7 +671,7 @@ movie_revenue</code></pre>
 ## [31]     NA   1.19  12.39 190.24 678.82  13.09  13.18  53.09 132.38  32.57
 ## [41]  25.54 187.71   6.72 312.90 204.84  11.99     NA 210.61 248.16  83.47</code></pre>
 </div>
-<div id="putting-it-all-together-1" class="section level3">
+<div id="putting-it-all-together" class="section level3">
 <h3>Putting it all together…</h3>
 <pre class="r"><code>top_50 &lt;- tibble(title = movie_title, release = movie_year, 
     `runtime (mins)` = movie_runtime, genre = movie_genre, rating = movie_rating, 
@@ -995,7 +689,7 @@ top_50</code></pre>
 ##  6 Pulp Fi~    1994              154 Crime,~    8.9 1.62e6           108.  
 ##  7 Schindl~    1993              195 Biogra~    8.9 1.07e6            96.1 
 ##  8 Il buon~    1966              161 Western    8.9 6.15e5             6.1 
-##  9 12 Angr~    1957               96 Drama      8.9 5.85e5             4.36
+##  9 12 Angr~    1957               96 Drama      8.9 5.86e5             4.36
 ## 10 Incepti~    2010              148 Action~    8.8 1.82e6           293.  
 ## # ... with 40 more rows</code></pre>
 <hr>
@@ -1026,7 +720,7 @@ bank. We will extact the following details:</p>
 <li>term (in days)</li>
 <li>background</li>
 </ul>
-<div id="robotstxt-2" class="section level3">
+<div id="robotstxt-1" class="section level3">
 <h3>robotstxt</h3>
 <p>Let us check if we can scrape the data from Wikipedia website using
 <code>paths_allowed()</code> from <strong>robotstxt</strong> package.</p>
