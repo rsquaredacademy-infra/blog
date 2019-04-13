@@ -3,11 +3,7 @@ title: A follow up note on our web scraping tutorial
 author: Aravind Hebbali
 description: "A follow up note on our web scraping tutorial"
 date: '2019-04-13'
-slug: web-scraping
-topics:
-  - rvest
-tags:
-  - rvest
+slug: web-scraping-note
 ---
 
 We had published a web scraping <a href="https://blog.rsquaredacademy.com/web-scraping/" target="_blank">tutorial</a> 
