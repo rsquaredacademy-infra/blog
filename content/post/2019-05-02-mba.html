@@ -1,0 +1,939 @@
+---
+title: "Practical Introduction to Market Basket Analysis - Asociation Rules"
+author: Aravind Hebbali
+twitterImg: /img/cover_image.jpg
+description: "Learn the what, why and how of market basket analysis in R"
+date: '2019-05-02'
+slug: market-basket-analysis-in-r
+topics:
+  - arules
+tags:
+  - arules
+---
+
+
+
+<p><img src="/img/mba_meme.jpg" width="50%" style="display: block; margin: auto;" /></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><img src="/img/mba_intro.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Ever wondered why items are displayed in a particular way in retail/online
+stores. Why certain items are suggested to you based on what you have added to
+the cart? Blame it on market basket analysis or association rule mining.</p>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this post:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/mba/mba.html" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/tree/master/association-rule-mining-in-r" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/335377" target="_blank">RStudio Cloud</a></li>
+</ul>
+</div>
+<div id="what" class="section level2">
+<h2>What?</h2>
+<p><img src="/img/mba_what.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Market basket analysis uses association rule mining under the hood to identify
+products frequently bought together. Before we get into the nitty gritty of
+market basket analysis, let us get a basic understanding of association rule
+mining. It finds association between different objects in a set. In the case
+of market basket analysis, the objects are the products purchased by a cusomter
+and the set is the transaction. In short, market basket analysis</p>
+<ul>
+<li>is a unsupervised data mining technique</li>
+<li>that uncovers products frequently bought together</li>
+<li>and creates if-then scenario rules</li>
+</ul>
+</div>
+<div id="why" class="section level2">
+<h2>Why ?</h2>
+<p><img src="/img/mba_why.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Market basket analysis creates actionable insights for:</p>
+<ul>
+<li>designing store layout</li>
+<li>online recommendation engines</li>
+<li>targeted marketing campaign/sales promotion/email campaign</li>
+<li>cross/up selling</li>
+<li>catalogue design</li>
+</ul>
+</div>
+<div id="advantages" class="section level2">
+<h2>Advantages</h2>
+<p><img src="/img/mba_advantages.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Market basket analysisis is <strong>cost effective</strong> as data required is readily
+available through electronic point of sale systems. It generates
+<strong>actionable insights</strong> for product placement, cross/up selling strategies,
+targeted marketing campaigns, catalogue design, pricing strategies,
+inventory control etc.</p>
+</div>
+<div id="use-cases" class="section level2">
+<h2>Use Cases</h2>
+<p><img src="/img/mba_use_cases.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Association rule mining has applications in several industries including
+retail, telecommunications, banking, insurance, manufacturing and medical.
+Let us look at its applications in more detail in the following industries:</p>
+<div id="retail" class="section level3">
+<h3>Retail</h3>
+<p>The introduction of electronic point of sale systems have allowed the
+collection of immense amounts of data and retail organizations make prolifc
+use of market basket analysis for</p>
+<ul>
+<li>designing store layout so that consumers can more easily find items that are
+frequently purchased together</li>
+<li>recommending associated products that are frequently bought together,
+<strong>“Customers who purchased this product also viewed this product…”</strong></li>
+<li>emailing customers who bought products specific products with other products
+and offers on those products that are likely to be interesting to them.</li>
+<li>grouping products that customers purchase frequently together in the store’s
+product placement</li>
+<li>designing special promotions that combine or discount certain products</li>
+<li>optimizing the layout of the catalog of an eCommerce site</li>
+<li>controlling inventory based on product demands and what products sell better
+together</li>
+</ul>
+</div>
+<div id="banks" class="section level3">
+<h3>Banks</h3>
+<p>Banks and financial institutions use market basket analysis to analyze credit
+card purchases for fraud detection and cross sell insurance products,
+investment products (mutual funds etc.), tax preparation, retirement planning,
+wealth management etc. It can also be used for next best offer, sequence and
+seasonal offers.</p>
+</div>
+<div id="telecommunications" class="section level3">
+<h3>Telecommunications</h3>
+<p>The telecommunications industry is characterized by high volatility and low
+customer loyalty due to lucrative offers for new customers from other service
+providers. The more services a customer uses from a particular operator, the
+harder it gets for him/her to switch to another operator. Market basket
+analysis is used to bundle mobile, landline, TV and internet services to
+customers to increase stickiness and reduce churn.</p>
+<hr>
+<a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
+<hr>
+</div>
+</div>
+<div id="simple-example" class="section level2">
+<h2>Simple Example</h2>
+<p><img src="/img/mba_items_description.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Before we move on to the case study, let us use a simple example to understand
+the important terminologies that we will come across in the rest of the
+tutorial. In the example, the transactions include the following products:</p>
+<ul>
+<li>mobile phones</li>
+<li>ear phones</li>
+<li>USB cable</li>
+<li>power bank</li>
+<li>screen guard</li>
+<li>mobile case cover</li>
+<li>modem/router</li>
+<li>mouse</li>
+<li>external hard drive</li>
+</ul>
+</div>
+<div id="steps" class="section level2">
+<h2>Steps</h2>
+<p><img src="/img/mba_steps.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The two important steps in market basket analysis are:</p>
+<ul>
+<li>frequent itemset generation</li>
+<li>rules generation</li>
+</ul>
+<p>We will discuss these steps in more detail in the case study.</p>
+</div>
+<div id="itemset" class="section level2">
+<h2>Itemset</h2>
+<p><img src="/img/mba_itemset.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Itemset is the collection of items purchased by a customer. In our example,
+mobile phone and screen guard are a frequent intemset. They are present in
+3 out of 5 transactions.</p>
+</div>
+<div id="antecedent-consequent" class="section level2">
+<h2>Antecedent &amp; Consequent</h2>
+<p><img src="/img/mba_antecedent_consequent.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Antecedent is the items of the left hand side of the rule and consequent is
+the right hand side of the rule. In our example, mobile phone is the antecedent
+and screen guard is the consequent.</p>
+</div>
+<div id="support" class="section level2">
+<h2>Support</h2>
+<p><img src="/img/mba_support.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Support is the probability of the antecedent event occuring. It is the relative
+frequency of the itemset. If it is less than 50% then the association is
+considered less fruitful. In our example, support is the relative frequency of
+transactions that include both mobile phone and screen guard.</p>
+</div>
+<div id="confidence" class="section level2">
+<h2>Confidence</h2>
+<p><img src="/img/mba_confidence.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Confidence is the probability the consequent will co-occur with the antecedent.
+It expresses the operational efficiency of the rule. In our example, it is the
+probability that a customer will purchase screen guard provided that he has
+already bought the mobile phone.</p>
+</div>
+<div id="lift" class="section level2">
+<h2>Lift</h2>
+<p><img src="/img/mba_lift.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The lift ratio calculates the efficiency of the rule in finding consequences,
+compared to a random selection of transactions. Generally, a Lift ratio of
+greater than one suggests some applicability of the rule.To compute the lift
+for a rule, divide the support of the itemset by the product of the support
+for antecedent and consequent. Now, let us understand how to interpret lift.</p>
+<div id="interpretation" class="section level3">
+<h3>Interpretation</h3>
+<ul>
+<li><strong>Lift = 1</strong>: implies no relationship between mobile phone and screen guard
+(i.e., mobile phone and screen guard occur together only by chance)</li>
+<li><strong>Lift &gt; 1</strong>: implies that there is a positive relationship between mobile
+phone and screen guard (i.e., mobile phone and screen guard occur together
+more often than random)</li>
+<li><strong>Lift &lt; 1</strong>: implies that there is a negative relationship between mobile
+phone and screen guard (i.e., mobile phone and screen guard occur together
+less often than random)</li>
+</ul>
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>Two public data sets are available for users to explore and learn market basket
+analysis:</p>
+<ul>
+<li><a href="http://archive.ics.uci.edu/ml/datasets/online+retail#" target="_blank">UCI</a></li>
+<li><a href="https://data.world/datasets/market-basket-analysis" target="_blank">data.world</a></li>
+</ul>
+<p>The groceries data set is available in the <strong>arules</strong> package as well. In this
+tutorial, we will use the UCI data set as it closely resembles real world data
+sets giving us a chance to reshape the data and restructure it in format
+required by the <strong>arules</strong> package.</p>
+</div>
+<div id="data-dictionary" class="section level2">
+<h2>Data Dictionary</h2>
+<ul>
+<li>invoice number</li>
+<li>stock code</li>
+<li>description</li>
+<li>quantity</li>
+<li>invoice date</li>
+<li>unit price</li>
+<li>customer id</li>
+<li>country</li>
+</ul>
+</div>
+<div id="libraries" class="section level2">
+<h2>Libraries</h2>
+<pre class="r"><code>library(readxl)
+library(readr)
+library(arules)
+library(arulesViz)
+library(magrittr)
+library(dplyr)
+library(lubridate)
+library(forcats)
+library(ggplot2)</code></pre>
+</div>
+<div id="preprocessing" class="section level2">
+<h2>Preprocessing</h2>
+<p>This section is optional. You can skip to the <strong>Read Data</strong> section without
+any loss of continuity.</p>
+<p><img src="/img/mba_pre_process.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>As shown above, the data set has one row per item. We have created a tiny R
+package <a href="https://github.com/rsquaredacademy/mbar" target="_blank">mbar</a>,<br />
+for data pre-processing. It can be installed from GitHub as shown below:</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/mbar&quot;)</code></pre>
+<p>We will use <code>mbar_prep_data()</code> from the mbar package to reshape the data so
+that there is one row per transaction with items across columns excluding
+the column names.</p>
+<pre class="r"><code>library(mbar)
+mba_data     &lt;- read_excel(&quot;online-retail.xlsx&quot;)
+transactions &lt;- mbar_prep_data(mba_data, InvoiceNo, Description)
+head(transactions)</code></pre>
+<pre><code>## # A tibble: 6 x 1,114
+##   item_1 item_2 item_3 item_4 item_5 item_6 item_7 item_8 item_9 item_10
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  
+## 1 WHITE~ WHITE~ CREAM~ KNITT~ RED W~ SET 7~ GLASS~ &quot;&quot;     &quot;&quot;     &quot;&quot;     
+## 2 HAND ~ HAND ~ &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     
+## 3 ASSOR~ POPPY~ POPPY~ FELTC~ IVORY~ BOX O~ BOX O~ BOX O~ HOME ~ LOVE B~
+## 4 JAM M~ RED C~ YELLO~ BLUE ~ &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     
+## 5 BATH ~ &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     &quot;&quot;     
+## 6 ALARM~ ALARM~ ALARM~ PANDA~ STARS~ INFLA~ VINTA~ SET/2~ ROUND~ SPACEB~
+## # ... with 1,104 more variables: item_11 &lt;chr&gt;, item_12 &lt;chr&gt;,
+## #   item_13 &lt;chr&gt;, item_14 &lt;chr&gt;, item_15 &lt;chr&gt;, item_16 &lt;chr&gt;,
+## #   item_17 &lt;chr&gt;, item_18 &lt;chr&gt;, item_19 &lt;chr&gt;, item_20 &lt;chr&gt;,
+## #   item_21 &lt;chr&gt;, item_22 &lt;chr&gt;, item_23 &lt;chr&gt;, item_24 &lt;chr&gt;,
+## #   item_25 &lt;chr&gt;, item_26 &lt;chr&gt;, item_27 &lt;chr&gt;, item_28 &lt;chr&gt;,
+## #   item_29 &lt;chr&gt;, item_30 &lt;chr&gt;, item_31 &lt;chr&gt;, item_32 &lt;chr&gt;,
+## #   item_33 &lt;chr&gt;, item_34 &lt;chr&gt;, item_35 &lt;chr&gt;, item_36 &lt;chr&gt;,
+## #   item_37 &lt;chr&gt;, item_38 &lt;chr&gt;, item_39 &lt;chr&gt;, item_40 &lt;chr&gt;,
+## #   item_41 &lt;chr&gt;, item_42 &lt;chr&gt;, item_43 &lt;chr&gt;, item_44 &lt;chr&gt;,
+## #   item_45 &lt;chr&gt;, item_46 &lt;chr&gt;, item_47 &lt;chr&gt;, item_48 &lt;chr&gt;,
+## #   item_49 &lt;chr&gt;, item_50 &lt;chr&gt;, item_51 &lt;chr&gt;, item_52 &lt;chr&gt;,
+## #   item_53 &lt;chr&gt;, item_54 &lt;chr&gt;, item_55 &lt;chr&gt;, item_56 &lt;chr&gt;,
+## #   item_57 &lt;chr&gt;, item_58 &lt;chr&gt;, item_59 &lt;chr&gt;, item_60 &lt;chr&gt;,
+## #   item_61 &lt;chr&gt;, item_62 &lt;chr&gt;, item_63 &lt;chr&gt;, item_64 &lt;chr&gt;,
+## #   item_65 &lt;chr&gt;, item_66 &lt;chr&gt;, item_67 &lt;chr&gt;, item_68 &lt;chr&gt;,
+## #   item_69 &lt;chr&gt;, item_70 &lt;chr&gt;, item_71 &lt;chr&gt;, item_72 &lt;chr&gt;,
+## #   item_73 &lt;chr&gt;, item_74 &lt;chr&gt;, item_75 &lt;chr&gt;, item_76 &lt;chr&gt;,
+## #   item_77 &lt;chr&gt;, item_78 &lt;chr&gt;, item_79 &lt;chr&gt;, item_80 &lt;chr&gt;,
+## #   item_81 &lt;chr&gt;, item_82 &lt;chr&gt;, item_83 &lt;chr&gt;, item_84 &lt;chr&gt;,
+## #   item_85 &lt;chr&gt;, item_86 &lt;chr&gt;, item_87 &lt;chr&gt;, item_88 &lt;chr&gt;,
+## #   item_89 &lt;chr&gt;, item_90 &lt;chr&gt;, item_91 &lt;chr&gt;, item_92 &lt;chr&gt;,
+## #   item_93 &lt;chr&gt;, item_94 &lt;chr&gt;, item_95 &lt;chr&gt;, item_96 &lt;chr&gt;,
+## #   item_97 &lt;chr&gt;, item_98 &lt;chr&gt;, item_99 &lt;chr&gt;, item_100 &lt;chr&gt;,
+## #   item_101 &lt;chr&gt;, item_102 &lt;chr&gt;, item_103 &lt;chr&gt;, item_104 &lt;chr&gt;,
+## #   item_105 &lt;chr&gt;, item_106 &lt;chr&gt;, item_107 &lt;chr&gt;, item_108 &lt;chr&gt;,
+## #   item_109 &lt;chr&gt;, item_110 &lt;chr&gt;, ...</code></pre>
+</div>
+<div id="eda" class="section level2">
+<h2>EDA</h2>
+<p>Before we generate the rules using the <strong>arules</strong> package, let us explore
+the data set a bit.</p>
+<div id="what-time-of-day-do-people-purchase" class="section level3">
+<h3>What time of day do people purchase?</h3>
+<pre class="r"><code>purchase_time &lt;-
+  mba_data %&gt;%
+  group_by(InvoiceDate) %&gt;%
+  slice(1) %&gt;%
+  mutate(time_of_day = hour(InvoiceDate)) %&gt;%
+  pull(time_of_day) %&gt;%
+  as.factor() %&gt;%
+  fct_count()
+
+purchase_time %&gt;%
+  ggplot() +
+  geom_col(aes(x = f, y = n), fill = &quot;blue&quot;) +
+  xlab(&quot;Hour of Day&quot;) + ylab(&quot;Transactions&quot;) +
+  ggtitle(&quot;Hourly Transaction Distribution&quot;)  </code></pre>
+<p><img src="/post/2019-05-02-mba_files/figure-html/eda_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="how-many-items-are-purchased-on-an-average" class="section level3">
+<h3>How many items are purchased on an average?</h3>
+<pre class="r"><code>items &lt;- 
+  mba_data %&gt;%
+  group_by(InvoiceNo) %&gt;%
+  summarize(count = n()) %&gt;%
+  pull(count) 
+
+mean(items)</code></pre>
+<pre><code>## [1] 20.92313</code></pre>
+<pre class="r"><code>median(items)</code></pre>
+<pre><code>## [1] 10</code></pre>
+</div>
+<div id="most-purchased-items" class="section level3">
+<h3>Most Purchased Items</h3>
+<pre class="r"><code>mba_data %&gt;%
+  group_by(Description) %&gt;%
+  summarize(count = n()) %&gt;%
+  arrange(desc(count))</code></pre>
+<pre><code>## # A tibble: 4,212 x 2
+##    Description                        count
+##    &lt;chr&gt;                              &lt;int&gt;
+##  1 WHITE HANGING HEART T-LIGHT HOLDER  2369
+##  2 REGENCY CAKESTAND 3 TIER            2200
+##  3 JUMBO BAG RED RETROSPOT             2159
+##  4 PARTY BUNTING                       1727
+##  5 LUNCH BAG RED RETROSPOT             1638
+##  6 ASSORTED COLOUR BIRD ORNAMENT       1501
+##  7 SET OF 3 CAKE TINS PANTRY DESIGN    1473
+##  8 &lt;NA&gt;                                1454
+##  9 PACK OF 72 RETROSPOT CAKE CASES     1385
+## 10 LUNCH BAG  BLACK SKULL.             1350
+## # ... with 4,202 more rows</code></pre>
+</div>
+<div id="average-order-value" class="section level3">
+<h3>Average Order Value</h3>
+<pre class="r"><code>total_revenue &lt;- 
+  mba_data %&gt;%
+  group_by(InvoiceNo) %&gt;%
+  summarize(order_sum = sum(UnitPrice)) %&gt;%
+  pull(order_sum) %&gt;%
+  sum()
+
+total_transactions &lt;- 
+  mba_data %&gt;%
+  group_by(InvoiceNo) %&gt;%
+  summarize(n()) %&gt;%
+  nrow()
+
+total_revenue / total_transactions</code></pre>
+<pre><code>## [1] 96.47892</code></pre>
+</div>
+</div>
+<div id="read-data" class="section level2">
+<h2>Read Data</h2>
+<p>It is now time to read data into R. We will use <code>read.transactions()</code>
+from <strong>arules</strong> package. The data cannot be read using <code>read.csv()</code> or
+<code>read_csv()</code> owing to the way it is structured. We will read the
+<code>transaction_data.csv</code> file as it contains the data we had modified
+in the previous step. We need to specify the following in order to
+read the data set:</p>
+<ul>
+<li>name of the data set within quotes (single or double)</li>
+<li>the format of the data, if each line represnts a transaction, use <code>basket</code>,
+and if each line represents an item in the transaction, use <code>single</code></li>
+<li>the separator used to separate the items in a transaction</li>
+</ul>
+<p>In our data set, each line represents a transaction and the items in the
+transaction are separated by a <code>,</code>.</p>
+<pre class="r"><code>basket_data &lt;- read.transactions(&quot;transaction_data.csv&quot;, format = &quot;basket&quot;, 
+  sep = &quot;,&quot;)
+basket_data</code></pre>
+<pre><code>## transactions in sparse format with
+##  25901 transactions (rows) and
+##  10085 items (columns)</code></pre>
+<p>The <code>read.transactions()</code> function allows you to read data where each row
+represents a item and not a transaction. In that case, the <code>format</code> argument
+should be set to the value <code>single</code> and the <code>cols</code> argument should specify
+the names or positions of the columns that represent the <strong>transaction id</strong> and
+<strong>item id</strong>. We tried to read data in this way as well but failed to do so.
+However, the code is available below for other users to try and let us know if
+you find a way to get it to work or spot any mistakes we may have made.</p>
+<pre class="r"><code>get_data &lt;- read.transactions(&quot;retail.csv&quot;, 
+  format = &quot;single&quot;,
+  sep = &quot;,&quot;,
+  cols = c(&quot;InvoiceNo&quot;, &quot;item&quot;))</code></pre>
+<p>We were able to read the data when we removed the <code>sep</code> argument from the above
+code, but the result from the <code>summary()</code> function was way different than what
+we see in the next section i.e. it showed higher number of transactions and
+items.</p>
+</div>
+<div id="data-summary" class="section level2">
+<h2>Data Summary</h2>
+<p>To get a quick overview of the data, use <code>summary()</code>. It will return the
+following:</p>
+<ul>
+<li>number of transactions</li>
+<li>number of items</li>
+<li>most frequent items</li>
+<li>distribution of items</li>
+<li>five number summary</li>
+</ul>
+<pre class="r"><code>summary(basket_data)</code></pre>
+<pre><code>## transactions as itemMatrix in sparse format with
+##  25901 rows (elements/itemsets/transactions) and
+##  10085 columns (items) and a density of 0.001660018 
+## 
+## most frequent items:
+## WHITE HANGING HEART T-LIGHT HOLDER           REGENCY CAKESTAND 3 TIER 
+##                               1999                               1914 
+##            JUMBO BAG RED RETROSPOT                      PARTY BUNTING 
+##                               1806                               1488 
+##            LUNCH BAG RED RETROSPOT                            (Other) 
+##                               1404                             425005 
+## 
+## element (itemset/transaction) length distribution:
+## sizes
+##    0    1    2    3    4    5    6    7    8    9   10   11   12   13   14 
+## 1454 4578 1727 1208  942  891  781  715  696  683  612  642  547  530  543 
+##   15   16   17   18   19   20   21   22   23   24   25   26   27   28   29 
+##  555  537  479  459  491  428  405  328  311  280  248  261  235  221  233 
+##   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44 
+##  224  175  174  145  149  139  122  119  100  117   98   94  102   93   72 
+##   45   46   47   48   49   50   51   52   53   54   55   56   57   58   59 
+##   73   74   71   69   68   59   70   49   49   54   57   42   32   42   39 
+##   60   61   62   63   64   65   66   67   68   69   70   71   72   73   74 
+##   34   40   22   27   30   24   34   28   25   21   23   26   14   17   24 
+##   75   76   77   78   79   80   81   82   83   84   85   86   87   88   89 
+##   11   18   14   13   10   16   18   15   10    9   16   13   16   13    7 
+##   90   91   92   93   94   95   96   97   98   99  100  101  102  103  104 
+##    8   12   12    8    7    7    4    7    9    5    8    8    4    5    7 
+##  105  106  107  108  109  110  111  112  113  114  115  116  117  118  119 
+##    2    3    7    9    4    7    4    2    7    1    1    4    7    6    2 
+##  120  121  122  123  124  125  126  127  129  130  131  132  133  134  135 
+##    3    5    4    4    2    5    6    2    1    4    3    6    6    3    4 
+##  136  137  138  139  140  141  142  143  144  145  146  147  148  149  150 
+##    3    2    1    1    3    8    5    3    4    4    6    2    3    1    4 
+##  151  152  153  154  155  156  157  158  159  160  162  163  164  167  168 
+##    3    2    4    7    3    3    5    2    4    5    1    2    1    3    5 
+##  169  170  171  172  173  174  175  176  177  178  179  180  181  182  183 
+##    2    2    4    3    1    3    5    1    2    2    2    2    1    2    1 
+##  184  185  186  187  189  190  192  193  194  196  197  198  201  202  204 
+##    2    1    1    2    2    1    1    5    1    2    3    2    1    1    2 
+##  205  206  207  208  209  212  213  215  219  220  224  226  227  228  230 
+##    2    1    3    3    2    1    2    2    7    1    3    3    1    1    2 
+##  232  234  236  238  240  241  244  248  249  250  252  256  257  258  260 
+##    1    2    1    2    2    2    1    1    2    2    1    1    1    1    2 
+##  261  263  265  266  270  272  281  284  285  298  299  301  303  304  305 
+##    1    2    1    1    1    1    1    1    2    1    2    1    1    1    3 
+##  312  314  316  320  321  326  327  329  332  333  338  339  341  344  348 
+##    2    1    1    2    1    1    1    1    1    1    1    1    1    2    1 
+##  350  360  365  367  375  391  394  398  400  402  405  411  419  422  429 
+##    1    2    1    1    3    1    1    1    1    1    1    1    2    1    1 
+##  431  442  447  460  468  471  477  509  514  530  587  627 1114 
+##    2    1    1    1    1    1    1    1    1    1    1    1    1 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    2.00    8.00   16.74   20.00 1114.00 
+## 
+## includes extended item information - examples:
+##                    labels
+## 1   *Boombox Ipod Classic
+## 2 *USB Office Mirror Ball
+## 3                       ?</code></pre>
+</div>
+<div id="item-frequency-plot" class="section level2">
+<h2>Item Frequency Plot</h2>
+<p>The most frequent items in the data set can be plotted using
+<code>itemFrequencyPlot()</code>. We can specify the number of items to be plotted and
+whether the <code>Y</code> axis should represent the absolute or relative number of transactions
+that include the item.</p>
+<p>The <code>topN</code> argument can be used to specify the number of items to be plotted
+and the <code>type</code> argument can be used to specify whether the <code>Y</code> axis represents
+absolute/relative frequency of the items.</p>
+<pre class="r"><code>itemFrequencyPlot(basket_data, topN = 10, type = &#39;absolute&#39;)</code></pre>
+<p><img src="/post/2019-05-02-mba_files/figure-html/plot_freq-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In the below plot, the <code>Y</code> axis represents the relative frequency of the items
+plotted.</p>
+<pre class="r"><code>itemFrequencyPlot(basket_data, topN = 10, type = &#39;relative&#39;)</code></pre>
+<p><img src="/post/2019-05-02-mba_files/figure-html/plot_freq_relative-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr>
+<a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a>
+<hr>
+</div>
+<div id="generate-rules" class="section level2">
+<h2>Generate Rules</h2>
+<p>Finally, to the part you all have been waiting for, rules generation. The
+<code>apriori()</code> function is used for generating the rules. We will first learn the
+different inputs that must be specified and later on play around with them and
+see how the rules generated change.</p>
+<p>The first input is the data set, which in our case is <code>basket_data</code>. Next, we
+will supply the mining parameters using the <code>parameter</code> argument:</p>
+<ul>
+<li><code>supp</code>: minimum <strong>support</strong> for an itemset</li>
+<li><code>conf</code>: minimum <strong>confidence</strong></li>
+<li><code>maxlen</code>: maximum number of items the antecedent may include</li>
+<li><code>target</code>: the type of association mined i.e. <strong>rules</strong></li>
+</ul>
+<p>The <code>parameter</code> argument takes several additional inputs but to get started, it
+is sufficient to know those mentioned above. All the inputs are supplied using
+a <code>list()</code>.</p>
+<p>For our case study, we will specify the following:</p>
+<ul>
+<li>support: 0.009</li>
+<li>confidence: 0.8</li>
+<li>maxlen: 4</li>
+</ul>
+<p>Keep in mind, mining association rules with very low values for <code>support</code> will
+result in a large number of rules being generated, resulting in long execution
+time and the process will eventually run out of memory.</p>
+<pre class="r"><code>rules &lt;- apriori(basket_data, parameter = list(supp=0.009, conf=0.8, 
+    target = &quot;rules&quot;, maxlen = 4))</code></pre>
+<pre><code>## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5   0.009      1
+##  maxlen target   ext
+##       4  rules FALSE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 233 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.16s].
+## sorting and recoding items ... [508 item(s)] done [0.03s].
+## creating transaction tree ... done [0.05s].
+## checking subsets of size 1 2 3 4</code></pre>
+<pre><code>## Warning in apriori(basket_data, parameter = list(supp = 0.009, conf =
+## 0.8, : Mining stopped (maxlen reached). Only patterns up to a length of 4
+## returned!</code></pre>
+<pre><code>##  done [0.06s].
+## writing ... [22 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.02s].</code></pre>
+<p>Change the values of <code>supp</code>, <code>conf</code> and <code>maxlen</code>, and observe how the rules
+generated change.</p>
+</div>
+<div id="rules-summary" class="section level2">
+<h2>Rules Summary</h2>
+<p>Once the rules have been generated by <code>apriori()</code>, we can use <code>summary()</code> to
+get some basic information such as rule length distribution.</p>
+<pre class="r"><code>summary(rules)</code></pre>
+<pre><code>## set of 22 rules
+## 
+## rule length distribution (lhs + rhs):sizes
+##  2  3  4 
+## 11  9  2 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   2.000   2.000   2.500   2.591   3.000   4.000 
+## 
+## summary of quality measures:
+##     support           confidence          lift           count      
+##  Min.   :0.009034   Min.   :0.8035   Min.   :22.59   Min.   :234.0  
+##  1st Qu.:0.010453   1st Qu.:0.8530   1st Qu.:25.02   1st Qu.:270.8  
+##  Median :0.013223   Median :0.8868   Median :55.94   Median :342.5  
+##  Mean   :0.012760   Mean   :0.9120   Mean   :48.55   Mean   :330.5  
+##  3rd Qu.:0.014362   3rd Qu.:1.0000   3rd Qu.:61.23   3rd Qu.:372.0  
+##  Max.   :0.018339   Max.   :1.0000   Max.   :71.30   Max.   :475.0  
+## 
+## mining info:
+##         data ntransactions support confidence
+##  basket_data         25901   0.009        0.8</code></pre>
+<p>The output from <code>summary()</code> does not display the rules though. To view the
+rules, we have to use <code>inspect()</code>.</p>
+</div>
+<div id="inspect-rules" class="section level2">
+<h2>Inspect Rules</h2>
+<p>The <code>inspect()</code> function will display the rules along with:</p>
+<ul>
+<li>support</li>
+<li>confidence</li>
+<li>lift</li>
+<li>count</li>
+</ul>
+<p>Before you inspect the rules, you can sort it by support, confidence or
+lift. In the below, output, we sort the rules by confidence in descending order
+before inspecting them.</p>
+<pre class="r"><code>basket_rules &lt;- sort(rules, by = &#39;confidence&#39;, decreasing = TRUE)
+inspect(basket_rules[1:10])</code></pre>
+<pre><code>##      lhs                                  rhs                                   support confidence     lift count
+## [1]  {BACK DOOR}                       =&gt; {KEY FOB}                         0.009613528  1.0000000 61.23168   249
+## [2]  {SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.014362380  1.0000000 69.62634   372
+## [3]  {SUGAR}                           =&gt; {SET 3 RETROSPOT TEA}             0.014362380  1.0000000 69.62634   372
+## [4]  {SET 3 RETROSPOT TEA}             =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [5]  {SUGAR}                           =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [6]  {SHED}                            =&gt; {KEY FOB}                         0.011273696  1.0000000 61.23168   292
+## [7]  {SET 3 RETROSPOT TEA,                                                                                       
+##       SUGAR}                           =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [8]  {COFFEE,                                                                                                    
+##       SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.014362380  1.0000000 69.62634   372
+## [9]  {COFFEE,                                                                                                    
+##       SUGAR}                           =&gt; {SET 3 RETROSPOT TEA}             0.014362380  1.0000000 69.62634   372
+## [10] {PINK REGENCY TEACUP AND SAUCER,                                                                            
+##       REGENCY CAKESTAND 3 TIER,                                                                                  
+##       ROSES REGENCY TEACUP AND SAUCER} =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.009999614  0.8900344 25.16679   259</code></pre>
+</div>
+<div id="redundant-non-redundant-rules" class="section level2">
+<h2>Redundant &amp; Non Redundant Rules</h2>
+<div id="redundant-rules" class="section level3">
+<h3>Redundant Rules</h3>
+<p>A rule is redundant if a more general rules with the same or a higher
+confidence exists. That is, a more specific rule is redundant if it is only
+equally or even less predictive than a more general rule. A rule is more
+general if it has the same RHS but one or more items removed from the LHS.</p>
+<div id="example-1" class="section level4">
+<h4>Example 1</h4>
+<p><img src="/img/mba_redundant_rule_1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In the above example, the first rule has the same support, condifence and lift
+as the next two rules. The second item in the left hand side of the rule is not
+adding any value and as such makes the rule redundant.</p>
+</div>
+<div id="example-2" class="section level4">
+<h4>Example 2</h4>
+<p><img src="/img/mba_redundant_rule_2.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In the above example, the first two rules have the same support, condifence and
+lift. The third rule differs only with respect to lift.</p>
+</div>
+<div id="example-3" class="section level4">
+<h4>Example 3</h4>
+<p><img src="/img/mba_redundant_rule_3.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In the above example, the first and third rule have the same support,
+condifence and lift. The second rule is different with respect to confidence
+and lift.</p>
+<p>Now that we have understood what redundant rules are and how to identify them,
+let us use the below R code to inspect them.</p>
+<pre class="r"><code>inspect(rules[is.redundant(rules)])</code></pre>
+<pre><code>##     lhs                             rhs                   support   
+## [1] {SET 3 RETROSPOT TEA,SUGAR}  =&gt; {COFFEE}              0.01436238
+## [2] {COFFEE,SET 3 RETROSPOT TEA} =&gt; {SUGAR}               0.01436238
+## [3] {COFFEE,SUGAR}               =&gt; {SET 3 RETROSPOT TEA} 0.01436238
+##     confidence lift     count
+## [1] 1          55.94168 372  
+## [2] 1          69.62634 372  
+## [3] 1          69.62634 372</code></pre>
+</div>
+</div>
+<div id="non-redundant-rules" class="section level3">
+<h3>Non-redundant Rules</h3>
+<p>Now let us look at the non-redundant rules.</p>
+<pre class="r"><code>inspect(rules[!is.redundant(rules)])</code></pre>
+<pre><code>##      lhs                                     rhs                                   support confidence     lift count
+## [1]  {REGENCY TEA PLATE PINK}             =&gt; {REGENCY TEA PLATE GREEN}         0.009034400  0.8863636 71.29722   234
+## [2]  {BACK DOOR}                          =&gt; {KEY FOB}                         0.009613528  1.0000000 61.23168   249
+## [3]  {SET 3 RETROSPOT TEA}                =&gt; {SUGAR}                           0.014362380  1.0000000 69.62634   372
+## [4]  {SUGAR}                              =&gt; {SET 3 RETROSPOT TEA}             0.014362380  1.0000000 69.62634   372
+## [5]  {SET 3 RETROSPOT TEA}                =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [6]  {COFFEE}                             =&gt; {SET 3 RETROSPOT TEA}             0.014362380  0.8034557 55.94168   372
+## [7]  {SUGAR}                              =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [8]  {COFFEE}                             =&gt; {SUGAR}                           0.014362380  0.8034557 55.94168   372
+## [9]  {REGENCY TEA PLATE GREEN}            =&gt; {REGENCY TEA PLATE ROSES}         0.010347091  0.8322981 55.99313   268
+## [10] {SHED}                               =&gt; {KEY FOB}                         0.011273696  1.0000000 61.23168   292
+## [11] {SET/6 RED SPOTTY PAPER CUPS}        =&gt; {SET/6 RED SPOTTY PAPER PLATES}   0.012084476  0.8087855 44.38211   313
+## [12] {SET/20 RED RETROSPOT PAPER NAPKINS,                                                                           
+##       SET/6 RED SPOTTY PAPER CUPS}        =&gt; {SET/6 RED SPOTTY PAPER PLATES}   0.009111617  0.8872180 48.68609   236
+## [13] {PINK REGENCY TEACUP AND SAUCER,                                                                               
+##       ROSES REGENCY TEACUP AND SAUCER}    =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.018339060  0.8828996 24.96505   475
+## [14] {GREEN REGENCY TEACUP AND SAUCER,                                                                              
+##       PINK REGENCY TEACUP AND SAUCER}     =&gt; {ROSES REGENCY TEACUP AND SAUCER} 0.018339060  0.8512545 22.59051   475
+## [15] {PINK REGENCY TEACUP AND SAUCER,                                                                               
+##       REGENCY CAKESTAND 3 TIER}           =&gt; {ROSES REGENCY TEACUP AND SAUCER} 0.011235087  0.8584071 22.78033   291
+## [16] {PINK REGENCY TEACUP AND SAUCER,                                                                               
+##       REGENCY CAKESTAND 3 TIER}           =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.011312305  0.8643068 24.43931   293
+## [17] {STRAWBERRY CHARLOTTE BAG,                                                                                     
+##       WOODLAND CHARLOTTE BAG}             =&gt; {RED RETROSPOT CHARLOTTE BAG}     0.010771785  0.8110465 23.65644   279
+## [18] {PINK REGENCY TEACUP AND SAUCER,                                                                               
+##       REGENCY CAKESTAND 3 TIER,                                                                                     
+##       ROSES REGENCY TEACUP AND SAUCER}    =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.009999614  0.8900344 25.16679   259
+## [19] {GREEN REGENCY TEACUP AND SAUCER,                                                                              
+##       PINK REGENCY TEACUP AND SAUCER,                                                                               
+##       REGENCY CAKESTAND 3 TIER}           =&gt; {ROSES REGENCY TEACUP AND SAUCER} 0.009999614  0.8839590 23.45843   259</code></pre>
+</div>
+</div>
+<div id="what-influenced-purchase-of-product-x" class="section level2">
+<h2>What influenced purchase of product X?</h2>
+<p>So far, we have learnt how to generate, inspect and prune rules. Now, how do
+we use these rules? To make business sense, we need to come up with a set of
+rules that can be used either for product placement in physical stores or
+as recommendations in an online store or for targeted marketing via email
+campaigns etc. To achieve that, we need to know 2 things:</p>
+<ul>
+<li>what products influenced the purchase of product X?</li>
+<li>what purchases did product X influence?</li>
+</ul>
+<p>For our case study, we can modify the above questions as:</p>
+<div id="what-influenced-the-purchase-of-sugar" class="section level4">
+<h4>What influenced the purchase of <strong>sugar</strong>?</h4>
+<p>To view the products which influenced the purchase of <strong>sugar</strong>, we will
+continue to use the <code>apriori()</code> function but add one more argument, <code>appearance</code>.
+It restricts the appearance of the items. Since we want the right hand side of
+the rules to have only one value, <strong>sugar</strong>, we will set the <code>rhs</code> argument to
+<strong>sugar</strong>. The left hand side of the rules should include all the products that
+influenced the purchase of sugar i.e. it will exclude <strong>sugar</strong>. We will use
+the <code>default</code> argument and supply it the value <code>lhs</code> i.e. all items excluding
+sugar can appear on the left hand side of the rule by default.</p>
+<ul>
+<li><code>default</code></li>
+<li><code>rhs</code></li>
+</ul>
+<pre class="r"><code>sugar_rules &lt;- apriori(basket_data, parameter = list(supp = 0.009, conf = 0.8), 
+  appearance = list(default = &quot;lhs&quot;, rhs = &quot;SUGAR&quot;)) </code></pre>
+<pre><code>## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5   0.009      1
+##  maxlen target   ext
+##      10  rules FALSE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 233 
+## 
+## set item appearances ...[1 item(s)] done [0.00s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.26s].
+## sorting and recoding items ... [508 item(s)] done [0.03s].
+## creating transaction tree ... done [0.05s].
+## checking subsets of size 1 2 3 4 done [0.08s].
+## writing ... [3 rule(s)] done [0.02s].
+## creating S4 object  ... done [0.01s].</code></pre>
+<pre class="r"><code>rules_sugar &lt;- sort(sugar_rules, by = &quot;confidence&quot;, decreasing = TRUE)
+inspect(rules_sugar)</code></pre>
+<pre><code>##     lhs                             rhs     support    confidence lift    
+## [1] {SET 3 RETROSPOT TEA}        =&gt; {SUGAR} 0.01436238 1.0000000  69.62634
+## [2] {COFFEE,SET 3 RETROSPOT TEA} =&gt; {SUGAR} 0.01436238 1.0000000  69.62634
+## [3] {COFFEE}                     =&gt; {SUGAR} 0.01436238 0.8034557  55.94168
+##     count
+## [1] 372  
+## [2] 372  
+## [3] 372</code></pre>
+<p>For the support and confidence we have mentioned, we know the following
+products influenced the purchase of <strong>sugar</strong>:</p>
+<ul>
+<li><strong>COFFEE</strong></li>
+<li><strong>SET 3 RETROSPOT TEA</strong></li>
+</ul>
+</div>
+</div>
+<div id="what-purchases-did-product-x-influence" class="section level2">
+<h2>What purchases did product X influence?</h2>
+<p>Now that we know what products influenced the purchase of <strong>sugar</strong>, let us
+answer the second question.</p>
+<div id="what-purchases-did-sugar-influence" class="section level4">
+<h4>What purchases did <strong>sugar</strong> influence?</h4>
+<p>In this case, we want <strong>sugar</strong> to be on the left hand side of the rule and all
+the products it influenced to be on the right hand side. We set the <code>lhs</code>
+argument to <strong>sugar</strong> and the <code>default</code> argument to <code>rhs</code> as all the products,
+the purchase of which was influenced by <strong>sugar</strong> should appear on the left
+hand side of the rule by default.</p>
+<pre class="r"><code>sugar_rules &lt;- apriori(basket_data, parameter = list(supp = 0.009, conf = 0.8), 
+  appearance = list(default = &quot;rhs&quot;, lhs = &quot;SUGAR&quot;)) </code></pre>
+<pre><code>## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5   0.009      1
+##  maxlen target   ext
+##      10  rules FALSE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 233 
+## 
+## set item appearances ...[1 item(s)] done [0.00s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.25s].
+## sorting and recoding items ... [508 item(s)] done [0.01s].
+## creating transaction tree ... done [0.06s].
+## checking subsets of size 1 2 done [0.02s].
+## writing ... [2 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.03s].</code></pre>
+<pre class="r"><code>rules_sugar &lt;- sort(sugar_rules, by = &quot;confidence&quot;, decreasing = TRUE)
+inspect(rules_sugar)</code></pre>
+<pre><code>##     lhs        rhs                   support    confidence lift     count
+## [1] {SUGAR} =&gt; {SET 3 RETROSPOT TEA} 0.01436238 1          69.62634 372  
+## [2] {SUGAR} =&gt; {COFFEE}              0.01436238 1          55.94168 372</code></pre>
+<p>For the support and confidence we have mentioned, we know the purchase of
+the following products were influenced by <strong>sugar</strong>:</p>
+<ul>
+<li><strong>COFFEE</strong></li>
+<li><strong>SET 3 RETROSPOT TEA</strong></li>
+</ul>
+</div>
+</div>
+<div id="top-rules" class="section level2">
+<h2>Top Rules</h2>
+<p>Let us take a look at the top rules by</p>
+<div id="support-1" class="section level4">
+<h4>Support</h4>
+<pre class="r"><code>supp_rules &lt;- sort(rules, by = &#39;support&#39;, decreasing = TRUE)
+top_rules &lt;- supp_rules[1:10]
+inspect(top_rules)</code></pre>
+<pre><code>##      lhs                                  rhs                                  support confidence     lift count
+## [1]  {PINK REGENCY TEACUP AND SAUCER,                                                                           
+##       ROSES REGENCY TEACUP AND SAUCER} =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.01833906  0.8828996 24.96505   475
+## [2]  {GREEN REGENCY TEACUP AND SAUCER,                                                                          
+##       PINK REGENCY TEACUP AND SAUCER}  =&gt; {ROSES REGENCY TEACUP AND SAUCER} 0.01833906  0.8512545 22.59051   475
+## [3]  {SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.01436238  1.0000000 69.62634   372
+## [4]  {SUGAR}                           =&gt; {SET 3 RETROSPOT TEA}             0.01436238  1.0000000 69.62634   372
+## [5]  {SET 3 RETROSPOT TEA}             =&gt; {COFFEE}                          0.01436238  1.0000000 55.94168   372
+## [6]  {COFFEE}                          =&gt; {SET 3 RETROSPOT TEA}             0.01436238  0.8034557 55.94168   372
+## [7]  {SUGAR}                           =&gt; {COFFEE}                          0.01436238  1.0000000 55.94168   372
+## [8]  {COFFEE}                          =&gt; {SUGAR}                           0.01436238  0.8034557 55.94168   372
+## [9]  {SET 3 RETROSPOT TEA,                                                                                      
+##       SUGAR}                           =&gt; {COFFEE}                          0.01436238  1.0000000 55.94168   372
+## [10] {COFFEE,                                                                                                   
+##       SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.01436238  1.0000000 69.62634   372</code></pre>
+</div>
+<div id="confidence-1" class="section level4">
+<h4>Confidence</h4>
+<pre class="r"><code>conf_rules &lt;- sort(rules, by = &#39;confidence&#39;, decreasing = TRUE)
+top_rules &lt;- conf_rules[1:10]
+inspect(top_rules)</code></pre>
+<pre><code>##      lhs                                  rhs                                   support confidence     lift count
+## [1]  {BACK DOOR}                       =&gt; {KEY FOB}                         0.009613528  1.0000000 61.23168   249
+## [2]  {SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.014362380  1.0000000 69.62634   372
+## [3]  {SUGAR}                           =&gt; {SET 3 RETROSPOT TEA}             0.014362380  1.0000000 69.62634   372
+## [4]  {SET 3 RETROSPOT TEA}             =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [5]  {SUGAR}                           =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [6]  {SHED}                            =&gt; {KEY FOB}                         0.011273696  1.0000000 61.23168   292
+## [7]  {SET 3 RETROSPOT TEA,                                                                                       
+##       SUGAR}                           =&gt; {COFFEE}                          0.014362380  1.0000000 55.94168   372
+## [8]  {COFFEE,                                                                                                    
+##       SET 3 RETROSPOT TEA}             =&gt; {SUGAR}                           0.014362380  1.0000000 69.62634   372
+## [9]  {COFFEE,                                                                                                    
+##       SUGAR}                           =&gt; {SET 3 RETROSPOT TEA}             0.014362380  1.0000000 69.62634   372
+## [10] {PINK REGENCY TEACUP AND SAUCER,                                                                            
+##       REGENCY CAKESTAND 3 TIER,                                                                                  
+##       ROSES REGENCY TEACUP AND SAUCER} =&gt; {GREEN REGENCY TEACUP AND SAUCER} 0.009999614  0.8900344 25.16679   259</code></pre>
+</div>
+<div id="lift-1" class="section level4">
+<h4>Lift</h4>
+<pre class="r"><code>lift_rules &lt;- sort(rules, by = &#39;lift&#39;, decreasing = TRUE)
+top_rules &lt;- lift_rules[1:10]
+inspect(top_rules)</code></pre>
+<pre><code>##      lhs                          rhs                           support confidence     lift count
+## [1]  {REGENCY TEA PLATE PINK}  =&gt; {REGENCY TEA PLATE GREEN} 0.009034400  0.8863636 71.29722   234
+## [2]  {SET 3 RETROSPOT TEA}     =&gt; {SUGAR}                   0.014362380  1.0000000 69.62634   372
+## [3]  {SUGAR}                   =&gt; {SET 3 RETROSPOT TEA}     0.014362380  1.0000000 69.62634   372
+## [4]  {COFFEE,                                                                                    
+##       SET 3 RETROSPOT TEA}     =&gt; {SUGAR}                   0.014362380  1.0000000 69.62634   372
+## [5]  {COFFEE,                                                                                    
+##       SUGAR}                   =&gt; {SET 3 RETROSPOT TEA}     0.014362380  1.0000000 69.62634   372
+## [6]  {BACK DOOR}               =&gt; {KEY FOB}                 0.009613528  1.0000000 61.23168   249
+## [7]  {SHED}                    =&gt; {KEY FOB}                 0.011273696  1.0000000 61.23168   292
+## [8]  {REGENCY TEA PLATE GREEN} =&gt; {REGENCY TEA PLATE ROSES} 0.010347091  0.8322981 55.99313   268
+## [9]  {SET 3 RETROSPOT TEA}     =&gt; {COFFEE}                  0.014362380  1.0000000 55.94168   372
+## [10] {COFFEE}                  =&gt; {SET 3 RETROSPOT TEA}     0.014362380  0.8034557 55.94168   372</code></pre>
+<hr>
+<a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
+<hr>
+</div>
+</div>
+<div id="visualization" class="section level2">
+<h2>Visualization</h2>
+<p>To visualize the rules, the authors of <strong>arules</strong> have created a companion
+package, <strong>arulesViz</strong>. It offers several options for visualizing the rules
+generated by <code>apriori()</code>.</p>
+<div id="scatter-plot" class="section level3">
+<h3>Scatter Plot</h3>
+<p>We can use the default <code>plot()</code> method to create a scatter plot. It will plot
+the support on the <code>X</code> axis, the confidence on the <code>Y</code> axis and the lift is
+represented by the opaqueness/alpha of the color of the points.</p>
+<pre class="r"><code>plot(basket_rules)</code></pre>
+<p><img src="/post/2019-05-02-mba_files/figure-html/plot_scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="network-plot" class="section level3">
+<h3>Network Plot</h3>
+<p>We can create a network plot using the <code>method</code> argument and supplying it the
+value <code>graph</code>. You can see the directionality of the rule in the below plot.
+For example, people who buy <strong>shed</strong> also buy <strong>key fob</strong> and similarly, people
+who buy <strong>back door</strong> also buy <strong>key fob</strong>. It will be difficult to identify
+the directionality of the rules when we are trying to plot too many rules.
+The <code>method</code> argument takes several other values as well.</p>
+<pre class="r"><code>plot(top_rules, method = &#39;graph&#39;)</code></pre>
+<p><img src="/post/2019-05-02-mba_files/figure-html/plot_network-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="things-to-keep-in-mind.." class="section level2">
+<h2>Things to keep in mind..</h2>
+<div id="directionality-of-rule-is-lost-while-using-lift" class="section level4">
+<h4>Directionality of rule is lost while using lift</h4>
+<p>The directionality of a rule is lost while using lift. In the below example,
+the lift is same for both the following rules:</p>
+<ul>
+<li>{Mobile Phone} =&gt; {Screen Guard}</li>
+<li>{Screen Guard} =&gt; {Mobile Phone}</li>
+</ul>
+<p>It is clear that the lift is the same irrespective of the direction of the rule.</p>
+<p><img src="/img/mba_lift_warning_final.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="confidence-as-a-measure-can-be-misleading" class="section level4">
+<h4>Confidence as a measure can be misleading</h4>
+<p>If you look at the below example, the confidence for the second rule,
+<strong>{Screen Guard} =&gt; {Mobile Phone}</strong>, is greater than the first rule,
+<strong>{Mobile Phone} =&gt; {Screen Guard}</strong>. It does not mean that we can recommend
+a mobile phone to a customer who is purchasing a screen guard. It is important
+to ensure that we do not use rules just because they have high confidence
+associated with them.</p>
+<p><img src="/img/mba_conf_warn_final.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<ul>
+<li>market basket analysis is an unsupervised data mining technique</li>
+<li>uncovers products frequently bought together</li>
+<li>creates if-then scenario rules</li>
+<li>cost-effective, insightful and actionable</li>
+<li>association rule mining has applications in several industries</li>
+<li>directionality of rule is lost while using lift</li>
+<li>confidence as a measure can be misleading</li>
+</ul>
+<p><img src="/img/mba_summary_meme.jpg" width="80%" style="display: block; margin: auto;" /></p>
+<p>Your knowledge of the domain/business matters a lot when you are trying to
+use market basket analysis. Especially, when you are trying to select or
+shortlist rules and use them for product placement in a store or for
+recommending products online. It is a good practice to critically review the
+rules before implementing them.</p>
+</div>

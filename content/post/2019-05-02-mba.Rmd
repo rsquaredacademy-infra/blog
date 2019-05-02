@@ -1,0 +1,749 @@
+---
+title: "Practical Introduction to Market Basket Analysis - Asociation Rules"
+author: Aravind Hebbali
+twitterImg: /img/cover_image.jpg
+description: "Learn the what, why and how of market basket analysis in R"
+date: '2019-05-02'
+slug: market-basket-analysis-in-r
+topics:
+  - arules
+tags:
+  - arules
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r meme, fig.align='center', out.width = "50%", echo=FALSE}
+knitr::include_graphics("/img/mba_meme.jpg")
+```
+
+## Introduction
+
+```{r mba_intro, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_intro.png")
+```
+
+Ever wondered why items are displayed in a particular way in retail/online 
+stores. Why certain items are suggested to you based on what you have added to 
+the cart? Blame it on market basket analysis or association rule mining. 
+
+## Resources
+
+Below are the links to all the resources related to this post:
+
+- <a href="https://slides.rsquaredacademy.com/mba/mba.html" target="_blank">Slides</a>
+- <a href="https://github.com/rsquaredacademy-education/online-courses/tree/master/association-rule-mining-in-r" target="_blank">Code & Data</a>
+- <a href="https://rstudio.cloud/project/335377" target="_blank">RStudio Cloud</a>
+
+## What?
+
+```{r mba_what, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_what.png")
+```
+
+Market basket analysis uses association rule mining under the hood to identify
+products frequently bought together. Before we get into the nitty gritty of 
+market basket analysis, let us get a basic understanding of association rule 
+mining. It finds association between different objects in a set. In the case 
+of market basket analysis, the objects are the products purchased by a cusomter 
+and the set is the transaction. In short, market basket analysis 
+
+- is a unsupervised data mining technique 
+- that uncovers products frequently bought together
+- and creates if-then scenario rules
+
+## Why ?
+
+```{r why, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_why.png")
+```
+
+Market basket analysis creates actionable insights for:
+
+- designing store layout
+- online recommendation engines
+- targeted marketing campaign/sales promotion/email campaign
+- cross/up selling 
+- catalogue design
+
+## Advantages
+
+```{r advantages, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_advantages.png")
+```
+
+Market basket analysisis is **cost effective** as data required is readily 
+available through electronic point of sale systems. It generates 
+**actionable insights** for product placement, cross/up selling strategies, 
+targeted marketing campaigns, catalogue design, pricing strategies, 
+inventory control etc.
+
+## Use Cases
+
+```{r use_cases, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_use_cases.png")
+```
+
+Association rule mining has applications in several industries including
+retail, telecommunications, banking, insurance, manufacturing and medical.
+Let us look at its applications in more detail in the following industries:
+
+### Retail
+
+The introduction of electronic point of sale systems have allowed the 
+collection of immense amounts of data and retail organizations make prolifc 
+use of market basket analysis for 
+
+- designing store layout so that consumers can more easily find items that are 
+frequently purchased together
+- recommending associated products that are frequently bought together,
+**“Customers who purchased this product also viewed this product…”**
+- emailing customers who bought products specific products with other products 
+and offers on those products that are likely to be interesting to them.
+- grouping products that customers purchase frequently together in the store’s 
+product placement
+- designing special promotions that combine or discount certain products
+- optimizing the layout of the catalog of an eCommerce site
+- controlling inventory based on product demands and what products sell better 
+together
+
+### Banks
+
+Banks and financial institutions use market basket analysis to analyze credit 
+card purchases for fraud detection and cross sell insurance products, 
+investment products (mutual funds etc.), tax preparation, retirement planning,
+wealth management etc. It can also be used for next best offer, sequence and
+seasonal offers.
+
+### Telecommunications
+
+The telecommunications industry is characterized by high volatility and low
+customer loyalty due to lucrative offers for new customers from other service
+providers. The more services a customer uses from a particular operator, the 
+harder it gets for him/her to switch to another operator. Market basket 
+analysis is used to bundle mobile, landline, TV and internet services to 
+customers to increase stickiness and reduce churn.
+
+<hr>
+<a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
+<hr>
+
+## Simple Example
+
+```{r simple_example, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_items_description.png")
+```
+
+Before we move on to the case study, let us use a simple example to understand
+the important terminologies that we will come across in the rest of the 
+tutorial. In the example, the transactions include the following products:
+
+- mobile phones
+- ear phones
+- USB cable
+- power bank
+- screen guard
+- mobile case cover
+- modem/router
+- mouse
+- external hard drive
+
+## Steps
+
+```{r steps, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_steps.png")
+```
+
+The two important steps in market basket analysis are:
+
+- frequent itemset generation
+- rules generation
+
+We will discuss these steps in more detail in the case study.
+
+## Itemset
+
+```{r itemset, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_itemset.png")
+```
+
+Itemset is the collection of items purchased by a customer. In our example,
+mobile phone and screen guard are a frequent intemset. They are present in 
+3 out of 5 transactions.
+
+## Antecedent & Consequent
+
+```{r ante_cons, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_antecedent_consequent.png")
+```
+
+Antecedent is the items of the left hand side of the rule and consequent is 
+the right hand side of the rule. In our example, mobile phone is the antecedent
+and screen guard is the consequent. 
+
+## Support
+
+```{r support, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_support.png")
+```
+
+Support is the probability of the antecedent event occuring. It is the relative
+frequency of the itemset. If it is less than 50% then the association is 
+considered less fruitful. In our example, support is the relative frequency of
+transactions that include both mobile phone and screen guard.
+
+## Confidence 
+
+```{r confidence, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_confidence.png")
+```
+
+Confidence is the probability the consequent will co-occur with the antecedent.
+It expresses the operational efficiency of the rule. In our example, it is the 
+probability that a customer will purchase screen guard provided that he has 
+already bought the mobile phone.
+
+## Lift
+
+```{r lift, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_lift.png")
+```
+
+The lift ratio calculates the efficiency of the rule in finding consequences, 
+compared to a random selection of transactions. Generally, a Lift ratio of 
+greater than one suggests some applicability of the rule.To compute the lift 
+for a rule, divide the support of the itemset by the product of the support 
+for antecedent and consequent. Now, let us understand how to interpret lift.
+
+### Interpretation
+
+- **Lift = 1**: implies no relationship between mobile phone and screen guard 
+(i.e., mobile phone and screen guard occur together only by chance)
+- **Lift > 1**: implies that there is a positive relationship between mobile 
+phone and screen guard (i.e., mobile phone and screen guard occur together 
+more often than random)
+- **Lift < 1**: implies that there is a negative relationship between mobile 
+phone and screen guard (i.e., mobile phone and screen guard occur together 
+less often than random)
+
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+
+## Data
+
+Two public data sets are available for users to explore and learn market basket 
+analysis:
+
+- <a href="http://archive.ics.uci.edu/ml/datasets/online+retail#" target="_blank">UCI</a>
+- <a href="https://data.world/datasets/market-basket-analysis" target="_blank">data.world</a>
+
+The groceries data set is available in the **arules** package as well. In this 
+tutorial, we will use the UCI data set as it closely resembles real world data 
+sets giving us a chance to reshape the data and restructure it in format 
+required by the **arules** package.
+
+## Data Dictionary
+
+- invoice number
+- stock code
+- description
+- quantity
+- invoice date
+- unit price
+- customer id
+- country
+
+## Libraries 
+
+```{r libs, message=FALSE, warning=FALSE}
+library(readxl)
+library(readr)
+library(arules)
+library(arulesViz)
+library(magrittr)
+library(dplyr)
+library(lubridate)
+library(forcats)
+library(ggplot2)
+```
+
+## Preprocessing
+
+This section is optional. You can skip to the **Read Data** section without
+any loss of continuity.
+
+```{r pre_process, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_pre_process.png")
+```
+
+As shown above, the data set has one row per item. We have created a tiny R 
+package <a href="https://github.com/rsquaredacademy/mbar" target="_blank">mbar</a>,  
+for data pre-processing. It can be installed from GitHub as shown below:
+
+```{r mbar, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/mbar")
+```
+
+We will use `mbar_prep_data()` from the mbar package to reshape the data so 
+that there is one row per transaction with items across columns excluding 
+the column names. 
+
+```{r preprocess}
+library(mbar)
+mba_data     <- read_excel("online-retail.xlsx")
+transactions <- mbar_prep_data(mba_data, InvoiceNo, Description)
+head(transactions)
+```
+
+## EDA
+
+Before we generate the rules using the **arules** package, let us explore
+the data set a bit.
+
+### What time of day do people purchase?
+
+```{r eda_1, fig.align='center', fig.height=5}
+purchase_time <-
+  mba_data %>%
+  group_by(InvoiceDate) %>%
+  slice(1) %>%
+  mutate(time_of_day = hour(InvoiceDate)) %>%
+  pull(time_of_day) %>%
+  as.factor() %>%
+  fct_count()
+
+purchase_time %>%
+  ggplot() +
+  geom_col(aes(x = f, y = n), fill = "blue") +
+  xlab("Hour of Day") + ylab("Transactions") +
+  ggtitle("Hourly Transaction Distribution")  
+```
+
+### How many items are purchased on an average?
+
+```{r eda_2}
+items <- 
+  mba_data %>%
+  group_by(InvoiceNo) %>%
+  summarize(count = n()) %>%
+  pull(count) 
+
+mean(items)
+median(items)
+```
+
+### Most Purchased Items
+
+```{r eda_4}
+mba_data %>%
+  group_by(Description) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+```
+
+### Average Order Value
+
+```{r eda_5}
+total_revenue <- 
+  mba_data %>%
+  group_by(InvoiceNo) %>%
+  summarize(order_sum = sum(UnitPrice)) %>%
+  pull(order_sum) %>%
+  sum()
+
+total_transactions <- 
+  mba_data %>%
+  group_by(InvoiceNo) %>%
+  summarize(n()) %>%
+  nrow()
+
+total_revenue / total_transactions
+```
+
+## Read Data
+
+It is now time to read data into R. We will use `read.transactions()`
+from **arules** package. The data cannot be read using `read.csv()` or
+`read_csv()` owing to the way it is structured. We will read the 
+`transaction_data.csv` file as it contains the data we had modified
+in the previous step. We need to specify the following in order to 
+read the data set:
+
+- name of the data set within quotes (single or double)
+- the format of the data, if each line represnts a transaction, use `basket`,
+and if each line represents an item in the transaction, use `single`
+- the separator used to separate the items in a transaction
+
+In our data set, each line represents a transaction and the items in the
+transaction are separated by a `,`.
+
+```{r read_data, warning=FALSE, message=FALSE}
+basket_data <- read.transactions("transaction_data.csv", format = "basket", 
+  sep = ",")
+basket_data
+```
+
+The `read.transactions()` function allows you to read data where each row 
+represents a item and not a transaction. In that case, the `format` argument
+should be set to the value `single` and the `cols` argument should specify
+the names or positions of the columns that represent the **transaction id** and
+**item id**. We tried to read data in this way as well but failed to do so. 
+However, the code is available below for other users to try and let us know if
+you find a way to get it to work or spot any mistakes we may have made.
+
+```{r read_data_try, eval=FALSE}
+get_data <- read.transactions("retail.csv", 
+  format = "single",
+  sep = ",",
+  cols = c("InvoiceNo", "item"))
+``` 
+
+We were able to read the data when we removed the `sep` argument from the above
+code, but the result from the `summary()` function was way different than what
+we see in the next section i.e. it showed higher number of transactions and
+items.
+
+## Data Summary
+
+To get a quick overview of the data, use `summary()`. It will return the 
+following:
+
+- number of transactions
+- number of items
+- most frequent items
+- distribution of items
+- five number summary 
+
+```{r summary}
+summary(basket_data)
+```
+
+## Item Frequency Plot
+
+The most frequent items in the data set can be plotted using 
+`itemFrequencyPlot()`. We can specify the number of items to be plotted and
+whether the `Y` axis should represent the absolute or relative number of transactions
+that include the item.
+
+The `topN` argument can be used to specify the number of items to be plotted
+and the `type` argument can be used to specify whether the `Y` axis represents
+absolute/relative frequency of the items.
+
+```{r plot_freq, fig.align='center', fig.height=5}
+itemFrequencyPlot(basket_data, topN = 10, type = 'absolute')
+```
+
+In the below plot, the `Y` axis represents the relative frequency of the items
+plotted.
+
+```{r plot_freq_relative, fig.align='center', fig.height=5}
+itemFrequencyPlot(basket_data, topN = 10, type = 'relative')
+```
+
+<hr>
+<a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a>
+<hr>
+
+## Generate Rules
+
+Finally, to the part you all have been waiting for, rules generation. The 
+`apriori()` function is used for generating the rules. We will first learn the 
+different inputs that must be specified and later on play around with them and
+see how the rules generated change.
+
+The first input is the data set, which in our case is `basket_data`. Next, we 
+will supply the mining parameters using the `parameter` argument:
+
+- `supp`: minimum **support** for an itemset 
+- `conf`: minimum **confidence**
+- `maxlen`: maximum number of items the antecedent may include 
+- `target`: the type of association mined i.e. **rules**
+
+The `parameter` argument takes several additional inputs but to get started, it
+is sufficient to know those mentioned above. All the inputs are supplied using
+a `list()`.
+
+For our case study, we will specify the following:
+
+- support: 0.009
+- confidence: 0.8
+- maxlen: 4 
+
+Keep in mind, mining association rules with very low values for `support` will 
+result in a large number of rules being generated, resulting in long execution 
+time and the process will eventually run out of memory. 
+
+```{r rules_generate}
+rules <- apriori(basket_data, parameter = list(supp=0.009, conf=0.8, 
+	target = "rules", maxlen = 4))
+```
+
+Change the values of `supp`, `conf` and `maxlen`, and observe how the rules
+generated change. 
+
+## Rules Summary
+
+Once the rules have been generated by `apriori()`, we can use `summary()` to
+get some basic information such as rule length distribution.
+
+```{r rules_summary}
+summary(rules)
+```
+
+The output from `summary()` does not display the rules though. To view the 
+rules, we have to use `inspect()`.
+
+## Inspect Rules
+
+The `inspect()` function will display the rules along with:
+
+- support
+- confidence
+- lift 
+- count
+
+Before you inspect the rules, you can sort it by support, confidence or
+lift. In the below, output, we sort the rules by confidence in descending order
+before inspecting them.
+
+```{r rules_inspect}
+basket_rules <- sort(rules, by = 'confidence', decreasing = TRUE)
+inspect(basket_rules[1:10])
+```
+
+## Redundant & Non Redundant Rules
+
+### Redundant Rules
+
+A rule is redundant if a more general rules with the same or a higher 
+confidence exists. That is, a more specific rule is redundant if it is only 
+equally or even less predictive than a more general rule. A rule is more 
+general if it has the same RHS but one or more items removed from the LHS.
+
+#### Example 1
+
+```{r red_rule_1, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_redundant_rule_1.png")
+```
+
+In the above example, the first rule has the same support, condifence and lift
+as the next two rules. The second item in the left hand side of the rule is not
+adding any value and as such makes the rule redundant.
+
+#### Example 2
+
+```{r red_rule_2, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_redundant_rule_2.png")
+```
+
+In the above example, the first two rules have the same support, condifence and 
+lift. The third rule differs only with respect to lift. 
+
+#### Example 3
+
+```{r red_rule_3, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_redundant_rule_3.png")
+```
+
+In the above example, the first and third rule have the same support, 
+condifence and lift. The second rule is different with respect to confidence 
+and lift. 
+
+Now that we have understood what redundant rules are and how to identify them, 
+let us use the below R code to inspect them.
+
+```{r rules_redundant}
+inspect(rules[is.redundant(rules)])
+```
+
+### Non-redundant Rules
+
+Now let us look at the non-redundant rules.
+
+```{r rules_non_redundant}
+inspect(rules[!is.redundant(rules)])
+```
+
+## What influenced purchase of product X?
+
+So far, we have learnt how to generate, inspect and prune rules. Now, how do
+we use these rules? To make business sense, we need to come up with a set of
+rules that can be used either for product placement in physical stores or 
+as recommendations in an online store or for targeted marketing via email
+campaigns etc. To achieve that, we need to know 2 things:
+
+- what products influenced the purchase of product X?
+- what purchases did product X influence?
+
+For our case study, we can modify the above questions as:
+
+#### What influenced the purchase of **sugar**?
+
+To view the products which influenced the purchase of **sugar**, we will 
+continue to use the `apriori()` function but add one more argument, `appearance`.
+It restricts the appearance of the items. Since we want the right hand side of 
+the rules to have only one value, **sugar**, we will set the `rhs` argument to 
+**sugar**. The left hand side of the rules should include all the products that 
+influenced the purchase of sugar i.e. it will exclude **sugar**. We will use 
+the `default` argument and supply it the value `lhs` i.e. all items excluding 
+sugar can appear on the left hand side of the rule by default.
+
+- `default`
+- `rhs`
+
+```{r rhs}
+sugar_rules <- apriori(basket_data, parameter = list(supp = 0.009, conf = 0.8), 
+  appearance = list(default = "lhs", rhs = "SUGAR")) 
+rules_sugar <- sort(sugar_rules, by = "confidence", decreasing = TRUE)
+inspect(rules_sugar)
+```
+
+For the support and confidence we have mentioned, we know the following 
+products influenced the purchase of **sugar**:
+
+- **COFFEE**
+- **SET 3 RETROSPOT TEA**
+
+## What purchases did product X influence?
+
+Now that we know what products influenced the purchase of **sugar**, let us 
+answer the second question.
+
+#### What purchases did **sugar** influence?
+
+In this case, we want **sugar** to be on the left hand side of the rule and all
+the products it influenced to be on the right hand side. We set the `lhs` 
+argument to **sugar** and the `default` argument to `rhs` as all the products, 
+the purchase of which was influenced by **sugar** should appear on the left 
+hand side of the rule by default.
+
+```{r lhs}
+sugar_rules <- apriori(basket_data, parameter = list(supp = 0.009, conf = 0.8), 
+  appearance = list(default = "rhs", lhs = "SUGAR")) 
+rules_sugar <- sort(sugar_rules, by = "confidence", decreasing = TRUE)
+inspect(rules_sugar)
+```
+
+For the support and confidence we have mentioned, we know the purchase of 
+the following products were influenced by **sugar**:
+
+- **COFFEE**
+- **SET 3 RETROSPOT TEA**
+
+## Top Rules
+
+Let us take a look at the top rules by 
+
+#### Support
+
+```{r top_rules_supp}
+supp_rules <- sort(rules, by = 'support', decreasing = TRUE)
+top_rules <- supp_rules[1:10]
+inspect(top_rules)
+```
+
+#### Confidence
+
+```{r top_rules_conf}
+conf_rules <- sort(rules, by = 'confidence', decreasing = TRUE)
+top_rules <- conf_rules[1:10]
+inspect(top_rules)
+```
+
+#### Lift
+
+```{r top_rules_lift}
+lift_rules <- sort(rules, by = 'lift', decreasing = TRUE)
+top_rules <- lift_rules[1:10]
+inspect(top_rules)
+```
+
+<hr>
+<a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
+<hr>
+
+## Visualization
+
+To visualize the rules, the authors of **arules** have created a companion
+package, **arulesViz**. It offers several options for visualizing the rules
+generated by `apriori()`. 
+
+### Scatter Plot
+
+We can use the default `plot()` method to create a scatter plot. It will plot 
+the support on the `X` axis, the confidence on the `Y` axis and the lift is 
+represented by the opaqueness/alpha of the color of the points.
+
+```{r plot_scatter, fig.align='center', fig.height=5, warning=FALSE, message=FALSE}
+plot(basket_rules)
+```
+
+### Network Plot
+
+We can create a network plot using the `method` argument and supplying it the 
+value `graph`. You can see the directionality of the rule in the below plot. 
+For example, people who buy **shed** also buy **key fob** and similarly, people
+who buy **back door** also buy **key fob**. It will be difficult to identify 
+the directionality of the rules when we are trying to plot too many rules.
+The `method` argument takes several other values as well.
+
+```{r plot_network, fig.align='center', fig.height=5}
+plot(top_rules, method = 'graph')
+```
+
+## Things to keep in mind..
+
+#### Directionality of rule is lost while using lift
+
+The directionality of a rule is lost while using lift. In the below example, 
+the lift is same for both the following rules:
+
+- {Mobile Phone} => {Screen Guard}
+- {Screen Guard} => {Mobile Phone}
+
+It is clear that the lift is the same irrespective of the direction of the rule.
+
+```{r lift_warning, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_lift_warning_final.png")
+```
+
+#### Confidence as a measure can be misleading
+
+If you look at the below example, the confidence for the second rule, 
+**{Screen Guard} => {Mobile Phone}**, is greater than the first rule, 
+**{Mobile Phone} => {Screen Guard}**. It does not mean that we can recommend 
+a mobile phone to a customer who is purchasing a screen guard. It is important 
+to ensure that we do not use rules just because they have high confidence 
+associated with them.
+
+```{r conf_warning, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_conf_warn_final.png")
+```
+
+## Summary
+
+- market basket analysis is an unsupervised data mining technique
+- uncovers products frequently bought together
+- creates if-then scenario rules
+- cost-effective, insightful and actionable
+- association rule mining has applications in several industries
+- directionality of rule is lost while using lift
+- confidence as a measure can be misleading
+
+```{r summary_meme, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/mba_summary_meme.jpg")
+```
+
+Your knowledge of the domain/business matters a lot when you are trying to 
+use market basket analysis. Especially, when you are trying to select or 
+shortlist rules and use them for product placement in a store or for 
+recommending products online. It is a good practice to critically review the
+rules before implementing them.
+
+
