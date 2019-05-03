@@ -13,7 +13,7 @@ tags:
 
 
 
-<p><img src="/img/mba_meme.jpg" width="50%" style="display: block; margin: auto;" /></p>
+<p><img src="/img/cover_image.jpg" width="80%" style="display: block; margin: auto;" /></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p><img src="/img/mba_intro.png" width="80%" style="display: block; margin: auto;" /></p>
@@ -538,16 +538,16 @@ time and the process will eventually run out of memory.</p>
 ## Absolute minimum support count: 233 
 ## 
 ## set item appearances ...[0 item(s)] done [0.00s].
-## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.16s].
-## sorting and recoding items ... [508 item(s)] done [0.03s].
-## creating transaction tree ... done [0.05s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.41s].
+## sorting and recoding items ... [508 item(s)] done [0.02s].
+## creating transaction tree ... done [0.06s].
 ## checking subsets of size 1 2 3 4</code></pre>
 <pre><code>## Warning in apriori(basket_data, parameter = list(supp = 0.009, conf =
 ## 0.8, : Mining stopped (maxlen reached). Only patterns up to a length of 4
 ## returned!</code></pre>
-<pre><code>##  done [0.06s].
+<pre><code>##  done [0.12s].
 ## writing ... [22 rule(s)] done [0.00s].
-## creating S4 object  ... done [0.02s].</code></pre>
+## creating S4 object  ... done [0.03s].</code></pre>
 <p>Change the values of <code>supp</code>, <code>conf</code> and <code>maxlen</code>, and observe how the rules
 generated change.</p>
 </div>
@@ -730,11 +730,11 @@ sugar can appear on the left hand side of the rule by default.</p>
 ## Absolute minimum support count: 233 
 ## 
 ## set item appearances ...[1 item(s)] done [0.00s].
-## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.26s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.42s].
 ## sorting and recoding items ... [508 item(s)] done [0.03s].
-## creating transaction tree ... done [0.05s].
-## checking subsets of size 1 2 3 4 done [0.08s].
-## writing ... [3 rule(s)] done [0.02s].
+## creating transaction tree ... done [0.06s].
+## checking subsets of size 1 2 3 4 done [0.11s].
+## writing ... [3 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.01s].</code></pre>
 <pre class="r"><code>rules_sugar &lt;- sort(sugar_rules, by = &quot;confidence&quot;, decreasing = TRUE)
 inspect(rules_sugar)</code></pre>
@@ -782,10 +782,10 @@ hand side of the rule by default.</p>
 ## Absolute minimum support count: 233 
 ## 
 ## set item appearances ...[1 item(s)] done [0.00s].
-## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.25s].
-## sorting and recoding items ... [508 item(s)] done [0.01s].
+## set transactions ...[10085 item(s), 25901 transaction(s)] done [1.40s].
+## sorting and recoding items ... [508 item(s)] done [0.03s].
 ## creating transaction tree ... done [0.06s].
-## checking subsets of size 1 2 done [0.02s].
+## checking subsets of size 1 2 done [0.01s].
 ## writing ... [2 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.03s].</code></pre>
 <pre class="r"><code>rules_sugar &lt;- sort(sugar_rules, by = &quot;confidence&quot;, decreasing = TRUE)
@@ -930,7 +930,6 @@ associated with them.</p>
 <li>directionality of rule is lost while using lift</li>
 <li>confidence as a measure can be misleading</li>
 </ul>
-<p><img src="/img/mba_summary_meme.jpg" width="80%" style="display: block; margin: auto;" /></p>
 <p>Your knowledge of the domain/business matters a lot when you are trying to
 use market basket analysis. Especially, when you are trying to select or
 shortlist rules and use them for product placement in a store or for

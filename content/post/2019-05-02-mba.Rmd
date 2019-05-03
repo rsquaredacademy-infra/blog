@@ -15,8 +15,8 @@ tags:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r meme, fig.align='center', out.width = "50%", echo=FALSE}
-knitr::include_graphics("/img/mba_meme.jpg")
+```{r mba_cover, fig.align='center', out.width="80%", echo=FALSE}
+knitr::include_graphics("/img/cover_image.jpg")
 ```
 
 ## Introduction
@@ -735,10 +735,6 @@ knitr::include_graphics("/img/mba_conf_warn_final.png")
 - association rule mining has applications in several industries
 - directionality of rule is lost while using lift
 - confidence as a measure can be misleading
-
-```{r summary_meme, fig.align='center', out.width="80%", echo=FALSE}
-knitr::include_graphics("/img/mba_summary_meme.jpg")
-```
 
 Your knowledge of the domain/business matters a lot when you are trying to 
 use market basket analysis. Especially, when you are trying to select or 
