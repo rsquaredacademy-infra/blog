@@ -48,12 +48,6 @@ post = "/:slug/"
     identifier = "start-here"
     url = "/start-here"
   [[menu.main]]
-    name = "Topics"
-    pre = "<i class='fa fa-bars fa-fw'></i>"
-    weight = 4
-    identifier = "topic"
-    url = "/topics"  
-  [[menu.main]]
     name = "Courses"
     pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
     weight = 5
