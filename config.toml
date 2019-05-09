@@ -89,12 +89,6 @@ post = "/:slug/"
     weight = 10
     identifier = "r-blogger"
     url = "https://r-bloggers.com/" 
-  [[menu.main]]
-    name = "R Weekly"
-    pre = "<i class='fa fa-cubes fa-fw'></i>"
-    weight = 11
-    identifier = "r-weekly"
-    url = "https://rweekly.org" 
 
 [social]
   # Link your social networking accounts to the side menu
