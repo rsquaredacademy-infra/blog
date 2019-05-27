@@ -48,11 +48,17 @@ post = "/:slug/"
     identifier = "start-here"
     url = "/start-here"
   [[menu.main]]
-    name = "Courses"
+    name = " Data Science Courses"
     pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
     weight = 5
     identifier = "courses"
     url = "https://www.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = " Risk Management Courses"
+    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
+    weight = 5
+    identifier = "courses"
+    url = "https://www.riskycall.com/" 
   [[menu.main]]
     name = "Shiny Apps"
     pre = "<i class='fa fa-cube fa-fw'></i>"
