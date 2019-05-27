@@ -1,0 +1,1142 @@
+---
+title: "Demystifying Regular Expressions in R"
+author: Aravind Hebbali
+twitterImg: /img/regex_cover_image.png
+description: "Beginners guide to regular expressions in R"
+date: '2019-05-27'
+slug: regular-expression-in-r
+topics:
+  - regex
+tags:
+  - regex
+---
+
+
+
+<p><img src="/img/regex_cover_image.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this post, we will learn about using regular expressions in R. While it is
+aimed at absolute beginners, we hope experienced users will find it useful as
+well. The post is broadly divided into 3 sections. In the first section, we
+will introduce the pattern matching functions such as <code>grep</code>, <code>grepl</code> etc. in
+base R as we will be using them in the rest of the post. Once the reader is
+comfortable with the above mentioned pattern matching functions, we will
+learn about regular expressions while exploring the names of R packages by
+probing the following:</p>
+<ul>
+<li>how many package names include the letter <code>r</code>?</li>
+<li>how many package names begin or end with the letter <code>r</code>?</li>
+<li>how many package names include the words <code>data</code> or <code>plot</code>?</li>
+</ul>
+<p>In the final section, we will go through 4 case studies including simple email
+validation. If you plan to try the case studies, please do not skip any of the
+topics in the second section.</p>
+<div id="what" class="section level3">
+<h3>What</h3>
+<p><img src="/img/regex_what.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="why" class="section level3">
+<h3>Why</h3>
+<p>Regular expressions can be used for:</p>
+<ul>
+<li>search</li>
+<li>replace</li>
+<li>validation</li>
+<li>extraction</li>
+</ul>
+<p><img src="/img/regex_why.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="use-cases" class="section level3">
+<h3>Use Cases</h3>
+<p>Regular expressions have applications in a wide range of areas. We list some of
+the most popular ones below:</p>
+<ul>
+<li>email validation</li>
+<li>password validation</li>
+<li>date validation</li>
+<li>phone number validation</li>
+<li>search and replace in text editors</li>
+<li>web scraping</li>
+</ul>
+<p><img src="/img/regex_use_case_blog.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="learning" class="section level2">
+<h2>Learning</h2>
+<p>The below steps offer advice on the best way to learn or use regular expressions:</p>
+<ul>
+<li>describe the pattern in layman terms</li>
+<li>break down the pattern into individual components<br />
+</li>
+<li>match each component to a regular expression</li>
+<li>build incrementally</li>
+<li>test</li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this post:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/regex/regex.html" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/tree/master/regular-expressions-in-r" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/356612" target="_blank">RStudio Cloud</a></li>
+</ul>
+<hr>
+<p><a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+<div id="libraries" class="section level2">
+<h2>Libraries</h2>
+<p>We will use the following libraries in this post:</p>
+<pre class="r"><code>library(dplyr)
+library(readr)</code></pre>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>We will use two data sets in this post. The first one is a list of all R
+packages on CRAN and is present in the <code>package_names.csv</code> file, and the
+second one, <code>top_downloads</code>, is the most downloaded packages from the
+<a href="https://cran.rstudio.com/" target="_blank">RStudio CRAN mirror</a>
+in the first week of May 2019, and extracted using the
+<a href="https://cranlogs.r-pkg.org/#rpackage" target="_blank">cranlogs</a> pacakge.</p>
+<div id="r-packages-data" class="section level3">
+<h3>R Packages Data</h3>
+<pre class="r"><code>read_csv(&quot;package_names.csv&quot;) %&gt;%
+  pull(1) -&gt; r_packages </code></pre>
+</div>
+<div id="top-r-packages" class="section level3">
+<h3>Top R Packages</h3>
+<pre class="r"><code>top_downloads &lt;- c(&quot;devtools&quot;, &quot;rlang&quot;, &quot;dplyr&quot;, &quot;Rcpp&quot;, &quot;tibble&quot;,    
+                   &quot;ggplot2&quot;, &quot;glue&quot;, &quot;pillar&quot;, &quot;cli&quot;, &quot;data.table&quot;)
+
+top_downloads</code></pre>
+<pre><code>##  [1] &quot;devtools&quot;   &quot;rlang&quot;      &quot;dplyr&quot;      &quot;Rcpp&quot;       &quot;tibble&quot;    
+##  [6] &quot;ggplot2&quot;    &quot;glue&quot;       &quot;pillar&quot;     &quot;cli&quot;        &quot;data.table&quot;</code></pre>
+</div>
+</div>
+<div id="pattern-matching-functions" class="section level2">
+<h2>Pattern Matching Functions</h2>
+<p>Before we get into the nitty gritty of regular expressions, let us explore a
+few functions from base R for pattern matching. We will learn about using
+regular expressions with the stringr package in an upcoming post.</p>
+<p><img src="/img/regex_base_functions.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="grep" class="section level2">
+<h2>grep</h2>
+<p>The first function we will learn is <code>grep()</code>. It can be used to find elements
+that match a given pattern in a character vector. It will return the elements
+or the index of the elements based on your specification. In the below example,
+<code>grep()</code> returns the index of the elements that match the given pattern.</p>
+<p><img src="/img/regex_grep_index_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r&quot;)</code></pre>
+<pre><code>## [1] 2 3 8</code></pre>
+<p>Now let us look at the inputs:</p>
+<ul>
+<li><code>pattern</code></li>
+<li><code>x</code></li>
+<li><code>ignore.case</code></li>
+<li><code>value</code></li>
+<li><code>invert</code></li>
+</ul>
+</div>
+<div id="grep---value" class="section level2">
+<h2>grep - Value</h2>
+<p>If you want <code>grep()</code> to return the element instead of the index, set the
+<code>value</code> argument to <code>TRUE</code>. The default is <code>FALSE</code>. In the below example,
+<code>grep()</code> returns the elements and not their index.</p>
+<p><img src="/img/regex_grep_value_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;rlang&quot;  &quot;dplyr&quot;  &quot;pillar&quot;</code></pre>
+</div>
+<div id="grep---ignore-case" class="section level2">
+<h2>grep - Ignore Case</h2>
+<p>If you have carefully observed the previous examples, have you noticed that
+the pattern <code>r</code> did not match the element <code>Rcpp</code> i.e. regular expressions are
+case sensitive. The <code>ignore.case</code> argument will ignore case while matching the
+pattern as shown below.</p>
+<p><img src="/img/regex_grep_ignore_case_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;rlang&quot;  &quot;dplyr&quot;  &quot;Rcpp&quot;   &quot;pillar&quot;</code></pre>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;R&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;Rcpp&quot;</code></pre>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;R&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;rlang&quot;  &quot;dplyr&quot;  &quot;Rcpp&quot;   &quot;pillar&quot;</code></pre>
+</div>
+<div id="grep---invert" class="section level2">
+<h2>grep - Invert</h2>
+<p>In some cases, you may want to retrieve elements that do not match the pattern
+specified. The <code>invert</code> argument will return the elements that do not match
+the pattern. In the below example, the elements returned do not match the
+pattern specified by us.</p>
+<p><img src="/img/regex_grep_invert_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot;devtools&quot;   &quot;Rcpp&quot;       &quot;tibble&quot;     &quot;ggplot2&quot;    &quot;glue&quot;      
+## [6] &quot;cli&quot;        &quot;data.table&quot;</code></pre>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r&quot;, value = TRUE, 
+     invert = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;devtools&quot;   &quot;tibble&quot;     &quot;ggplot2&quot;    &quot;glue&quot;       &quot;cli&quot;       
+## [6] &quot;data.table&quot;</code></pre>
+</div>
+<div id="grepl" class="section level2">
+<h2>grepl</h2>
+<p><code>grepl()</code> will return only logical values. If the elements match the pattern
+specified, it will return <code>TRUE</code> else <code>FALSE</code>.</p>
+<p><img src="/img/regex_grepl_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grepl(x = top_downloads, pattern = &quot;r&quot;)</code></pre>
+<pre><code>##  [1] FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE</code></pre>
+<div id="ignore-case" class="section level3">
+<h3>Ignore Case</h3>
+<p>To ignore the case, use the <code>ignore.case</code> argument and set it to <code>TRUE</code>.</p>
+<p><img src="/img/regex_grepl_ignore_case_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grepl(x = top_downloads, pattern = &quot;r&quot;, ignore.case = TRUE)</code></pre>
+<pre><code>##  [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE</code></pre>
+<p>The next 3 functions that we explore differ from the above 2 in the format of
+and amount of details in the results. They all return the following additional
+details:</p>
+<ul>
+<li>the starting position of the first match</li>
+<li>the length of the matched text</li>
+<li>whether the match position and length are in chracter or bytes</li>
+</ul>
+</div>
+<div id="regexpr" class="section level3">
+<h3>regexpr</h3>
+<pre class="r"><code>rr_pkgs &lt;- c(&quot;purrr&quot;, &quot;olsrr&quot;, &quot;blorr&quot;)
+regexpr(&quot;r&quot;, rr_pkgs)</code></pre>
+<pre><code>## [1] 3 4 4
+## attr(,&quot;match.length&quot;)
+## [1] 1 1 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE</code></pre>
+</div>
+<div id="gregexpr" class="section level3">
+<h3>gregexpr</h3>
+<pre class="r"><code>gregexpr(&quot;r&quot;, rr_pkgs)</code></pre>
+<pre><code>## [[1]]
+## [1] 3 4 5
+## attr(,&quot;match.length&quot;)
+## [1] 1 1 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE
+## 
+## [[2]]
+## [1] 4 5
+## attr(,&quot;match.length&quot;)
+## [1] 1 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE
+## 
+## [[3]]
+## [1] 4 5
+## attr(,&quot;match.length&quot;)
+## [1] 1 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE</code></pre>
+</div>
+<div id="regexec" class="section level3">
+<h3>regexec</h3>
+<pre class="r"><code>regexec(&quot;r&quot;, rr_pkgs)</code></pre>
+<pre><code>## [[1]]
+## [1] 3
+## attr(,&quot;match.length&quot;)
+## [1] 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE
+## 
+## [[2]]
+## [1] 4
+## attr(,&quot;match.length&quot;)
+## [1] 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE
+## 
+## [[3]]
+## [1] 4
+## attr(,&quot;match.length&quot;)
+## [1] 1
+## attr(,&quot;index.type&quot;)
+## [1] &quot;chars&quot;
+## attr(,&quot;useBytes&quot;)
+## [1] TRUE</code></pre>
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+</div>
+<div id="sub" class="section level2">
+<h2>sub</h2>
+<p><code>sub()</code> will perform replacement of the first match. In the below example,
+you can observe that only the first match of <code>r</code> is replaced by <code>s</code> while
+the rest remain the same.</p>
+<p><img src="/img/regex_sub_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>rr_pkgs &lt;- c(&quot;purrr&quot;, &quot;olsrr&quot;, &quot;blorr&quot;)
+sub(x = rr_pkgs, pattern = &quot;r&quot;, replacement = &quot;s&quot;)</code></pre>
+<pre><code>## [1] &quot;pusrr&quot; &quot;olssr&quot; &quot;blosr&quot;</code></pre>
+</div>
+<div id="gsub" class="section level2">
+<h2>gsub</h2>
+<p><code>gsub()</code> will perform replacement of all the matches. In the below example,
+all the <code>s</code> are replaced by <code>r</code>. Compare the below output with the output from
+<code>sub()</code> to understand the difference between them.</p>
+<p><img src="/img/regex_gsub_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gsub(x = rr_pkgs, pattern = &quot;r&quot;, replacement = &quot;s&quot;)</code></pre>
+<pre><code>## [1] &quot;pusss&quot; &quot;olsss&quot; &quot;bloss&quot;</code></pre>
+</div>
+<div id="regular-expressions" class="section level2">
+<h2>Regular Expressions</h2>
+<p>So far we have been exploring R functions for pattern matching with a very
+simple pattern i.e. a single character. From this section, we will start
+exploring different scenarios and the corresponding regular expressions. This
+section is further divided into 5 sub sections:</p>
+<ul>
+<li>anchors</li>
+<li>metacharacters</li>
+<li>quantifiers</li>
+<li>sequences</li>
+<li>and character classes</li>
+</ul>
+</div>
+<div id="anchors" class="section level2">
+<h2>Anchors</h2>
+<p>Anchors do not match any character. Instead, they match the pattern supplied to
+a position before, after or between characters i.e. they are used to anchor the
+regex or pattern at a certain position. Anchors are useful when we are searching
+for a pattern at the beggining or end of a string.</p>
+<p><img src="/img/regex_anchors.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="caret-symbol" class="section level3">
+<h3>Caret Symbol (^)</h3>
+<p>The caret <strong>^</strong> matches the position before the first character in the string.
+In the below example, we want to know the R packages whose names begin with
+the letter <code>r</code>. To achieve this, we use <code>^</code>, the caret symbol, which specifies
+that the pattern must be present at the beginning of the string.</p>
+<p><img src="/img/regex_anchor_start_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;^r&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;rlang&quot;</code></pre>
+<p>It has returned only one package, <code>rlang</code> but if you look at the package names
+even <code>Rcpp</code> begins with <code>r</code> but has been ignored. Let us ignore the case of the
+pattern and see if the results change.</p>
+<p><img src="/img/regex_anchor_start_ignore_case_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;^r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;rlang&quot; &quot;Rcpp&quot;</code></pre>
+</div>
+<div id="dollar-symbol" class="section level3">
+<h3>Dollar Symbol ($)</h3>
+<p>The dollar $ matches right after the last character in the string. Let us
+now look at packages whose names end with the letter <code>r</code>. To achieve this, we
+use <code>$</code>, the dollar symbol. As you can see in the below example, the <code>$</code> is
+specified at the end of the pattern we are looking for.</p>
+<p><img src="/img/regex_anchor_end_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>From our sample data set, we can see that there are 2 packages that end with
+the letter <code>r</code>, dplyr and pillar.</p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;r$&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;dplyr&quot;  &quot;pillar&quot;</code></pre>
+</div>
+</div>
+<div id="meta-characters" class="section level2">
+<h2>Meta Characters</h2>
+<p>Meta characters are a special set of characters not captured by regular
+expressions i.e. if these special characters are present in a string, regular
+expressions will not detect them. In order to be detected, they must be
+prefixed by double backslash (\). The below table displays the metacharacters:</p>
+<p><img src="/img/regex_meta_characters.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Now that we know the meta characters, let us look at some examples. In the first
+example, we want to detect package names separated by a dot.</p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;.&quot;, value = TRUE)[1:60]</code></pre>
+<pre><code>##  [1] &quot;A3&quot;                 &quot;abbyyR&quot;             &quot;abc&quot;               
+##  [4] &quot;abc.data&quot;           &quot;ABC.RAP&quot;            &quot;ABCanalysis&quot;       
+##  [7] &quot;abcdeFBA&quot;           &quot;ABCoptim&quot;           &quot;ABCp2&quot;             
+## [10] &quot;abcrf&quot;              &quot;abctools&quot;           &quot;abd&quot;               
+## [13] &quot;abe&quot;                &quot;abf2&quot;               &quot;ABHgenotypeR&quot;      
+## [16] &quot;abind&quot;              &quot;abjutils&quot;           &quot;abn&quot;               
+## [19] &quot;abnormality&quot;        &quot;abodOutlier&quot;        &quot;ABPS&quot;              
+## [22] &quot;AbsFilterGSEA&quot;      &quot;AbSim&quot;              &quot;abstractr&quot;         
+## [25] &quot;abtest&quot;             &quot;abundant&quot;           &quot;Ac3net&quot;            
+## [28] &quot;ACA&quot;                &quot;acc&quot;                &quot;accelerometry&quot;     
+## [31] &quot;accelmissing&quot;       &quot;AcceptanceSampling&quot; &quot;ACCLMA&quot;            
+## [34] &quot;accrual&quot;            &quot;accrued&quot;            &quot;accSDA&quot;            
+## [37] &quot;ACD&quot;                &quot;ACDm&quot;               &quot;acebayes&quot;          
+## [40] &quot;acepack&quot;            &quot;ACEt&quot;               &quot;acid&quot;              
+## [43] &quot;acm4r&quot;              &quot;ACMEeqtl&quot;           &quot;acmeR&quot;             
+## [46] &quot;ACNE&quot;               &quot;acnr&quot;               &quot;acopula&quot;           
+## [49] &quot;AcousticNDLCodeR&quot;   &quot;acp&quot;                &quot;aCRM&quot;              
+## [52] &quot;AcrossTic&quot;          &quot;acrt&quot;               &quot;acs&quot;               
+## [55] &quot;ACSNMineR&quot;          &quot;acss&quot;               &quot;acss.data&quot;         
+## [58] &quot;ACSWR&quot;              &quot;ACTCD&quot;              &quot;Actigraphy&quot;</code></pre>
+<p>If you look at the output, it includes names of even those package names which
+are not separated by dot. Why is this happening? A dot is special character in
+regular expressions. It is also known as wildcard character i.e. it is used to
+match any character other than <code>\n</code> (new line). Now let us try to escape it
+using the double backslash (<code>\\</code>).</p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;\\.&quot;, value = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;abc.data&quot;             &quot;ABC.RAP&quot;              &quot;acss.data&quot;           
+##  [4] &quot;aire.zmvm&quot;            &quot;AMAP.Seq&quot;             &quot;anim.plots&quot;          
+##  [7] &quot;ANOVA.TFNs&quot;           &quot;ar.matrix&quot;            &quot;archivist.github&quot;    
+## [10] &quot;aroma.affymetrix&quot;     &quot;aroma.apd&quot;            &quot;aroma.cn&quot;            
+## [13] &quot;aroma.core&quot;           &quot;ASGS.foyer&quot;           &quot;assertive.base&quot;      
+## [16] &quot;assertive.code&quot;       &quot;assertive.data&quot;       &quot;assertive.data.uk&quot;   
+## [19] &quot;assertive.data.us&quot;    &quot;assertive.datetimes&quot;  &quot;assertive.files&quot;     
+## [22] &quot;assertive.matrices&quot;   &quot;assertive.models&quot;     &quot;assertive.numbers&quot;   
+## [25] &quot;assertive.properties&quot; &quot;assertive.reflection&quot; &quot;assertive.sets&quot;      
+## [28] &quot;assertive.strings&quot;    &quot;assertive.types&quot;      &quot;auto.pca&quot;            
+## [31] &quot;AWR.Athena&quot;           &quot;AWR.Kinesis&quot;          &quot;AWR.KMS&quot;             
+## [34] &quot;aws.alexa&quot;            &quot;aws.cloudtrail&quot;       &quot;aws.comprehend&quot;      
+## [37] &quot;aws.ec2metadata&quot;      &quot;aws.iam&quot;              &quot;aws.kms&quot;             
+## [40] &quot;aws.lambda&quot;           &quot;aws.polly&quot;            &quot;aws.s3&quot;              
+## [43] &quot;aws.ses&quot;              &quot;aws.signature&quot;        &quot;aws.sns&quot;             
+## [46] &quot;aws.sqs&quot;              &quot;aws.transcribe&quot;       &quot;aws.translate&quot;       
+## [49] &quot;bea.R&quot;                &quot;benford.analysis&quot;</code></pre>
+<p>When we use <code>\\.</code>, it matches the dot. Feel free to play around with other
+special characters mentioned in the table but ensure that you use a different
+data set.</p>
+<hr>
+<p><a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+<div id="quantifiers" class="section level2">
+<h2>Quantifiers</h2>
+<p>Quantifiers are very powerful and we need to be careful while using them. They
+always act on items to the immediate left and are used to specify the number of
+times a pattern must appear or be matched. The below table shows the different
+quantifiers and their description:</p>
+<p><img src="/img/regex_quantifiers.png" width="80%" style="display: block; margin: auto;" /></p>
+<div id="dot" class="section level4">
+<h4>Dot</h4>
+<p>The <code>.</code> (dot) is a wildcard character as it will match any character except a
+new line (). Keep in mind that it will match only 1 character and if you want
+to match more than 1 character, you need to specify as many dots. Let us look
+at a few examples.</p>
+<p><img src="/img/regex_quantifier_dot_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># extract package names that include the string data 
+data_pkgs &lt;- grep(x = r_packages, pattern = &quot;data&quot;, value = TRUE)
+head(data_pkgs)</code></pre>
+<pre><code>## [1] &quot;abc.data&quot;       &quot;acss.data&quot;      &quot;adeptdata&quot;      &quot;adklakedata&quot;   
+## [5] &quot;archdata&quot;       &quot;assertive.data&quot;</code></pre>
+<pre class="r"><code># package name includes the string data followed by any character and then the letter r
+grep(x = data_pkgs, pattern = &quot;data.r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;datadr&quot;          &quot;dataframes2xls&quot;  &quot;dataPreparation&quot;</code></pre>
+<pre class="r"><code># package name includes the string data followed by any 3 characters and then the letter r
+grep(x = data_pkgs, pattern = &quot;data...r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;data.world&quot;            &quot;datadogr&quot;              &quot;dataRetrieval&quot;        
+## [4] &quot;datasauRus&quot;            &quot;rdataretriever&quot;        &quot;WikidataQueryServiceR&quot;</code></pre>
+<pre class="r"><code># package name includes the string data followed by any 3 characters and then the letter r
+grep(x = r_packages, pattern = &quot;data(.){3}r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;data.world&quot;            &quot;datadogr&quot;              &quot;DataEntry&quot;            
+## [4] &quot;dataRetrieval&quot;         &quot;datasauRus&quot;            &quot;rdataretriever&quot;       
+## [7] &quot;RWDataPlyr&quot;            &quot;WikidataQueryServiceR&quot;</code></pre>
+<pre class="r"><code># package name includes the string stat followed by any 2 characters and then the letter r
+grep(x = r_packages, pattern = &quot;stat..r&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;DistatisR&quot;      &quot;snpStatsWriter&quot; &quot;StatPerMeCo&quot;</code></pre>
+</div>
+<div id="optional-character" class="section level4">
+<h4>Optional Character</h4>
+<p><code>?</code>, the optional character is used when the item to its left is optional and
+is matched at most once.</p>
+<p><img src="/img/regex_optional.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In this first example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the letter <code>r</code></li>
+<li>includes the string <code>data</code></li>
+<li>there may be zero or one character between <code>r</code> and <code>data</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_question_mark.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(.)?data&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;dplyr.teradata&quot;  
+##  [4] &quot;engsoccerdata&quot;    &quot;historydata&quot;      &quot;icpsrdata&quot;       
+##  [7] &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;   &quot;qrmdata&quot;         
+## [10] &quot;rdatacite&quot;        &quot;rdataretriever&quot;   &quot;rqdatatable&quot;     
+## [13] &quot;smartdata&quot;</code></pre>
+<p>In the below example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the letter <code>r</code></li>
+<li>includes the string <code>data</code></li>
+<li>there may be zero or one dot between <code>r</code> and <code>data</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_question_mark_2.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(\\.)?data&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;   
+## [4] &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;  
+## [7] &quot;rdatacite&quot;        &quot;rdataretriever&quot;</code></pre>
+<p>In the next example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the letter <code>r</code></li>
+<li>includes the string <code>data</code></li>
+<li>there may be zero or one character between <code>r</code> and <code>data</code></li>
+<li>and the character must be any of the following:
+<ul>
+<li>m</li>
+<li>y</li>
+<li>q</li>
+</ul></li>
+</ul>
+<p><img src="/img/regex_quantifier_question_mark_3.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(m|y|q)?data&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;ctrdata&quot;        &quot;engsoccerdata&quot;  &quot;historydata&quot;    &quot;icpsrdata&quot;     
+## [5] &quot;prioritizrdata&quot; &quot;qrmdata&quot;        &quot;rdatacite&quot;      &quot;rdataretriever&quot;
+## [9] &quot;rqdatatable&quot;</code></pre>
+<p>In the last example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the letter <code>r</code></li>
+<li>includes the string <code>data</code></li>
+<li>there may be zero or one character between <code>r</code> and <code>data</code></li>
+<li>and the character must be any of the following:
+<ul>
+<li>m</li>
+<li>y</li>
+<li>q</li>
+<li>dot</li>
+</ul></li>
+</ul>
+<p><img src="/img/regex_quantifier_question_mark_4.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(\\.|m|y|q)?data&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;   
+##  [4] &quot;historydata&quot;      &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;   
+##  [7] &quot;prioritizrdata&quot;   &quot;qrmdata&quot;          &quot;rdatacite&quot;       
+## [10] &quot;rdataretriever&quot;   &quot;rqdatatable&quot;</code></pre>
+</div>
+<div id="asterik-symbol" class="section level4">
+<h4>Asterik Symbol</h4>
+<p><code>*</code>, the asterik symbol is used when the item to its left will be matched zero
+or more times.</p>
+<p><img src="/img/regex_asterik.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the below example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the letter <code>r</code></li>
+<li>includes the string <code>data</code></li>
+<li>there may be zero or more character(s) between <code>r</code> and <code>data</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_star.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(.)*data&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;archdata&quot;           &quot;assertive.data&quot;     &quot;assertive.data.uk&quot; 
+##  [4] &quot;assertive.data.us&quot;  &quot;cluster.datasets&quot;   &quot;crimedata&quot;         
+##  [7] &quot;cropdatape&quot;         &quot;ctrdata&quot;            &quot;dplyr.teradata&quot;    
+## [10] &quot;engsoccerdata&quot;      &quot;groupdata2&quot;         &quot;historydata&quot;       
+## [13] &quot;icpsrdata&quot;          &quot;igraphdata&quot;         &quot;mldr.datasets&quot;     
+## [16] &quot;nordklimdata1&quot;      &quot;prioritizrdata&quot;     &quot;qrmdata&quot;           
+## [19] &quot;radiant.data&quot;       &quot;rangeModelMetadata&quot; &quot;rattle.data&quot;       
+## [22] &quot;rbefdata&quot;           &quot;rdatacite&quot;          &quot;rdataretriever&quot;    
+## [25] &quot;rehh.data&quot;          &quot;resampledata&quot;       &quot;rnaturalearthdata&quot; 
+## [28] &quot;ropendata&quot;          &quot;rqdatatable&quot;        &quot;rtsdata&quot;           
+## [31] &quot;smartdata&quot;          &quot;surveydata&quot;         &quot;survJamda.data&quot;    
+## [34] &quot;traitdataform&quot;      &quot;vortexRdata&quot;        &quot;xmlparsedata&quot;</code></pre>
+</div>
+<div id="plus-symbol" class="section level4">
+<h4>Plus Symbol</h4>
+<p><code>+</code>, the plus symbol is used when the item to its left is matched one or more
+times.</p>
+<p><img src="/img/regex_plus.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the below example, we are looking for package names that include the
+following pattern:</p>
+<ul>
+<li>includes the string <code>plot</code></li>
+<li><code>plot</code> is preceded by one or more <code>g</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_plus.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_pkgs &lt;- grep(x = r_packages, pattern = &quot;plot&quot;, value = TRUE)
+grep(x = plot_pkgs, pattern = &quot;(g)+plot&quot;, value = TRUE, ignore.case = TRUE)</code></pre>
+<pre><code>## [1] &quot;ggplot2&quot;               &quot;ggplot2movies&quot;         &quot;ggplotAssist&quot;         
+## [4] &quot;ggplotgui&quot;             &quot;ggplotify&quot;             &quot;gplots&quot;               
+## [7] &quot;RcmdrPlugin.KMggplot2&quot; &quot;regplot&quot;</code></pre>
+</div>
+</div>
+<div id="brackets" class="section level2">
+<h2>Brackets</h2>
+<p><img src="/img/regex_brackets.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="n" class="section level4">
+<h4>{n}</h4>
+<p><code>{n}</code> is used when the item to its left is matched exactly n times. In the
+below example, we are looking for package names that include the following
+pattern:</p>
+<ul>
+<li>includes the string <code>plot</code></li>
+<li><code>plot</code> is preceded by exactly one <code>g</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_exact_n_match_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = plot_pkgs, pattern = &quot;(g){2}plot&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;ggplot2&quot;               &quot;ggplot2movies&quot;         &quot;ggplotAssist&quot;         
+## [4] &quot;ggplotgui&quot;             &quot;ggplotify&quot;             &quot;RcmdrPlugin.KMggplot2&quot;</code></pre>
+</div>
+<div id="n-1" class="section level4">
+<h4>{n,}</h4>
+<p><code>{n, }</code> is used when the item to its left is matched n or more times. In the
+below example, we are looking for package names that include the following
+pattern:</p>
+<ul>
+<li>includes the string <code>plot</code></li>
+<li><code>plot</code> is preceded by one or more <code>g</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_match_one_or_more_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = plot_pkgs, pattern = &quot;(g){1, }plot&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;ggplot2&quot;               &quot;ggplot2movies&quot;         &quot;ggplotAssist&quot;         
+## [4] &quot;ggplotgui&quot;             &quot;ggplotify&quot;             &quot;gplots&quot;               
+## [7] &quot;RcmdrPlugin.KMggplot2&quot; &quot;regplot&quot;</code></pre>
+</div>
+<div id="nm" class="section level4">
+<h4>{n,m}</h4>
+<p><code>{n, m}</code> is used when the item to its left is matched at least n times but not
+more than m times. In the below example, we are looking for package names that
+include the following pattern:</p>
+<ul>
+<li>includes the string <code>plot</code></li>
+<li><code>plot</code> is preceded by 1 or 3 <code>t</code></li>
+</ul>
+<p><img src="/img/regex_quantifier_match_between_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = plot_pkgs, pattern = &quot;(t){1,3}plot&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;forestplot&quot;   &quot;limitplot&quot;    &quot;nhstplot&quot;     &quot;productplots&quot;
+## [5] &quot;tttplot&quot;      &quot;txtplot&quot;</code></pre>
+</div>
+</div>
+<div id="or" class="section level2">
+<h2>OR</h2>
+<p><img src="/img/regex_or.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The <code>|</code> (OR) operator is useful when you want to match one amongst the given
+options. For example, let us say we are looking for package names that begin
+with <code>g</code> and is followed by either another <code>g</code> or <code>l</code>.</p>
+<p><img src="/img/regex_or_round_bracket_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;g(g|l)&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;ggplot2&quot; &quot;glue&quot;</code></pre>
+<p>The square brackets (<code>[]</code>) can be used in place of <code>|</code> as shown in the below
+example where we are looking for package names that begin with the letter
+<code>d</code> and is followed by either <code>e</code> or <code>p</code> or <code>a</code>.</p>
+<p><img src="/img/regex_or_square_bracket_canva.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = top_downloads, pattern = &quot;d[epa]&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;devtools&quot;   &quot;dplyr&quot;      &quot;data.table&quot;</code></pre>
+<hr>
+<p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+<div id="sequences" class="section level2">
+<h2>Sequences</h2>
+<p><img src="/img/regex_sequences.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="digit-character" class="section level4">
+<h4>Digit Character</h4>
+<p><code>\\d</code> matches any digit character. Let us use it to find package names that
+include a digit.</p>
+<p><img src="/img/regex_match_digit.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;\\d&quot;, value = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;           
+##  [4] &quot;Ac3net&quot;          &quot;acm4r&quot;           &quot;ade4&quot;           
+##  [7] &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;         &quot;ALA4R&quot;          
+## [10] &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
+## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;        
+## [16] &quot;APML0&quot;           &quot;aprean3&quot;         &quot;AR1seg&quot;         
+## [19] &quot;arena2r&quot;         &quot;arf3DS4&quot;         &quot;argon2&quot;         
+## [22] &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
+## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;            
+## [28] &quot;b6e6rl&quot;          &quot;base2grob&quot;       &quot;base64&quot;         
+## [31] &quot;base64enc&quot;       &quot;base64url&quot;       &quot;BaTFLED3D&quot;      
+## [34] &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
+## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;          
+## [40] &quot;BHH2&quot;            &quot;bikeshare14&quot;     &quot;bio3d&quot;          
+## [43] &quot;biomod2&quot;         &quot;Bios2cor&quot;        &quot;bios2mds&quot;       
+## [46] &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
+## [49] &quot;Bolstad2&quot;        &quot;BradleyTerry2&quot;</code></pre>
+<pre class="r"><code># invert
+grep(x = r_packages, pattern = &quot;\\d&quot;, value = TRUE, invert = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;abbyyR&quot;             &quot;abc&quot;                &quot;abc.data&quot;          
+##  [4] &quot;ABC.RAP&quot;            &quot;ABCanalysis&quot;        &quot;abcdeFBA&quot;          
+##  [7] &quot;ABCoptim&quot;           &quot;abcrf&quot;              &quot;abctools&quot;          
+## [10] &quot;abd&quot;                &quot;abe&quot;                &quot;ABHgenotypeR&quot;      
+## [13] &quot;abind&quot;              &quot;abjutils&quot;           &quot;abn&quot;               
+## [16] &quot;abnormality&quot;        &quot;abodOutlier&quot;        &quot;ABPS&quot;              
+## [19] &quot;AbsFilterGSEA&quot;      &quot;AbSim&quot;              &quot;abstractr&quot;         
+## [22] &quot;abtest&quot;             &quot;abundant&quot;           &quot;ACA&quot;               
+## [25] &quot;acc&quot;                &quot;accelerometry&quot;      &quot;accelmissing&quot;      
+## [28] &quot;AcceptanceSampling&quot; &quot;ACCLMA&quot;             &quot;accrual&quot;           
+## [31] &quot;accrued&quot;            &quot;accSDA&quot;             &quot;ACD&quot;               
+## [34] &quot;ACDm&quot;               &quot;acebayes&quot;           &quot;acepack&quot;           
+## [37] &quot;ACEt&quot;               &quot;acid&quot;               &quot;ACMEeqtl&quot;          
+## [40] &quot;acmeR&quot;              &quot;ACNE&quot;               &quot;acnr&quot;              
+## [43] &quot;acopula&quot;            &quot;AcousticNDLCodeR&quot;   &quot;acp&quot;               
+## [46] &quot;aCRM&quot;               &quot;AcrossTic&quot;          &quot;acrt&quot;              
+## [49] &quot;acs&quot;                &quot;ACSNMineR&quot;</code></pre>
+<p>In the next few examples, we will not use R package names data, instead we will
+use dummy data of Invoice IDs and see if they conform to certain rules such as:</p>
+<ul>
+<li>they should include letters and numbers</li>
+<li>they should not include symbols</li>
+<li>they should not include space or tab</li>
+</ul>
+</div>
+<div id="non-digit-character" class="section level4">
+<h4>Non Digit Character</h4>
+<p><code>\\D</code> matches any non-digit character. Let us use it to remove invoice ids that
+include only numbers and no letters.</p>
+<p><img src="/img/regex_match_non_digit.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>As you can see below, thre are 3 invoice ids that did not conform to the rules
+and have been removed. Only those invoice ids that have both letter and numbers
+have been returned.</p>
+<pre class="r"><code>invoice_id &lt;- c(&quot;R536365&quot;, &quot;R536472&quot;, &quot;R536671&quot;, &quot;536915&quot;, &quot;R536125&quot;, &quot;R536287&quot;,
+                &quot;536741&quot;, &quot;R536893&quot;, &quot;R536521&quot;, &quot;536999&quot;)
+grep(x = invoice_id, pattern = &quot;\\D&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;R536365&quot; &quot;R536472&quot; &quot;R536671&quot; &quot;R536125&quot; &quot;R536287&quot; &quot;R536893&quot; &quot;R536521&quot;</code></pre>
+<pre class="r"><code># invert
+grep(x = invoice_id, pattern = &quot;\\D&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot;536915&quot; &quot;536741&quot; &quot;536999&quot;</code></pre>
+</div>
+<div id="white-space-character" class="section level4">
+<h4>White Space Character</h4>
+<p><code>\\s</code> matches any white space character such as space or tab. Let us use it to
+detect invoice ids that include any white space (space or tab).</p>
+<p><img src="/img/regex_match_space.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>As you can see below, there are 4 invoice ids that include white space
+character.</p>
+<pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;R 536472&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;R53 6125&quot;, &quot;R536287&quot;,
+           &quot;536741&quot;, &quot;R5368  93&quot;, &quot;R536521&quot;, &quot;536 999&quot;), 
+     pattern = &quot;\\s&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;R 536472&quot;  &quot;R53 6125&quot;  &quot;R5368  93&quot; &quot;536 999&quot;</code></pre>
+<pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;R 536472&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;R53 6125&quot;, &quot;R536287&quot;,
+           &quot;536741&quot;, &quot;R5368  93&quot;, &quot;R536521&quot;, &quot;536 999&quot;), 
+     pattern = &quot;\\s&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot;R536365&quot; &quot;R536671&quot; &quot;R536915&quot; &quot;R536287&quot; &quot;536741&quot;  &quot;R536521&quot;</code></pre>
+</div>
+<div id="non-white-space-character" class="section level4">
+<h4>Non White Space Character</h4>
+<p><code>\\S</code> matches any non white space character. Let us use it to remove any
+invoice ids which are blank or missing.</p>
+<p><img src="/img/regex_match_non_space.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>As you can see below, two invoice ids which were blank have been removed. If you
+observe carefully, it does not remove any invoice ids which have a white space
+character present, it only removes those which are completely blank i.e. those
+which include only space or tab.</p>
+<pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;R 536472&quot;, &quot; &quot;, &quot;R536915&quot;, &quot;R53 6125&quot;, &quot;R536287&quot;,
+           &quot; &quot;, &quot;R5368  93&quot;, &quot;R536521&quot;, &quot;536 999&quot;), 
+     pattern = &quot;\\S&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;R536365&quot;   &quot;R 536472&quot;  &quot;R536915&quot;   &quot;R53 6125&quot;  &quot;R536287&quot;   &quot;R5368  93&quot;
+## [7] &quot;R536521&quot;   &quot;536 999&quot;</code></pre>
+<pre class="r"><code># invert
+grep(x = c(&quot;R536365&quot;, &quot;R 536472&quot;, &quot; &quot;, &quot;R536915&quot;, &quot;R53 6125&quot;, &quot;R536287&quot;,
+           &quot; &quot;, &quot;R5368  93&quot;, &quot;R536521&quot;, &quot;536 999&quot;), 
+     pattern = &quot;\\S&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot; &quot; &quot; &quot;</code></pre>
+</div>
+<div id="word-character" class="section level4">
+<h4>Word Character</h4>
+<p><code>\\w</code> matches any word character i.e. alphanumeric. It includes the following:</p>
+<ul>
+<li>a to z</li>
+<li>A to Z</li>
+<li>0 to 9</li>
+<li>underscore(_)</li>
+</ul>
+<p><img src="/img/regex_match_word.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us use it to remove those invoice ids which include only symbols or special
+characters. Again, you can see that it does not remove those ids which include
+both word characters and symbols as it will match any string that includes
+word characters.</p>
+<pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
+           &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
+     pattern = &quot;\\w&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;R536365&quot;  &quot;R536671&quot;  &quot;R536915&quot;  &quot;R5362@87&quot; &quot;53+67$41&quot; &quot;R536893&quot; 
+## [7] &quot;536#999&quot;</code></pre>
+<pre class="r"><code># invert
+grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
+           &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
+     pattern = &quot;\\w&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot;%+$!#@?&quot; &quot;$%+#!@?&quot; &quot;@$+%#!&quot;</code></pre>
+</div>
+<div id="non-word-character" class="section level4">
+<h4>Non Word Character</h4>
+<p><code>\\W</code> matches any non-word character i.e. symbols. It includes everything that
+is not a word character.</p>
+<p><img src="/img/regex_match_non_word.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us use it to detect invoice ids that include any non-word character. As you
+can see only 4 ids do not include non-word characters.</p>
+<pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
+           &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
+     pattern = &quot;\\W&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;%+$!#@?&quot;  &quot;$%+#!@?&quot;  &quot;R5362@87&quot; &quot;53+67$41&quot; &quot;@$+%#!&quot;   &quot;536#999&quot;</code></pre>
+<pre class="r"><code># invert
+grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
+           &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
+     pattern = &quot;\\W&quot;, value = TRUE, invert = TRUE)</code></pre>
+<pre><code>## [1] &quot;R536365&quot; &quot;R536671&quot; &quot;R536915&quot; &quot;R536893&quot;</code></pre>
+</div>
+</div>
+<div id="word-boundary" class="section level2">
+<h2>Word Boundary</h2>
+<p><code>\\b</code> and <code>\\B</code> are similar to caret and dollar symbol. They match at a position
+called word boundary. Now, what is a word boundary? The following 3 positions
+qualify as word boundaries:</p>
+<ul>
+<li>before the first character in the string</li>
+<li>after the last character in the string</li>
+<li>between two characters in the string</li>
+</ul>
+<p>In the first 2 cases, the character must be a word character whereas in the
+last case, one should be a word character and another non-word character. Sounds
+confusing? It will be clear once we go through a few examples.</p>
+<p>Let us say we are looking for package names beginning with the string <code>stat</code>.
+In this case, we can prefix <code>stat</code> with <code>\\b</code>.</p>
+<p><img src="/img/regex_word_boundary_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;\\bstat&quot;, value = TRUE) </code></pre>
+<pre><code>##  [1] &quot;haplo.stats&quot;    &quot;statar&quot;         &quot;statcheck&quot;      &quot;statebins&quot;     
+##  [5] &quot;states&quot;         &quot;statGraph&quot;      &quot;stationery&quot;     &quot;statip&quot;        
+##  [9] &quot;statmod&quot;        &quot;statnet&quot;        &quot;statnet.common&quot; &quot;statnetWeb&quot;    
+## [13] &quot;statprograms&quot;   &quot;statquotes&quot;     &quot;stats19&quot;        &quot;statsDK&quot;       
+## [17] &quot;statsr&quot;         &quot;statVisual&quot;</code></pre>
+<p>Suffix <code>\\b</code> to <code>stat</code> to look at all package names that end with the string
+<code>stat</code>.</p>
+<p><img src="/img/regex_word_boundary_2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>If you observe the output, you can find package names that do not end with
+the string <code>stat</code>. <code>spatstat.data</code>, <code>spatstat.local</code> and <code>spatstat.utils</code> do not
+end with <code>stat</code> but satisfy the third condition mentioned aboved for word
+boundaries. They are between 2 characters where <code>t</code> is a word character and dot
+is a non-word character.</p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;stat\\b&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;Blendstat&quot;          &quot;costat&quot;             &quot;dstat&quot;             
+##  [4] &quot;eurostat&quot;           &quot;gstat&quot;              &quot;hierfstat&quot;         
+##  [7] &quot;jsonstat&quot;           &quot;lawstat&quot;            &quot;lestat&quot;            
+## [10] &quot;lfstat&quot;             &quot;LS2Wstat&quot;           &quot;maxstat&quot;           
+## [13] &quot;mdsstat&quot;            &quot;mistat&quot;             &quot;poolfstat&quot;         
+## [16] &quot;Pstat&quot;              &quot;RcmdrPlugin.lfstat&quot; &quot;rfacebookstat&quot;     
+## [19] &quot;Rilostat&quot;           &quot;rjstat&quot;             &quot;RMTstat&quot;           
+## [22] &quot;sgeostat&quot;           &quot;spatstat&quot;           &quot;spatstat.data&quot;     
+## [25] &quot;spatstat.local&quot;     &quot;spatstat.utils&quot;     &quot;volleystat&quot;</code></pre>
+<p>Do package names include the string <code>stat</code> either at the end or in the middle
+but not at the beginning? Prefix <code>stat</code> with <code>\\B</code> to find the answer.</p>
+<p><img src="/img/regex_word_boundary_3.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;\\Bstat&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;bigstatsr&quot;          &quot;biostat3&quot;           &quot;Blendstat&quot;         
+##  [4] &quot;compstatr&quot;          &quot;costat&quot;             &quot;cumstats&quot;          
+##  [7] &quot;curstatCI&quot;          &quot;CytobankAPIstats&quot;   &quot;dbstats&quot;           
+## [10] &quot;descstatsr&quot;         &quot;DistatisR&quot;          &quot;dlstats&quot;           
+## [13] &quot;dostats&quot;            &quot;dstat&quot;              &quot;estatapi&quot;          
+## [16] &quot;eurostat&quot;           &quot;freestats&quot;          &quot;geostatsp&quot;         
+## [19] &quot;gestate&quot;            &quot;getmstatistic&quot;      &quot;ggstatsplot&quot;       
+## [22] &quot;groupedstats&quot;       &quot;gstat&quot;              &quot;hierfstat&quot;         
+## [25] &quot;hydrostats&quot;         &quot;jsonstat&quot;           &quot;labstatR&quot;          
+## [28] &quot;labstats&quot;           &quot;lawstat&quot;            &quot;learnstats&quot;        
+## [31] &quot;lestat&quot;             &quot;lfstat&quot;             &quot;LS2Wstat&quot;          
+## [34] &quot;maxstat&quot;            &quot;mdsstat&quot;            &quot;mistat&quot;            
+## [37] &quot;mlbstats&quot;           &quot;mstate&quot;             &quot;multistate&quot;        
+## [40] &quot;multistateutils&quot;    &quot;ohtadstats&quot;         &quot;orderstats&quot;        
+## [43] &quot;p3state.msm&quot;        &quot;poolfstat&quot;          &quot;PRISMAstatement&quot;   
+## [46] &quot;Pstat&quot;              &quot;raustats&quot;           &quot;RcmdrPlugin.lfstat&quot;
+## [49] &quot;readstata13&quot;        &quot;realestateDK&quot;       &quot;restatapi&quot;         
+## [52] &quot;rfacebookstat&quot;      &quot;Rilostat&quot;           &quot;rjstat&quot;            
+## [55] &quot;RMTstat&quot;            &quot;rstatscn&quot;           &quot;runstats&quot;          
+## [58] &quot;scanstatistics&quot;     &quot;sgeostat&quot;           &quot;sjstats&quot;           
+## [61] &quot;spatstat&quot;           &quot;spatstat.data&quot;      &quot;spatstat.local&quot;    
+## [64] &quot;spatstat.utils&quot;     &quot;TDAstats&quot;           &quot;tidystats&quot;         
+## [67] &quot;tigerstats&quot;         &quot;tradestatistics&quot;    &quot;unsystation&quot;       
+## [70] &quot;USGSstates2k&quot;       &quot;volleystat&quot;         &quot;wbstats&quot;</code></pre>
+<p>Are there packages whose names include the string <code>stat</code> either at the
+beginning or in the middle but not at the end. Suffix <code>\\B</code> to <code>stat</code> to
+answer this question.</p>
+<p><img src="/img/regex_word_boundary_4.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;stat\\B&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;       
+##  [4] &quot;cumstats&quot;         &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot;
+##  [7] &quot;dbstats&quot;          &quot;descstatsr&quot;       &quot;DistatisR&quot;       
+## [10] &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
+## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;         
+## [16] &quot;getmstatistic&quot;    &quot;ggstatsplot&quot;      &quot;groupedstats&quot;    
+## [19] &quot;haplo.stats&quot;      &quot;hydrostats&quot;       &quot;labstatR&quot;        
+## [22] &quot;labstats&quot;         &quot;learnstats&quot;       &quot;mlbstats&quot;        
+## [25] &quot;mstate&quot;           &quot;multistate&quot;       &quot;multistateutils&quot; 
+## [28] &quot;ohtadstats&quot;       &quot;orderstats&quot;       &quot;p3state.msm&quot;     
+## [31] &quot;PRISMAstatement&quot;  &quot;raustats&quot;         &quot;readstata13&quot;     
+## [34] &quot;realestateDK&quot;     &quot;restatapi&quot;        &quot;rstatscn&quot;        
+## [37] &quot;runstats&quot;         &quot;scanstatistics&quot;   &quot;sjstats&quot;         
+## [40] &quot;statar&quot;           &quot;statcheck&quot;        &quot;statebins&quot;       
+## [43] &quot;states&quot;           &quot;statGraph&quot;        &quot;stationery&quot;      
+## [46] &quot;statip&quot;           &quot;statmod&quot;          &quot;statnet&quot;         
+## [49] &quot;statnet.common&quot;   &quot;statnetWeb&quot;       &quot;statprograms&quot;    
+## [52] &quot;statquotes&quot;       &quot;stats19&quot;          &quot;statsDK&quot;         
+## [55] &quot;statsr&quot;           &quot;statVisual&quot;       &quot;TDAstats&quot;        
+## [58] &quot;tidystats&quot;        &quot;tigerstats&quot;       &quot;tradestatistics&quot; 
+## [61] &quot;unsystation&quot;      &quot;USGSstates2k&quot;     &quot;wbstats&quot;</code></pre>
+<p>Prefix and suffix <code>\\B</code> to <code>stat</code> to look at package names that include the
+string <code>stat</code> but neither in the beginning nor in the end.</p>
+<p><img src="/img/regex_word_boundary_5.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the below output, you can observe that the string <code>stat</code> must be between
+two word characters. Those examples we showed in the case of <code>\\b</code> where it
+was surrounded by a dot do not hold here.</p>
+<pre class="r"><code>grep(x = r_packages, pattern = &quot;\\Bstat\\B&quot;, value = TRUE)</code></pre>
+<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;       
+##  [4] &quot;cumstats&quot;         &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot;
+##  [7] &quot;dbstats&quot;          &quot;descstatsr&quot;       &quot;DistatisR&quot;       
+## [10] &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
+## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;         
+## [16] &quot;getmstatistic&quot;    &quot;ggstatsplot&quot;      &quot;groupedstats&quot;    
+## [19] &quot;hydrostats&quot;       &quot;labstatR&quot;         &quot;labstats&quot;        
+## [22] &quot;learnstats&quot;       &quot;mlbstats&quot;         &quot;mstate&quot;          
+## [25] &quot;multistate&quot;       &quot;multistateutils&quot;  &quot;ohtadstats&quot;      
+## [28] &quot;orderstats&quot;       &quot;p3state.msm&quot;      &quot;PRISMAstatement&quot; 
+## [31] &quot;raustats&quot;         &quot;readstata13&quot;      &quot;realestateDK&quot;    
+## [34] &quot;restatapi&quot;        &quot;rstatscn&quot;         &quot;runstats&quot;        
+## [37] &quot;scanstatistics&quot;   &quot;sjstats&quot;          &quot;TDAstats&quot;        
+## [40] &quot;tidystats&quot;        &quot;tigerstats&quot;       &quot;tradestatistics&quot; 
+## [43] &quot;unsystation&quot;      &quot;USGSstates2k&quot;     &quot;wbstats&quot;</code></pre>
+</div>
+<div id="character-classes" class="section level2">
+<h2>Character Classes</h2>
+<p><img src="/img/regex_character_classes.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>A set of characters enclosed in a square bracket (<code>[]</code>). The regular expression
+will match only those characters enclosed in the brackets and it matches only a
+single character. The order of the characters inside the brackets do not matter
+and a hyphen can be used to specify a range of charcters. For example, [0-9]
+will match a single digit between 0 and 9. Similarly, [a-z] will match a single
+letter between a to z. You can specify more than one range as well. [a-z0-9A-Z]
+will match a alphanumeric character while ignoring the case. A caret <strong>^</strong> after
+the opening bracket negates the character class. For example, [^0-9] will match
+a single character that is not a digit.</p>
+<p><img src="/img/regex_character_class_numbers.png" width="100%" style="display: block; margin: auto;" />
+Let us go through a few examples to understand character classes in more detail.</p>
+<pre class="r"><code># package names that include vowels
+grep(x = top_downloads, pattern = &quot;[aeiou]&quot;, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;devtools&quot;   &quot;rlang&quot;      &quot;tibble&quot;     &quot;ggplot2&quot;    &quot;glue&quot;      
+## [6] &quot;pillar&quot;     &quot;cli&quot;        &quot;data.table&quot;</code></pre>
+<pre class="r"><code># package names that include a number
+grep(x = r_packages, pattern = &quot;[0-9]&quot;, value = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;           
+##  [4] &quot;Ac3net&quot;          &quot;acm4r&quot;           &quot;ade4&quot;           
+##  [7] &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;         &quot;ALA4R&quot;          
+## [10] &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
+## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;        
+## [16] &quot;APML0&quot;           &quot;aprean3&quot;         &quot;AR1seg&quot;         
+## [19] &quot;arena2r&quot;         &quot;arf3DS4&quot;         &quot;argon2&quot;         
+## [22] &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
+## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;            
+## [28] &quot;b6e6rl&quot;          &quot;base2grob&quot;       &quot;base64&quot;         
+## [31] &quot;base64enc&quot;       &quot;base64url&quot;       &quot;BaTFLED3D&quot;      
+## [34] &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
+## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;          
+## [40] &quot;BHH2&quot;            &quot;bikeshare14&quot;     &quot;bio3d&quot;          
+## [43] &quot;biomod2&quot;         &quot;Bios2cor&quot;        &quot;bios2mds&quot;       
+## [46] &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
+## [49] &quot;Bolstad2&quot;        &quot;BradleyTerry2&quot;</code></pre>
+<pre class="r"><code># package names that begin with a number
+grep(x = r_packages, pattern = &quot;^[0-9]&quot;, value = TRUE)</code></pre>
+<pre><code>## character(0)</code></pre>
+<pre class="r"><code># package names that end with a number
+grep(x = r_packages, pattern = &quot;[0-9]$&quot;, value = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;A3&quot;                &quot;ABCp2&quot;             &quot;abf2&quot;             
+##  [4] &quot;ade4&quot;              &quot;AdvDif4&quot;           &quot;alr3&quot;             
+##  [7] &quot;alr4&quot;              &quot;ANN2&quot;              &quot;aods3&quot;            
+## [10] &quot;aplore3&quot;           &quot;APML0&quot;             &quot;aprean3&quot;          
+## [13] &quot;arf3DS4&quot;           &quot;argon2&quot;            &quot;ARTP2&quot;            
+## [16] &quot;aster2&quot;            &quot;auth0&quot;             &quot;aws.s3&quot;           
+## [19] &quot;base64&quot;            &quot;BayClone2&quot;         &quot;BayesS5&quot;          
+## [22] &quot;BCC1997&quot;           &quot;BDP2&quot;              &quot;BEQI2&quot;            
+## [25] &quot;BHH2&quot;              &quot;bikeshare14&quot;       &quot;biomod2&quot;          
+## [28] &quot;biostat3&quot;          &quot;bipartiteD3&quot;       &quot;bit64&quot;            
+## [31] &quot;Bolstad2&quot;          &quot;BradleyTerry2&quot;     &quot;brglm2&quot;           
+## [34] &quot;bridger2&quot;          &quot;c060&quot;              &quot;c212&quot;             
+## [37] &quot;c3&quot;                &quot;C443&quot;              &quot;C50&quot;              
+## [40] &quot;cAIC4&quot;             &quot;CARE1&quot;             &quot;CB2&quot;              
+## [43] &quot;cec2013&quot;           &quot;Census2016&quot;        &quot;Chaos01&quot;          
+## [46] &quot;choroplethrAdmin1&quot; &quot;cld2&quot;              &quot;cld3&quot;             
+## [49] &quot;clogitL1&quot;          &quot;CLONETv2&quot;</code></pre>
+<pre class="r"><code># package names with only upper case letters
+grep(x = r_packages, pattern = &quot;^[A-Z][A-Z]{1, }[A-Z]$&quot;, value = TRUE)[1:50]</code></pre>
+<pre><code>##  [1] &quot;ABPS&quot;    &quot;ACA&quot;     &quot;ACCLMA&quot;  &quot;ACD&quot;     &quot;ACNE&quot;    &quot;ACSWR&quot;   &quot;ACTCD&quot;  
+##  [8] &quot;ADCT&quot;    &quot;ADDT&quot;    &quot;ADMM&quot;    &quot;ADPF&quot;    &quot;AER&quot;     &quot;AFM&quot;     &quot;AGD&quot;    
+## [15] &quot;AHR&quot;     &quot;AID&quot;     &quot;AIG&quot;     &quot;AIM&quot;     &quot;ALS&quot;     &quot;ALSCPC&quot;  &quot;ALSM&quot;   
+## [22] &quot;AMCP&quot;    &quot;AMGET&quot;   &quot;AMIAS&quot;   &quot;AMOEBA&quot;  &quot;AMORE&quot;   &quot;AMR&quot;     &quot;ANOM&quot;   
+## [29] &quot;APSIM&quot;   &quot;ARHT&quot;    &quot;AROC&quot;    &quot;ART&quot;     &quot;ARTIVA&quot;  &quot;ARTP&quot;    &quot;ASIP&quot;   
+## [36] &quot;ASSA&quot;    &quot;AST&quot;     &quot;ATE&quot;     &quot;ATR&quot;     &quot;AUC&quot;     &quot;AUCRF&quot;   &quot;AWR&quot;    
+## [43] &quot;BACA&quot;    &quot;BACCO&quot;   &quot;BACCT&quot;   &quot;BALCONY&quot; &quot;BALD&quot;    &quot;BALLI&quot;   &quot;BAMBI&quot;  
+## [50] &quot;BANOVA&quot;</code></pre>
+</div>
+<div id="case-studies" class="section level2">
+<h2>Case Studies</h2>
+<p>Now that we have understood the basics of regular expressions, it is time for
+some practical application. The case studies in this section include validating
+the following:</p>
+<ul>
+<li>blood group</li>
+<li>email id</li>
+<li>PAN number</li>
+<li>GST number</li>
+</ul>
+<p>Note, the regular expressions used here are not robust as compared to those
+used in real world applications. Our aim is to demonstrate a general strategy
+to used while dealing with regular expressions.</p>
+<div id="blood-group" class="section level3">
+<h3>Blood Group</h3>
+<p>According to Wikipedia, a blood group or type is a classification of blood based
+on the presence and absence of antibodies and inherited antigenic substances on
+the surface of red blood cells (RBCs).</p>
+<p><img src="/img/regex_cs_blood_groups.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The below table defines the matching pattern for blood group and maps them to
+regular expressions.</p>
+<ul>
+<li>it must begin with <code>A</code>, <code>B</code>, <code>AB</code> or <code>O</code></li>
+<li>it must end with <code>+</code> or <code>-</code></li>
+</ul>
+<p><img src="/img/regex_cs_bg_table.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us test the regular expression with some examples.</p>
+<pre class="r"><code>blood_pattern &lt;- &quot;^(A|B|AB|O)[-|+]$&quot;
+blood_sample &lt;- c(&quot;A+&quot;, &quot;C-&quot;, &quot;AB+&quot;)
+grep(x = blood_sample, pattern = blood_pattern, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;A+&quot;  &quot;AB+&quot;</code></pre>
+</div>
+<div id="email-id" class="section level3">
+<h3>email id</h3>
+<p>Nowadays email is ubiquitous. We use it for everything from communication to
+registration for online services. Wherever you go, you will be asked for email
+id. You might even be denied a few services if you do not use email. At the same
+time, it is important to validate a email address. You might have seen a message
+similar to the below one when you misspell or enter a wrong email id. Regular
+expressions are used to validate email address and in this case study we will
+attempt to do the same.</p>
+<p><img src="/img/regex_cs_email.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>First, we will create some basic rules for simple email validation:</p>
+<ul>
+<li>it must begin with a letter</li>
+<li>the id may include letters, numbers and special characters</li>
+<li>must include only one @ and dot</li>
+<li>the id must be to the left of @</li>
+<li>the domain name should be between @ and dot</li>
+<li>the domain extension should be after dot and must include only letters</li>
+</ul>
+<p>In the below table, we map the above rules to general expression.</p>
+<p><img src="/img/regex_cs_email_table.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us now test the regular expression with some dummy email ids.</p>
+<pre class="r"><code>email_pattern &lt;- &quot;^[a-zA-Z0-9\\!#$%&amp;&#39;*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\\.[a-z]&quot;
+emails &lt;- c(&quot;test9+_A@test.com&quot;, &quot;test@test..com&quot;, &quot;test-test.com&quot;)
+grep(x = emails, pattern = email_pattern, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;test9+_A@test.com&quot;</code></pre>
+</div>
+<div id="pan-number-validation" class="section level3">
+<h3>PAN Number Validation</h3>
+<p>PAN (Permanent Account Number) is an identification number assigned to all
+taxpayers in India. PAN is an electronic system through which, all tax related
+information for a person/company is recorded against a single PAN number.</p>
+<div id="structure" class="section level4">
+<h4>Structure</h4>
+<ul>
+<li>must include only 10 characters</li>
+<li>the first 5 characters are letters</li>
+<li>the next 4 characters are numerals</li>
+<li>the last character is a letter</li>
+</ul>
+<p><img src="/img/regex_cs_pan_1.png" width="100%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>the first 3 characters are a sequence from AAA to ZZZ</li>
+<li>the 4th character indicates the status of the tax payer and shold be one of
+A, B, C, F, G, H, L, J, P, T or E</li>
+<li>the 5th character is the first character of the last/surname of the card holder</li>
+<li>the 6th to 10th character is a sequnce from 0001 to 9999</li>
+<li>the last character is a letter</li>
+</ul>
+<p><img src="/img/regex_cs_pan_2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the below table, we map the pattern to regular expression.</p>
+<p><img src="/img/regex_cs_pan_table.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us test the regular expression with some dummy PAN numbers.</p>
+<pre class="r"><code>pan_pattern &lt;- &quot;^[A-Z]{3}(A|B|C|F|G|H|L|J|P|T|E)[A-Z][0-9]{4}[A-Z]&quot;
+my_pan &lt;- c(&quot;AJKNT3865H&quot;, &quot;AJKNT38655&quot;, &quot;A2KNT3865H&quot;, &quot;AJKDT3865H&quot;)
+grep(x = my_pan, pattern = pan_pattern, value = TRUE)</code></pre>
+<pre><code>## character(0)</code></pre>
+</div>
+</div>
+<div id="gst-number-validation" class="section level3">
+<h3>GST Number Validation</h3>
+<p>In simple words, Goods and Service Tax (GST) is an indirect tax levied on the
+supply of goods and services. This law has replaced many indirect tax laws that
+previously existed in India. GST identification number is assigned to every
+GST registed dealer.</p>
+<p><img src="/img/regex_cs_gst.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="structure-1" class="section level4">
+<h4>Structure</h4>
+<p>Below is the format break down of GST identification number:</p>
+<ul>
+<li>it must include 15 characters only</li>
+<li>the first 2 characters represent the state code and is a sequence from 01 to 35</li>
+<li>the next 10 characters are the PAN number of the entity</li>
+<li>the 13th character is the entity code and is between 1 and 9</li>
+<li>the 14th character is a default alphabet, <strong>Z</strong></li>
+<li>the 15th character is a random single number or alphabet</li>
+</ul>
+<p>In the below table, we map the pattern to regular expression.</p>
+<p><img src="/img/regex_cs_gst_table.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us test the regular expression with some dummy GST numbers.</p>
+<pre class="r"><code>gst_pattern &lt;- &quot;[0-3][1-5][A-Z]{3}(A|B|C|F|G|H|L|J|P|T|E)[A-Z][0-9]{4}[A-Z][1-9]Z[0-9A-Z]&quot;
+sample_gst &lt;- c(&quot;22AAAAA0000A1Z5&quot;, &quot;22AAAAA0000A1Z&quot;, &quot;42AAAAA0000A1Z5&quot;,
+                &quot;38AAAAA0000A1Z5&quot;, &quot;22AAAAA0000A0Z5&quot;, &quot;22AAAAA0000A1X5&quot;,
+                &quot;22AAAAA0000A1Z$&quot;)
+grep(x = sample_gst, pattern = gst_pattern, value = TRUE)</code></pre>
+<pre><code>## [1] &quot;22AAAAA0000A1Z5&quot;</code></pre>
+</div>
+</div>
+</div>
+<div id="rstudio-addin" class="section level2">
+<h2>RStudio Addin</h2>
+<p><a href="https://www.garrickadenbuie.com/" target="_blank">Garrick Aden-Buie</a>
+has created a wonderful RStudio addin, <a href="https://www.garrickadenbuie.com/project/regexplain/" target="_blank">RegExplain</a>
+and you will find it very useful while learning and building regular expressions.</p>
+</div>
+<div id="other-applications" class="section level2">
+<h2>Other Applications</h2>
+<ul>
+<li>R variable names</li>
+<li>R file names and extensions</li>
+<li>password validation</li>
+<li>camelcase</li>
+<li>currency format</li>
+<li>date of birth</li>
+<li>date validation</li>
+<li>decimal number</li>
+<li>full name / first name</li>
+<li>html tags</li>
+<li>https url</li>
+<li>phone number</li>
+<li>ip address</li>
+<li>month name</li>
+</ul>
+</div>
+<div id="what-we-have-not-covered" class="section level2">
+<h2>What we have not covered?</h2>
+<p>While we have covered a lot, the below topics have been left out:</p>
+<ul>
+<li>flags</li>
+<li>grouping and capturing</li>
+<li>back references</li>
+<li>look ahead and look behind</li>
+</ul>
+<p>You may want to explore them to up your regular expressions game.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<ul>
+<li>a regular expression is a special text for identifying a pattern</li>
+<li>it can be used to search, replace, validate and extract strings matching a
+given pattern</li>
+<li>use cases include email and password validation, search and replace in text
+editors, html tags validation, web scraping etc.</li>
+</ul>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf</a></li>
+<li><a href="https://stringr.tidyverse.org/articles/regular-expressions.html" class="uri">https://stringr.tidyverse.org/articles/regular-expressions.html</a></li>
+<li><a href="https://r4ds.had.co.nz/strings.html" class="uri">https://r4ds.had.co.nz/strings.html</a></li>
+<li><a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/master/strings.pdf</a></li>
+<li><a href="https://www.garrickadenbuie.com/project/regexplain/" class="uri">https://www.garrickadenbuie.com/project/regexplain/</a></li>
+</ul>
+<p>If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source repository</a>
+or reach out to us at <a href="mailto:feedback@rsquaredacademy.com" class="email">feedback@rsquaredacademy.com</a>.</p>
+</div>

@@ -1,0 +1,1151 @@
+---
+title: "Demystifying Regular Expressions in R"
+author: Aravind Hebbali
+twitterImg: /img/regex_cover_image.png
+description: "Beginners guide to regular expressions in R"
+date: '2019-05-27'
+slug: regular-expression-in-r
+topics:
+  - regex
+tags:
+  - regex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r regex_cover_image, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cover_image.png")
+```
+
+## Introduction
+
+In this post, we will learn about using regular expressions in R. While it is 
+aimed at absolute beginners, we hope experienced users will find it useful as 
+well. The post is broadly divided into 3 sections. In the first section, we 
+will introduce the pattern matching functions such as `grep`, `grepl` etc. in 
+base R as we will be using them in the rest of the post. Once the reader is 
+comfortable with the above mentioned pattern matching functions, we will 
+learn about regular expressions while exploring the names of R packages by 
+probing the following:
+
+- how many package names include the letter `r`?
+- how many package names begin or end with the letter `r`?
+- how many package names include the words `data` or `plot`?
+
+In the final section, we will go through 4 case studies including simple email
+validation. If you plan to try the case studies, please do not skip any of the
+topics in the second section. 
+
+### What
+
+```{r regex_what, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_what.png")
+```
+
+### Why
+
+Regular expressions can be used for:
+
+- search
+- replace
+- validation
+- extraction
+
+```{r regex_why, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_why.png")
+```
+
+### Use Cases
+
+Regular expressions have applications in a wide range of areas. We list some of 
+the most popular ones below:
+
+- email validation
+- password validation
+- date validation
+- phone number validation
+- search and replace in text editors
+- web scraping
+
+```{r regex_use_case, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_use_case_blog.png")
+```
+
+## Learning
+
+The below steps offer advice on the best way to learn or use regular expressions:
+
+- describe the pattern in layman terms
+- break down the pattern into individual components  
+- match each component to a regular expression
+- build incrementally
+- test 
+
+## Resources
+
+Below are the links to all the resources related to this post:
+
+- <a href="https://slides.rsquaredacademy.com/regex/regex.html" target="_blank">Slides</a>
+- <a href="https://github.com/rsquaredacademy-education/online-courses/tree/master/regular-expressions-in-r" target="_blank">Code & Data</a>
+- <a href="https://rstudio.cloud/project/356612" target="_blank">RStudio Cloud</a>
+
+<hr>
+
+<a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
+
+<hr>
+
+## Libraries
+
+We will use the following libraries in this post:
+
+```{r install, eval=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(readr)
+```
+
+## Data
+
+We will use two data sets in this post. The first one is a list of all R 
+packages on CRAN and is present in the `package_names.csv` file, and the
+second one, `top_downloads`, is the most downloaded packages from the 
+<a href="https://cran.rstudio.com/" target="_blank">RStudio CRAN mirror</a> 
+in the first week of May 2019, and extracted using the 
+<a href="https://cranlogs.r-pkg.org/#rpackage" target="_blank">cranlogs</a> pacakge. 
+
+### R Packages Data
+
+```{r read_data, message=FALSE}
+read_csv("package_names.csv") %>%
+  pull(1) -> r_packages 
+```
+
+### Top R Packages
+
+```{r top_downloads}
+top_downloads <- c("devtools", "rlang", "dplyr", "Rcpp", "tibble",    
+                   "ggplot2", "glue", "pillar", "cli", "data.table")
+
+top_downloads
+```
+
+## Pattern Matching Functions
+
+Before we get into the nitty gritty of regular expressions, let us explore a
+few functions from base R for pattern matching. We will learn about using
+regular expressions with the stringr package in an upcoming post.
+
+```{r regex_base_functions, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_base_functions.png")
+```
+
+## grep
+
+The first function we will learn is `grep()`. It can be used to find elements
+that match a given pattern in a character vector. It will return the elements
+or the index of the elements based on your specification. In the below example, 
+`grep()` returns the index of the elements that match the given pattern. 
+
+```{r grep_index, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grep_index_canva.png")
+```
+
+```{r grep_code}
+grep(x = top_downloads, pattern = "r")
+```
+
+Now let us look at the inputs:
+
+- `pattern`
+- `x`
+- `ignore.case`
+- `value`
+- `invert`
+
+
+## grep - Value
+
+If you want `grep()` to return the element instead of the index, set the
+`value` argument to `TRUE`. The default is `FALSE`. In the below example, 
+`grep()` returns the elements and not their index.
+
+```{r grep_value, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grep_value_canva.png")
+```
+
+```{r grep_value_code}
+grep(x = top_downloads, pattern = "r", value = TRUE)
+```
+
+## grep - Ignore Case
+
+If you have carefully observed the previous examples, have you noticed that
+the pattern `r` did not match the element `Rcpp` i.e. regular expressions are
+case sensitive. The `ignore.case` argument will ignore case while matching the
+pattern as shown below.
+
+```{r grep_ignore_case, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grep_ignore_case_canva.png")
+```
+
+```{r grep_ignore_case_code}
+grep(x = top_downloads, pattern = "r", value = TRUE, ignore.case = TRUE)
+grep(x = top_downloads, pattern = "R", value = TRUE)
+grep(x = top_downloads, pattern = "R", value = TRUE, ignore.case = TRUE)
+```
+
+## grep - Invert
+
+In some cases, you may want to retrieve elements that do not match the pattern
+specified. The `invert` argument will return the elements that do not match
+the pattern. In the below example, the elements returned do not match the 
+pattern specified by us.
+
+```{r grep_invert, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grep_invert_canva.png")
+```
+
+```{r grep_invert_code}
+grep(x = top_downloads, pattern = "r", value = TRUE, invert = TRUE)
+grep(x = top_downloads, pattern = "r", value = TRUE, 
+     invert = TRUE, ignore.case = TRUE)
+```
+
+## grepl
+
+`grepl()` will return only logical values. If the elements match the pattern
+specified, it will return `TRUE` else `FALSE`.
+
+```{r grepl, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grepl_canva.png")
+```
+
+```{r grepl_code}
+grepl(x = top_downloads, pattern = "r")
+```
+
+### Ignore Case
+
+To ignore the case, use the `ignore.case` argument and set it to `TRUE`.
+
+```{r grepl_ignore_case, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_grepl_ignore_case_canva.png")
+```
+
+```{r grepl_ignore_case_code}
+grepl(x = top_downloads, pattern = "r", ignore.case = TRUE)
+```
+
+The next 3 functions that we explore differ from the above 2 in the format of 
+and amount of details in the results. They all return the following additional 
+details:
+
+- the starting position of the first match
+- the length of the matched text
+- whether the match position and length are in chracter or bytes 
+
+### regexpr
+
+```{r regexpr}
+rr_pkgs <- c("purrr", "olsrr", "blorr")
+regexpr("r", rr_pkgs)
+```
+
+### gregexpr
+
+```{r gregexpr}
+gregexpr("r", rr_pkgs)
+```
+
+### regexec
+
+```{r regexec}
+regexec("r", rr_pkgs)
+```
+
+<hr>
+
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+
+<hr>
+
+## sub
+
+`sub()` will perform replacement of the first match. In the below example, 
+you can observe that only the first match of `r` is replaced by `s` while
+the rest remain the same. 
+
+```{r sub, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_sub_canva.png")
+```
+
+```{r sub_code}
+rr_pkgs <- c("purrr", "olsrr", "blorr")
+sub(x = rr_pkgs, pattern = "r", replacement = "s")
+```
+
+## gsub
+
+`gsub()` will perform replacement of all the matches. In the below example, 
+all the `s` are replaced by `r`. Compare the below output with the output from
+`sub()` to understand the difference between them.
+
+```{r gsub, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_gsub_canva.png")
+```
+
+```{r gsub_code}
+gsub(x = rr_pkgs, pattern = "r", replacement = "s")
+```
+
+## Regular Expressions
+
+So far we have been exploring R functions for pattern matching with a very 
+simple pattern i.e. a single character. From this section, we will start
+exploring different scenarios and the corresponding regular expressions. This 
+section is further divided into 5 sub sections:
+
+- anchors
+- metacharacters
+- quantifiers
+- sequences 
+- and character classes
+
+## Anchors 
+
+Anchors do not match any character. Instead, they match the pattern supplied to
+a position before, after or between characters i.e. they are used to anchor the 
+regex or pattern at a certain position. Anchors are useful when we are searching 
+for a pattern at the beggining or end of a string.
+
+```{r regex_anchors, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_anchors.png")
+```
+
+### Caret Symbol (^)
+
+The caret **^** matches the position before the first character in the string.
+In the below example, we want to know the R packages whose names begin with
+the letter `r`. To achieve this, we use `^`, the caret symbol, which specifies 
+that the pattern must be present at the beginning of the string.
+
+```{r anchor_start}, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_anchor_start_canva.png")
+```
+
+```{r anchor_start_code}
+grep(x = top_downloads, pattern = "^r", value = TRUE)
+```
+
+It has returned only one package, `rlang` but if you look at the package names
+even `Rcpp` begins with `r` but has been ignored. Let us ignore the case of the
+pattern and see if the results change.
+
+```{r anchor_start_ignore_case, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_anchor_start_ignore_case_canva.png")
+```
+
+```{r anchor_start_ignore_case_code}
+grep(x = top_downloads, pattern = "^r", value = TRUE, ignore.case = TRUE)
+```
+
+### Dollar Symbol ($)
+
+The dollar $ matches right after the last character in the string. Let us 
+now look at packages whose names end with the letter `r`. To achieve this, we 
+use `$`, the dollar symbol. As you can see in the below example, the `$` is 
+specified at the end of the pattern we are looking for.
+
+```{r anchor_end, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_anchor_end_canva.png")
+```
+
+From our sample data set, we can see that there are 2 packages that end with
+the letter `r`, dplyr and pillar.
+
+```{r anchor_end_code}
+grep(x = top_downloads, pattern = "r$", value = TRUE)
+```
+
+## Meta Characters
+
+Meta characters are a special set of characters not captured by regular 
+expressions i.e. if these special characters are present in a string, regular
+expressions will not detect them. In order to be detected, they must be 
+prefixed by double backslash (\\). The below table displays the metacharacters:
+
+```{r meta_characters, echo=FALSE, fig.align="center", out.width="50%"}
+knitr::include_graphics("/img/regex_meta_characters.png")
+```
+
+Now that we know the meta characters, let us look at some examples. In the first
+example, we want to detect package names separated by a dot.
+
+```{r meta_1}
+grep(x = r_packages, pattern = ".", value = TRUE)[1:60]
+```
+
+If you look at the output, it includes names of even those package names which
+are not separated by dot. Why is this happening? A dot is special character in 
+regular expressions. It is also known as wildcard character i.e. it is used to 
+match any character other than `\n` (new line). Now let us try to escape it 
+using the double backslash (`\\`).
+
+```{r meta_2}
+grep(x = r_packages, pattern = "\\.", value = TRUE)[1:50]
+```
+
+When we use `\\.`, it matches the dot. Feel free to play around with other
+special characters mentioned in the table but ensure that you use a different
+data set.
+
+<hr>
+
+<a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a>
+
+<hr>
+
+## Quantifiers
+
+Quantifiers are very powerful and we need to be careful while using them. They 
+always act on items to the immediate left and are used to specify the number of
+times a pattern must appear or be matched. The below table shows the different
+quantifiers and their description:
+
+```{r regex_quantifiers, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/regex_quantifiers.png")
+```
+
+#### Dot
+
+The `.` (dot) is a wildcard character as it will match any character except a 
+new line (\n). Keep in mind that it will match only 1 character and if you want 
+to match more than 1 character, you need to specify as many dots. Let us look 
+at a few examples.
+
+```{r quantifier_dot, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_dot_canva.png")
+```
+
+```{r quantifier_dot_code_1}
+# extract package names that include the string data 
+data_pkgs <- grep(x = r_packages, pattern = "data", value = TRUE)
+head(data_pkgs)
+
+# package name includes the string data followed by any character and then the letter r
+grep(x = data_pkgs, pattern = "data.r", value = TRUE, ignore.case = TRUE)
+
+# package name includes the string data followed by any 3 characters and then the letter r
+grep(x = data_pkgs, pattern = "data...r", value = TRUE, ignore.case = TRUE)
+
+# package name includes the string data followed by any 3 characters and then the letter r
+grep(x = r_packages, pattern = "data(.){3}r", value = TRUE, ignore.case = TRUE)
+
+# package name includes the string stat followed by any 2 characters and then the letter r
+grep(x = r_packages, pattern = "stat..r", value = TRUE, ignore.case = TRUE)
+```
+
+#### Optional Character
+
+`?`, the optional character is used when the item to its left is optional and 
+is matched at most once.
+
+```{r regex_optional, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_optional.png")
+``` 
+
+In this first example, we are looking for package names that include the 
+following pattern:
+
+- includes the letter `r`
+- includes the string `data`
+- there may be zero or one character between `r` and `data`
+
+```{r quantifier_mark_1, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_question_mark.png")
+```
+
+```{r quantifier_question_code_1}
+grep(x = data_pkgs, pattern = "r(.)?data", value = TRUE)
+```
+
+In the below example, we are looking for package names that include the 
+following pattern:
+
+- includes the letter `r`
+- includes the string `data`
+- there may be zero or one dot between `r` and `data`
+
+```{r quantifier_mark_2, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_question_mark_2.png")
+```
+
+```{r quantifier_question_code_2}
+grep(x = data_pkgs, pattern = "r(\\.)?data", value = TRUE)
+```
+
+In the next example, we are looking for package names that include the 
+following pattern:
+
+- includes the letter `r`
+- includes the string `data`
+- there may be zero or one character between `r` and `data`
+- and the character must be any of the following:
+    - m
+    - y
+    - q
+
+```{r quantifier_mark_3, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_question_mark_3.png")
+```
+
+```{r quantifier_question_code_3}
+grep(x = data_pkgs, pattern = "r(m|y|q)?data", value = TRUE)
+```
+
+In the last example, we are looking for package names that include the 
+following pattern:
+
+- includes the letter `r`
+- includes the string `data`
+- there may be zero or one character between `r` and `data`
+- and the character must be any of the following:
+    - m
+    - y
+    - q
+    - dot
+
+```{r quantifier_mark_4, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_question_mark_4.png")
+```
+
+```{r quantifier_question_code_4}
+grep(x = data_pkgs, pattern = "r(\\.|m|y|q)?data", value = TRUE)
+```
+
+#### Asterik Symbol
+
+`*`, the asterik symbol is used when the item to its left will be matched zero 
+or more times.
+
+```{r regex_asterik, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_asterik.png")
+```
+
+In the below example, we are looking for package names that include the 
+following pattern:
+
+- includes the letter `r`
+- includes the string `data`
+- there may be zero or more character(s) between `r` and `data`
+
+```{r quantifier_star, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_star.png")
+```
+
+```{r quantifier_star_code}
+grep(x = data_pkgs, pattern = "r(.)*data", value = TRUE)
+```
+
+#### Plus Symbol
+
+`+`, the plus symbol is used when the item to its left is matched one or more 
+times.
+
+```{r regex_plus, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_plus.png")
+```
+
+In the below example, we are looking for package names that include the 
+following pattern:
+
+- includes the string `plot`
+- `plot` is preceded by one or more `g`
+
+```{r quantifier_plus, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_plus.png")
+```
+
+```{r quantifier_plus_code}
+plot_pkgs <- grep(x = r_packages, pattern = "plot", value = TRUE)
+grep(x = plot_pkgs, pattern = "(g)+plot", value = TRUE, ignore.case = TRUE)
+```
+
+## Brackets
+
+```{r regex_brackets, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_brackets.png")
+```
+
+#### {n}
+
+`{n}` is used when the item to its left is matched exactly n times. In the 
+below example, we are looking for package names that include the following 
+pattern:
+
+- includes the string `plot`
+- `plot` is preceded by exactly one `g`
+
+```{r quantifier_exact_n_match, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_exact_n_match_canva.png")
+```
+
+```{r quantifier_n_code}
+grep(x = plot_pkgs, pattern = "(g){2}plot", value = TRUE)
+```
+
+#### {n,}
+
+`{n, }` is used when the item to its left is matched n or more times. In the 
+below example, we are looking for package names that include the following 
+pattern:
+
+- includes the string `plot`
+- `plot` is preceded by one or more `g`
+
+```{r quantifier_match_one_or_more, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_match_one_or_more_canva.png")
+```
+
+```{r quantifier_n_or_more_code}
+grep(x = plot_pkgs, pattern = "(g){1, }plot", value = TRUE)
+```
+
+#### {n,m}
+
+`{n, m}` is used when the item to its left is matched at least n times but not 
+more than m times. In the below example, we are looking for package names that 
+include the following pattern:
+
+- includes the string `plot`
+- `plot` is preceded by 1 or 3 `t`
+
+```{r quantifier_match_between, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_quantifier_match_between_canva.png")
+```
+
+```{r quantifier_between_code}
+grep(x = plot_pkgs, pattern = "(t){1,3}plot", value = TRUE)
+```
+
+## OR
+
+```{r regex_or, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_or.png")
+```
+
+The `|` (OR) operator is useful when you want to match one amongst the given 
+options. For example, let us say we are looking for package names that begin 
+with `g` and is followed by either another `g` or `l`.
+
+```{r or_round, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_or_round_bracket_canva.png")
+```
+
+```{r or_round_code}
+grep(x = top_downloads, pattern = "g(g|l)", value = TRUE)
+```
+
+The square brackets (`[]`) can be used in place of `|` as shown in the below
+example where we are looking for package names that begin with the letter 
+`d` and is followed by either `e` or `p` or `a`.
+
+```{r or_square, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_or_square_bracket_canva.png")
+```
+
+```{r or_square_code}
+grep(x = top_downloads, pattern = "d[epa]", value = TRUE)
+```
+
+<hr>
+
+<a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
+
+<hr>
+
+## Sequences
+
+```{r regex_sequences, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_sequences.png")
+```
+
+#### Digit Character
+
+`\\d` matches any digit character. Let us use it to find package names that 
+include a digit.
+
+```{r sequence_digit, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_digit.png")
+```
+
+```{r digit_code}
+grep(x = r_packages, pattern = "\\d", value = TRUE)[1:50]
+
+# invert
+grep(x = r_packages, pattern = "\\d", value = TRUE, invert = TRUE)[1:50]
+```
+
+In the next few examples, we will not use R package names data, instead we will 
+use dummy data of Invoice IDs and see if they conform to certain rules such as:
+
+- they should include letters and numbers
+- they should not include symbols
+- they should not include space or tab
+
+#### Non Digit Character
+
+`\\D` matches any non-digit character. Let us use it to remove invoice ids that
+include only numbers and no letters.
+
+```{r sequence_non_digit, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_non_digit.png")
+```
+
+As you can see below, thre are 3 invoice ids that did not conform to the rules 
+and have been removed. Only those invoice ids that have both letter and numbers
+have been returned.
+
+```{r non_digit_code}
+invoice_id <- c("R536365", "R536472", "R536671", "536915", "R536125", "R536287",
+                "536741", "R536893", "R536521", "536999")
+grep(x = invoice_id, pattern = "\\D", value = TRUE)
+
+# invert
+grep(x = invoice_id, pattern = "\\D", value = TRUE, invert = TRUE)
+```
+
+#### White Space Character
+
+`\\s` matches any white space character such as space or tab. Let us use it to
+detect invoice ids that include any white space (space or tab).
+
+```{r sequence_space, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_space.png")
+```
+
+As you can see below, there are 4 invoice ids that include white space 
+character.
+
+```{r space_code}
+grep(x = c("R536365", "R 536472", "R536671", "R536915", "R53 6125", "R536287",
+           "536741", "R5368  93", "R536521", "536 999"), 
+     pattern = "\\s", value = TRUE)
+
+grep(x = c("R536365", "R 536472", "R536671", "R536915", "R53 6125", "R536287",
+           "536741", "R5368  93", "R536521", "536 999"), 
+     pattern = "\\s", value = TRUE, invert = TRUE)
+```
+
+#### Non White Space Character
+
+`\\S` matches any non white space character. Let us use it to remove any 
+invoice ids which are blank or missing.
+
+```{r sequence_non_space, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_non_space.png")
+```
+
+As you can see below, two invoice ids which were blank have been removed. If you
+observe carefully, it does not remove any invoice ids which have a white space
+character present, it only removes those which are completely blank i.e. those
+which include only space or tab.
+
+```{r non_space_code}
+grep(x = c("R536365", "R 536472", " ", "R536915", "R53 6125", "R536287",
+           " ", "R5368  93", "R536521", "536 999"), 
+     pattern = "\\S", value = TRUE)
+
+# invert
+grep(x = c("R536365", "R 536472", " ", "R536915", "R53 6125", "R536287",
+           " ", "R5368  93", "R536521", "536 999"), 
+     pattern = "\\S", value = TRUE, invert = TRUE)
+```
+
+#### Word Character
+
+`\\w` matches any word character i.e. alphanumeric. It includes the following:
+
+- a to z
+- A to Z
+- 0 to 9
+- underscore(_)
+
+```{r sequence_word, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_word.png")
+```
+
+Let us use it to remove those invoice ids which include only symbols or special
+characters. Again, you can see that it does not remove those ids which include
+both word characters and symbols as it will match any string that includes 
+word characters.
+
+```{r word_code}
+grep(x = c("R536365", "%+$!#@?", "R536671", "R536915", "$%+#!@?", "R5362@87",
+           "53+67$41", "R536893", "@$+%#!", "536#999"), 
+     pattern = "\\w", value = TRUE)
+
+# invert
+grep(x = c("R536365", "%+$!#@?", "R536671", "R536915", "$%+#!@?", "R5362@87",
+           "53+67$41", "R536893", "@$+%#!", "536#999"), 
+     pattern = "\\w", value = TRUE, invert = TRUE)
+```
+
+#### Non Word Character
+
+`\\W` matches any non-word character i.e. symbols. It includes everything that
+is not a word character.
+
+```{r sequence_non_word, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_match_non_word.png")
+```
+
+Let us use it to detect invoice ids that include any non-word character. As you
+can see only 4 ids do not include non-word characters.
+
+```{r non_word_code}
+grep(x = c("R536365", "%+$!#@?", "R536671", "R536915", "$%+#!@?", "R5362@87",
+           "53+67$41", "R536893", "@$+%#!", "536#999"), 
+     pattern = "\\W", value = TRUE)
+
+# invert
+grep(x = c("R536365", "%+$!#@?", "R536671", "R536915", "$%+#!@?", "R5362@87",
+           "53+67$41", "R536893", "@$+%#!", "536#999"), 
+     pattern = "\\W", value = TRUE, invert = TRUE)
+```
+
+## Word Boundary
+
+`\\b` and `\\B` are similar to caret and dollar symbol. They match at a position
+called word boundary. Now, what is a word boundary? The following 3 positions
+qualify as word boundaries:
+
+- before the first character in the string
+- after the last character in the string
+- between two characters in the string
+
+In the first 2 cases, the character must be a word character whereas in the 
+last case, one should be a word character and another non-word character. Sounds
+confusing? It will be clear once we go through a few examples.
+
+Let us say we are looking for package names beginning with the string `stat`. 
+In this case, we can prefix `stat` with `\\b`. 
+
+```{r word_boundary_1, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_word_boundary_1.png")
+```
+
+```{r boundary_code_2}
+grep(x = r_packages, pattern = "\\bstat", value = TRUE) 
+```
+
+Suffix `\\b` to `stat` to look at all package names that end with the string 
+`stat`.
+
+```{r word_boundary_2, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_word_boundary_2.png")
+```
+
+If you observe the output, you can find package names that do not end with 
+the string `stat`. `spatstat.data`, `spatstat.local` and `spatstat.utils` do not
+end with `stat` but satisfy the third condition mentioned aboved for word 
+boundaries. They are between 2 characters where `t` is a word character and dot
+is a non-word character.
+
+```{r boundary_code_3}
+grep(x = r_packages, pattern = "stat\\b", value = TRUE)
+```
+
+Do package names include the string `stat` either at the end or in the middle 
+but not at the beginning? Prefix `stat` with `\\B` to find the answer.
+
+```{r word_boundary_3, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_word_boundary_3.png")
+```
+
+```{r boundary_code_4}
+grep(x = r_packages, pattern = "\\Bstat", value = TRUE)
+```
+
+Are there packages whose names include the string `stat` either at the 
+beginning or in the middle but not at the end. Suffix `\\B` to `stat` to 
+answer this question.
+
+```{r word_boundary_4, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_word_boundary_4.png")
+```
+
+```{r boundary_code_5}
+grep(x = r_packages, pattern = "stat\\B", value = TRUE)
+```
+
+Prefix and suffix `\\B` to `stat` to look at package names that include the 
+string `stat` but neither in the beginning nor in the end. 
+
+```{r word_boundary_5, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_word_boundary_5.png")
+```
+
+In the below output, you can observe that the string `stat` must be between
+two word characters. Those examples we showed in the case of `\\b` where it 
+was surrounded by a dot do not hold here.
+
+```{r boundary_code_6}
+grep(x = r_packages, pattern = "\\Bstat\\B", value = TRUE)
+```
+
+## Character Classes
+
+```{r regex_character_classes, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_character_classes.png")
+```
+
+A set of characters enclosed in a square bracket (`[]`). The regular expression
+will match only those characters enclosed in the brackets and it matches only a
+single character. The order of the characters inside the brackets do not matter 
+and a hyphen can be used to specify a range of charcters. For example, [0-9] 
+will match a single digit between 0 and 9. Similarly, [a-z] will match a single 
+letter between a to z. You can specify more than one range as well. [a-z0-9A-Z]
+will match a alphanumeric character while ignoring the case. A caret **^** after
+the opening bracket negates the character class. For example, [^0-9] will match
+a single character that is not a digit.
+
+```{r character_class_numbers, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_character_class_numbers.png")
+```
+Let us go through a few examples to understand character classes in more detail.
+
+```{r character_code_1}
+# package names that include vowels
+grep(x = top_downloads, pattern = "[aeiou]", value = TRUE)
+
+# package names that include a number
+grep(x = r_packages, pattern = "[0-9]", value = TRUE)[1:50]
+
+# package names that begin with a number
+grep(x = r_packages, pattern = "^[0-9]", value = TRUE)
+
+# package names that end with a number
+grep(x = r_packages, pattern = "[0-9]$", value = TRUE)[1:50]
+
+# package names with only upper case letters
+grep(x = r_packages, pattern = "^[A-Z][A-Z]{1, }[A-Z]$", value = TRUE)[1:50]
+```
+
+## Case Studies
+
+Now that we have understood the basics of regular expressions, it is time for 
+some practical application. The case studies in this section include validating 
+the following:
+
+- blood group
+- email id
+- PAN number
+- GST number
+
+Note, the regular expressions used here are not robust as compared to those 
+used in real world applications. Our aim is to demonstrate a general strategy
+to used while dealing with regular expressions. 
+
+### Blood Group
+
+According to Wikipedia, a blood group or type is a classification of blood based 
+on the presence and absence of antibodies and inherited antigenic substances on 
+the surface of red blood cells (RBCs).
+
+```{r regex_bg_validation, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_blood_groups.png")
+```
+
+The below table defines the matching pattern for blood group and maps them to
+regular expressions. 
+
+- it must begin with `A`, `B`, `AB` or `O`
+- it must end with `+` or `-`
+
+```{r regex_bg_table, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_bg_table.png")
+```
+
+Let us test the regular expression with some examples.
+
+```{r blood_group}
+blood_pattern <- "^(A|B|AB|O)[-|+]$"
+blood_sample <- c("A+", "C-", "AB+")
+grep(x = blood_sample, pattern = blood_pattern, value = TRUE)
+```
+
+### email id
+
+Nowadays email is ubiquitous. We use it for everything from communication to 
+registration for online services. Wherever you go, you will be asked for email 
+id. You might even be denied a few services if you do not use email. At the same
+time, it is important to validate a email address. You might have seen a message
+similar to the below one when you misspell or enter a wrong email id. Regular
+expressions are used to validate email address and in this case study we will 
+attempt to do the same.
+
+```{r regex_email_validation, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_email.png")
+```
+
+First, we will create some basic rules for simple email validation:
+
+- it must begin with a letter
+- the id may include letters, numbers and special characters
+- must include only one @ and dot
+- the id must be to the left of @
+- the domain name should be between @ and dot
+- the domain extension should be after dot and must include only letters
+
+In the below table, we map the above rules to general expression.
+
+```{r regex_email_table, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_email_table.png")
+```
+
+Let us now test the regular expression with some dummy email ids.
+
+```{r email_validation}
+email_pattern <- "^[a-zA-Z0-9\\!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\\.[a-z]"
+emails <- c("test9+_A@test.com", "test@test..com", "test-test.com")
+grep(x = emails, pattern = email_pattern, value = TRUE)
+```
+
+### PAN Number Validation
+
+PAN (Permanent Account Number) is an identification number assigned to all 
+taxpayers in India. PAN is an electronic system through which, all tax related 
+information for a person/company is recorded against a single PAN number.
+
+#### Structure
+
+- must include only 10 characters
+- the first 5 characters are letters
+- the next 4 characters are numerals
+- the last character is a letter
+
+```{r regex_pan_validation_1, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_pan_1.png")
+```
+
+- the first 3 characters are a sequence from AAA to ZZZ
+- the 4th character indicates the status of the tax payer and shold be one of
+A, B, C, F, G, H, L, J, P, T or E
+- the 5th character is the first character of the last/surname of the card holder
+- the 6th to 10th character is a sequnce from 0001 to 9999
+- the last character is a letter
+
+```{r regex_pan_validation_2, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_pan_2.png")
+```
+
+In the below table, we map the pattern to regular expression.
+
+```{r regex_pan_table, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_pan_table.png")
+```
+
+Let us test the regular expression with some dummy PAN numbers.
+
+```{r pan_validation}
+pan_pattern <- "^[A-Z]{3}(A|B|C|F|G|H|L|J|P|T|E)[A-Z][0-9]{4}[A-Z]"
+my_pan <- c("AJKNT3865H", "AJKNT38655", "A2KNT3865H", "AJKDT3865H")
+grep(x = my_pan, pattern = pan_pattern, value = TRUE)
+```
+
+### GST Number Validation
+
+In simple words, Goods and Service Tax (GST) is an indirect tax levied on the 
+supply of goods and services. This law has replaced many indirect tax laws that 
+previously existed in India. GST identification number is assigned to every
+GST registed dealer.
+
+```{r regex_gst_validation, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_gst.png")
+```
+
+#### Structure
+
+Below is the format break down of GST identification number:
+
+- it must include 15 characters only
+- the first 2 characters represent the state code and is a sequence from 01 to 35
+- the next 10 characters are the PAN number of the entity
+- the 13th character is the entity code and is between 1 and 9
+- the 14th character is a default alphabet, **Z**
+- the 15th character is a random single number or alphabet
+
+In the below table, we map the pattern to regular expression.
+
+```{r regex_gst_table, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/regex_cs_gst_table.png")
+```
+
+Let us test the regular expression with some dummy GST numbers.
+
+```{r gst_validation}
+gst_pattern <- "[0-3][1-5][A-Z]{3}(A|B|C|F|G|H|L|J|P|T|E)[A-Z][0-9]{4}[A-Z][1-9]Z[0-9A-Z]"
+sample_gst <- c("22AAAAA0000A1Z5", "22AAAAA0000A1Z", "42AAAAA0000A1Z5",
+                "38AAAAA0000A1Z5", "22AAAAA0000A0Z5", "22AAAAA0000A1X5",
+                "22AAAAA0000A1Z$")
+grep(x = sample_gst, pattern = gst_pattern, value = TRUE)
+```
+
+## RStudio Addin
+
+<a href="https://www.garrickadenbuie.com/" target="_blank">Garrick Aden-Buie</a> 
+has created a wonderful RStudio addin, <a href="https://www.garrickadenbuie.com/project/regexplain/" target="_blank">RegExplain</a> 
+and you will find it very useful while learning and building regular expressions. 
+
+## Other Applications
+
+- R variable names
+- R file names and extensions
+- password validation
+- camelcase
+- currency format
+- date of birth
+- date validation
+- decimal number
+- full name / first name
+- html tags
+- https url 
+- phone number 
+- ip address 
+- month name
+
+## What we have not covered?
+
+While we have covered a lot, the below topics have been left out:
+
+- flags
+- grouping and capturing
+- back references
+- look ahead and look behind
+
+You may want to explore them to up your regular expressions game.
+
+## Summary
+
+- a regular expression is a special text for identifying a pattern
+- it can be used to search, replace, validate and extract strings matching a 
+given pattern
+- use cases include email and password validation, search and replace in text
+editors, html tags validation, web scraping etc.
+
+## References
+
+- https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf
+- https://stringr.tidyverse.org/articles/regular-expressions.html
+- https://r4ds.had.co.nz/strings.html
+- https://github.com/rstudio/cheatsheets/blob/master/strings.pdf
+- https://www.garrickadenbuie.com/project/regexplain/
+
+If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source repository</a>
+or reach out to us at feedback@rsquaredacademy.com.
