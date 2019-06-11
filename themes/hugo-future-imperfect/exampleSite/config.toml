@@ -1,6 +1,6 @@
-baseurl = "https://blog.rsquaredacademy.com/"
+baseurl = "/"
 languageCode = "en-us"
-title = "Rsquared Academy Blog"
+title = "Hugo Future Imperfect"
 theme = "hugo-future-imperfect"
 preserveTaxonomyNames = true
 paginate = 3
@@ -10,22 +10,18 @@ pluralizeListTitles = false
 # Set the followings to true as part of your site SEO
 enableRobotsTXT = true
 canonifyURLs = true
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
-[permalinks]
-    post = "/:year/:month/:day/:slug/"
-    
 [params]
   # Sets the meta tag description
-  description          = "Rsquared Academy Official Blog"
+  description          = "HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo"
   # Sets the navbarTitle that appears in the top left of the navigation bar
-  navbarTitle          = "Rsquared Academy"
+  navbarTitle          = "Future Imperfect"
   # Sets where "View More Posts" links
-  viewMorePostLink     = "/post/"
+  viewMorePostLink     = "/blog/"
 
 # Optional Params
   # Sets navbarTitle to match the section of the website
-  dynamicTitles        = false
+  dynamicTitles        = true
   # Sets RSS icons to appear on the sidebar with the social media buttons
   rssAppearAtTop       = true
   rssAppearAtBottom    = true
@@ -42,17 +38,18 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   # apple-touch-icon-precomposed.png, favicon.png, favicon.ico, and mstile.png.
   # These are stored in the favicon folder. See the following for more information:
   # https://github.com/audreyr/favicon-cheat-sheet
-  loadFavicon          = true
+  loadFavicon          = false
   faviconVersion       = ""
   # Sets Social Share links to appear on posts
   socialShare          = true
   # Sets specific share to appear on posts (default behavior is to appear)
   socialShareTwitter   = true
-  socialShareGoogleplus = false
+  socialShareGoogleplus = true
   socialShareFacebook  = true
   socialShareReddit    = true
   socialShareLinkedin  = true
   socialShareStumbleupon = true
+  socialSharePinterest = true
   socialShareEmail     = true
 
   # Load custom CSS or JavaScript files. The variable is an array so that you
@@ -90,22 +87,22 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   # These are optional params related to the sidebar. They are recommended, but not
   # required for proper functionality. HTML is supported within the params.
 [params.intro]
-  header    = "Rsquared Academy"
+  header    = "Hugo Future Imperfect"
 
-  paragraph = "Free and open source education initiative with focus on data science and analytics."
+  paragraph = "Another fine responsive site template by <a href=\"http://html5up.net\">HTML5 UP</a>. Ported by Julio Pescador with some extra goodies <i class='fa fa-hand-peace-o'></i>"
 
-  about     = "Rsquared Academy is a free and open source education initiative with focus on data science and analytics. We offer free self paced online courses using R, Python, SQL, Git etc. as well as customized training for corporates and colleges/universities."
+  about     = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tellus lacus, auctor vehicula molestie quis, tempor quis velit. Quisque in quam ac leo efficitur vulputate. Phasellus ullamcorper aliquam sodales. Maecenas sit amet condimentum ipsum. Proin sit amet ligula elit. Mauris."
 
   # This appears at the top of the sidebar above params.intro.header.
   # A width of less than 100px is recommended from a design perspective.
   [params.intro.pic]
-    src       = "/img/logo.jpeg"
+    src       = "/img/main/logo.jpg"
     # Sets Image to be a cirlce
-    circle    = true
+    circle    = false
     # Sets Image to be Future Imperfect's hexagon
-    imperfect = false
+    imperfect = true
     width     = ""
-    alt       = "Rsquared Academy Logo"
+    alt       = "Hugo Future Imperfect"
 
 [params.postAmount]
 # Sets the number of recent posts to show in the sidebar. The default value is 5.
@@ -120,33 +117,33 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   weight = 1
 
 [[menu.main]]
+  name = "About"
+  url = "/about/"
+  identifier = "fa fa-id-card-o"
+  weight = 2
+
+[[menu.main]]
   name = "Blog"
-  url = "/post/"
+  url = "/blog/"
   identifier = "fa fa-newspaper-o"
   weight = 3
 
 [[menu.main]]
-  name = "Online Courses"
-  url = "https://www.rsquaredacademy.com/"
-  identifier = "fa fa-graduation-cap fa-fw"
-  weight = 2
-
-[[menu.main]]
-  name = "Tutorials"
-  url = "/start-here/"
-  identifier = "fa fa-road fa-fw"
+  name = "Itemized"
+  url = "/itemized/"
+  identifier = "fa fa-list"
   weight = 4
 
 [[menu.main]]
-  name = "About"
-  url = "/about/"
-  identifier = "fa fa-user fa-fw"
+  name = "Categories"
+  url = "/categories/"
+  identifier = "fa fa-sitemap"
   weight = 5
 
 [[menu.main]]
-  name = "R Bloggers"
-  url = "https://www.r-bloggers.com"
-  identifier = "fa fa-cubes fa-fw"
+  name = "Contact"
+  url = "/contact/"
+  identifier = "fa fa-envelope-o"
   weight = 6
 
 # Sets Social Media icons to appear and link to your account. Value should be your
@@ -154,14 +151,47 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 # and socialAppearAtBottom.
 [social]
   # Coding Communities
-  github           = "rsquaredacademy"
+  github           = "jpescador/hugo-future-imperfect"
+  gitlab           = ""
+  stackoverflow    = "" # User Number
+  bitbucket        = ""
+  jsfiddle         = ""
+  codepen          = ""
+  # Visual Art Communities
+  deviantart       = ""
+  flickr           = "example"
+  behance          = ""
+  dribbble         = ""
+  # Publishing Communities
+  wordpress        = ""
+  medium           = ""
   # Professional/Business Oriented Communities
-  linkedin_company = "rsquared-academy"
-  slideshare       = "RsquaredIn"
+  linkedin         = "example"
+  linkedin_company = "examplebusiness"
+  foursquare       = ""
+  xing             = ""
+  slideshare       = ""
   # Social Networks
-  facebook         = "rsquaredacademy"
-  youtube          = "rsquaredin"
-  whatsapp         = "+91-9148068802" 
-  twitter          = "rsquaredacademy"
-  email            = "info@rsquaredacademy.com"
-
+  facebook         = "example"
+  googleplus       = ""
+  reddit           = "example"
+  quora            = ""
+  youtube          = ""
+  vimeo            = ""
+  whatsapp         = "" # WhatsApp Number
+    # WeChat and QQ need testing.
+    wechat         = ""
+    qq             = "" # User ID Number
+  instagram        = "example"
+  tumblr           = ""
+  twitter          = "example"
+  skype            = ""
+  snapchat         = ""
+  pinterest        = "example"
+  telegram         = "example"
+  vine             = ""
+  googlescholar    = ""
+  orcid            = ""
+  researchgate     = "example"
+  # Email
+  email            = "example"
