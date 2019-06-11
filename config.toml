@@ -4,8 +4,8 @@ title = "Rsquared Academy Blog"
 theme = "hugo-future-imperfect"
 preserveTaxonomyNames = true
 paginate = 3
-disqusShortname = "shortname"
-googleAnalytics = ""
+disqusShortname = "rsquaredacademy"
+googleAnalytics = "UA-57270671-6"
 pluralizeListTitles = false
 # Set the followings to true as part of your site SEO
 enableRobotsTXT = true
