@@ -1,167 +1,107 @@
 baseurl = "https://blog.rsquaredacademy.com/"
 languageCode = "en-us"
 title = "Rsquared Academy Blog"
-theme = "hugo-future-imperfect"
-preserveTaxonomyNames = true
-paginate = 3
-disqusShortname = "rsquaredacademy"
-googleAnalytics = "UA-57270671-6"
-pluralizeListTitles = false
-# Set the followings to true as part of your site SEO
-enableRobotsTXT = true
-canonifyURLs = true
+theme = "blackburn"
+copyright = "&copy; 2014-2019. All rights reserved."
+paginate = 10
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [permalinks]
-    post = "/:slug/"
-    
+post = "/:slug/"
+
+[indexes]
+  tag = "tags"
+  topic = "topics"
+
 [params]
-  # Sets the meta tag description
-  description          = "Rsquared Academy Official Blog"
-  # Sets the navbarTitle that appears in the top left of the navigation bar
-  navbarTitle          = "Rsquared Academy"
-  # Sets where "View More Posts" links
-  viewMorePostLink     = "/post/"
+  # Shown in the home page
+  subtitle = "Explore..Discover..Learn"
+  description = "Rsquared Academy Blog"
+  twitterAuthor = "@hebbaliaravind"
+  twitterSite = "@rsquaredacademy"
+  brand = "![Rsquared Academy Logo](/img/logos.png)"
+  googleAnalytics = "UA-57270671-6"
+  disqus = "rsquaredacademy"
+  [params.logo]
+    url = "logo.jpeg"
+    width = 50
+    height = 50
+    alt = "Aravind Hebbali"
 
-# Optional Params
-  # Sets navbarTitle to match the section of the website
-  dynamicTitles        = false
-  # Sets RSS icons to appear on the sidebar with the social media buttons
-  rssAppearAtTop       = true
-  rssAppearAtBottom    = true
-  # Sets Social Media icons to appear on the sidebar
-  socialAppearAtTop    = true
-  socialAppearAtBottom = true
-  # Sets Categories to sort by number of posts instead of alphabetical
-  categoriesByCount    = true
-  # set to show or to hide categories in the sidebar
-  showSidebarCategories = true
-  # Sets Estimated Reading Time to appear in post headers
-  includeReadingTime   = true
-  # Sets the Favicon and Version for the site. Default support is for
-  # apple-touch-icon-precomposed.png, favicon.png, favicon.ico, and mstile.png.
-  # These are stored in the favicon folder. See the following for more information:
-  # https://github.com/audreyr/favicon-cheat-sheet
-  loadFavicon          = true
-  faviconVersion       = ""
-  # Sets Social Share links to appear on posts
-  socialShare          = true
-  # Sets specific share to appear on posts (default behavior is to appear)
-  socialShareTwitter   = true
-  socialShareGoogleplus = false
-  socialShareFacebook  = true
-  socialShareReddit    = true
-  socialShareLinkedin  = true
-  socialShareStumbleupon = true
-  socialShareEmail     = true
+  # CSS name for highlight.js
+  highlightjs = "Github"
+  highlightjs_extra_languages = ["r", "yaml"]
+  dateFormat = "02 Jan 2006"
 
-  # Load custom CSS or JavaScript files. The variable is an array so that you
-  # can load multiple files if necessary. You can also load the standard theme
-  # files by adding the value, "default".
-  # customCSS            = ["default", "/path/to/file"]
-  # customJS             = ["default", "/path/to/file"]
-  customCSS            = ["default"]
-  customJS             = ["default"]
+[menu]
+  # Shown in the side menu.
+  [[menu.main]]
+    name = "Home"
+    pre = "<i class='fa fa-home fa-fw'></i>"
+    weight = 1
+    identifier = "home"
+    url = "/"
+  [[menu.main]]
+    name = "Start here"
+    pre = "<i class='fa fa-road fa-fw'></i>"
+    weight = 2
+    identifier = "start-here"
+    url = "/start-here"
+  [[menu.main]]
+    name = " Data Science Courses"
+    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
+    weight = 3
+    identifier = "courses1"
+    url = "https://www.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = " Risk Management Courses"
+    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
+    weight = 4
+    identifier = "courses2"
+    url = "https://www.riskycall.com/" 
+  [[menu.main]]
+    name = "Shiny Apps"
+    pre = "<i class='fa fa-cube fa-fw'></i>"
+    weight = 6
+    identifier = "app"
+    url = "https://apps.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = "R Packages"
+    pre = "<i class='fa fa-code fa-fw'></i>"
+    weight = 7
+    identifier = "package"
+    url = "https://pkgs.rsquaredacademy.com/" 
+  [[menu.main]]
+    name = "e-books"
+    pre = "<i class='fa fa-book fa-fw'></i>"
+    weight = 8
+    identifier = "ebooks"
+    url = "https://ebooks.rsquaredacademy.com/"   
+  [[menu.main]]
+    name = "About"
+    pre = "<i class='fa fa-user fa-fw'></i>"
+    weight = 9
+    identifier = "about"
+    url = "/about/"
+  [[menu.main]]
+    name = "R Bloggers"
+    pre = "<i class='fa fa-cubes fa-fw'></i>"
+    weight = 10
+    identifier = "r-blogger"
+    url = "https://r-bloggers.com/" 
 
-  # options for highlight.js (version, additional languages, and theme)
-  disable_highlight = false # set to true to disable Highlight
-  highlightjsVersion = "9.11.0"
-  highlightjsCDN = "//cdn.bootcss.com"
-  highlightjsLang = ["r", "yaml", "css"]
-  highlightjsTheme = "github"
-  MathJaxCDN = "//cdn.bootcss.com"
-  MathJaxVersion = "2.7.1"
-
-# Disqus will take priority over Staticman (github.com/eduardoboucas/staticman)
-# due to its ease of use. Feel free to check out both and decide what you would
-# prefer to use. See Staticman.yml for additional settings.
-[params.staticman]
-  # Sets Statiman to be active
-  staticman = false
-  # Sets the location for Staticman to connect to
-  username  = ""
-  repo      = ""
-  branch    = ""
-
-  [params.staticman.recaptcha]
-    sitekey = "SITE_KEY"
-    secret  = "ENCRYPTED_SECRET"
-
-  # These are optional params related to the sidebar. They are recommended, but not
-  # required for proper functionality. HTML is supported within the params.
-[params.intro]
-  header    = "Rsquared Academy"
-
-  paragraph = "Free and open source education initiative with focus on data science and analytics."
-
-  about     = "Rsquared Academy is a free and open source education initiative with focus on data science and analytics. We offer free self paced online courses using R, Python, SQL, Git etc. as well as customized training for corporates and colleges/universities."
-
-  # This appears at the top of the sidebar above params.intro.header.
-  # A width of less than 100px is recommended from a design perspective.
-  [params.intro.pic]
-    src       = "/img/logo.jpeg"
-    # Sets Image to be a cirlce
-    circle    = true
-    # Sets Image to be Future Imperfect's hexagon
-    imperfect = false
-    width     = ""
-    alt       = "Rsquared Academy Logo"
-
-[params.postAmount]
-# Sets the number of recent posts to show in the sidebar. The default value is 5.
-    sidebar = 5
-
-# Sets the menu items in the navigation bar
-# Identifier prepends a Font Awesome icon to the menu item
-[[menu.main]]
-  name = "Home"
-  url = "/"
-  identifier = "fa fa-home"
-  weight = 1
-
-[[menu.main]]
-  name = "Blog"
-  url = "/post/"
-  identifier = "fa fa-newspaper-o"
-  weight = 3
-
-[[menu.main]]
-  name = "Online Courses"
-  url = "https://www.rsquaredacademy.com/"
-  identifier = "fa fa-graduation-cap fa-fw"
-  weight = 2
-
-[[menu.main]]
-  name = "Tutorials"
-  url = "/start-here/"
-  identifier = "fa fa-road fa-fw"
-  weight = 4
-
-[[menu.main]]
-  name = "About"
-  url = "/about/"
-  identifier = "fa fa-user fa-fw"
-  weight = 5
-
-[[menu.main]]
-  name = "R Bloggers"
-  url = "https://www.r-bloggers.com"
-  identifier = "fa fa-cubes fa-fw"
-  weight = 6
-
-# Sets Social Media icons to appear and link to your account. Value should be your
-# username unless otherwise noted. These are the icons affected by socialAppearAtTop
-# and socialAppearAtBottom.
 [social]
-  # Coding Communities
-  github           = "rsquaredacademy"
-  # Professional/Business Oriented Communities
-  linkedin_company = "rsquared-academy"
-  slideshare       = "RsquaredIn"
-  # Social Networks
-  facebook         = "rsquaredacademy"
-  youtube          = "rsquaredin"
-  whatsapp         = "+91-9148068802" 
-  twitter          = "rsquaredacademy"
-  email            = "info@rsquaredacademy.com"
+  # Link your social networking accounts to the side menu
+  # by entering your username or ID.
 
+  # SNS microblogging
+  twitter = "rsquaredacademy"
+  facebook = "rsquaredacademy"
+
+  # SNS photo/video sharing
+  youtube = "rsquaredin"
+  slideshare = "rsquaredin"
+  linkedin = "rsquared-academy"
+
+  # Techie
+github = "rsquaredacademy"
