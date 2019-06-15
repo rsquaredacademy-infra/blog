@@ -14,9 +14,16 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:image" content="https://blog.rsquaredacademy.com/img/logo.jpeg" >
   {{ else }}
+  {{ $defaultDescription := printf "Article posted by %s, on %s" .Params.author (.Date.Format "Monday, January 2nd, 2006") }}
   <title>{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}</title>
-  <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}">
+  <meta property="og:title" content="{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}">
   <meta property="og:type" content="article">
+  <meta property="og:description" content="{{ .Description | default $defaultDescription }}">
+  <meta name="twitter:title" content="{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Description | default $defaultDescription }}">
+  <meta name="twitter:domain" content="blog.rsquaredacademy.com">
+  <meta name="twitter:creator" content="@rsquaredacademy">
+  <meta name="twitter:site" content="@rsquaredacademy">
 
     {{ if .Params.twitterImg }}
     <meta name="twitter:card" content="summary_large_image">
@@ -35,17 +42,12 @@
     <meta property="og:image:width" content="1129" />
     <meta property="og:image:height" content="1129" />
     {{ end }}
-    
-  {{ $defaultDescription := printf "Article posted by %s, on %s" .Params.author (.Date.Format "Monday, January 2nd, 2006") }}
+      
   <meta property="description" content="{{ .Description | default $defaultDescription }}">
   <meta property="og:description" content="{{ .Description | default $defaultDescription }}">
   {{ end }}
 
-  <meta name="twitter:title" content="{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}">
-  <meta name="twitter:description" content="{{ .Description | default $defaultDescription }}">
-  <meta name="twitter:domain" content="blog.rsquaredacademy.com">
-  <meta name="twitter:creator" content="@rsquaredacademy">
-  <meta name="twitter:site" content="@rsquaredacademy">
+
 
   <!-- CSS -->
   {{ $purecss := "https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/" }}
