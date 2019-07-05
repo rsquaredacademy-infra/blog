@@ -1,7 +1,7 @@
 ---
 title: "pkginfo: Tools for Retrieving R Package Information"
 author: Aravind Hebbali
-twitterImg: /img/regex_cover_image.png
+twitterImg: /img/github_pkginfo.png
 description: "An experimental R package for retrieving R pacakge informatiom."
 date: '2019-07-05'
 slug: introducing-pkginfo
