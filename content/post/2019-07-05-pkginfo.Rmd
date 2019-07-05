@@ -1,0 +1,216 @@
+---
+title: "pkginfo: Tools for Retrieving R Package Information"
+author: Aravind Hebbali
+twitterImg: /img/regex_cover_image.png
+description: "An experimental R package for retrieving R pacakge informatiom."
+date: '2019-07-05'
+slug: introducing-pkginfo
+topics:
+  - packages
+tags:
+  - pkginfo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r regex_cover_image, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("/img/github_pkginfo.png")
+```
+
+## Motivation
+
+There are several wonderful tools for retrieving information about R packages, some of which are listed below:
+
+- **[cranlogs](https://github.com/r-hub/cranlogs)**, **[dlstats](https://github.com/GuangchuangYu/dlstats)** and **[packageRank](https://github.com/lindbrook/packageRank)** for R package download stats
+- **[pkgsearch](https://github.com/r-hub/pkgsearch)** and **[packagefinder](https://github.com/jsugarelli/packagefinder/)** for searching CRAN R packages
+- **[crandb](https://github.com/r-hub/crandb)** provides API for programatically accessing meta-data
+- **[cchecks](https://github.com/ropenscilabs/cchecks)** for CRAN check results
+
+We have used some or all of these to track/monitor our own [R packages](https://pkgs.rsquaredacademy.com) available on CRAN. Over time, we wanted to have a single interface which would retrieve information from different places including:
+
+- check results from [CRAN](https://cran.r-project.org/)
+- issues & pull requests from [GitHub](https://github.com/)
+- build status from [Travis](https://travis-ci.org/) and [Appveyor](https://ci.appveyor.com/)
+- code coverage from [Codecov](https://codecov.io/)
+- questions tagged with the package name in [Stack Overflow](https://stackoverflow.com/)
+
+And below is a demo of what we came up with...
+
+```{r pkginfo_youtube_demo, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "g7Lcmgiyzmo")
+```
+
+The above shiny app can be launched with:
+
+```{r launch_app, eval=FALSE}
+pkginfo::pkginfo_dashboard()
+```
+
+## Introduction
+
+[pkginfo](https://github.com/rsquaredacademy/pkginfo) will allow you to retrieve information from multiple places. The shiny app is especially useful if you are looking for information about multiple R packages. [pkginfo](https://github.com/rsquaredacademy/pkginfo) provides two APIs, one is object oriented, the other one is procedural, and in this post, we will show you how to use them.
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/rsquaredacademy/pkginfo) with:
+
+```{r pkginfo_install, eval=FALSE}
+devtools::install_github("rsquaredacademy/pkginfo")
+```
+
+<hr>
+
+<a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
+
+<hr>
+
+## Object Oriented API
+
+The object oriented API uses [R6](https://github.com/r-lib/R6) classes.
+
+```{r pkginfo_load, message=FALSE, warning=FALSE}
+library(pkginfo)
+```
+
+### GitHub
+
+#### Creating a new GitHubRepo object
+
+```{r gh_object}
+myRepo <- GitHubRepo$new("olsrr", "rsquaredacademy")
+```
+
+#### Stars, Forks & Issues
+
+`get_stats()` will report the number of stars, forks and open issues.
+
+```{r gh_object_stats}
+myRepo$get_stats()
+```
+
+#### Issues
+
+`get_issues()` will report the date, number, author and title of all the open issues.
+
+```{r gh_object_issues}
+myRepo$get_issues()
+```
+
+#### Branches 
+
+`get_branches()` will report the name of the branches.
+
+```{r gh_object_branches}
+myRepo$get_branches()
+```
+
+#### Build Status & Code Coverage
+
+The build status is reported from [Travis CI](https://travis-ci.org/) and [Appveyor](https://ci.appveyor.com/) while code coverage is reported from [Codecov](https://codecov.io/)
+
+##### Travis CI
+
+```{r gh_object_build_covr}
+myRepo$get_travis_status()
+```
+
+##### Codecov
+
+```{r gh_codecov}
+myRepo$get_coverage()
+```
+
+<hr>
+
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+
+<hr>
+
+
+## Procedural API
+
+### GitHub
+
+To use the procedural API for retrieving GitHub information, you need to provide the following inputs:
+
+- package/repo name
+- GitHUb user/organization name (optional)
+
+If you do not know the GitHub user/org name, leave it empty. [pkginfo](https://github.com/rsquaredacademy/pkginfo) will look for the user/org name in the **URLS** available on the CRAN page of the package.
+
+#### Stars, Forks & Issues
+
+```{r gh_stats}
+get_gh_stats("olsrr", "rsquaredacademy")
+```
+
+#### Issues
+
+```{r gh_issues}
+get_gh_issues("olsrr", "rsquaredacademy")
+```
+
+<hr>
+
+<a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
+
+<hr>
+
+### CRAN Check Results
+
+The CRAN check results is reported using the [cchecksapi](https://github.com/ropenscilabs/cchecksapi) API. 
+
+```{r cran_check_2}
+get_pkg_cran_check_results("olsrr")
+```
+
+### Build Status 
+
+You can check the build status of a package from both [Travis CI](https://travis-ci.org/) and [Appveyor](https://ci.appveyor.com/).
+
+#### Travis CI
+
+```{r build_travis}
+get_status_travis("olsrr", "rsquaredacademy")
+```
+
+#### Appveyor
+
+```{r build_appveyor}
+get_status_appveyor("olsrr", "rsquaredacademy")
+```
+
+### Code Coverage
+
+Report code coverage for the package from the coverage service [Codecov](https://codecov.io/). We hope to add coverage from [Coveralls](https://coveralls.io/) in the near future.
+
+```{r codecov}
+get_code_coverage("olsrr", "rsquaredacademy")
+```
+
+### Stack Overflow
+
+Questions tagged with the package name will be displayed from [Stack Overflow](https://stackoverflow.com/).
+
+```{r so_questions}
+get_so_questions("dplyr")
+```
+
+## To Do..
+
+In the near future, [pkginfo](https://github.com/rsquaredacademy/pkginfo) will retrieve information:
+
+- about packages that are available on GitHub/GitLab but not on CRAN
+- packages that are available on [GitLab](https://about.gitlab.com/)
+- about code coverage from [Coveralls](https://coveralls.io/)
+- about Twitter mentions
+
+We did not have any specific end user in mind while developing but believe it will be more useful to package developers/maintainers. Suggestions/feedbacks and pull requests are always welcome.
+
+If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source repository</a>
+or reach out to us at feedback@rsquaredacademy.com.
