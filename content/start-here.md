@@ -9,19 +9,8 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 - [Variables](/variables-in-r/)
 - [Data Types](/data-types-in-r/)
-- [Getting Help in R](/getting-help-in-r/)
+- [Getting Help in R](/getting-help-in-r-updated/)
 - [Beginners Guide to R Pacakge Ecosystem](/beginners-guide-to-r-package-ecosystem/)
-
-## Data Types/Structures
-
-- [Vectors - Part 1](/vectors-part-1/)
-- [Vectors - Part 2](/vectors-part-2/)
-- [Vectors - Part 3](/vectors-part-3/)
-- [Matrix - Part 1](/matrix-part-1/)
-- [Matrix - Part 2](/matrix-part-2/)
-- [Lists](/introduction-to-lists/)
-- [Factors](/introduction-to-factors/)
-- [Dataframes](/introduction-to-dataframes/)
 
 ## Data Wrangling With R
 
@@ -34,6 +23,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Readable Code with Pipes](/readable-code-with-pipes/)
 - [How to work with dates in R?](/working-with-dates-in-r/)
 - [Working with strings in R using stringr](/hacking-strings-with-stringr/)
+- [Demystifying Regular Expressions](/regular-expression-in-r/)
 - [Working with factors using forcats](/working-with-categorical-data-using-forcats/)
 
 ## Databases
@@ -42,6 +32,22 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Data Wrangling with dbplyr](/data-wrangling-with-dbplyr)
 - [SQL for Data Science - Part 1](/sql-for-data-science-part-1)
 - [SQL for Data Science - Part 2](/sql-for-data-science-part-2)
+
+## Others
+
+- [Practical Introduction to Web Scraping in R](/web-scraping/)
+- [Market Basket Analysis in R](/market-basket-analysis-in-r/)
+
+## R Packages
+
+- [olsrr: Tools for Regression Models](/introducing-olsrr/)
+- [rfm: Tools for RFM Analysis](/introducing-rfm/)
+- [descriptr: Generate Descriptive/Summary Statistics](/introducing-descriptr/)
+- [blorr: Tools for Binary Logistic Regression Models](/introducing-blorr/)
+- [rbin: Tools for Binning Data](/binning-data-with-rbin/)
+- [vistributions: Tools for Visualizing Distributions](/introducting-vistributions/)
+- [pkginfo: Tools for Retrieving Package Information](/introducing-pkginfo/)
+- [xplorerr: Tools for Interactive Data Analysis](/shiny-apps/)
 
 ## Data Visualization With R
 
@@ -67,7 +73,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Faceting](/faceting/)
 - [Themes](/themes/)
 
-### Base 
+### Base R
 
 - [Introduction](/data-visualization-with-r-introduction/)
 - [Title and Axis Labels](/data-visualization-with-r-title-and-axis-labels/)
@@ -80,3 +86,13 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Text Annotations](/data-visualization-with-r-text-annotations/)
 - [Combine Plots](/data-visualization-with-r-combining-plots/)
 
+## Data Types/Structures
+
+- [Vectors - Part 1](/vectors-part-1/)
+- [Vectors - Part 2](/vectors-part-2/)
+- [Vectors - Part 3](/vectors-part-3/)
+- [Matrix - Part 1](/matrix-part-1/)
+- [Matrix - Part 2](/matrix-part-2/)
+- [Lists](/introduction-to-lists/)
+- [Factors](/introduction-to-factors/)
+- [Dataframes](/introduction-to-dataframes/)
