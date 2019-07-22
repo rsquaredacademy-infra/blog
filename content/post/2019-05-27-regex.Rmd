@@ -91,12 +91,6 @@ Below are the links to all the resources related to this post:
 - <a href="https://github.com/rsquaredacademy-education/online-courses/tree/master/regular-expressions-in-r" target="_blank">Code & Data</a>
 - <a href="https://rstudio.cloud/project/356612" target="_blank">RStudio Cloud</a>
 
-<hr>
-
-<a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a>
-
-<hr>
-
 ## Libraries
 
 We will use the following libraries in this post:
