@@ -37,6 +37,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 - [Practical Introduction to Web Scraping in R](/web-scraping/)
 - [Market Basket Analysis in R](/market-basket-analysis-in-r/)
+- [Customer Segmentation using RFM Analysis](/customer-segmentation-using-rfm-analysis/)
 
 ## R Packages
 
