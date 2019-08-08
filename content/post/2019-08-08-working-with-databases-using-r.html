@@ -1,0 +1,1106 @@
+---
+title: "A Comprehensive Introduction to Working with Databases using R"
+author: Aravind Hebbali
+twitterImg: /img/dbi_cover_image.png
+description: "Learn to connect, explore and query database from R"
+date: '2019-08-08'
+slug: working-with-databases-using-r
+topics:
+  - databases
+tags:
+  - dbi
+  - dbplot
+  - modeldb
+  - tidypredict
+  - config
+---
+
+
+
+<p><img src="/img/dbi_cover_image.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In a previous <a href="https://blog.rsquaredacademy.com/quick-guide-r-sqlite/" target="_blank">post</a>, we had briefly looked at connecting to databases from R and using dplyr for querying data. In this new expanded post, we will focus on the following:</p>
+<ul>
+<li>connect to &amp; explore database</li>
+<li>read &amp; write data</li>
+<li>use RStudio SQL script &amp; knitr SQL engine</li>
+<li>query data using dplyr</li>
+<li>visualize data with dbplot</li>
+<li>modeling data with modeldb &amp; tidypredict</li>
+<li>explore RStudio connections pane</li>
+<li>handling credentials</li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this post:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/sql/sqlite.html#/section" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/430439" target="_blank">RStudio Cloud</a></li>
+</ul>
+<p>You can try our <strong>free online course</strong> <a href="https://rsquared-academy.thinkific.com/courses/working-with-databases-using-r"><strong>Working with Databases using R</strong></a> if you prefer to learn through self paced online courses.</p>
+{{% youtube "bPlGPmjPFeU" %}}
+</div>
+<div id="libraries" class="section level2">
+<h2>Libraries</h2>
+<p>Before we connect to and explore the local SQLite database, let us take a look at the R packages we will use in this post.</p>
+<ul>
+<li><a href="http://r-dbi.github.io/DBI/">DBI</a> a database interface for R</li>
+<li><a href="https://dbplyr.tidyverse.org/">dbplyr</a> a dplyr backend for databases</li>
+<li><a href="https://dplyr.tidyverse.org/">dplyr</a> for querying data</li>
+<li><a href="https://edgararuiz.github.io/dbplot/">dbplot</a> &amp; <a href="https://ggplot2.tidyverse.org/">ggplot2</a> for data visualization</li>
+<li><a href="https://tidymodels.github.io/modeldb/">modeldb</a> &amp; <a href="https://tidymodels.github.io/tidypredict/">tidypredict</a> for modeling &amp; prediction inside database</li>
+<li><a href="https://cran.r-project.org/package=config">config</a> for handling credentials</li>
+</ul>
+<pre class="r"><code># install.packages(c(&quot;DBI&quot;, &quot;dbplyr&quot;, &quot;dplyr&quot;, &quot;dbplot&quot;, &quot;ggplot2&quot;, &quot;modeldb&quot;,
+# &quot;tidypredict&quot;, &quot;config&quot;))
+library(DBI)
+library(dbplyr)
+library(dplyr)
+library(dbplot)
+library(ggplot2)
+library(modeldb)
+library(tidypredict)
+library(config)</code></pre>
+<p>If you do not have all the above packages installed, go ahead and install them. In the R script we are sharing with you, we have commented out the code for installing the packages. If you are using the RStudio Cloud project, we have already installed the packages in the project and you can just load them into the R session using <code>library()</code>.</p>
+<p>As and when we come to the specific sections where we are using these packages, they will be reintroduced and we will look at their documentation and explore the functions we will use.</p>
+<hr>
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/" target="_blank"><img src="/img/ad_courses.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+<div id="connect-explore" class="section level2">
+<h2>Connect &amp; Explore</h2>
+<p>The first step is to successfully connect to a database. To begin with, we will keep things simple and connect to a local <strong>SQLite</strong> database, <code>mydatabase.db</code>. We will explore the database, list the tables present and the fields/columns in those tables. In the last section of this post, we will connect to a <strong>MySQL</strong> database hosted on AWS using RStudio connections tab and learn how to specify the host, port, username, password etc.</p>
+<div id="connect" class="section level4">
+<h4>Connect</h4>
+<p>To connect to the database, we will use <code>dbConnect()</code> from the <a href="http://r-dbi.github.io/DBI/">DBI</a> package which defines a common interface between R and database management systems. The first input is the database driver which in our case is <code>SQLite</code> and the second input is the name and location of the database. Since we are connecting to a local database, it is sufficient to specify the name and location of the database. The database connection is saved in <code>con</code> for further use in exploring and querying data.</p>
+<pre class="r"><code>con &lt;- DBI::dbConnect(RSQLite::SQLite(), dbname = &quot;mydatabase.db&quot;)
+con</code></pre>
+<pre><code>## &lt;SQLiteConnection&gt;
+##   Path: J:\R\Others\blogs\content\post\mydatabase.db
+##   Extensions: TRUE</code></pre>
+<p>If the database is present and the correct path to the database has been specified, R will not return any error.</p>
+</div>
+<div id="connection-summary" class="section level4">
+<h4>Connection Summary</h4>
+<p>Next, let us get a quick summary of the database connection using <code>summary()</code>. It shows <code>SQLiteConnection</code> under class and we can ignore the other details for the time being. Great! We have successfully connected to the database and now it is time to list the tables present in the database.</p>
+<pre class="r"><code>summary(con)</code></pre>
+<pre><code>##           Length            Class             Mode 
+##                1 SQLiteConnection               S4</code></pre>
+</div>
+<div id="list-tables" class="section level4">
+<h4>List Tables</h4>
+<p>Now that we are connected to a database, let us list all the tables present in it using <code>dbListTables()</code>.</p>
+<pre class="r"><code>DBI::dbListTables(con)</code></pre>
+<pre><code>## [1] &quot;COMPANY&quot;    &quot;DEPARTMENT&quot; &quot;ecom&quot;       &quot;trade&quot;</code></pre>
+<p>There are 4 tables in the database and we will be using only the <code>ecom</code> and <code>trade</code> tables in our examples and practice questions.</p>
+</div>
+<div id="list-fields" class="section level4">
+<h4>List Fields</h4>
+<p>Let us go ahead and list all the fields/colums in the <code>ecom</code> table since we will be using it in the following sections. To list all the fields (columns) in a table, use <code>dbListFields()</code>. It takes 2 inputs:</p>
+<ul>
+<li>the database connection name (<code>con</code>)</li>
+<li>name of the table (<code>ecom</code>) enclosed in single/double quotes</li>
+</ul>
+<pre class="r"><code>DBI::dbListFields(con, &quot;ecom&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;          &quot;referrer&quot;    &quot;device&quot;      &quot;bouncers&quot;    &quot;n_visit&quot;    
+##  [6] &quot;n_pages&quot;     &quot;duration&quot;    &quot;country&quot;     &quot;purchase&quot;    &quot;order_items&quot;
+## [11] &quot;order_value&quot;</code></pre>
+<p>There are 11 columns in the <code>ecom</code> table. Let us take a look at the data dictionary to understand what these columns stand for:</p>
+<ul>
+<li>id: row id</li>
+<li>referrer: referrer website/search engine</li>
+<li>os: operating system</li>
+<li>browser: browser</li>
+<li>device: device used to visit the website</li>
+<li>n_pages: number of pages visited</li>
+<li>duration: time spent on the website (in seconds)</li>
+<li>repeat: frequency of visits</li>
+<li>country: country of origin</li>
+<li>purchase: whether visitor purchased</li>
+<li>order_value: order value of visitor (in dollars)</li>
+</ul>
+<p>Now that we know how to connect to a database and list the fields/columns, let us move on to the next section where we will learn how to query data from the tables present in the database.</p>
+</div>
+</div>
+<div id="querying-data" class="section level2">
+<h2>Querying Data</h2>
+<p>Now that we have successfully connected to the database and explored the tables, let us look at querying data from the <code>ecom</code> table. In this section,
+we will learn to:</p>
+<ul>
+<li>read entire table</li>
+<li>read few rows</li>
+<li>read data in batches</li>
+</ul>
+<div id="entire-table" class="section level4">
+<h4>Entire Table</h4>
+<p>We can read an entire table from a database using <code>dbReadTable()</code> provided the table is not very large. We will read data from the <code>COMPANY</code> table as it has few rows and will not fill the whole page. The first input is the database connection name and the second input is the name of the table in quotes.</p>
+<pre class="r"><code>DBI::dbReadTable(con, &#39;COMPANY&#39;)</code></pre>
+<pre><code>##   ID  NAME AGE    ADDRESS SALARY
+## 1  1  Paul  32 California  20000
+## 2  2 Allen  25      Texas  15000
+## 3  3 Teddy  23     Norway  20000
+## 4  4  Mark  25 Rich-Mond   65000
+## 5  5 David  27      Texas  85000
+## 6  6   Kim  22 South-Hall  45000</code></pre>
+<p>In some cases, we may not need the entire table but only a specific number of rows. Use <code>dbGetQuery()</code> and supply a SQL statement specifying the number of rows of data to be read from the table. In the below example, we read ten rows of data from the <code>ecom</code> table.</p>
+</div>
+<div id="few-rows" class="section level4">
+<h4>Few Rows</h4>
+<pre class="r"><code>DBI::dbGetQuery(con, &quot;select * from ecom limit 10&quot;)</code></pre>
+<pre><code>##    id referrer device bouncers n_visit n_pages duration        country
+## 1   1   google laptop     true      10       1      693 Czech Republic
+## 2   2    yahoo tablet     true       9       1      459          Yemen
+## 3   3   direct laptop     true       0       1      996         Brazil
+## 4   4     bing tablet    false       3      18      468          China
+## 5   5    yahoo mobile     true       9       1      955         Poland
+## 6   6    yahoo laptop    false       5       5      135   South Africa
+## 7   7    yahoo mobile     true      10       1       75     Bangladesh
+## 8   8   direct mobile     true      10       1      908      Indonesia
+## 9   9     bing mobile    false       3      19      209    Netherlands
+## 10 10   google mobile     true       6       1      208 Czech Republic
+##    purchase order_items order_value
+## 1     false           0           0
+## 2     false           0           0
+## 3     false           0           0
+## 4      true           6         434
+## 5     false           0           0
+## 6     false           0           0
+## 7     false           0           0
+## 8     false           0           0
+## 9     false           0           0
+## 10    false           0           0</code></pre>
+<p>In case of very large table, we can read data in batches using <code>dbSendQuery()</code> and <code>dbFetch()</code>. We can mention the number of rows of data to be read while fetching the data using the query generated by <code>dbSendQuery()</code>.</p>
+</div>
+<div id="read-data-in-batches" class="section level4">
+<h4>Read Data in Batches</h4>
+<pre class="r"><code>query  &lt;- DBI::dbSendQuery(con, &#39;select * from ecom&#39;)
+
+# first batch of 10 rows
+DBI::dbFetch(query, n = 10)</code></pre>
+<pre><code>##    id referrer device bouncers n_visit n_pages duration        country
+## 1   1   google laptop     true      10       1      693 Czech Republic
+## 2   2    yahoo tablet     true       9       1      459          Yemen
+## 3   3   direct laptop     true       0       1      996         Brazil
+## 4   4     bing tablet    false       3      18      468          China
+## 5   5    yahoo mobile     true       9       1      955         Poland
+## 6   6    yahoo laptop    false       5       5      135   South Africa
+## 7   7    yahoo mobile     true      10       1       75     Bangladesh
+## 8   8   direct mobile     true      10       1      908      Indonesia
+## 9   9     bing mobile    false       3      19      209    Netherlands
+## 10 10   google mobile     true       6       1      208 Czech Republic
+##    purchase order_items order_value
+## 1     false           0           0
+## 2     false           0           0
+## 3     false           0           0
+## 4      true           6         434
+## 5     false           0           0
+## 6     false           0           0
+## 7     false           0           0
+## 8     false           0           0
+## 9     false           0           0
+## 10    false           0           0</code></pre>
+<pre class="r"><code># second batch of 10 rows
+DBI::dbFetch(query, n = 10)</code></pre>
+<pre><code>##    id referrer device bouncers n_visit n_pages duration       country
+## 1  11   direct laptop     true       9       1      738       Jamaica
+## 2  12   direct tablet    false       6      12      132       Estonia
+## 3  13   direct mobile    false       9      14      406       Ireland
+## 4  14    yahoo tablet    false       5       8       80   Philippines
+## 5  15    yahoo mobile    false       7       1       19        France
+## 6  16     bing laptop     true       1       1      995 United States
+## 7  17     bing tablet    false       5      16      368          Peru
+## 8  18   google tablet     true       7       1      406         China
+## 9  19   social tablet    false       7      10      290      Colombia
+## 10 20   social tablet    false       2       1       28       Namibia
+##    purchase order_items order_value
+## 1     false           0           0
+## 2     false           0           0
+## 3      true           3         651
+## 4     false           2         362
+## 5     false           7        2423
+## 6     false           0           0
+## 7      true           6        1049
+## 8     false           0           0
+## 9      true           9        1304
+## 10    false           7        2077</code></pre>
+</div>
+<div id="your-turn" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>list fields in the <code>trade</code> table</li>
+<li>read all rows &amp; columns from the <code>trade</code> table</li>
+<li>read first 30 rows from the <code>trade</code> table</li>
+</ul>
+</div>
+</div>
+<div id="query" class="section level2">
+<h2>Query</h2>
+<p>In this section, we will look at a bunch of functions that will allow us to get information about the query we sent to the database in the previous section to fetch data in batches. Before we start, let us look at the output from <code>query</code>.</p>
+<pre class="r"><code>query</code></pre>
+<pre><code>## &lt;SQLiteResult&gt;
+##   SQL  select * from ecom
+##   ROWS Fetched: 20 [incomplete]
+##        Changed: 0</code></pre>
+<p>We can see the follwing:</p>
+<ul>
+<li>SQL statement</li>
+<li>number of rows fetched (15)</li>
+<li>status of the query (incomplete)</li>
+<li>and number of rows changed in the table (0)</li>
+</ul>
+<p>The status is incomplete as we are querying data in batches and the number of rows changed is <code>0</code> since ran a <code>SELECT</code> SQL statement which does not modify the table.</p>
+<div id="query-status" class="section level4">
+<h4>Query Status</h4>
+<p>To know the status of a query, use <code>dbHasCompleted()</code>. It is very useful in
+cases of queries that might take a long time to complete. It will return a logical value i.e. <code>TRUE</code> or <code>FALSE</code>. In our example, since we are querying data in batches, the output will be <code>FALSE</code>.</p>
+<pre class="r"><code>DBI::dbHasCompleted(query)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="query-info" class="section level4">
+<h4>Query Info</h4>
+<p><code>dbGetInfo()</code> will display the following:</p>
+<ul>
+<li>SQL statement being executed</li>
+<li>the count of rows fetched/affected</li>
+<li>and the status of the query</li>
+</ul>
+<pre class="r"><code>DBI::dbGetInfo(query)</code></pre>
+<pre><code>## $statement
+## [1] &quot;select * from ecom&quot;
+## 
+## $row.count
+## [1] 20
+## 
+## $rows.affected
+## [1] 0
+## 
+## $has.completed
+## [1] FALSE</code></pre>
+<p>The output is similar to what we saw when we printed <code>query</code>.</p>
+</div>
+<div id="latest-query" class="section level4">
+<h4>Latest Query</h4>
+<p>To view the query used in <code>dbSendQuery()</code> or <code>dbSendStatement()</code>, use <code>dbGetStatement()</code>.</p>
+<pre class="r"><code>DBI::dbGetStatement(query)</code></pre>
+<pre><code>## [1] &quot;select * from ecom&quot;</code></pre>
+</div>
+<div id="rows-fetched" class="section level4">
+<h4>Rows Fetched</h4>
+<p><code>dbGetRowCount()</code> will return the total number of rows actually fetched from the table in the database.</p>
+<pre class="r"><code>DBI::dbGetRowCount(query)</code></pre>
+<pre><code>## [1] 20</code></pre>
+</div>
+<div id="rows-affected" class="section level4">
+<h4>Rows Affected</h4>
+<p>The total number of rows added, deleted or updated by a data manipulation statement is returned by <code>dbGetRowsAffected()</code>. In our example, the SQL statemet did not modify the table in any way and hence the output will be <code>0</code>.</p>
+<pre class="r"><code>DBI::dbGetRowsAffected(query)</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="column-info" class="section level4">
+<h4>Column Info</h4>
+<p><code>dbColumnInfo()</code> returns a <code>data.frame</code> that describes the output of a query. In the below example, it returns the column name and data type of the output from the query.</p>
+<pre class="r"><code>DBI::dbColumnInfo(query)</code></pre>
+<pre><code>##           name      type
+## 1           id   integer
+## 2     referrer character
+## 3       device character
+## 4     bouncers character
+## 5      n_visit   integer
+## 6      n_pages    double
+## 7     duration    double
+## 8      country character
+## 9     purchase character
+## 10 order_items    double
+## 11 order_value    double</code></pre>
+</div>
+<div id="clear-results" class="section level4">
+<h4>Clear Results</h4>
+<p>To free all resources associated with a result set, use <code>dbClearResult()</code>. After running the below code, we will not be able to retrieve any information about <code>query</code> i.e. try running <code>dbGetInfo(query)</code> or <code>dbGetStatement(query)</code> and R will return an error.</p>
+<pre class="r"><code>DBI::dbClearResult(query)</code></pre>
+</div>
+</div>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<p>In this section, we will learn to:</p>
+<ul>
+<li>check if a table exists</li>
+<li>create table</li>
+<li>overwrite table</li>
+<li>append data to a table</li>
+<li>insert rows into a table</li>
+<li>append one table to another</li>
+<li>remove a table</li>
+</ul>
+<div id="check-table-name" class="section level4">
+<h4>Check Table Name</h4>
+<p>It is a good practice to check whether a table of the same name exists before trying to create a new one in the database. In the below example, we use <code>dbExistsTable()</code> to check if the database already has a table by the name <code>trial_db</code>. <code>dbExistsTable()</code> always returns a logical value.</p>
+<pre class="r"><code>DBI::dbExistsTable(con, &quot;trial_db&quot;)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Since there is no table by the name <code>trial_db</code>, let us go ahead and create a new table of the same name.</p>
+</div>
+<div id="create-table" class="section level4">
+<h4>Create Table</h4>
+<p>To create a new table, use <code>dbWriteTable()</code>. It takes the following 3 arguments:</p>
+<ul>
+<li>connection name</li>
+<li>name of the new table</li>
+<li>data for the new table</li>
+</ul>
+<p>Let us first create a new dataset <code>trial_db</code>. It has 2 columns, <code>x</code> and <code>y</code>, and 10 rows of data. Next, we create a new table of the same name in the database. In <code>dbWriteTable()</code>, we specify the following:</p>
+<ul>
+<li><code>con</code>: database connection</li>
+<li><code>"trial_db"</code>: name of the table in database</li>
+<li><code>trial_data</code>: name of the dataset used to create the table in the database</li>
+</ul>
+<p>Ensure that the name of the table in the database is always enclosed in single/double quotes.</p>
+<pre class="r"><code># sample data
+x          &lt;- 1:10
+y          &lt;- letters[1:10]
+trial_data &lt;- tibble::tibble(x, y)
+
+# write table to database
+DBI::dbWriteTable(con, &quot;trial_db&quot;, trial_data)</code></pre>
+<p>Let us check if the table has been created.</p>
+<pre class="r"><code>DBI::dbListTables(con)</code></pre>
+<pre><code>## [1] &quot;COMPANY&quot;    &quot;DEPARTMENT&quot; &quot;ecom&quot;       &quot;trade&quot;      &quot;trial_db&quot;</code></pre>
+<pre class="r"><code>DBI::dbExistsTable(con, &quot;trial_db&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="overwrite-table" class="section level4">
+<h4>Overwrite Table</h4>
+<p>Sometimes instead of creating a new table, you may want to overwrite the data in an existing table. In such cases, use the <code>overwrite</code> argument in <code>dbWriteTable()</code> and set it to <code>TRUE</code>. In the below example, we overwrite the <code>trial_db</code> table in the database using the data set <code>trial2_data</code>.</p>
+<pre class="r"><code># sample data
+x      &lt;- sample(100, 10)
+y      &lt;- letters[11:20]
+trial2_data &lt;- tibble::tibble(x, y)
+
+# overwrite table trial
+DBI::dbWriteTable(con, &quot;trial_db&quot;, trial2_data, overwrite = TRUE)</code></pre>
+<p>Let us query sone data from <code>trial_db</code> table to ensure that it has been overwritten.</p>
+<pre class="r"><code>DBI::dbGetQuery(con, &quot;select * from trial_db&quot;)</code></pre>
+<pre><code>##     x y
+## 1  24 k
+## 2  57 l
+## 3  29 m
+## 4  46 n
+## 5  58 o
+## 6  13 p
+## 7  93 q
+## 8  90 r
+## 9  25 s
+## 10 92 t</code></pre>
+</div>
+<div id="append-data" class="section level4">
+<h4>Append Data</h4>
+<p>Alright! Now let us say instead of overwriting the data in the table, you want to append the data. In such cases, you can append data to an existing table by setting the <code>append</code> argument in <code>dbWriteTable()</code> to <code>TRUE</code>. In the below example, we append the data set <code>trial3_data</code> to the <code>trial_db</code> table in the database.</p>
+<pre class="r"><code># sample data
+x      &lt;- sample(100, 10)
+y      &lt;- letters[5:14]
+trial3_data &lt;- tibble::tibble(x, y)
+
+# append data
+DBI::dbWriteTable(con, &quot;trial_db&quot;, trial3_data, append = TRUE)</code></pre>
+<p>Let us check if the data has been appended successfully by querying data from the <code>trial_db</code> table.</p>
+<pre class="r"><code>DBI::dbGetQuery(con, &quot;select * from trial_db&quot;)</code></pre>
+<pre><code>##     x y
+## 1  24 k
+## 2  57 l
+## 3  29 m
+## 4  46 n
+## 5  58 o
+## 6  13 p
+## 7  93 q
+## 8  90 r
+## 9  25 s
+## 10 92 t
+## 11 45 e
+## 12  5 f
+## 13 47 g
+## 14 20 h
+## 15 78 i
+## 16 27 j
+## 17  1 k
+## 18 18 l
+## 19 48 m
+## 20 32 n</code></pre>
+</div>
+<div id="insert-rows" class="section level4">
+<h4>Insert Rows</h4>
+<p>We can insert new rows into existing tables using:</p>
+<ul>
+<li><code>dbExecute()</code></li>
+<li><code>dbSendStatement()</code></li>
+</ul>
+<p>Both the function take 2 arguments:</p>
+<ul>
+<li>connection name</li>
+<li>sql statement</li>
+</ul>
+<p>In the below example, we insert a new row of data into the <code>trial-db</code> table in the database using `dbExecute().</p>
+<pre class="r"><code>DBI::dbExecute(con,
+  &quot;INSERT into trial_db (x, y) VALUES (32, &#39;c&#39;), (45, &#39;k&#39;), (61, &#39;h&#39;)&quot;
+)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Let us check if the new row of data has been inserted into the <code>trial_db</code> table by querying data from the same table.</p>
+<pre class="r"><code>DBI::dbGetQuery(con, &quot;select * from trial_db&quot;)</code></pre>
+<pre><code>##     x y
+## 1  24 k
+## 2  57 l
+## 3  29 m
+## 4  46 n
+## 5  58 o
+## 6  13 p
+## 7  93 q
+## 8  90 r
+## 9  25 s
+## 10 92 t
+## 11 45 e
+## 12  5 f
+## 13 47 g
+## 14 20 h
+## 15 78 i
+## 16 27 j
+## 17  1 k
+## 18 18 l
+## 19 48 m
+## 20 32 n
+## 21 32 c
+## 22 45 k
+## 23 61 h</code></pre>
+<p>In the next example, we insert another row of data into the <code>trial_db</code> table in the database using <code>dbSendStatement()</code>.</p>
+<pre class="r"><code>DBI::dbSendStatement(con,
+  &quot;INSERT into trial_db (x, y) VALUES (25, &#39;m&#39;), (54, &#39;l&#39;), (16, &#39;y&#39;)&quot;
+)</code></pre>
+<pre><code>## &lt;SQLiteResult&gt;
+##   SQL  INSERT into trial_db (x, y) VALUES (25, &#39;m&#39;), (54, &#39;l&#39;), (16, &#39;y&#39;)
+##   ROWS Fetched: 0 [complete]
+##        Changed: 3</code></pre>
+<p>Let us check if the new row of data has been inserted into the <code>trial_db</code> table by querying data from the same table.</p>
+<pre class="r"><code>DBI::dbGetQuery(con, &quot;select * from trial_db&quot;)</code></pre>
+<pre><code>## Warning: Closing open result set, pending rows</code></pre>
+<pre><code>##     x y
+## 1  24 k
+## 2  57 l
+## 3  29 m
+## 4  46 n
+## 5  58 o
+## 6  13 p
+## 7  93 q
+## 8  90 r
+## 9  25 s
+## 10 92 t
+## 11 45 e
+## 12  5 f
+## 13 47 g
+## 14 20 h
+## 15 78 i
+## 16 27 j
+## 17  1 k
+## 18 18 l
+## 19 48 m
+## 20 32 n
+## 21 32 c
+## 22 45 k
+## 23 61 h
+## 24 25 m
+## 25 54 l
+## 26 16 y</code></pre>
+</div>
+<div id="remove-table" class="section level4">
+<h4>Remove Table</h4>
+<p>To delete/remove a table from the database, use <code>dbRemoveTable()</code>.</p>
+<pre class="r"><code>DBI::dbRemoveTable(con, &quot;trial_db&quot;)</code></pre>
+</div>
+<div id="your-turn-1" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>check if <code>mytable</code> exists in the database</li>
+<li>create new table <code>mytable</code> using the first 3 rows of <code>mtcars</code> data set</li>
+<li>list all tables to check if the new table has been created</li>
+<li>overwrite <code>mytable</code> with the first 10 rows of <code>mtcars</code> data set</li>
+<li>append the 20th row of <code>mtcars</code> data set to <code>mytable</code></li>
+<li>create a new table using the last 5 rows of <code>mtcars</code> and append it to <code>mytable</code></li>
+<li>remove <code>mytable</code></li>
+</ul>
+</div>
+</div>
+<div id="data-type" class="section level2">
+<h2>Data Type</h2>
+<p>We know of the different data types in R such as integer, numeric/double, logical, factor etc. How do databases treat these data types? To know the data type of a particular value in a database, use <code>dbDataType()</code>. The first input is the database driver and the next is the value whose data type we are seeking. In the below example, we look at the data type of 3 different values in SQLite.</p>
+<pre class="r"><code>DBI::dbDataType(RSQLite::SQLite(), &quot;a&quot;)</code></pre>
+<pre><code>## [1] &quot;TEXT&quot;</code></pre>
+<pre class="r"><code>DBI::dbDataType(RSQLite::SQLite(), 1:5)</code></pre>
+<pre><code>## [1] &quot;INTEGER&quot;</code></pre>
+<pre class="r"><code>DBI::dbDataType(RSQLite::SQLite(), 1.5)</code></pre>
+<pre><code>## [1] &quot;REAL&quot;</code></pre>
+</div>
+<div id="generate-sql-query" class="section level2">
+<h2>Generate SQL Query</h2>
+<p><code>sqlCreateTable()</code> will generate the SQL statement for simple <code>CREATE TABLE</code> operations. In the below example, it generates the SQL statement for creating table <code>new</code> with two fields <code>x</code> and <code>y</code>.</p>
+<pre class="r"><code>DBI::sqlCreateTable(con, &quot;new&quot;, c(x = &quot;integer&quot;, y = &quot;text&quot;))</code></pre>
+<pre><code>## Warning: Do not rely on the default value of the row.names argument for
+## sqlCreateTable(), it will change in the future.</code></pre>
+<pre><code>## &lt;SQL&gt; CREATE TABLE `new` (
+##   `x` integer,
+##   `y` text
+## )</code></pre>
+<p><code>sqlAppendTable()</code> will generate the SQL statement for simple <code>INSERT</code> operations. In the below example, it generates the SQL statement for inserting a new row of data into the <code>trial_db</code> table.</p>
+<pre class="r"><code>trial_new &lt;- data.frame(x = 30, y = &#39;k&#39;)
+DBI::sqlAppendTable(con, &quot;trial_db&quot;, trial_new)</code></pre>
+<pre><code>## Warning: Do not rely on the default value of the row.names argument for
+## sqlAppendTable(), it will change in the future.</code></pre>
+<pre><code>## &lt;SQL&gt; INSERT INTO `trial_db`
+##   (`x`, `y`)
+## VALUES
+##   (30, &#39;k&#39;)</code></pre>
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+<div id="running-sql-scripts" class="section level2">
+<h2>Running SQL Scripts</h2>
+<p>Once you are connected to a database, you may want to run some SQL queries. So far, we have run the SQL queries in R using function from the DBI package. Using RStudio SQL scripts, we can execute plain SQL queries as shown below. In the first line, we specify the database connection <code>-- !preview conn=con</code> followed by SQL queries. The output can be viewed by clicking on the preview button. We have included a sample SQL script (dbi.sql) which you can open and execute in RStudio.</p>
+<p><img src="/img/dbi_running_sql_scripts.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="knitr-sql-engine" class="section level2">
+<h2>knitr SQL Engine</h2>
+<p>In addition to R, the knitr package can execute code chunks in a variety of languages including SQL. In the below image, we show how to execute SQL queries. First, we establish a DBIconnection to a database in a R code chunk which is then used in a SQL chunk via the <code>connection</code> option (<code>connection = con</code>). Check out the <code>dbi.Rmd</code> file in the resources section.</p>
+<p><img src="/img/dbi_knitr_sql_engine.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="your-turn-2" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>check the data type of <code>"NULL"</code></li>
+<li>use SQL script to select <code>duration</code>, <code>n_visit</code> from <code>trade</code> table
+where <code>device</code> has the value <code>tablet</code></li>
+<li>create a html report for the above sql query using the knitr SQL engine</li>
+</ul>
+</div>
+</div>
+<div id="data-transformation" class="section level2">
+<h2>Data Transformation</h2>
+<p>In this section, we will learn to query data from a database using dplyr. We will learn to:</p>
+<ul>
+<li>reference data</li>
+<li>query data using dplyr</li>
+<li>display query</li>
+<li>collect data</li>
+<li>simulate</li>
+</ul>
+<div id="reference-data" class="section level4">
+<h4>Reference Data</h4>
+<p>The first step is to reference the table in the database using <code>tbl()</code>. Since we want to use the <code>ecom</code> table from the database, we reference it as <code>ecom2</code> using <code>tbl()</code>.</p>
+<pre class="r"><code>ecom2 &lt;- dplyr::tbl(con, &quot;ecom&quot;)
+ecom2</code></pre>
+<pre><code>## # Source:   table&lt;ecom&gt; [?? x 11]
+## # Database: sqlite 3.22.0 [J:\R\Others\blogs\content\post\mydatabase.db]
+##       id referrer device bouncers n_visit n_pages duration country purchase
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
+##  1     1 google   laptop true          10       1      693 Czech ~ false   
+##  2     2 yahoo    tablet true           9       1      459 Yemen   false   
+##  3     3 direct   laptop true           0       1      996 Brazil  false   
+##  4     4 bing     tablet false          3      18      468 China   true    
+##  5     5 yahoo    mobile true           9       1      955 Poland  false   
+##  6     6 yahoo    laptop false          5       5      135 South ~ false   
+##  7     7 yahoo    mobile true          10       1       75 Bangla~ false   
+##  8     8 direct   mobile true          10       1      908 Indone~ false   
+##  9     9 bing     mobile false          3      19      209 Nether~ false   
+## 10    10 google   mobile true           6       1      208 Czech ~ false   
+## # ... with more rows, and 2 more variables: order_items &lt;dbl&gt;,
+## #   order_value &lt;dbl&gt;</code></pre>
+<p>If you look at the output, <code>ecom2</code> displays a tibble but in the second line it also shows the database information as well. Let us now move on and calculate the average time on site by device type.</p>
+</div>
+<div id="query-data" class="section level4">
+<h4>Query Data</h4>
+<p>Let us compute the average time on site for different referrer groups when the visitor browses the site using a laptop. Now, instead of using SQL statement to extract the above information, we will use dplyr. This is especially useful if the user is not well versed in SQL. While dplyr can be used to query data, it is still advisable to learn the basics of SQL.</p>
+<pre class="r"><code>ecom2 %&gt;% 
+  dplyr::select(referrer, device, duration) %&gt;% 
+  dplyr::filter(device == &quot;laptop&quot;) %&gt;% 
+  dplyr::group_by(referrer) %&gt;% 
+  dplyr::summarise(avg_tos = mean(duration)) %&gt;% 
+  dplyr::arrange(avg_tos)</code></pre>
+<pre><code>## Warning: Missing values are always removed in SQL.
+## Use `AVG(x, na.rm = TRUE)` to silence this warning</code></pre>
+<pre><code>## # Source:     lazy query [?? x 2]
+## # Database:   sqlite 3.22.0 [J:\R\Others\blogs\content\post\mydatabase.db]
+## # Ordered by: avg_tos
+##   referrer avg_tos
+##   &lt;chr&gt;      &lt;dbl&gt;
+## 1 direct      326.
+## 2 yahoo       331.
+## 3 social      362.
+## 4 bing        434.
+## 5 google      439.</code></pre>
+</div>
+<div id="display-query" class="section level4">
+<h4>Display Query</h4>
+<p>If you want to view the SQL translation of the dplyr code used in the previous example, use <code>show_query()</code>.</p>
+<pre class="r"><code>tos_query &lt;- 
+  ecom2 %&gt;% 
+  dplyr::select(referrer, device, duration) %&gt;% 
+  dplyr::filter(device == &quot;laptop&quot;) %&gt;% 
+  dplyr::group_by(referrer) %&gt;% 
+  dplyr::summarise(avg_tos = mean(duration)) %&gt;% 
+  dplyr::arrange(avg_tos)
+
+dplyr::show_query(tos_query)</code></pre>
+<pre><code>## Warning: Missing values are always removed in SQL.
+## Use `AVG(x, na.rm = TRUE)` to silence this warning</code></pre>
+<pre><code>## &lt;SQL&gt;
+## SELECT `referrer`, AVG(`duration`) AS `avg_tos`
+## FROM (SELECT `referrer`, `device`, `duration`
+## FROM `ecom`)
+## WHERE (`device` = &#39;laptop&#39;)
+## GROUP BY `referrer`
+## ORDER BY `avg_tos`</code></pre>
+</div>
+<div id="collect-data" class="section level4">
+<h4>Collect Data</h4>
+<p>Now, some interesting facts. We will understand this using a different simple example. Let us read the <code>referrer</code> and <code>device</code> column from the <code>ecom</code> table in the database and store it in <code>result</code>.</p>
+<pre class="r"><code>result &lt;- 
+  ecom2 %&gt;%
+  dplyr::select(referrer, device) 
+
+result</code></pre>
+<pre><code>## # Source:   lazy query [?? x 2]
+## # Database: sqlite 3.22.0 [J:\R\Others\blogs\content\post\mydatabase.db]
+##    referrer device
+##    &lt;chr&gt;    &lt;chr&gt; 
+##  1 google   laptop
+##  2 yahoo    tablet
+##  3 direct   laptop
+##  4 bing     tablet
+##  5 yahoo    mobile
+##  6 yahoo    laptop
+##  7 yahoo    mobile
+##  8 direct   mobile
+##  9 bing     mobile
+## 10 google   mobile
+## # ... with more rows</code></pre>
+<p>When we print <code>result</code>, it displays the first 10 rows. In addition it shows the database information at the beginning as well as <code>... with more rows</code> at the bottom of the table but it does not exactly say how many more rows are there.
+Let us use <code>nrow()</code> to find the total number of rows in <code>result</code>.</p>
+<pre class="r"><code>nrow(result)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>No luck with <code>nrow()</code> either as it returns <code>NA</code> instead of the number of rows in <code>result</code>. Now, why does this happen? When working with databases, <strong>dplyr</strong> never pulls data into R unless you explicitly ask for it. In the previous example, it just displays the first 10 rows and has not read the entire table. The <code>ecom</code> table in the database has 1000 rows of data and ideally dplyr should have read all the rows of data. But it does not work like that and the reason is this statement at the beginning of the output: <code>Source:   lazy query [?? x 2]</code>. It does display the number of columns, <code>2</code>. In place of the number of columns there is <code>??</code>because it has not read the entire data from the <code>ecom</code> table.</p>
+<p>What do we do if we need the entire data? In such cases, we can use <code>collect()</code> as shown in the below example.</p>
+<pre class="r"><code>result %&gt;% 
+  dplyr::collect() </code></pre>
+<pre><code>## # A tibble: 1,000 x 2
+##    referrer device
+##    &lt;chr&gt;    &lt;chr&gt; 
+##  1 google   laptop
+##  2 yahoo    tablet
+##  3 direct   laptop
+##  4 bing     tablet
+##  5 yahoo    mobile
+##  6 yahoo    laptop
+##  7 yahoo    mobile
+##  8 direct   mobile
+##  9 bing     mobile
+## 10 google   mobile
+## # ... with 990 more rows</code></pre>
+<p>In the above output, dplyr has read the entire data from <code>ecom</code>. It show the number of rows and columns at the top and the number of rows not displayed (990) at the bottom. More importantly, it does not show any information about the database as the entire data from <code>ecom</code> has been read and is available in the R session.</p>
+<pre class="r"><code>result %&gt;% 
+  dplyr::collect() %&gt;% 
+  nrow()</code></pre>
+<pre><code>## [1] 1000</code></pre>
+<p>Even <code>nrow()</code> returns 1000 as the entire data has been read from the database. Unless and until required or explicitly asked for, the data is not pulled from the database. When you are playing around with or iterating or experimenting with R code, do not use <code>collect()</code>. Only when you have finalized the code for the information being extracted from the database, use <code>collect()</code> to read the complete output into the R session.</p>
+</div>
+<div id="simulate" class="section level4">
+<h4>Simulate</h4>
+<p><code>simulate_*()</code> functions from <a href="https://dbplyr.tidyverse.org/">dbplyr</a> are useful for testing SQL generation. In the below example, we want to generate the SQL for computing average time on site by referrer type for a MySQL database connection. The SQL generated is rendered to a SQL string by <code>sql_render()</code>. You can test SQL generation for a wide variety of databases using dbplyr.</p>
+<pre class="r"><code>ecom2 %&gt;% 
+  dplyr::group_by(referrer) %&gt;% 
+  dplyr::summarise(avg_tos = mean(duration))  %&gt;% 
+  dbplyr::sql_render(dbplyr::simulate_mysql())</code></pre>
+<pre><code>## Warning: Missing values are always removed in SQL.
+## Use `AVG(x, na.rm = TRUE)` to silence this warning</code></pre>
+<pre><code>## &lt;SQL&gt; SELECT `referrer`, AVG(`duration`) AS `avg_tos`
+## FROM `ecom`
+## GROUP BY `referrer`</code></pre>
+</div>
+<div id="your-turn-3" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>use <code>tbl()</code> to reference <code>trade</code> table as <code>trade2</code></li>
+<li>use dplyr verbs to compute average duration for <code>device</code> from the <code>trade</code> table</li>
+<li>store the above query in a variable <code>tos_device</code></li>
+<li>use <code>show_query()</code> to display the underlying SQL query of <code>tos_device</code></li>
+<li>use <code>collect()</code> to retrieve data from <code>tos_device</code></li>
+<li>use <code>explain()</code> to display the underlying computation logic of <code>tos_device</code></li>
+</ul>
+</div>
+</div>
+<div id="data-visualization" class="section level2">
+<h2>Data Visualization</h2>
+<p><a href="https://edgararuiz.github.io/dbplot/index.html">dbplot</a> leverages dplyr to process the underlying data computations of a plot inside a database. It uses ggplot2 to generate the following plots:</p>
+<ul>
+<li>box plot</li>
+<li>bar plot</li>
+<li>histogram</li>
+<li>line chart</li>
+<li>raster plot</li>
+</ul>
+<p>Some of the plots work with only Hive or Sparklyr connections. You can refere to the documentation for more details. Since we are dealing with a SQLite database, we will be able to generate the following plots.</p>
+<div id="bar-plot" class="section level4">
+<h4>Bar Plot</h4>
+<pre class="r"><code>ecom2 %&gt;% 
+  dbplot::dbplot_bar(device) + 
+  ggplot2::xlab(&quot;Device&quot;) + 
+  ggplot2::ylab(&quot;Count&quot;) + 
+  ggplot2::ggtitle(&quot;Device Distribution&quot;)</code></pre>
+<p><img src="/post/2019-08-08-working-with-databases-using-r_files/figure-html/dbplot1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="line-chart" class="section level4">
+<h4>Line Chart</h4>
+<pre class="r"><code>ecom2 %&gt;% 
+  dbplot::dbplot_line(n_visit) + 
+  ggplot2::xlab(&quot;Visits&quot;) + 
+  ggplot2::ylab(&quot;Count&quot;) </code></pre>
+<p><img src="/post/2019-08-08-working-with-databases-using-r_files/figure-html/dbplot2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="your-turn-4" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>create bar plot of <code>referrer</code> column from the <code>trade</code> table</li>
+<li>create line chart of <code>n_visit</code> column from the <code>trade</code> table</li>
+</ul>
+</div>
+</div>
+<div id="data-modeling" class="section level2">
+<h2>Data Modeling</h2>
+<p>In this section, we will explore fitting models and running predictions inside the database using the following packages:</p>
+<ul>
+<li><a href="https://tidymodels.github.io/modeldb/index.html">modeldb</a></li>
+<li><a href="https://tidymodels.github.io/tidypredict/index.html">tidypredict</a></li>
+</ul>
+<p>Let us start with fitting models inside database. The <a href="https://tidymodels.github.io/modeldb/index.html">modeldb</a> package fits models inside database by using dplyr and dbplyr for SQL translation of the algorithms and currently supports linear regression and k-means clustering.</p>
+<div id="simple-regression" class="section level4">
+<h4>Simple Regression</h4>
+<p>Let us begin with a simple linear regression model. From the <code>ecom</code> table in the database, we want to regress <code>duration</code> on <code>n_visit</code>. As shown below, we first select the required fields using <code>select()</code> and pass the resulting data to <code>linear_regression_db()</code> from modeldb. We need to specify the dependent variable which in our case is <code>duration</code>.</p>
+<pre class="r"><code>ecom2 %&gt;% 
+  dplyr::select(duration, n_visit) %&gt;% 
+  modeldb::linear_regression_db(duration)</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   `(Intercept)` n_visit
+##           &lt;dbl&gt;   &lt;dbl&gt;
+## 1          364.   -1.72</code></pre>
+<p>Let us move on to a multiple regression example. In the below example, we want to regress <code>duration</code> on <code>n_visit</code> (number of visit) and <code>n_pages</code> (number of pages browsed).</p>
+</div>
+<div id="multiple-regression" class="section level4">
+<h4>Multiple Regression</h4>
+<pre class="r"><code>ecom2 %&gt;% 
+  dplyr::select(duration, n_visit, n_pages) %&gt;%
+  modeldb::linear_regression_db(duration)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   `(Intercept)` n_visit n_pages
+##           &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1          415.   -2.02   -8.37</code></pre>
+</div>
+<div id="categorical-variables" class="section level4">
+<h4>Categorical Variables</h4>
+<p>So how do we handle categorical variables? To handle categorical variables, use <code>add_dummy_variables()</code>. We need to specify the categorical variable and its values. It will create the dummy variables.</p>
+<pre class="r"><code>ecom2 %&gt;% 
+  dplyr::select(duration, device) %&gt;%
+  modeldb::add_dummy_variables(device, values = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)) %&gt;%
+  modeldb::linear_regression_db(duration)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   `(Intercept)` device_mobile device_tablet
+##           &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1          376.         -39.2         -22.1</code></pre>
+</div>
+<div id="full-example" class="section level4">
+<h4>Full Example</h4>
+<p>Below is a full example, where we have both continuous and categorical predictors. Whenever you have 3 or more predictors, use the <code>sample_size</code> or <code>auto_count</code> arguments. To know why, click <a href="https://tidymodels.github.io/modeldb/reference/linear_regression_db.html">here</a></p>
+<pre class="r"><code># use sample size
+ecom2 %&gt;% 
+  dplyr::select(duration, n_visit, n_pages, device) %&gt;%
+  modeldb::add_dummy_variables(device, values = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)) %&gt;%
+  modeldb::linear_regression_db(duration, sample_size = 1000)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   `(Intercept)` n_visit n_pages device_mobile device_tablet
+##           &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1          427.   -1.52   -8.27         -31.1         -14.4</code></pre>
+<pre class="r"><code># use auto_count
+ecom2 %&gt;% 
+  dplyr::select(duration, n_visit, n_pages, device) %&gt;%
+  modeldb::add_dummy_variables(device, values = c(&quot;laptop&quot;, &quot;mobile&quot;, &quot;tablet&quot;)) %&gt;%
+  modeldb::linear_regression_db(duration, auto_count = TRUE)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   `(Intercept)` n_visit n_pages device_mobile device_tablet
+##           &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1          427.   -1.52   -8.27         -31.1         -14.4</code></pre>
+</div>
+<div id="your-turn-5" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>regress <code>duration</code> on <code>n_pages</code></li>
+<li>regress <code>duration</code> on <code>referrer</code></li>
+<li>and finally regress <code>duration</code> on <code>n_pages</code>, <code>n_visit</code> and <code>referrer</code></li>
+</ul>
+</div>
+</div>
+<div id="predict-inside-database" class="section level2">
+<h2>Predict Inside Database</h2>
+<p><a href="https://tidymodels.github.io/tidypredict/index.html">tidypredict</a> can return SQL statement that can be run inside the database. Let us first create a linear model in R using <code>lm()</code></p>
+<pre class="r"><code>model &lt;- lm(duration ~ device + referrer + n_visit + n_pages, data = ecom2)
+model</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = duration ~ device + referrer + n_visit + n_pages, 
+##     data = ecom2)
+## 
+## Coefficients:
+##    (Intercept)    devicemobile    devicetablet  referrerdirect  
+##        441.450         -30.952         -14.497          -8.980  
+## referrergoogle  referrersocial   referreryahoo         n_visit  
+##        -10.038         -19.841         -32.097          -1.433  
+##        n_pages  
+##         -8.298</code></pre>
+<div id="fit" class="section level4">
+<h4>Fit</h4>
+<p>To add the fitted values in a new column, use <code>tidypredict_to_column()</code>. In the below example, we use <code>model</code> to compute the fitted values and add it as a new column.</p>
+<pre class="r"><code>ecom2 %&gt;% 
+  tidypredict::tidypredict_to_column(model) %&gt;% 
+  dplyr::select(duration, fit)</code></pre>
+<pre><code>## # Source:   lazy query [?? x 2]
+## # Database: sqlite 3.22.0 [J:\R\Others\blogs\content\post\mydatabase.db]
+##    duration   fit
+##       &lt;dbl&gt; &lt;dbl&gt;
+##  1      693  409.
+##  2      459  374.
+##  3      996  424.
+##  4      468  273.
+##  5      955  357.
+##  6      135  361.
+##  7       75  356.
+##  8      908  379.
+##  9      209  249.
+## 10      208  384.
+## # ... with more rows</code></pre>
+<p><code>tidypredict_fit()</code> returns a Tidy Eval formula that can be used inside a dplyr command.</p>
+<pre class="r"><code>tidypredict::tidypredict_fit(model)</code></pre>
+<pre><code>## 441.450192491919 + (ifelse(device == &quot;mobile&quot;, 1, 0) * -30.9522074131866) + 
+##     (ifelse(device == &quot;tablet&quot;, 1, 0) * -14.4972018107797) + 
+##     (ifelse(referrer == &quot;direct&quot;, 1, 0) * -8.98035001912995) + 
+##     (ifelse(referrer == &quot;google&quot;, 1, 0) * -10.038005625893) + 
+##     (ifelse(referrer == &quot;social&quot;, 1, 0) * -19.8411767075006) + 
+##     (ifelse(referrer == &quot;yahoo&quot;, 1, 0) * -32.0969778768984) + 
+##     (n_visit * -1.4325653130794) + (n_pages * -8.29825840984566)</code></pre>
+<p>Let us use the above R code to calculate fitted values using <code>mutate()</code> from dplyr.</p>
+<pre class="r"><code>ecom2 %&gt;%
+  dplyr::mutate(
+    fit = 441.450192491919 + (ifelse(device == &quot;mobile&quot;, 1, 0) *
+      -30.9522074131866) + (ifelse(device == &quot;tablet&quot;, 1,
+      0) * -14.4972018107797) + (ifelse(referrer == &quot;direct&quot;,
+      1, 0) * -8.98035001912995) + (ifelse(referrer == &quot;google&quot;,
+      1, 0) * -10.038005625893) + (ifelse(referrer == &quot;social&quot;,
+      1, 0) * -19.8411767075006) + (ifelse(referrer == &quot;yahoo&quot;,
+      1, 0) * -32.0969778768984) + (n_visit * -1.4325653130794) +
+      (n_pages * -8.29825840984566)
+    ) %&gt;%
+  dplyr::select(duration, fit)</code></pre>
+<pre><code>## # Source:   lazy query [?? x 2]
+## # Database: sqlite 3.22.0 [J:\R\Others\blogs\content\post\mydatabase.db]
+##    duration   fit
+##       &lt;dbl&gt; &lt;dbl&gt;
+##  1      693  409.
+##  2      459  374.
+##  3      996  424.
+##  4      468  273.
+##  5      955  357.
+##  6      135  361.
+##  7       75  356.
+##  8      908  379.
+##  9      209  249.
+## 10      208  384.
+## # ... with more rows</code></pre>
+<p>The SQL translation of the above step can be viewed using <code>tidypredict_sql()</code>.</p>
+<pre class="r"><code>tidypredict::tidypredict_sql(model, con)</code></pre>
+<pre><code>## &lt;SQL&gt; 441.450192491919 + (CASE WHEN (`device` = &#39;mobile&#39;) THEN (1.0) WHEN NOT(`device` = &#39;mobile&#39;) THEN (0.0) END * -30.9522074131866) + (CASE WHEN (`device` = &#39;tablet&#39;) THEN (1.0) WHEN NOT(`device` = &#39;tablet&#39;) THEN (0.0) END * -14.4972018107797) + (CASE WHEN (`referrer` = &#39;direct&#39;) THEN (1.0) WHEN NOT(`referrer` = &#39;direct&#39;) THEN (0.0) END * -8.98035001912995) + (CASE WHEN (`referrer` = &#39;google&#39;) THEN (1.0) WHEN NOT(`referrer` = &#39;google&#39;) THEN (0.0) END * -10.038005625893) + (CASE WHEN (`referrer` = &#39;social&#39;) THEN (1.0) WHEN NOT(`referrer` = &#39;social&#39;) THEN (0.0) END * -19.8411767075006) + (CASE WHEN (`referrer` = &#39;yahoo&#39;) THEN (1.0) WHEN NOT(`referrer` = &#39;yahoo&#39;) THEN (0.0) END * -32.0969778768984) + (`n_visit` * -1.4325653130794) + (`n_pages` * -8.29825840984566)</code></pre>
+</div>
+</div>
+<div id="close-connection" class="section level2">
+<h2>Close Connection</h2>
+<p>It is a good practice to close connection to a database when you no longer need to read/write data from/to it. Use <code>dbDisconnect()</code> to close the database connection.</p>
+<pre class="r"><code>DBI::dbDisconnect(con)</code></pre>
+<hr>
+<p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+<div id="rstudio-connections-pane" class="section level2">
+<h2>RStudio Connections Pane</h2>
+<p>In this section, we will learn to connect and explore databases using RStudio connections pane. We will connect to a MySQL database hosted on AWS. For security reasons, the database will be deleted after this post has been published and you will not be able to reproduce the results from this section onwards. Now, in the below images we show how to add and explore a new connection. <strong>The Connections Pane is available only in RStudio 1.1 and later.</strong></p>
+<div id="step-1-click-on-new-connection" class="section level4">
+<h4>Step 1: Click on New Connection</h4>
+<p>In the Connections Pane, click on the <code>New Connection</code> button.</p>
+<p><img src="/img/dbi_connection_edited_1.png" width="60%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-2-connect-to-a-data-source" class="section level4">
+<h4>Step 2: Connect to a Data Source</h4>
+<p>Once you click on <code>New Connection</code>, RStudio will display the exisiting data sources. If you do not see the driver for the database you want to connect to, install the driver and check again. Visit <a href="https://db.rstudio.com/best-practices/drivers/" class="uri">https://db.rstudio.com/best-practices/drivers/</a> for more information about setting up ODBC drivers.</p>
+<p><img src="/img/dbi_connection_edited_2.png" width="60%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-3-supply-database-connection-parameters" class="section level4">
+<h4>Step 3: Supply Database Connection Parameters</h4>
+<p>If the database driver is already present, click on it to create a new
+connection. Specify the database parameters in the text box as shown in the below image. Visit <a href="https://www.connectionstrings.com/" class="uri">https://www.connectionstrings.com/</a> to learn how to specify the connection strings for different databases.</p>
+<p><img src="/img/dbi_connection_edited_3.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>Once you specify the database parameters, the R code will be automatically updated by RStudio as shown below.</p>
+<p><img src="/img/dbi_connection_edited_4.png" width="60%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-4-test-connection" class="section level4">
+<h4>Step 4: Test Connection</h4>
+<p>After specifying the database connection parameters, we can test if the connection works by clicking on <code>Test</code>.</p>
+<p><img src="/img/dbi_connection_edited_5.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>If RStudio is able to connect to the database, it will show a success message as shown below.</p>
+<p><img src="/img/dbi_connection_pane_5.png" width="60%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-5-connect-options" class="section level4">
+<h4>Step 5: Connect Options</h4>
+<p>After testing the connection, you can choose to connect from</p>
+<ul>
+<li>the console</li>
+<li>R script</li>
+<li>or a notebook.</li>
+</ul>
+<p>You can copy the R code to the clipboard as well. Depending on where you intend to use the connection i.e. interactive session, R script or notebook, choose the appropriate option.</p>
+<p><img src="/img/dbi_connection_edited_6.png" width="60%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-6-open-new-connection" class="section level4">
+<h4>Step 6: Open New Connection</h4>
+<p>Click on <code>OK</code> button to open a new connection to the database.</p>
+<p><img src="/img/dbi_connection_edited_7.png" width="60%" style="display: block; margin: auto;" /></p>
+<div id="step-7-explore-database" class="section level5">
+<h5>Step 7: Explore Database</h5>
+<p>You can explore the database from the <code>Connections</code> tab. View the tables in the database, explore the fields in a table, open a SQL script to run queries or close the connection if you don’t need it any longer.</p>
+<p><img src="/img/dbi_connection_edited_8.png" width="50%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="handling-credentials" class="section level2">
+<h2>Handling Credentials</h2>
+<p>Handling database credentials is one of the most important part of working with
+databases in R. In this section, we will look at the different options for
+securely storing and accessing credentials. After connecting to the database, we
+will list the tables in the database (just to check that the connection is
+working) and then disconnect.</p>
+</div>
+<div id="rstudioapi" class="section level2">
+<h2>rstudioapi</h2>
+<p>You can prompt the user to enter the database credentials using RStudio IDE. <code>askForPassword()</code> will show a popup box that masks what is typed.</p>
+<pre class="r"><code>db_con &lt;- DBI::dbConnect(drv      = RMySQL::MySQL(), 
+                         username = rstudioapi::askForPassword(&quot;Database Username&quot;),
+                         password = rstudioapi::askForPassword(&quot;Database Password&quot;),
+                         host     = &quot;mysql-ecom.cowqoftkc0gy.us-east-2.rds.amazonaws.com&quot;, 
+                         port     = 3306, 
+                         dbname   = &quot;mysql_test&quot;)</code></pre>
+<p><img src="/img/dbi_ask_credentials.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="renviron" class="section level4">
+<h4>.Renviron</h4>
+<p>The second method is store the credentials as environment variables. This can
+be achieved using <code>Sys.setenv()</code> or using .Renviron file. The credentials can then be retrieved using <code>Sys.getenv()</code> as shown in the below example:</p>
+<pre class="r"><code>db_con &lt;- DBI::dbConnect(drv      = RMySQL::MySQL(), 
+                         username = Sys.getenv(&quot;db_uid&quot;), 
+                         password = Sys.getenv(&quot;db_pwd&quot;), 
+                         host     = &quot;mysql-ecom.cowqoftkc0gy.us-east-2.rds.amazonaws.com&quot;, 
+                         port     = 3306, 
+                         dbname   = &quot;mysql_test&quot;)
+
+# list tables in the database
+DBI::dbListTables(db_con)</code></pre>
+<pre><code>## [1] &quot;mtcars&quot;</code></pre>
+<pre class="r"><code>DBI::dbDisconnect(db_con)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>In RStudio, create a new file and save it as .Renviron. In this file, define the
+credentials as shown below:</p>
+<pre class="r"><code>userid = &quot;username&quot;
+pwd    = &quot;password&quot;</code></pre>
+<p>Save the file in the home directory of your project and restart R. Why should you restart R? .Renviron is processed only at the beginning of an R session. If you try to access the credentials using <code>Sys.getenv()</code> without restarting R, the credentials will not be retrieved and you will see an error if you try to connect to the database. After restarting R, use <code>Sys.getenv()</code> to retrieve the
+credentials while opening a new connection to the database. We have added the <code>.Renviron</code> file used to store credentials in the resources section of the learning management system as well as in the GitHub repo.</p>
+</div>
+<div id="options" class="section level4">
+<h4>options</h4>
+<p>The database credentials can be recorded as a global option in R. There are two ways to do this:</p>
+<ul>
+<li>use <code>options()</code></li>
+<li>use an R file</li>
+</ul>
+<p>Below is the code that records credentials using <code>options()</code>:</p>
+<pre class="r"><code>options(db_userid   = &quot;user_id&quot;)
+options(db_password = &quot;pass_word&quot;)</code></pre>
+<p>The above code can be stored in a R file which can then be sourced before opening a new connection to the database. The credentials can be retrieved using <code>getOptions()</code>. We have added the <code>options.R</code> file used to store credentials to the database in the resources section of the learning management system as well as in the GitHub repo.</p>
+<pre class="r"><code>source(&quot;options.R&quot;)
+db_con &lt;- DBI::dbConnect(drv      = RMySQL::MySQL(), 
+                         username = getOption(&quot;db_userid&quot;), 
+                         password = getOption(&quot;db_password&quot;), 
+                         host     = &quot;mysql-ecom.cowqoftkc0gy.us-east-2.rds.amazonaws.com&quot;, 
+                         port     = 3306, 
+                         dbname   = &quot;mysql_test&quot;)
+
+# list tables in the database
+DBI::dbListTables(db_con)</code></pre>
+<pre><code>## [1] &quot;mtcars&quot;</code></pre>
+<pre class="r"><code>DBI::dbDisconnect(db_con)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="config" class="section level4">
+<h4>config</h4>
+<p>The <a href="https://github.com/rstudio/config">config</a> package allows you to manage environment specific configuration values. Configurations are defined using a YAML text file and are read by default from a file named config.yml in the current working directory. Store the database connection details such as driver, username, password, host, port, database name etc. in a YAML file and read it using <code>get()</code>. We have added the <code>config.yml</code> file used to store the credentials in the resources section of the learning management system as well as in the GitHub repo.</p>
+<pre class="r"><code># read configurations
+md &lt;- config::get(&quot;mysql-dev&quot;)</code></pre>
+<pre><code>## Warning in readLines(con): incomplete final line found on &#39;J:
+## \R\Others\blogs\content\post\config.yml&#39;</code></pre>
+<pre class="r"><code># test
+md$port</code></pre>
+<pre><code>## [1] 3306</code></pre>
+<pre class="r"><code>md$dbname</code></pre>
+<pre><code>## [1] &quot;mysql_test&quot;</code></pre>
+<pre class="r"><code># connect
+db_con &lt;- DBI::dbConnect(drv      = RMySQL::MySQL(), 
+                         username = md$username,
+                         password = md$password,
+                         host     = md$host, 
+                         port     = md$port, 
+                         dbname   = md$dbname)
+
+# list tables in the database
+DBI::dbListTables(db_con)</code></pre>
+<pre><code>## [1] &quot;mtcars&quot;</code></pre>
+<pre class="r"><code>DBI::dbDisconnect(db_con)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="keyring" class="section level4">
+<h4>keyring</h4>
+<p>The <a href="https://github.com/r-lib/keyring#readme">keyring</a> package provides platform independent API to access the operating systems credential store. We leave it to the reader to explore the keyring package for storing and accessing credentials safely.</p>
+</div>
+</div>
+<div id="dbx" class="section level2">
+<h2>dbx</h2>
+<p><a href="https://github.com/ankane/dbx">dbx</a> is another interesting package built on top
+of DBI for both research and production environments and we hope to explore it
+in a separate post in the coming days.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<ul>
+<li><a href="http://r-dbi.github.io/DBI/">DBI</a> to connect and interact with databases</li>
+<li><a href="https://dplyr.tidyverse.org/index.html">dplyr</a> and <a href="https://dbplyr.tidyverse.org/index.html">dbplyr</a> for data transformation</li>
+<li><a href="https://edgararuiz.github.io/dbplot/index.html">dbplot</a> for data visualization</li>
+<li><a href="https://tidymodels.github.io/modeldb/">modeldb</a> and <a href="https://tidymodels.github.io/tidypredict/">tidypredict</a> for data modeling</li>
+<li><a href="https://github.com/rstudio/config">config</a>, <a href="https://github.com/r-lib/keyring">keyring</a>, .Renviron and <code>options()</code> to handle credentials</li>
+<li>always close the database connection</li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source
+repository</a> or reach out to us at <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a>.</p>
+</div>
