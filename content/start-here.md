@@ -28,8 +28,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 
 ## Databases
 
-- [Quick Guide: R & SQLite](/quick-guide-r-sqlite/)
-- [Data Wrangling with dbplyr](/data-wrangling-with-dbplyr)
+- [Working with Databases using R](/working-with-databases-using-r/)
 - [SQL for Data Science - Part 1](/sql-for-data-science-part-1)
 - [SQL for Data Science - Part 2](/sql-for-data-science-part-2)
 
