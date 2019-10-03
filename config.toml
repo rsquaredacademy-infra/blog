@@ -42,7 +42,7 @@ post = "/:slug/"
     identifier = "home"
     url = "/"
   [[menu.main]]
-    name = "Start here"
+    name = "All Posts"
     pre = "<i class='fa fa-road fa-fw'></i>"
     weight = 2
     identifier = "start-here"
@@ -53,12 +53,6 @@ post = "/:slug/"
     weight = 3
     identifier = "courses1"
     url = "https://rsquared-academy.thinkific.com/" 
-  [[menu.main]]
-    name = " Risk Management Courses"
-    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
-    weight = 4
-    identifier = "courses2"
-    url = "https://www.riskycall.com/" 
   [[menu.main]]
     name = "Shiny Apps"
     pre = "<i class='fa fa-cube fa-fw'></i>"
