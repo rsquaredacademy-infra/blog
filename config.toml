@@ -30,7 +30,7 @@ post = "/:slug/"
 
   # CSS name for highlight.js
   highlightjs = "Github"
-  highlightjs_extra_languages = ["r", "yaml"]
+  highlightjs_extra_languages = ["r", "yaml", "bash"]
   dateFormat = "02 Jan 2006"
 
 [menu]
@@ -52,7 +52,7 @@ post = "/:slug/"
     pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
     weight = 3
     identifier = "courses1"
-    url = "https://www.rsquaredacademy.com/" 
+    url = "https://rsquared-academy.thinkific.com/" 
   [[menu.main]]
     name = " Risk Management Courses"
     pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
