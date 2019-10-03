@@ -21,7 +21,7 @@ post = "/:slug/"
   twitterSite = "@rsquaredacademy"
   brand = "![Rsquared Academy Logo](/img/logos.png)"
   googleAnalytics = "UA-57270671-6"
-  disqus = "rsquaredacademy"
+  disqus = ""
   [params.logo]
     url = "logo.jpeg"
     width = 50
