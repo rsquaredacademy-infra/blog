@@ -3,3 +3,10 @@
 .RData
 .Ruserdata
 public/
+.Renviron
+.here
+config.yml
+options.R
+content/post/config.yml
+content/post/mydatabase.db
+content/post/options.R
