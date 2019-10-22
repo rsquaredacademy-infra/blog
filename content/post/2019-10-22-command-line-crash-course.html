@@ -1,0 +1,5357 @@
+---
+title: "Command Line Basics for R Users"
+author: Aravind Hebbali
+twitterImg: /img/cline_cover_image.png
+description: "Getting Started with the Command Line"
+date: '2019-10-22'
+slug: command-line-basics-for-r-users
+categories:
+  - bash
+tags:
+  - bash
+  - shell
+  - terminal
+  - cli
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
+
+
+<p><img src="/img/cline_cover_image.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>In this tutorial, you will be introduced to shell commands. We have selected a set of commands we think will be useful in general to a wide range of audience.
+We have created a <a href="https://rstudio.cloud/project/518720">RStudio Cloud Project</a> to ensure that all readers are using the same environment while going through the tutorial. Our goal was to ensure that after completing this tutorial, readers should be able to use the shell for version control, managing cloud services (like deploying your own shiny server etc.), execute commands in R &amp; RMarkdown and execute R scripts in the shell. Apart from learning shell commands, the tutorial will also focus on</p>
+<ul>
+<li>exploring R release names</li>
+<li>mapping shell commands to R functions</li>
+<li>RStudio Terminal</li>
+<li>executing shell commands from R using <code>system2()</code> or <code>processx::run()</code></li>
+<li>execute shell commands in RMarkdown</li>
+<li>execute R scripts in the shell</li>
+</ul>
+<p>If you want a deeper understanding of using command line for data science, we suggest you read <a href="https://www.datascienceatthecommandline.com/">Data Science at the Command Line</a>. <a href="https://software-carpentry.org/">Software Carpentry</a> too has a lesson on <a href="https://swcarpentry.github.io/shell-novice/">shell</a>. We have listed more references at the end of the tutorial for the benefit of the readers.</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#navigate">Navigating File System</a></li>
+<li><a href="#filemanage">File Management</a></li>
+<li><a href="#inputoutput">Input/Output</a></li>
+<li><a href="#regex">Search &amp; Regular Expression</a></li>
+<li><a href="#datatransfer">Data Transfer</a></li>
+<li><a href="#compress">File Compression</a></li>
+<li><a href="#sysinfo">System Info</a></li>
+<li><a href="#system2">Execute Shell Commands from R</a></li>
+<li><a href="#shellrstudio">Execute Shell Commands in RStudio</a></li>
+<li><a href="#shellrmarkdown">Execute Shell Commands in RMarkdown</a></li>
+<li><a href="#rinshell">Execute R Commands in Shell</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this post:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/github/shell.pdf" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/518720" target="_blank">RStudio Cloud</a></li>
+</ul>
+<p>You can try our <strong>free online course</strong> <a href="https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users"><strong>Command Line Basics for R Users</strong></a> if you prefer to learn through self paced online courses.</p>
+{{% youtube "" %}}
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+<div id="what-is-shellterminal" class="section level3">
+<h3>What is Shell/Terminal?</h3>
+<p>Shell is a text based application for viewing, handling &amp; manipulating files. It
+takes in commands and passes them on to the operating system. It is also known
+as</p>
+<ul>
+<li>CLI (Command Line Interface)</li>
+<li>Bash (Bourne Again Shell)</li>
+<li>Terminal</li>
+</ul>
+<p>It is sufficient to know a handful of commands to get started with the shell.</p>
+</div>
+<div id="launch-terminal" class="section level3">
+<h3>Launch Terminal</h3>
+<p>Although we will use the terminal in RStudio on <a href="https://rstudio.cloud/">RStudio Cloud</a>, we should still know how to launch the terminal in different operating systems.</p>
+<div id="mac" class="section level4">
+<h4>mac</h4>
+<p>Applications -&gt; Utility -&gt; Terminal</p>
+<p><img src="/img/cline_mac-terminal.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="windows" class="section level4">
+<h4>Windows</h4>
+<div id="option-1" class="section level5">
+<h5>Option 1</h5>
+<p>Go to the Start Menu or screen and enter <code>Command Prompt</code> in the search field.</p>
+<p><img src="/img/cline_windows-terminal-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="option-2" class="section level5">
+<h5>Option 2</h5>
+<p>Start Menu -&gt; Windows System -&gt; Command Prompt</p>
+<p><img src="/img/cline_windows-terminal-2.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="option-3" class="section level5">
+<h5>Option 3</h5>
+<p>Hold the Windows key and press the <code>R</code> key to get a <code>Run</code> window. Type <code>cmd</code> in the box and click on the <code>OK</code> button.</p>
+<p><img src="/img/cline_windows-terminal-3.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="linux" class="section level4">
+<h4>Linux</h4>
+<ul>
+<li>Applications -&gt; Accessories -&gt; Terminal</li>
+<li>Applications -&gt; System -&gt; Terminal</li>
+</ul>
+<p><img src="/img/cline_linux-terminal.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="windows-subsystem-for-linux" class="section level4">
+<h4>Windows Subsystem for Linux</h4>
+<p>If you want to use bash on Windows, try the Windows subsystem for Linux. It only works on 64 bit Windows 10. Below are the steps to enable Windows subsystem fro Linux:</p>
+<div id="step-1---enable-developer-mode" class="section level5">
+<h5>Step 1 - Enable Developer Mode</h5>
+<p>To enable Developer Mode open the Settings app and head to <strong>Update &amp; Security &gt; For Developers</strong>. Press the <strong>Developer Mode</strong> switch.</p>
+<p><img src="/img/cline_wsl-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-2---enable-windows-subsystem-for-linux" class="section level5">
+<h5>Step 2 - Enable Windows Subsystem for Linux</h5>
+<p>To enable the Windows Subsystem for Linux (Beta), open the <strong>Control Panel</strong>, click <strong>Programs and Features</strong>, and click <strong>Turn Windows Features On or Off</strong> in left side bar under Programs and Features. Enable the <strong>Windows Subsystem for Linux (Beta)</strong> option in the list here and click OK. After you do, you’ll be prompted to reboot your computer. Click <strong>Restart Now</strong> to reboot your computer and Windows 10 will install the new feature.</p>
+<p><img src="/img/cline_wsl-2.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="step-3---install-your-linux-distribution-of-choice" class="section level5">
+<h5>Step 3 - Install your Linux Distribution of Choice</h5>
+<p>Open the Microsoft store and choose your favorite Linux distribution.</p>
+<p><img src="/img/cline_wsl-3.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>In the distro’s page, click on “Get”.</p>
+<p><img src="/img/cline_wsl-4.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Launch the distro from the <strong>Start Menu</strong>.</p>
+<p><img src="/img/cline_wsl-5.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>You can learn more about the Windows Subsystem for Linux <a href="https://docs.microsoft.com/en-us/windows/wsl/about">here</a>.</p>
+</div>
+</div>
+<div id="rstudio-terminal" class="section level4">
+<h4>RStudio Terminal</h4>
+<p>RStudio introduced the terminal with version 1.1.383. The terminal tab is next to the console tab. If it is not visible, use any of the below methods to launch it</p>
+<ul>
+<li>Shift + Alt + T</li>
+<li>Tools -&gt; Terminal -&gt; New Terminal</li>
+</ul>
+<p>Note, the terminal depends on the underlying operating system. To learn more about the RStudio terminal, read this <a href="https://support.rstudio.com/hc/en-us/articles/115010737148-Using-the-RStudio-Terminal">article</a> or watch this <a href="https://resources.rstudio.com/webinars/terminal-updates">webinar</a>. In this book, we will use the RStudio terminal on <a href="https://rstudio.cloud/">RStudio Cloud</a> to ensure that all users have access to Linux bash. You can try all the commands used in this book on your local system as well except in case of Windows users.</p>
+<p><img src="/img/cline_rstudio-termina.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="prompt" class="section level3">
+<h3>Prompt</h3>
+<p>As soon as you launch the terminal, you will see the hostname, machine name and
+the prompt. In case of mac &amp; Linux users, the prompt is <code>$</code>. For Windows users, it is <code>&gt;</code>.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+OS
+</th>
+<th style="text-align:left;">
+Prompt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+macOS
+</td>
+<td style="text-align:left;">
+$
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linux
+</td>
+<td style="text-align:left;">
+$
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Windows
+</td>
+<td style="text-align:left;">
+&gt;
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/img/cline_prompt-canva.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="get-started" class="section level3">
+<h3>Get Started</h3>
+<p>To begin with, let us learn to display</p>
+<ul>
+<li>basic information about the user</li>
+<li>the current date &amp; time</li>
+<li>the calendar</li>
+<li>and clear the screen.</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>whoami</code>
+</td>
+<td style="text-align:left;">
+Who is the user?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>date</code>
+</td>
+<td style="text-align:left;">
+Get date, time and timezone
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cal</code>
+</td>
+<td style="text-align:left;">
+Display calendar
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>clear</code>
+</td>
+<td style="text-align:left;">
+Clear the screen
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>whoami</code> prints the effective user id i.e. the name of the user who runs the command. Use it to verify the user as which you are logged into the system.</p>
+<pre class="bash"><code>whoami</code></pre>
+<pre><code>## aravind</code></pre>
+<p><code>date</code> will display or change the value of the system’s time and date information.</p>
+<pre class="bash"><code>date</code></pre>
+<pre><code>## Tue Oct 22 16:25:03 IST 2019</code></pre>
+<p><code>cal</code> will display a formatted calendar and <code>clear</code> will clear all text on the screen and display a new prompt. You can clear the screen by pressing <code>Ctrl + L</code> as well.</p>
+<pre class="bash"><code>cal</code></pre>
+<pre><code>##     October 2019      
+## Su Mo Tu We Th Fr Sa  
+##        1  2  3  4  5  
+##  6  7  8  9 10 11 12  
+## 13 14 15 16 17 18 19  
+## 20 21 _2_2 23 24 25 26  
+## 27 28 29 30 31        
+## </code></pre>
+<p>In R, we can get the user information from <code>Sys.info()</code> or <code>whoami()</code> from the <a href="https://cran.r-project.org/package=whoami">whoami</a> package. The current date &amp; time are returned by <code>Sys.date()</code> &amp; <code>Sys.time()</code>. To clear the R console, we use Ctrl + L.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>whoami</code>
+</td>
+<td style="text-align:left;">
+<code>Sys.info()</code> / <code>whoami::whoami()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>date</code>
+</td>
+<td style="text-align:left;">
+<code>Sys.date()</code> / <code>Sys.time()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cal</code>
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>clear</code>
+</td>
+<td style="text-align:left;">
+<code>Ctrl + L</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="helpdocumentation" class="section level3">
+<h3>Help/Documentation</h3>
+<p>Before we proceed further, let us learn to view the documentation/manual pages of the commands.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>man</code>
+</td>
+<td style="text-align:left;">
+Display manual pages for a command
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>whatis</code>
+</td>
+<td style="text-align:left;">
+Single line description of a command
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>man</code> is used to view the system’s reference manual. Let us use it to view the documentation of the <code>whatis</code> command which we will use next.</p>
+<pre class="bash"><code>man whatis</code></pre>
+<pre><code>## WHATIS(1)                     Manual pager utils                     WHATIS(1)
+## 
+## NAME
+##        whatis - display one-line manual page descriptions
+## 
+## SYNOPSIS
+##        whatis  [-dlv?V]  [-r|-w]  [-s  list]  [-m  system[,...]] [-M path] [-L
+##        locale] [-C file] name ...
+## 
+## DESCRIPTION
+##        Each manual page has a short description available within  it.   whatis
+##        searches  the  manual  page names and displays the manual page descripâ€
+##        tions of any name matched.
+## 
+##        name may contain wildcards (-w) or be a regular expression (-r).  Using
+##        these  options, it may be necessary to quote the name or escape (\) the
+##        special characters to stop the shell from interpreting them.
+## 
+##        index databases are used during the search,  and  are  updated  by  the
+##        mandb  program.   Depending  on your installation, this may be run by a
+##        periodic cron job, or may need to be  run  manually  after  new  manual
+##        pages  have  been installed.  To produce an old style text whatis dataâ€
+##        base from the relative index database, issue the command:
+## 
+##        whatis -M manpath -w &#39;*&#39; | sort &gt; manpath/whatis
+## 
+##        where manpath is a manual page hierarchy such as /usr/man.
+## 
+## OPTIONS
+##        -d, --debug
+##               Print debugging information.
+## 
+##        -v, --verbose
+##               Print verbose warning messages.
+## 
+##        -r, --regex
+##               Interpret each name as a regular expression.  If a name  matches
+##               any  part  of  a  page  name, a match will be made.  This option
+##               causes whatis to be somewhat slower due to the nature  of  dataâ€
+##               base searches.
+## 
+##        -w, --wildcard
+##               Interpret  each  name  as a pattern containing shell style wildâ€
+##               cards.  For a match to be made, an expanded name must match  the
+##               entire  page  name.   This  option  causes whatis to be somewhat
+##               slower due to the nature of database searches.
+## 
+##        -l, --long
+##               Do not trim output to the terminal width.  Normally, output will
+##               be  truncated  to  the terminal width to avoid ugly results from
+##               poorly-written NAME sections.
+## 
+##        -s list, --sections list, --section list
+##               Search only the given manual sections.   list  is  a  colon-  or
+##               comma-separated list of sections.  If an entry in list is a simâ€
+##               ple section,  for  example  &quot;3&quot;,  then  the  displayed  list  of
+##               descriptions  will include pages in sections &quot;3&quot;, &quot;3perl&quot;, &quot;3x&quot;,
+##               and so on; while if an entry in list has an extension, for examâ€
+##               ple &quot;3perl&quot;, then the list will only include pages in that exact
+##               part of the manual section.
+## 
+##        -m system[,...], --systems=system[,...]
+##               If this system has access to  other  operating  system&#39;s  manual
+##               page  names,  they can be accessed using this option.  To search
+##               NewOS&#39;s manual page names, use the option -m NewOS.
+## 
+##               The system specified can be a  combination  of  comma  delimited
+##               operating system names.  To include a search of the native operâ€
+##               ating system&#39;s manual page names, include the system name man in
+##               the  argument  string.   This  option  will override the $SYSTEM
+##               environment variable.
+## 
+##        -M path, --manpath=path
+##               Specify an alternate set of colon-delimited manual page  hierarâ€
+##               chies  to search.  By default, whatis uses the $MANPATH environâ€
+##               ment variable, unless it is empty or unset,  in  which  case  it
+##               will  determine an appropriate manpath based on your $PATH enviâ€
+##               ronment variable.  This option overrides the contents  of  $MANâ€
+##               PATH.
+## 
+##        -L locale, --locale=locale
+##               whatis  will normally determine your current locale by a call to
+##               the C function setlocale(3) which interrogates various  environâ€
+##               ment  variables,  possibly including $LC_MESSAGES and $LA</code></pre>
+<p><code>whatis</code> displays short manual page descriptions (each manual page has a short description available within it).</p>
+<pre class="bash"><code>whatis ls</code></pre>
+<pre><code>## ls (1)               - list directory contents</code></pre>
+<p>You will find <a href="https://tldr.sh/">tldr.sh</a> very useful while exploring new commands and there is a related R package, <a href="https://github.com/kirillseva/tldrrr">tldrrr</a> as well.</p>
+<pre class="r"><code># devtools::install_github(&quot;kirillseva/tldrrr&quot;)
+tldrrr::tldr(&quot;pwd&quot;)</code></pre>
+<pre><code>## pwd 
+##  
+## Print name of current/working directory. 
+##  
+## â€¢ Print the current directory: 
+##  
+##   pwd 
+##  
+## â€¢ Print the current directory, and resolve all symlinks (i.e. show the &quot;physical&quot; path): 
+##  
+##   pwd -P</code></pre>
+<hr>
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/" target="_blank"><img src="/img/ad_courses.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+</div>
+<div id="navigate" class="section level2">
+<h2>Navigating File System</h2>
+<p>In this section, we will learn commands that will help us</p>
+<ul>
+<li>navigate between different folders/directories</li>
+<li>return current working directory</li>
+<li>list all the files &amp; folders in a directory</li>
+<li>create and delete directories</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>pwd</code>
+</td>
+<td style="text-align:left;">
+Print working directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls</code>
+</td>
+<td style="text-align:left;">
+List directory contents
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd</code>
+</td>
+<td style="text-align:left;">
+Change current working directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mkdir</code>
+</td>
+<td style="text-align:left;">
+Create directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rmdir</code>
+</td>
+<td style="text-align:left;">
+Remove/delete directory
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>pwd</code> displays the name of the <strong>p</strong>resent <strong>w</strong>orking <strong>d</strong>irectory.</p>
+<pre class="bash"><code>pwd</code></pre>
+<pre><code>## /mnt/j/R/Others/blogs/content/post/cline</code></pre>
+<p><code>ls</code> displays information about files and directories in the current directory along with their associated metadata such as</p>
+<ul>
+<li>size</li>
+<li>ownership</li>
+<li>modification date</li>
+</ul>
+<p>With no options, it will list the files and directories in the current directory, sorted alphabetically.</p>
+<pre class="bash"><code>ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+<p><code>cd</code> (<strong>c</strong>hange <strong>d</strong>irectory) changes the current working directory. It is among the most used commands as it allows the user to move around the file system.</p>
+<pre class="bash"><code>cd r
+pwd</code></pre>
+<pre><code>## /mnt/j/R/Others/blogs/content/post/cline/r</code></pre>
+<p><code>mkdir</code> will create new directory. It will allow you to set file mode (permissions associated with the directory) i.e. who can open/modify/delete the directory.</p>
+<pre class="bash"><code>mkdir rfiles
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## rfiles
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+<p><code>rmdir</code> will remove empty directories from the file system. It can be used to remove multiple empty directories as well. If the directory is not empty, <code>rmdir</code> will not remove it and instead display a warning that the directory is not empty.</p>
+<pre class="bash"><code>rmdir rfiles
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+<div id="change-working-directory" class="section level3">
+<h3>Change Working Directory</h3>
+<p>Let us focus a bit more on changing working directory. The below table shows commands for changing working directory to</p>
+<ul>
+<li>up one level</li>
+<li>previous working directory</li>
+<li>home directory</li>
+<li>and root directory</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>cd .</code>
+</td>
+<td style="text-align:left;">
+Navigate into directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd ..</code>
+</td>
+<td style="text-align:left;">
+Go up one level
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd -</code>
+</td>
+<td style="text-align:left;">
+Go to previous working directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd ~</code>
+</td>
+<td style="text-align:left;">
+Change directory to home directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd /</code>
+</td>
+<td style="text-align:left;">
+Change directory to root directory
+</td>
+</tr>
+</tbody>
+</table>
+<p>All files and directories stem from one main directory, the root directory. All the other directories in the system are sub-directories of the root directory and the root directory has no parent directory. It is represented by a single slash (<code>/</code>). <code>cd /</code> will change the current working directory to the root directory.</p>
+<pre class="bash"><code>cd /
+pwd</code></pre>
+<pre><code>## /</code></pre>
+<p>The parent directory i.e. the directory one level up from the current directory which contains the directory we are in now is represented by two dots (<code>..</code>). <code>cd ..</code> will change us into the parent directory of the current directory.</p>
+<pre class="bash"><code>cd ..
+pwd</code></pre>
+<pre><code>## /mnt/j/R/Others/blogs/content/post</code></pre>
+<p>The home directory is the directory we are placed in, by default, when we launch a new terminal session. It is represented by the tilde (<code>~</code>).</p>
+<pre class="bash"><code>cd ~
+pwd</code></pre>
+<pre><code>## /home/aravind</code></pre>
+<p>To change into the previous working directory, use <code>cd -</code>.</p>
+<pre class="bash"><code>cd -
+pwd</code></pre>
+<pre><code>## /mnt/j/R/Others/blogs/content/post
+## /mnt/j/R/Others/blogs/content/post</code></pre>
+<p>The current working directory is represented by a single dot (<code>.</code>). <code>cd .</code> will change us into the current directory i.e. it will do nothing.</p>
+</div>
+<div id="list-directory-contents" class="section level3">
+<h3>List Directory Contents</h3>
+<p><code>ls</code> will list the contents of a directory. Using different arguments, we can</p>
+<ul>
+<li>list hidden files</li>
+<li>view file permissions, ownership, size &amp; modification date</li>
+<li>sort by size &amp; modification date</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>ls</code>
+</td>
+<td style="text-align:left;">
+List directory contents
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -l</code>
+</td>
+<td style="text-align:left;">
+List files one per line
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -a</code>
+</td>
+<td style="text-align:left;">
+List all files including hidden files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -la</code>
+</td>
+<td style="text-align:left;">
+Display file permissions, ownership, size &amp; modification date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -lh</code>
+</td>
+<td style="text-align:left;">
+Long format list with size displayed in human readable format
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -lS</code>
+</td>
+<td style="text-align:left;">
+Long format list sorted by size
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls -ltr</code>
+</td>
+<td style="text-align:left;">
+Long format list sorted by modification date
+</td>
+</tr>
+</tbody>
+</table>
+<div id="list-files-one-per-line" class="section level4">
+<h4>List files one per line</h4>
+<pre class="bash"><code>ls -l</code></pre>
+<pre><code>## total 31108
+## -rwxrwxrwx 1 aravind aravind       12 Oct 22 16:24 analysis.R
+## -rwxrwxrwx 1 aravind aravind      430 Oct 22 16:24 bash.R
+## -rwxrwxrwx 1 aravind aravind      145 Oct 22 16:24 bash.Rmd
+## -rwxrwxrwx 1 aravind aravind    16242 Oct 22 16:24 bash.sh
+## -rwxrwxrwx 1 aravind aravind       35 Oct 22 16:24 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Oct 22 16:24 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind    39501 Oct 22 16:24 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind     9291 Oct 22 16:24 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject4
+## -rwxrwxrwx 1 aravind aravind     1498 Oct 22 16:24 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Oct 22 16:24 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 r
+## -rwxrwxrwx 1 aravind aravind    10240 Oct 22 16:24 release_names.tar
+## -rwxrwxrwx 1 aravind aravind      632 Oct 22 16:24 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Oct 22 16:24 release_names.txt
+## -rwxrwxrwx 1 aravind aravind       65 Oct 22 16:24 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Oct 22 16:24 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Oct 22 16:24 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind      157 Oct 22 16:24 urls.txt
+## -rwxrwxrwx 1 aravind aravind     4398 Oct 22 16:24 zip_example.zip</code></pre>
+</div>
+<div id="list-all-files-including-hidden-files" class="section level4">
+<h4>List all files including hidden files</h4>
+<pre class="bash"><code>ls -a</code></pre>
+<pre><code>## .
+## ..
+## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="display-file-permissions-ownership-size-modification-date" class="section level4">
+<h4>Display file permissions, ownership, size &amp; modification date</h4>
+<pre class="bash"><code>ls -la</code></pre>
+<pre><code>## total 31108
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:25 .
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 ..
+## -rwxrwxrwx 1 aravind aravind       12 Oct 22 16:24 analysis.R
+## -rwxrwxrwx 1 aravind aravind      430 Oct 22 16:24 bash.R
+## -rwxrwxrwx 1 aravind aravind      145 Oct 22 16:24 bash.Rmd
+## -rwxrwxrwx 1 aravind aravind    16242 Oct 22 16:24 bash.sh
+## -rwxrwxrwx 1 aravind aravind       35 Oct 22 16:24 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Oct 22 16:24 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind    39501 Oct 22 16:24 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind     9291 Oct 22 16:24 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject4
+## -rwxrwxrwx 1 aravind aravind     1498 Oct 22 16:24 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Oct 22 16:24 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 r
+## -rwxrwxrwx 1 aravind aravind    10240 Oct 22 16:24 release_names.tar
+## -rwxrwxrwx 1 aravind aravind      632 Oct 22 16:24 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Oct 22 16:24 release_names.txt
+## -rwxrwxrwx 1 aravind aravind       65 Oct 22 16:24 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Oct 22 16:24 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Oct 22 16:24 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind      157 Oct 22 16:24 urls.txt
+## -rwxrwxrwx 1 aravind aravind     4398 Oct 22 16:24 zip_example.zip</code></pre>
+</div>
+<div id="display-size-in-human-readable-format" class="section level4">
+<h4>Display size in human readable format</h4>
+<pre class="bash"><code>ls -lh</code></pre>
+<pre><code>## total 31M
+## -rwxrwxrwx 1 aravind aravind   12 Oct 22 16:24 analysis.R
+## -rwxrwxrwx 1 aravind aravind  430 Oct 22 16:24 bash.R
+## -rwxrwxrwx 1 aravind aravind  145 Oct 22 16:24 bash.Rmd
+## -rwxrwxrwx 1 aravind aravind  16K Oct 22 16:24 bash.sh
+## -rwxrwxrwx 1 aravind aravind   35 Oct 22 16:24 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind   34 Oct 22 16:24 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind  39K Oct 22 16:24 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind 9.1K Oct 22 16:24 main_project.zip
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myfiles
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 mypackage
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myproject
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myproject1
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myproject2
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myproject3
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 myproject4
+## -rwxrwxrwx 1 aravind aravind 1.5K Oct 22 16:24 package_names.txt
+## -rwxrwxrwx 1 aravind aravind 1.1K Oct 22 16:24 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind 4.0K Oct 22 16:24 r
+## -rwxrwxrwx 1 aravind aravind  10K Oct 22 16:24 release_names.tar
+## -rwxrwxrwx 1 aravind aravind  632 Oct 22 16:24 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind  546 Oct 22 16:24 release_names.txt
+## -rwxrwxrwx 1 aravind aravind   65 Oct 22 16:24 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind   53 Oct 22 16:24 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind  31M Oct 22 16:24 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind  157 Oct 22 16:24 urls.txt
+## -rwxrwxrwx 1 aravind aravind 4.3K Oct 22 16:24 zip_example.zip</code></pre>
+</div>
+<div id="sort-list-by-size" class="section level4">
+<h4>Sort list by size</h4>
+<pre class="bash"><code>ls -lS</code></pre>
+<pre><code>## total 31108
+## -rwxrwxrwx 1 aravind aravind 31754998 Oct 22 16:24 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind    39501 Oct 22 16:24 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind    16242 Oct 22 16:24 bash.sh
+## -rwxrwxrwx 1 aravind aravind    10240 Oct 22 16:24 release_names.tar
+## -rwxrwxrwx 1 aravind aravind     9291 Oct 22 16:24 main_project.zip
+## -rwxrwxrwx 1 aravind aravind     4398 Oct 22 16:24 zip_example.zip
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject4
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 r
+## -rwxrwxrwx 1 aravind aravind     1498 Oct 22 16:24 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Oct 22 16:24 pkg_names.txt
+## -rwxrwxrwx 1 aravind aravind      632 Oct 22 16:24 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Oct 22 16:24 release_names.txt
+## -rwxrwxrwx 1 aravind aravind      430 Oct 22 16:24 bash.R
+## -rwxrwxrwx 1 aravind aravind      157 Oct 22 16:24 urls.txt
+## -rwxrwxrwx 1 aravind aravind      145 Oct 22 16:24 bash.Rmd
+## -rwxrwxrwx 1 aravind aravind       65 Oct 22 16:24 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Oct 22 16:24 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind       35 Oct 22 16:24 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Oct 22 16:24 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind       12 Oct 22 16:24 analysis.R</code></pre>
+</div>
+<div id="sort-list-by-modification-date" class="section level4">
+<h4>Sort list by modification date</h4>
+<pre class="bash"><code>ls -ltr</code></pre>
+<pre><code>## total 31108
+## -rwxrwxrwx 1 aravind aravind     4398 Oct 22 16:24 zip_example.zip
+## -rwxrwxrwx 1 aravind aravind      546 Oct 22 16:24 release_names.txt
+## -rwxrwxrwx 1 aravind aravind    10240 Oct 22 16:24 release_names.tar
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 r
+## -rwxrwxrwx 1 aravind aravind     9291 Oct 22 16:24 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myfiles
+## -rwxrwxrwx 1 aravind aravind      632 Oct 22 16:24 release_names.tar.gz
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject3
+## -rwxrwxrwx 1 aravind aravind       35 Oct 22 16:24 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       65 Oct 22 16:24 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Oct 22 16:24 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind       34 Oct 22 16:24 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind      157 Oct 22 16:24 urls.txt
+## -rwxrwxrwx 1 aravind aravind     1498 Oct 22 16:24 package_names.txt
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject1
+## -rwxrwxrwx 1 aravind aravind     1082 Oct 22 16:24 pkg_names.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Oct 22 16:24 sept_15.csv.gz
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 mypackage
+## -rwxrwxrwx 1 aravind aravind    16242 Oct 22 16:24 bash.sh
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject2
+## -rwxrwxrwx 1 aravind aravind      145 Oct 22 16:24 bash.Rmd
+## -rwxrwxrwx 1 aravind aravind       12 Oct 22 16:24 analysis.R
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject
+## -rwxrwxrwx 1 aravind aravind      430 Oct 22 16:24 bash.R
+## -rwxrwxrwx 1 aravind aravind    39501 Oct 22 16:24 lorem-ipsum.txt
+## drwxrwxrwx 1 aravind aravind     4096 Oct 22 16:24 myproject4</code></pre>
+</div>
+</div>
+<div id="r-functions" class="section level3">
+<h3>R Functions</h3>
+<p>In R, <code>getwd()</code> will return the current working directory. You can use <code>here()</code> from the <a href="https://here.r-lib.org/">here</a> package as well. To change the current
+working directory, use <code>setwd()</code>. The <a href="https://fs.r-lib.org/index.html">fs</a> package provides useful functions for file operations.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>pwd</code>
+</td>
+<td style="text-align:left;">
+<code>getwd()</code> / <code>here::here()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ls</code>
+</td>
+<td style="text-align:left;">
+<code>dir()</code> / <code>list.files()</code> / <code>list.dirs()</code> / <code>fs::dir_ls()</code> / <code>dir_info()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cd</code>
+</td>
+<td style="text-align:left;">
+<code>setwd()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mkdir</code>
+</td>
+<td style="text-align:left;">
+<code>dir.create()</code> / <code>fs::dir_create()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rmdir</code>
+</td>
+<td style="text-align:left;">
+<code>fs::dir_delete()</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="filemanage" class="section level2">
+<h2>File Management</h2>
+<p>In this section, we will explore commands for file management including:</p>
+<ul>
+<li>create new file/change timestamps</li>
+<li>copying files</li>
+<li>renaming/moving files</li>
+<li>deleting files</li>
+<li>comparing files</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>touch</code>
+</td>
+<td style="text-align:left;">
+Create empty file(s)/change timestamp
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cp</code>
+</td>
+<td style="text-align:left;">
+Copy files &amp; folders
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv</code>
+</td>
+<td style="text-align:left;">
+Rename/move file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm</code>
+</td>
+<td style="text-align:left;">
+Remove/delete file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff</code>
+</td>
+<td style="text-align:left;">
+Compare files
+</td>
+</tr>
+</tbody>
+</table>
+<div id="create-new-file" class="section level3">
+<h3>Create new file</h3>
+<p><code>touch</code> modifies file timestamps which is information associated with file modification. It can be any of the following:</p>
+<ul>
+<li>access time (the last time the file was read)</li>
+<li>modification time (the last time the contents of the file was changed)</li>
+<li>change time (the last time the file’s metadata was changed)</li>
+</ul>
+<p>If the file does not exist, it will create an empty file of the same name. Let us use <code>touch</code> to create a new file <code>myanalysis.R</code>.</p>
+<pre class="bash"><code>touch myanalysis.R
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myanalysis.R
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="copy-filesfolders" class="section level3">
+<h3>Copy Files/Folders</h3>
+<p><code>cp</code> makes copies of files and directories. The general form of the command is
+<strong>cp source destination</strong>. By default, it will overwrite files without prompting for confirmation so be cautious while copying files or folders.</p>
+</div>
+<div id="copy-files-in-same-folder" class="section level3">
+<h3>Copy files in same folder</h3>
+<p>Let us create a copy of <code>release_names.txt</code> file and name it as <code>release_names_2.txt</code>.</p>
+<pre class="bash"><code>cp release_names.txt release_names_2.txt
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myanalysis.R
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## release_names_2.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+<div id="copy-files-into-different-folder" class="section level4">
+<h4>Copy files into different folder</h4>
+<p>To copy a file into a different directory/folder, we need to specify the name of the destination folder. If the copied file should have a different name, then we need to specify the new name of the file as well. Let us copy the <code>release_names.txt</code> file into the <code>r_releases</code> folder (we will retain the same name for the file as we are copying it into a different folder).</p>
+<pre class="bash"><code>cp release_names.txt r_releases/release_names.txt</code></pre>
+<p>Let us check if the file has been copied by listing the files in the <code>r_releases</code> folder using <code>ls</code>.</p>
+<pre class="bash"><code>ls r_releases</code></pre>
+<pre><code>## release_names.txt</code></pre>
+</div>
+<div id="copy-folders" class="section level4">
+<h4>Copy folders</h4>
+<p>How about making copies of folders? Use the <code>-r</code> option to copy entire folders. Let us create a copy of the <code>r</code> folder and name it as <code>r2</code>. The <code>-r</code> option stands for <code>--recursive</code> i.e. copy directories recursively.</p>
+<pre class="bash"><code>cp -r r r2
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myanalysis.R
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## release_names_2.txt
+## release_names_3.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+</div>
+<div id="moverename-files" class="section level3">
+<h3>Move/Rename Files</h3>
+<p><code>mv</code> moves and renames files and directories. Using different options, we can ensure</p>
+<ul>
+<li>files are not overwritten</li>
+<li>user is prompted for confirmation before overwriting files</li>
+<li>details of files being moved is displayed</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>mv</code>
+</td>
+<td style="text-align:left;">
+Move or rename files/directories
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv -f</code>
+</td>
+<td style="text-align:left;">
+Do not prompt for confirmation before overwriting files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv -i</code>
+</td>
+<td style="text-align:left;">
+Prompt for confirmation before overwriting files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv -n</code>
+</td>
+<td style="text-align:left;">
+Do not overwrite existing files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv -v</code>
+</td>
+<td style="text-align:left;">
+Move files in verbose mode
+</td>
+</tr>
+</tbody>
+</table>
+<p>Let us move the <code>release_names_2.txt</code> file to the <code>r_releases</code> folder.</p>
+<pre class="bash"><code>mv release_names_2.txt r_releases</code></pre>
+<p>Use <code>ls</code> to verfiy if the file has been moved. As you can see, <code>release_names_2.txt</code> is not present in the current working directory.</p>
+<pre class="bash"><code>ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myanalysis.R
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## release_names_3.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+<p>Let us check if <code>release_names_2.txt</code> is present in the <code>r_releases</code> folder. Great! We have successfully moved the file into a different folder.</p>
+<pre class="bash"><code>ls r_releases</code></pre>
+<pre><code>## release_names.txt
+## release_names_2.txt</code></pre>
+<div id="move-files-in-verbose-mode" class="section level4">
+<h4>Move files in verbose mode</h4>
+<p>To view the details of the files being moved/renamed, use the <code>-v</code> option. In the below example, we move the <code>release_names_3.txt</code> file into the <code>r_releases</code> folder using <code>mv</code>.</p>
+<pre class="bash"><code>mv -v release_names_3.txt r_releases</code></pre>
+<pre><code>## renamed &#39;release_names_3.txt&#39; -&gt; &#39;r_releases/release_names_3.txt&#39;</code></pre>
+</div>
+<div id="do-not-overwrite-existing-files" class="section level4">
+<h4>Do not overwrite existing files</h4>
+<p>How do we ensure that files are not overwritten without prompting the user first? In the below example, we will try to overwrite the <code>release_names_2.txt</code> in the <code>r_releases</code> folder using <code>mv</code> and see what happens. But first, let us look at the contents of the <code>release_names_2.txt</code> file using the <code>cat</code> command.</p>
+<p>We will look into the <code>cat</code> command in more detail in the next chapter but for the time being it is sufficient to know that it prints contents of a file. The file contains release names of different R versions.</p>
+<pre class="bash"><code>cat r_releases/release_names_2.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+<p>In our current working directory, we will create another file of the same name i.e. <code>release_names_2.txt</code> but its contents are different from the file in the <code>r_releases</code> folder. It contains the string <code>release_names</code> and nothing else. We will now move this file into the <code>r_releases</code> folder but use the option <code>-n</code> to ensure that the file in the <code>r_releases</code> folder is not overwritten. We can confirm this by printing the contents of the file in the <code>r_releases</code> folder.</p>
+<p>The <code>echo</code> command is used to print text to the terminal or to write to a file. We will explore it in more detail in the next chapter.</p>
+<pre class="bash"><code>echo &quot;release_names&quot; &gt; release_names_2.txt 
+mv -n release_names_2.txt r_releases
+cat r_releases/release_names_2.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+<p>As you can observe, the contents of the file in the <code>r_releases</code> folder has not changed. In the next section, we will learn to overwrite the contents using the <code>-f</code> option.</p>
+</div>
+</div>
+<div id="do-not-prompt-for-confirmation-before-overwriting-files" class="section level3">
+<h3>Do not prompt for confirmation before overwriting files</h3>
+<p>What if we actually intend to overwrite a file and do not want to be prompted for confirming the same. In this case, we can use the <code>-f</code> option which stands for <code>--force</code> i.e. do not prompt before overwriting. Let us first print the contents of the <code>release_names_2.txt</code> file in the <code>r_releases</code> folder.</p>
+<pre class="bash"><code>cat r_releases/release_names_2.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+<p>Now we will create another file of the same name in the current working directory but with different content and use the <code>-f</code> option to overwrite the file in the <code>r_releases</code> folder. You can see that the contents of the file in the <code>r_releases</code> folder has changed.</p>
+<pre class="bash"><code>echo &quot;release_names&quot; &gt; release_names_2.txt 
+mv -f release_names_2.txt r_releases
+cat r_releases/release_names_2.txt</code></pre>
+<pre><code>## release_names</code></pre>
+</div>
+<div id="removedelete-files" class="section level3">
+<h3>Remove/Delete Files</h3>
+<p>The <code>rm</code> command is used to delete/remove files &amp; folders. Using additional options, we can</p>
+<ul>
+<li>remove directories &amp; sub-directories</li>
+<li>forcibly remove directories</li>
+<li>interactively remove multiple files</li>
+<li>display information about files removed/deleted</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>rm</code>
+</td>
+<td style="text-align:left;">
+Remove files/directories
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm -r</code>
+</td>
+<td style="text-align:left;">
+Recursively remove a directory &amp; all its subdirectories
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm -rf</code>
+</td>
+<td style="text-align:left;">
+Forcibly remove directory without prompting for confirmation or showing error messages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm -i</code>
+</td>
+<td style="text-align:left;">
+Interactively remove multiple files, with a prompt before every removal
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm -v</code>
+</td>
+<td style="text-align:left;">
+Remove files in verbose mode, printing a message for each removed file
+</td>
+</tr>
+</tbody>
+</table>
+<div id="remove-files" class="section level4">
+<h4>Remove files</h4>
+<p>Let us use <code>rm</code> to remove the file <code>myanalysis.R</code> (we created it earlier using the <code>touch</code> command).</p>
+<pre class="bash"><code>rm myanalysis.R
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject1
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="recursive-deletion" class="section level4">
+<h4>Recursive Deletion</h4>
+<p>How about folders or directories? We can remove a directory and all its contents including sub-directories using the option <code>-r</code> which stands for <code>--recursive</code> and removes directories and their contents recursively. Let us remove the <code>myproject1</code> folder and all its contents.</p>
+<pre class="bash"><code>rm -r myproject1
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject2
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="force-removal" class="section level4">
+<h4>Force Removal</h4>
+<p>Use the <code>-f</code> option which stands for <code>--force</code> to forciby remove directory and all its contents without prompting for confirmation or showing error messages. Let us remove the <code>myproject2</code> folder and all its contents.</p>
+<pre class="bash"><code>rm -rf myproject2
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="verbose-mode" class="section level4">
+<h4>Verbose Mode</h4>
+<p>Remove files in verbose mode, printing a message for each removed file. This is useful when you want to see the details of the files being removed. In the below example, we will remove all files with <code>.txt</code> extension from the <code>myfiles</code> folder. Instead of specifying the name of each text file, we use the wildcard <code>*</code> along with <code>.txt</code> i.e. any file with the extension <code>.txt</code> will be removed.</p>
+<pre class="bash"><code>cd myfiles
+rm -v *.txt</code></pre>
+<pre><code>## removed &#39;release_names.txt&#39;
+## removed &#39;release_names_18.txt&#39;
+## removed &#39;release_names_19.txt&#39;</code></pre>
+</div>
+</div>
+<div id="compare-files" class="section level3">
+<h3>Compare Files</h3>
+<p><code>diff</code> stands for difference. It is used to compare files line by line and display differences. It also indicates which lines in one file must be changed to make the files identical. Using additional options, we can</p>
+<ul>
+<li>ignore white spaces while comparing files</li>
+<li>show differences sidy by side</li>
+<li>show differences in unified format</li>
+<li>compare directories recursively</li>
+<li>display names of files that differ</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>diff</code>
+</td>
+<td style="text-align:left;">
+Compare files &amp; directories
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff -w</code>
+</td>
+<td style="text-align:left;">
+Compare files; ignoring white spaces
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff -y</code>
+</td>
+<td style="text-align:left;">
+Compare files; showing differences side by side
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff -u</code>
+</td>
+<td style="text-align:left;">
+Compare files; show differences in unified format
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff -r</code>
+</td>
+<td style="text-align:left;">
+Compare directories recursively
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff -rq</code>
+</td>
+<td style="text-align:left;">
+Compare directories; show the names of files that differ
+</td>
+</tr>
+</tbody>
+</table>
+<div id="compare-files-1" class="section level4">
+<h4>Compare Files</h4>
+<p>Let us compare the contents of the following files</p>
+<ul>
+<li><code>imports_olsrr.txt</code></li>
+<li><code>imports_blorr.txt</code></li>
+</ul>
+<p>The files contain the names of R packages imported by the <a href="https://olsrr.rsquaredacademy.com/">olsrr</a> and <a href="https://blorr.rsquaredacademy.com/">blorr</a> packages respectively (<strong>Full disclosure: both the above R pakages are developed by Rsquared Academy.</strong>).</p>
+<p><code>diff</code> uses certain special symbols and gives instructions to make the files identical. The instructions are on how to change the first file to make it identical to the second file. We list the symbols below</p>
+<ul>
+<li><strong>a</strong> for add</li>
+<li><strong>c</strong> for change</li>
+<li><strong>d</strong> for delete</li>
+</ul>
+<p>We will use the <code>-w</code> option to ignore white spaces while comparing the files.</p>
+<pre class="bash"><code>diff -w imports_olsrr.txt imports_blorr.txt</code></pre>
+<pre><code>## 1a2
+## &gt; caret
+## 3d3
+## &lt; cli
+## 4a5
+## &gt; cli</code></pre>
+<p>Let us interpret the results. <code>4a5</code> indicates <strong>after line 4 in file 1, add line 5 from file 2</strong> to make both the files identical i.e. add <code>caret</code> which is line 5 in <code>imports_blorr.txt</code> after line 4 in <code>imports_olsrr.txt</code> which will make both the files identical.</p>
+<p>Let us change the file order and see the instructions from <code>diff</code>.</p>
+<pre class="bash"><code>diff -w imports_blorr.txt imports_olsrr.txt</code></pre>
+<pre><code>## 2d1
+## &lt; caret
+## 4d2
+## &lt; clisymbols
+## 5a4
+## &gt; clisymbols</code></pre>
+<p><code>5d4</code> indicates <strong>delete line 5 from file 1 to match both the files at line4</strong> i.e. delete <code>caret</code> which is line 5 in <code>imports_blorr.txt</code> to make both the files identical.</p>
+</div>
+<div id="side-by-side" class="section level4">
+<h4>Side By Side</h4>
+<p>To view the differences between the files side by side, use the <code>-y</code> option.</p>
+<pre class="bash"><code>diff -y imports_olsrr.txt imports_blorr.txt</code></pre>
+<pre><code>## car 
+                                  | car
+## checkmate
+                                  | caret
+## cli
+                                  | checkmate
+## clisymbols
+                                  | clisymbols
+##                                &gt; cli</code></pre>
+</div>
+<div id="unified-format" class="section level4">
+<h4>Unified Format</h4>
+<p>To view the differences between the files in a unified format, use the <code>-u</code> option.</p>
+<pre class="bash"><code>diff -u imports_olsrr.txt imports_blorr.txt</code></pre>
+<pre><code>## --- imports_olsrr.txt    2019-09-20 13:36:03.000000000 +0530
+## +++ imports_blorr.txt    2019-09-20 13:36:35.000000000 +0530
+## @@ -1,4 +1,5 @@
+## -car 
+## -checkmate
+## -cli
+## -clisymbols
+## +car
+## +caret
+## +checkmate
+## +clisymbols
+## +cli</code></pre>
+</div>
+<div id="compare-recursively" class="section level4">
+<h4>Compare Recursively</h4>
+<p>To compare recursively, use the <code>-r</code> option. Let us compare the <code>mypackage</code> and <code>myproject</code> folders.</p>
+<pre class="bash"><code>diff -r mypackage myproject</code></pre>
+</div>
+<div id="file-details" class="section level4">
+<h4>File Details</h4>
+<p>To compare directories and view the names of files that differ, use the <code>-rq</code> option. In the below example, we look at the names of files that differ in <code>mypackage</code> and <code>myproject</code> folders.</p>
+<pre class="bash"><code>diff -rq mypackage myproject</code></pre>
+</div>
+</div>
+<div id="r-functions-1" class="section level3">
+<h3>R Functions</h3>
+<p>In R, file operations can be performed using functions from both base R and the <a href="https://fs.r-lib.org/index.html">fs</a> package.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>touch</code>
+</td>
+<td style="text-align:left;">
+<code>file.create()</code> / <code>fs::file_create()</code> / <code>fs::file_touch()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cp</code>
+</td>
+<td style="text-align:left;">
+<code>file.copy()</code> / <code>fs::file_copy()</code> / <code>fs::dir_copy()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mv</code>
+</td>
+<td style="text-align:left;">
+<code>file.rename()</code> / <code>fs::file_move()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rm</code>
+</td>
+<td style="text-align:left;">
+<code>file.remove()</code> / <code>fs::file_delete()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>diff</code>
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="inputoutput" class="section level2">
+<h2>Input/Output</h2>
+<p>In this section, we will explore commands that will</p>
+<ul>
+<li>display messages</li>
+<li>print file contents</li>
+<li>sort file contents</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>echo</code>
+</td>
+<td style="text-align:left;">
+Display messages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cat</code>
+</td>
+<td style="text-align:left;">
+Print contents of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>head</code>
+</td>
+<td style="text-align:left;">
+Prints first ten lines of a file by default
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail</code>
+</td>
+<td style="text-align:left;">
+Prints last ten lines of a file by default
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>more</code>
+</td>
+<td style="text-align:left;">
+Open a file for interactive reading, scrolling &amp; searching
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>less</code>
+</td>
+<td style="text-align:left;">
+Open a file for interactive reading, scrolling &amp; searching
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sort</code>
+</td>
+<td style="text-align:left;">
+Sort a file in ascending order
+</td>
+</tr>
+</tbody>
+</table>
+<div id="display-messages" class="section level3">
+<h3>Display Messages</h3>
+<p>The <code>echo</code> command prints text to the terminal. It can be used for writing or appending messages to a file as well.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>echo</code>
+</td>
+<td style="text-align:left;">
+Display messages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>echo -n</code>
+</td>
+<td style="text-align:left;">
+Print message without trailing new line
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>echo &amp;gt; file</code>
+</td>
+<td style="text-align:left;">
+Write message to a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>echo &amp;gt;&amp;gt; file</code>
+</td>
+<td style="text-align:left;">
+Append message to a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>echo -e</code>
+</td>
+<td style="text-align:left;">
+Enable interpretation of special characters
+</td>
+</tr>
+</tbody>
+</table>
+<div id="print-message" class="section level4">
+<h4>Print Message</h4>
+<p>Let us start with a simple example. We will print the text <code>Action of the Toes</code> to the terminal. It is the release name for R version 3.6.1.</p>
+<pre class="bash"><code>echo Action of the Toes</code></pre>
+</div>
+<div id="redirect-output" class="section level4">
+<h4>Redirect Output</h4>
+<p>What if we want to redirect the output? Instead of printing the text to the terminal, we want to write it to a file. In such cases, use <code>&gt;</code> along with the file name to redirect the output to the file. Keep in mind that <code>&gt;</code> will overwrite files. If you want to append to files instead of overwriting, use <code>&gt;&gt;</code>.</p>
+<pre class="bash"><code>echo Great Truth &gt; release.txt</code></pre>
+</div>
+</div>
+<div id="print-concatenate-files" class="section level3">
+<h3>Print &amp; Concatenate Files</h3>
+<p>The <code>cat</code> command reads data from files, and outputs their contents. It is the simplest way to display the contents of a file at the command line. It can be used to overwrite or append new content to files as well. <code>cat</code> stands for <strong>catenate</strong> and can be used to</p>
+<ul>
+<li>display text files</li>
+<li>copy text files into a new document</li>
+<li>append the contents of a text file to the end of another text file, combining them</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>cat</code>
+</td>
+<td style="text-align:left;">
+Print &amp; concatenate files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cat &amp;gt;</code>
+</td>
+<td style="text-align:left;">
+Concatenate several files into the target file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cat &amp;gt;&amp;gt;</code>
+</td>
+<td style="text-align:left;">
+Append several files into the target file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>cat -n</code>
+</td>
+<td style="text-align:left;">
+Number all output lines
+</td>
+</tr>
+</tbody>
+</table>
+<div id="print-content" class="section level4">
+<h4>Print Content</h4>
+<p>Let us print the content of the <code>release_names.txt</code> file (it contains R release names).</p>
+<pre class="bash"><code>cat release_names.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+</div>
+<div id="number-all-output-lines" class="section level4">
+<h4>Number All Output Lines</h4>
+<p>If you want to number the output line, use the <code>-n</code> option.</p>
+<pre class="bash"><code>cat -n release_names.txt</code></pre>
+<pre><code>##      1   Unsuffered Consequences
+##      2   Great Pumpkin
+##      3   December Snowflakes
+##      4   Gift-Getting Season
+##      5   Easter Beagle
+##      6   Roasted Marshmallows
+##      7   Trick or Treat
+##      8   Security Blanket
+##      9   Masked Marvel
+##     10   Good Sport
+##     11   Frisbee Sailing
+##     12   Warm Puppy
+##     13   Spring Dance
+##     14   Sock it to Me
+##     15   Pumpkin Helmet
+##     16   Smooth Sidewalk
+##     17   Full of Ingredients
+##     18   World-Famous Astronaut
+##     19   Fire Safety
+##     20   Wooden Christmas Tree
+##     21   Very Secure Dishes
+##     22   Very, Very Secure Dishes
+##     23   Supposedly Educational
+##     24   Bug in Your Hair
+##     25   Sincere Pumpkin Patch
+##     26   Another Canoe
+##     27   You Stupid Darkness
+##     28   Single Candle
+##     29   Short Summer
+##     30   Kite Eating Tree</code></pre>
+</div>
+<div id="concatenate-several-files" class="section level4">
+<h4>Concatenate Several Files</h4>
+<p>To concatenate the contents of several files into a target file, use <code>&gt;</code>. In the below example, we concatenate the contents of the files <code>release_names_18.txt</code> and <code>release_names_19.txt</code> into a single file <code>release_names_18_19.txt</code>. In this case we are not printing the contents of the file to the terminal and instead we concatenate the contents from both the files and redirect the output to the target file.</p>
+<pre class="bash"><code>cat release_names_18.txt release_names_19.txt &gt; release_names_18_19.txt
+cat release_names_18_19.txt</code></pre>
+<pre><code>## Someone to Lean On
+## Joy in Playing
+## Feather Spray
+## Eggshell IglooGreat Truth
+## Planting of a Tree
+## Action of the Toes</code></pre>
+</div>
+</div>
+<div id="head" class="section level3">
+<h3>Head</h3>
+<p>The <code>head</code> command will display the firt 10 lines of a file(s) by default. It can be used to display the first few lines or bytes of a file as well.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>head</code>
+</td>
+<td style="text-align:left;">
+Output the first parts of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>head -n</code>
+</td>
+<td style="text-align:left;">
+Output the first n lines of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>head -c</code>
+</td>
+<td style="text-align:left;">
+Output the first c bytes of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>head -n -x</code>
+</td>
+<td style="text-align:left;">
+Output everything but the last x lines of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>head -c -x</code>
+</td>
+<td style="text-align:left;">
+Output everything but the last x bytes of a file
+</td>
+</tr>
+</tbody>
+</table>
+<div id="output-the-first-parts-of-a-file" class="section level4">
+<h4>Output the first parts of a file</h4>
+<p>Let us use <code>head</code> to display the first 10 lines of the <code>release_names.txt</code> file.</p>
+<pre class="bash"><code>head release_names.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport</code></pre>
+</div>
+<div id="output-the-first-n-lines-of-a-file" class="section level4">
+<h4>Output the first n lines of a file</h4>
+<p>Using the <code>n</code> option, we can specify the number of lines to be displayed. In the below example, we display the first 5 lines.</p>
+<pre class="bash"><code>head -n 5 release_names.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle</code></pre>
+</div>
+<div id="output-the-first-c-bytes-of-a-file" class="section level4">
+<h4>Output the first c bytes of a file</h4>
+<p>The <code>c</code> option can be used to display characters or bytes instead of lines. Let us display the first 5 bytes of the <code>release_names.txt</code> file.</p>
+<pre class="bash"><code>head -c 5 release_names.txt</code></pre>
+<pre><code>## Unsuf</code></pre>
+</div>
+<div id="output-everything-but-the-last-5-lines-of-a-file" class="section level4">
+<h4>Output everything but the last 5 lines of a file</h4>
+<p>To display the last parts of a file, use <code>-</code> while specifying the number of lines. In the below example, we display the last 5 lines of the file.</p>
+<pre class="bash"><code>head -n -5 release_names.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch</code></pre>
+</div>
+<div id="output-everything-but-the-last-3-bytes-of-a-file" class="section level4">
+<h4>Output everything but the last 3 bytes of a file</h4>
+<p>In this example, we display the last 3 bytes of the file using the <code>c</code> option and <code>-</code> while specifying the number of bytes.</p>
+<pre class="bash"><code>head -c -3 release_names.txt</code></pre>
+<pre><code>## Unsuffered Consequences
+## Great Pumpkin
+## December Snowflakes
+## Gift-Getting Season
+## Easter Beagle
+## Roasted Marshmallows
+## Trick or Treat
+## Security Blanket
+## Masked Marvel
+## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tre</code></pre>
+</div>
+</div>
+<div id="tail" class="section level3">
+<h3>Tail</h3>
+<p>The <code>tail</code> command displays the last 10 lines of a file(s) by default. It can be used to display the last few lines or bytes of a file as well.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>tail</code>
+</td>
+<td style="text-align:left;">
+Display the last part of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail -n num</code>
+</td>
+<td style="text-align:left;">
+Show the last num lines of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail -n +num</code>
+</td>
+<td style="text-align:left;">
+Show all contents of the file starting from num line
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail -c num</code>
+</td>
+<td style="text-align:left;">
+Show last num bytes of a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail -f</code>
+</td>
+<td style="text-align:left;">
+Keep reading file until Ctrl + C
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tail -F</code>
+</td>
+<td style="text-align:left;">
+Keep reading file until Ctrl + C; even if the file is rotated
+</td>
+</tr>
+</tbody>
+</table>
+<div id="display-the-last-parts-of-a-file" class="section level4">
+<h4>Display the last parts of a file</h4>
+<p>Let us use <code>tail</code> to display the last 10 lines of the file.</p>
+<pre class="bash"><code>tail release_names.txt</code></pre>
+<pre><code>## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+</div>
+<div id="display-the-last-5-lines-of-a-file" class="section level4">
+<h4>Display the last 5 lines of a file</h4>
+<p>As we did in the previous section, use <code>n</code> to specify the number of lines to be displayed.</p>
+<pre class="bash"><code>tail -n 5 release_names.txt</code></pre>
+<pre><code>## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+</div>
+<div id="display-all-contents-from-line-10" class="section level4">
+<h4>Display all contents from line 10</h4>
+<p>We can use <code>tail</code> to display all contents of a file starting from a specific line. In the below example, we display all contents of the file starting from the 10th line using the <code>n</code> option and <code>+</code> prefix while specifying the number of lines.</p>
+<pre class="bash"><code>tail -n +10 release_names.txt</code></pre>
+<pre><code>## Good Sport
+## Frisbee Sailing
+## Warm Puppy
+## Spring Dance
+## Sock it to Me
+## Pumpkin Helmet
+## Smooth Sidewalk
+## Full of Ingredients
+## World-Famous Astronaut
+## Fire Safety
+## Wooden Christmas Tree
+## Very Secure Dishes
+## Very, Very Secure Dishes
+## Supposedly Educational
+## Bug in Your Hair
+## Sincere Pumpkin Patch
+## Another Canoe
+## You Stupid Darkness
+## Single Candle
+## Short Summer
+## Kite Eating Tree</code></pre>
+</div>
+<div id="display-the-last-10-bytes-of-a-file" class="section level4">
+<h4>Display the last 10 bytes of a file</h4>
+<p>Use the <code>c</code> option to display the last 7 bytes of a file.</p>
+<pre class="bash"><code>tail -c 7 release_names.txt</code></pre>
+<pre><code>##  Tree</code></pre>
+</div>
+</div>
+<div id="more" class="section level3">
+<h3>More</h3>
+<p>The <code>more</code> command displays text, one screen at a time. It opens a file for</p>
+<ul>
+<li>interactive reading</li>
+<li>scrolling</li>
+<li>and searching</li>
+</ul>
+<p>Press <code>space</code> to scroll down the page, the forward slash (<code>/</code>) for searching strings, <code>n</code> to go to the next match and <code>q</code> to quit.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>more</code>
+</td>
+<td style="text-align:left;">
+Open a file for interactive reading, scrolling &amp; searching
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>space</code>
+</td>
+<td style="text-align:left;">
+Page down
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>/</code>
+</td>
+<td style="text-align:left;">
+Search for a string; press <code>n</code> to go the next match
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>q</code>
+</td>
+<td style="text-align:left;">
+Quit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="less" class="section level3">
+<h3>Less</h3>
+<p>The <code>less</code> command is similar to <code>more</code> but offers more features. It allows the
+user to scroll up and down, go to the beggining and end of the file, forward and backward search and the ability to go the next and previous match while searching the file.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>less</code>
+</td>
+<td style="text-align:left;">
+Open a file for interactive reading, scrolling &amp; searching
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>space</code>
+</td>
+<td style="text-align:left;">
+Page down
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>b</code>
+</td>
+<td style="text-align:left;">
+Page up
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>G</code>
+</td>
+<td style="text-align:left;">
+Go to the end of file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>g</code>
+</td>
+<td style="text-align:left;">
+Go to the start of file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>/</code>
+</td>
+<td style="text-align:left;">
+Forward search
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>?</code>
+</td>
+<td style="text-align:left;">
+Backward search
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>n</code>
+</td>
+<td style="text-align:left;">
+Go to next match
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>N</code>
+</td>
+<td style="text-align:left;">
+Go to previous match
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>q</code>
+</td>
+<td style="text-align:left;">
+Quit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sort" class="section level3">
+<h3>Sort</h3>
+<p>The <code>sort</code> command will sort the contents of text file, line by line. Using additional options, we can</p>
+<ul>
+<li>sort a file in ascending/descending order</li>
+<li>ignore case while sorting</li>
+<li>use numeric order for sorting</li>
+<li>preserve only unique lines while sorting</li>
+</ul>
+<p>Using the <code>sort</code> command, the contents can be sorted numerically and alphabetically. By default, the rules for sorting are:</p>
+<ul>
+<li>lines starting with a number will appear before lines starting with a letter.</li>
+<li>lines starting with a letter that appears earlier in the alphabet will appear
+before lines starting with a letter that appears later in the alphabet.</li>
+<li>lines starting with a lowercase letter will appear before lines starting with the same letter in uppercase.</li>
+</ul>
+<p>Using additional options, the rules for sorting can be changed. We list the options in the below table.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>sort</code>
+</td>
+<td style="text-align:left;">
+Sort lines of text files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sort -r</code>
+</td>
+<td style="text-align:left;">
+Sort a file in descending order
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sort --ignore-case</code>
+</td>
+<td style="text-align:left;">
+Ignore case while sorting
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sort -n</code>
+</td>
+<td style="text-align:left;">
+Use numeric order for sorting
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sort -u</code>
+</td>
+<td style="text-align:left;">
+Preserve only unique lines while sorting
+</td>
+</tr>
+</tbody>
+</table>
+<div id="sort-1" class="section level4">
+<h4>Sort</h4>
+<p>Let us sort the contents of the <code>pkg_names.txt</code> file. It contains names R packages randomly selected from CRAN.</p>
+<pre class="bash"><code>sort pkg_names.txt</code></pre>
+<pre><code>## ASIP
+## AdMit
+## AnalyzeTS
+## AzureStor
+## AzureStor
+## BIGDAWG
+## BIOMASS
+## BIOMASS
+## BenfordTests
+## BinOrdNonNor
+## BioCircos
+## ClimMobTools
+## CombinePValue
+## Eagle
+## FField
+## ICAOD
+## MARSS
+## MIAmaxent
+## MIAmaxent
+## MIAmaxent
+## MVB
+## MVTests
+## MaXact
+## MaxentVariableSelection
+## OptimaRegion
+## OxyBS
+## PathSelectMP
+## PropScrRand
+## RJDBC
+## RPyGeo
+## SCRT
+## SMARTp
+## SPEDInstabR
+## SemiParSampleSel
+## SetMethods
+## SmallCountRounding
+## SpatioTemporal
+## SphericalK
+## SuppDists
+## Survgini
+## TIMP
+## TSeriesMMA
+## VineCopula
+## WGScan
+## WPKDE
+## accept
+## accept
+## addhaz
+## alfr
+## aweek
+## aweek
+## bayesbio
+## blink
+## breakfast
+## cbsem
+## corclass
+## crsra
+## cyclocomp
+## dagitty
+## disparityfilter
+## edfReader
+## errorlocate
+## expstudies
+## fermicatsR
+## foretell
+## gLRTH
+## gazepath
+## generalhoslem
+## geoknife
+## hdnom
+## hindexcalculator
+## ibd
+## interplot
+## kfigr
+## logNormReg
+## ltxsparklines
+## lue
+## mbir
+## mcmcabn
+## mev
+## mgcViz
+## mined
+## mlflow
+## mongolite
+## mongolite
+## mvShapiroTest
+## odk
+## overlapping
+## pAnalysis
+## pls
+## pmdplyr
+## poisbinom
+## randtests
+## redcapAPI
+## rgw
+## rless
+## rsed
+## rstudioapi
+## solitude
+## splithalfr
+## sspline
+## sybilccFBA
+## tailr
+## tailr
+## tictactoe
+## viridisLite
+## vqtl
+## widyr
+## widyr</code></pre>
+</div>
+<div id="descending-order" class="section level4">
+<h4>Descending Order</h4>
+<p>Using the <code>-r</code> option which stands for <code>--reverse</code> the contents of the file can be sorted in descending/reverse order. Let us now sort the contents of the <code>pkg_names.txt</code> file in reverse order.</p>
+<pre class="bash"><code>sort -r pkg_names.txt</code></pre>
+<pre><code>## widyr
+## widyr
+## vqtl
+## viridisLite
+## tictactoe
+## tailr
+## tailr
+## sybilccFBA
+## sspline
+## splithalfr
+## solitude
+## rstudioapi
+## rsed
+## rless
+## rgw
+## redcapAPI
+## randtests
+## poisbinom
+## pmdplyr
+## pls
+## pAnalysis
+## overlapping
+## odk
+## mvShapiroTest
+## mongolite
+## mongolite
+## mlflow
+## mined
+## mgcViz
+## mev
+## mcmcabn
+## mbir
+## lue
+## ltxsparklines
+## logNormReg
+## kfigr
+## interplot
+## ibd
+## hindexcalculator
+## hdnom
+## geoknife
+## generalhoslem
+## gazepath
+## gLRTH
+## foretell
+## fermicatsR
+## expstudies
+## errorlocate
+## edfReader
+## disparityfilter
+## dagitty
+## cyclocomp
+## crsra
+## corclass
+## cbsem
+## breakfast
+## blink
+## bayesbio
+## aweek
+## aweek
+## alfr
+## addhaz
+## accept
+## accept
+## WPKDE
+## WGScan
+## VineCopula
+## TSeriesMMA
+## TIMP
+## Survgini
+## SuppDists
+## SphericalK
+## SpatioTemporal
+## SmallCountRounding
+## SetMethods
+## SemiParSampleSel
+## SPEDInstabR
+## SMARTp
+## SCRT
+## RPyGeo
+## RJDBC
+## PropScrRand
+## PathSelectMP
+## OxyBS
+## OptimaRegion
+## MaxentVariableSelection
+## MaXact
+## MVTests
+## MVB
+## MIAmaxent
+## MIAmaxent
+## MIAmaxent
+## MARSS
+## ICAOD
+## FField
+## Eagle
+## CombinePValue
+## ClimMobTools
+## BioCircos
+## BinOrdNonNor
+## BenfordTests
+## BIOMASS
+## BIOMASS
+## BIGDAWG
+## AzureStor
+## AzureStor
+## AnalyzeTS
+## AdMit
+## ASIP</code></pre>
+</div>
+<div id="ignore-case" class="section level4">
+<h4>Ignore case</h4>
+<p>To ignore case while sorting contents, use the <code>--ignore-case</code> option. Time to sort the <code>pkg_names.txt</code> file while ignoring case.</p>
+<pre class="bash"><code>sort --ignore-case pkg_names.txt</code></pre>
+<pre><code>## accept
+## accept
+## addhaz
+## AdMit
+## alfr
+## AnalyzeTS
+## ASIP
+## aweek
+## aweek
+## AzureStor
+## AzureStor
+## bayesbio
+## BenfordTests
+## BIGDAWG
+## BinOrdNonNor
+## BioCircos
+## BIOMASS
+## BIOMASS
+## blink
+## breakfast
+## cbsem
+## ClimMobTools
+## CombinePValue
+## corclass
+## crsra
+## cyclocomp
+## dagitty
+## disparityfilter
+## Eagle
+## edfReader
+## errorlocate
+## expstudies
+## fermicatsR
+## FField
+## foretell
+## gazepath
+## generalhoslem
+## geoknife
+## gLRTH
+## hdnom
+## hindexcalculator
+## ibd
+## ICAOD
+## interplot
+## kfigr
+## logNormReg
+## ltxsparklines
+## lue
+## MARSS
+## MaXact
+## MaxentVariableSelection
+## mbir
+## mcmcabn
+## mev
+## mgcViz
+## MIAmaxent
+## MIAmaxent
+## MIAmaxent
+## mined
+## mlflow
+## mongolite
+## mongolite
+## MVB
+## mvShapiroTest
+## MVTests
+## odk
+## OptimaRegion
+## overlapping
+## OxyBS
+## pAnalysis
+## PathSelectMP
+## pls
+## pmdplyr
+## poisbinom
+## PropScrRand
+## randtests
+## redcapAPI
+## rgw
+## RJDBC
+## rless
+## RPyGeo
+## rsed
+## rstudioapi
+## SCRT
+## SemiParSampleSel
+## SetMethods
+## SmallCountRounding
+## SMARTp
+## solitude
+## SpatioTemporal
+## SPEDInstabR
+## SphericalK
+## splithalfr
+## sspline
+## SuppDists
+## Survgini
+## sybilccFBA
+## tailr
+## tailr
+## tictactoe
+## TIMP
+## TSeriesMMA
+## VineCopula
+## viridisLite
+## vqtl
+## WGScan
+## widyr
+## widyr
+## WPKDE</code></pre>
+</div>
+<div id="numeric-order" class="section level4">
+<h4>Numeric Order</h4>
+<p>To sort numerically, use the <code>-n</code> option which stands for <code>--numeric-sort</code>. In this example, we will use a different file, <code>package_names.txt</code> where the package names are prefixed by random numbers between 1 and 100.</p>
+<pre class="bash"><code>sort -n package_names.txt</code></pre>
+<pre><code>## 1. cyclocomp
+## 2. odk
+## 3. redcapAPI
+## 4. TIMP
+## 5. pls
+## 6. BinOrdNonNor
+## 7. bayesbio
+## 8. MVTests
+## 9. pAnalysis
+## 10. aweek
+## 11. hdnom
+## 12. ltxsparklines
+## 13. MaXact
+## 14. RJDBC
+## 15. MIAmaxent
+## 16. randtests
+## 17. ASIP
+## 18. gazepath
+## 19. mcmcabn
+## 20. rless
+## 21. corclass
+## 22. vqtl
+## 23. disparityfilter
+## 24. SCRT
+## 25. RPyGeo
+## 26. blink
+## 27. gLRTH
+## 28. splithalfr
+## 29. sspline
+## 29. sspline
+## 30. logNormReg
+## 31. BIGDAWG
+## 31. BIGDAWG
+## 32. SPEDInstabR
+## 33. tailr
+## 33. tailr
+## 34. ibd
+## 35. fermicatsR
+## 36. mlflow
+## 37. CombinePValue
+## 38. BenfordTests
+## 39. mev
+## 40. MaxentVariableSelection
+## 41. rstudioapi
+## 42. OptimaRegion
+## 43. accept
+## 44. expstudies
+## 45. solitude
+## 45. solitude
+## 46. cbsem
+## 47. SMARTp
+## 48. geoknife
+## 49. SemiParSampleSel
+## 50. mbir
+## 51. interplot
+## 52. ClimMobTools
+## 53. MVB
+## 54. OxyBS
+## 55. hindexcalculator
+## 56. MARSS
+## 57. generalhoslem
+## 58. alfr
+## 59. AdMit
+## 60. Eagle
+## 61. PropScrRand
+## 62. lue
+## 63. dagitty
+## 64. viridisLite
+## 65. mined
+## 65. mined
+## 66. SuppDists
+## 67. tictactoe
+## 68. AzureStor
+## 68. AzureStor
+## 69. FField
+## 70. rsed
+## 70. rsed
+## 71. kfigr
+## 72. overlapping
+## 72. overlapping
+## 73. VineCopula
+## 74. crsra
+## 75. pmdplyr
+## 76. errorlocate
+## 77. SetMethods
+## 78. sybilccFBA
+## 79. mvShapiroTest
+## 80. SpatioTemporal
+## 81. mgcViz
+## 82. breakfast
+## 83. WPKDE
+## 84. BIOMASS
+## 85. edfReader
+## 86. mongolite
+## 87. WGScan
+## 88. SphericalK
+## 89. foretell
+## 90. widyr
+## 91. rgw
+## 92. BioCircos
+## 93. PathSelectMP
+## 94. ICAOD
+## 95. TSeriesMMA
+## 96. poisbinom
+## 97. AnalyzeTS
+## 98. SmallCountRounding
+## 99. Survgini
+## 100. addhaz</code></pre>
+</div>
+<div id="preserve-only-unique-lines" class="section level4">
+<h4>Preserve Only Unique Lines</h4>
+<p>The <code>-u</code> option which stands for <code>--unique</code> will preserve only unique lines while sorting the contents of the file. In the below example, we remove all duplicate lines from the <code>pkg_names.txt</code> while sorting.</p>
+<pre class="bash"><code>sort -u pkg_names.txt</code></pre>
+<pre><code>## ASIP
+## AdMit
+## AnalyzeTS
+## AzureStor
+## BIGDAWG
+## BIOMASS
+## BenfordTests
+## BinOrdNonNor
+## BioCircos
+## ClimMobTools
+## CombinePValue
+## Eagle
+## FField
+## ICAOD
+## MARSS
+## MIAmaxent
+## MVB
+## MVTests
+## MaXact
+## MaxentVariableSelection
+## OptimaRegion
+## OxyBS
+## PathSelectMP
+## PropScrRand
+## RJDBC
+## RPyGeo
+## SCRT
+## SMARTp
+## SPEDInstabR
+## SemiParSampleSel
+## SetMethods
+## SmallCountRounding
+## SpatioTemporal
+## SphericalK
+## SuppDists
+## Survgini
+## TIMP
+## TSeriesMMA
+## VineCopula
+## WGScan
+## WPKDE
+## accept
+## accept
+## addhaz
+## alfr
+## aweek
+## bayesbio
+## blink
+## breakfast
+## cbsem
+## corclass
+## crsra
+## cyclocomp
+## dagitty
+## disparityfilter
+## edfReader
+## errorlocate
+## expstudies
+## fermicatsR
+## foretell
+## gLRTH
+## gazepath
+## generalhoslem
+## geoknife
+## hdnom
+## hindexcalculator
+## ibd
+## interplot
+## kfigr
+## logNormReg
+## ltxsparklines
+## lue
+## mbir
+## mcmcabn
+## mev
+## mgcViz
+## mined
+## mlflow
+## mongolite
+## mvShapiroTest
+## odk
+## overlapping
+## pAnalysis
+## pls
+## pmdplyr
+## poisbinom
+## randtests
+## redcapAPI
+## rgw
+## rless
+## rsed
+## rstudioapi
+## solitude
+## splithalfr
+## sspline
+## sybilccFBA
+## tailr
+## tictactoe
+## viridisLite
+## vqtl
+## widyr</code></pre>
+</div>
+</div>
+<div id="word-count" class="section level3">
+<h3>Word Count</h3>
+<p><code>wc</code> will print newline, word, and byte counts for file(s). If more than one file is specified, it will also print total line.</p>
+<div id="count-words-bytes-and-lines" class="section level4">
+<h4>Count words, bytes and lines</h4>
+<pre class="bash"><code>wc release_names.txt</code></pre>
+<pre><code>##  30  73 546 release_names.txt</code></pre>
+</div>
+<div id="count-lines-in-a-file" class="section level4">
+<h4>Count lines in a file</h4>
+<pre class="bash"><code>wc -l release_names.txt</code></pre>
+<pre><code>## 30 release_names.txt</code></pre>
+</div>
+<div id="count-words-in-a-file" class="section level4">
+<h4>Count words in a file</h4>
+<pre class="bash"><code>wc -w release_names.txt</code></pre>
+<pre><code>## 73 release_names.txt</code></pre>
+</div>
+<div id="count-charactersbytes-in-a-file" class="section level4">
+<h4>Count characters(bytes) in a file</h4>
+<pre class="bash"><code>wc -c release_names.txt</code></pre>
+<pre><code>## 546 release_names.txt</code></pre>
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="regex" class="section level2">
+<h2>Search &amp; Regular Expressions</h2>
+<p>In this section, we will explore commands that will</p>
+<ul>
+<li>search for a given string in a file</li>
+<li>find files using names</li>
+<li>and search for binary executable files</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>grep</code>
+</td>
+<td style="text-align:left;">
+Search for a given string in a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>find</code>
+</td>
+<td style="text-align:left;">
+Find files using filenames
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>which</code>
+</td>
+<td style="text-align:left;">
+Search for binary executable files
+</td>
+</tr>
+</tbody>
+</table>
+<div id="grep" class="section level3">
+<h3>grep</h3>
+<p>The <code>grep</code> command is used for pattern matching. Along with additional options, it can be used to</p>
+<ul>
+<li>match pattern in input text</li>
+<li>ignore case</li>
+<li>search recursively for an exact string</li>
+<li>print filename and line number for each match</li>
+<li>invert match for excluding specific strings</li>
+</ul>
+<p><code>grep</code> processes text line by line, and prints any lines which match a specified pattern. <code>grep</code>, which stands for <strong>g</strong>lobal <strong>r</strong>egular <strong>e</strong>xpression <strong>p</strong>rint is a powerful tool for matching a regular expression against text in a file, multiple files, or a stream of input.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>grep</code>
+</td>
+<td style="text-align:left;">
+Matches pattern in input text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>grep -i</code>
+</td>
+<td style="text-align:left;">
+Ignore case
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>grep -RI</code>
+</td>
+<td style="text-align:left;">
+Search recursively for an exact string
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>grep -E</code>
+</td>
+<td style="text-align:left;">
+Use extended regular expression
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>grep -Hn</code>
+</td>
+<td style="text-align:left;">
+Print file name &amp; corresponding line number for each match
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>grep -v</code>
+</td>
+<td style="text-align:left;">
+Invert match for excluding specific strings
+</td>
+</tr>
+</tbody>
+</table>
+<div id="match-pattern-in-input-text" class="section level4">
+<h4>Match Pattern in Input Text</h4>
+<p>Using <code>grep</code> let us search for packages that inlcude the letter <code>R</code> in their names.</p>
+<pre class="bash"><code>grep R package_names.txt</code></pre>
+<pre><code>## 14. RJDBC
+## 30. logNormReg
+## 27. gLRTH
+## 35. fermicatsR
+## 42. OptimaRegion
+## 61. PropScrRand
+## 25. RPyGeo
+## 47. SMARTp
+## 24. SCRT
+## 56. MARSS
+## 85. edfReader
+## 32. SPEDInstabR
+## 98. SmallCountRounding</code></pre>
+</div>
+<div id="ignore-case-1" class="section level4">
+<h4>Ignore Case</h4>
+<p>In the previous case, <code>grep</code> returned only those packages whose name included <code>R</code> but not <code>r</code> i.e. it did not ignore the case of the letter. Using the <code>-i</code> option, we will now search while ignoring the case of the letter.</p>
+<pre class="bash"><code>grep -i R package_names.txt</code></pre>
+<pre><code>## 14. RJDBC
+## 58. alfr
+## 64. viridisLite
+## 99. Survgini
+## 30. logNormReg
+## 27. gLRTH
+## 71. kfigr
+## 72. overlapping
+## 90. widyr
+## 33. tailr
+## 40. MaxentVariableSelection
+## 33. tailr
+## 72. overlapping
+## 16. randtests
+## 12. ltxsparklines
+## 91. rgw
+## 35. fermicatsR
+## 21. corclass
+## 68. AzureStor
+## 42. OptimaRegion
+## 61. PropScrRand
+## 74. crsra
+## 80. SpatioTemporal
+## 23. disparityfilter
+## 49. SemiParSampleSel
+## 76. errorlocate
+## 88. SphericalK
+## 28. splithalfr
+## 89. foretell
+## 25. RPyGeo
+## 50. mbir
+## 51. interplot
+## 6. BinOrdNonNor
+## 47. SMARTp
+## 38. BenfordTests
+## 79. mvShapiroTest
+## 92. BioCircos
+## 55. hindexcalculator
+## 41. rstudioapi
+## 57. generalhoslem
+## 24. SCRT
+## 95. TSeriesMMA
+## 82. breakfast
+## 56. MARSS
+## 70. rsed
+## 68. AzureStor
+## 85. edfReader
+## 20. rless
+## 75. pmdplyr
+## 32. SPEDInstabR
+## 3. redcapAPI
+## 70. rsed
+## 98. SmallCountRounding</code></pre>
+</div>
+<div id="highlight" class="section level4">
+<h4>Highlight</h4>
+<p>The <code>--color</code> option will highlight the matched strings.</p>
+<pre class="bash"><code>grep -i --color R package_names.txt</code></pre>
+<pre><code>## 14. RJDBC
+## 58. alfr
+## 64. viridisLite
+## 99. Survgini
+## 30. logNormReg
+## 27. gLRTH
+## 71. kfigr
+## 72. overlapping
+## 90. widyr
+## 33. tailr
+## 40. MaxentVariableSelection
+## 33. tailr
+## 72. overlapping
+## 16. randtests
+## 12. ltxsparklines
+## 91. rgw
+## 35. fermicatsR
+## 21. corclass
+## 68. AzureStor
+## 42. OptimaRegion
+## 61. PropScrRand
+## 74. crsra
+## 80. SpatioTemporal
+## 23. disparityfilter
+## 49. SemiParSampleSel
+## 76. errorlocate
+## 88. SphericalK
+## 28. splithalfr
+## 89. foretell
+## 25. RPyGeo
+## 50. mbir
+## 51. interplot
+## 6. BinOrdNonNor
+## 47. SMARTp
+## 38. BenfordTests
+## 79. mvShapiroTest
+## 92. BioCircos
+## 55. hindexcalculator
+## 41. rstudioapi
+## 57. generalhoslem
+## 24. SCRT
+## 95. TSeriesMMA
+## 82. breakfast
+## 56. MARSS
+## 70. rsed
+## 68. AzureStor
+## 85. edfReader
+## 20. rless
+## 75. pmdplyr
+## 32. SPEDInstabR
+## 3. redcapAPI
+## 70. rsed
+## 98. SmallCountRounding</code></pre>
+</div>
+<div id="print-filename" class="section level4">
+<h4>Print Filename</h4>
+<p>If there is more than one file to search, use the <code>-H</code> option to print the filename for each match.</p>
+<pre class="bash"><code>grep -i --color -H bio package_names.txt</code></pre>
+<pre><code>## package_names.txt:84. BIOMASS
+## package_names.txt:92. BioCircos
+## package_names.txt:7. bayesbio</code></pre>
+</div>
+<div id="print-corresponding-line-number" class="section level4">
+<h4>Print Corresponding Line Number</h4>
+<p>The <code>-n</code> option will print the corresponding line number of the match in the file.</p>
+<pre class="bash"><code>grep -i --color -n bio package_names.txt</code></pre>
+<pre><code>## 59:84. BIOMASS
+## 71:92. BioCircos
+## 88:7. bayesbio</code></pre>
+</div>
+<div id="print-filename-line-number" class="section level4">
+<h4>Print Filename &amp; Line Number</h4>
+<p>Let us print both the file name and the line number for each match.</p>
+<pre class="bash"><code>grep -i --color -Hn R package_names.txt</code></pre>
+<pre><code>## package_names.txt:1:14. RJDBC
+## package_names.txt:3:58. alfr
+## package_names.txt:8:64. viridisLite
+## package_names.txt:14:99. Survgini
+## package_names.txt:15:30. logNormReg
+## package_names.txt:16:27. gLRTH
+## package_names.txt:18:71. kfigr
+## package_names.txt:20:72. overlapping
+## package_names.txt:21:90. widyr
+## package_names.txt:22:33. tailr
+## package_names.txt:23:40. MaxentVariableSelection
+## package_names.txt:26:33. tailr
+## package_names.txt:27:72. overlapping
+## package_names.txt:30:16. randtests
+## package_names.txt:31:12. ltxsparklines
+## package_names.txt:32:91. rgw
+## package_names.txt:33:35. fermicatsR
+## package_names.txt:37:21. corclass
+## package_names.txt:38:68. AzureStor
+## package_names.txt:41:42. OptimaRegion
+## package_names.txt:42:61. PropScrRand
+## package_names.txt:43:74. crsra
+## package_names.txt:51:80. SpatioTemporal
+## package_names.txt:52:23. disparityfilter
+## package_names.txt:54:49. SemiParSampleSel
+## package_names.txt:55:76. errorlocate
+## package_names.txt:57:88. SphericalK
+## package_names.txt:61:28. splithalfr
+## package_names.txt:62:89. foretell
+## package_names.txt:63:25. RPyGeo
+## package_names.txt:64:50. mbir
+## package_names.txt:65:51. interplot
+## package_names.txt:66:6. BinOrdNonNor
+## package_names.txt:67:47. SMARTp
+## package_names.txt:68:38. BenfordTests
+## package_names.txt:69:79. mvShapiroTest
+## package_names.txt:71:92. BioCircos
+## package_names.txt:75:55. hindexcalculator
+## package_names.txt:78:41. rstudioapi
+## package_names.txt:80:57. generalhoslem
+## package_names.txt:84:24. SCRT
+## package_names.txt:85:95. TSeriesMMA
+## package_names.txt:87:82. breakfast
+## package_names.txt:96:56. MARSS
+## package_names.txt:97:70. rsed
+## package_names.txt:98:68. AzureStor
+## package_names.txt:100:85. edfReader
+## package_names.txt:101:20. rless
+## package_names.txt:102:75. pmdplyr
+## package_names.txt:103:32. SPEDInstabR
+## package_names.txt:104:3. redcapAPI
+## package_names.txt:106:70. rsed
+## package_names.txt:107:98. SmallCountRounding</code></pre>
+</div>
+<div id="invert-match" class="section level4">
+<h4>Invert Match</h4>
+<p>Use the <code>-v</code> option to select non-matching lines. In the below example, we search for packages whose name does not include <code>R</code> while ignoring the case.</p>
+<pre class="bash"><code>grep -v -i R package_names.txt</code></pre>
+<pre><code>## 36. mlflow
+## 10. aweek
+## 31. BIGDAWG
+## 22. vqtl
+## 29. sspline
+## 39. mev
+## 66. SuppDists
+## 15. MIAmaxent
+## 31. BIGDAWG
+## 29. sspline
+## 60. Eagle
+## 83. WPKDE
+## 11. hdnom
+## 26. blink
+## 18. gazepath
+## 52. ClimMobTools
+## 44. expstudies
+## 65. mined
+## 81. mgcViz
+## 45. solitude
+## 9. pAnalysis
+## 65. mined
+## 94. ICAOD
+## 48. geoknife
+## 45. solitude
+## 67. tictactoe
+## 46. cbsem
+## 93. PathSelectMP
+## 96. poisbinom
+## 17. ASIP
+## 5. pls
+## 84. BIOMASS
+## 59. AdMit
+## 77. SetMethods
+## 53. MVB
+## 2. odk
+## 86. mongolite
+## 4. TIMP
+## 97. AnalyzeTS
+## 87. WGScan
+## 63. dagitty
+## 69. FField
+## 13. MaXact
+## 73. VineCopula
+## 7. bayesbio
+## 34. ibd
+## 8. MVTests
+## 19. mcmcabn
+## 43. accept
+## 78. sybilccFBA
+## 62. lue
+## 100. addhaz
+## 37. CombinePValue
+## 1. cyclocomp
+## 54. OxyBS</code></pre>
+</div>
+<div id="recursive-search" class="section level4">
+<h4>Recursive Search</h4>
+<p>Use the <code>-r</code> option to search recursively. In the below example, we search all files with the <code>.txt</code> extension for the string <code>bio</code> while ignoring the case.</p>
+<pre class="bash"><code>grep -i --color -r bio *.txt</code></pre>
+<pre><code>## package_names.txt:84. BIOMASS
+## package_names.txt:92. BioCircos
+## package_names.txt:7. bayesbio
+## pkg_names.txt:BIOMASS
+## pkg_names.txt:BioCircos
+## pkg_names.txt:BIOMASS
+## pkg_names.txt:bayesbio</code></pre>
+</div>
+</div>
+<div id="find" class="section level3">
+<h3>find</h3>
+<p>The <code>find</code> command can be used for searching files and directories. Using additional options, we can</p>
+<ul>
+<li>search files by extension type</li>
+<li>ignore case while searching files/directories</li>
+</ul>
+<p><code>find</code> is a powerful tool for working with the files. It can be used on its own to locate files, or in conjunction with other programs to perform operations on those files.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>find</code>
+</td>
+<td style="text-align:left;">
+Find files or directories under the given directory; recursively
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>find -name '*.txt'</code>
+</td>
+<td style="text-align:left;">
+Find files by extension
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>find -type d -iname</code>
+</td>
+<td style="text-align:left;">
+Find directories matching a given name, in case-insensitive mode
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>find -type d -name</code>
+</td>
+<td style="text-align:left;">
+Find directories matching a given name, in case-sensitive mode
+</td>
+</tr>
+</tbody>
+</table>
+<div id="search-recursively" class="section level4">
+<h4>Search Recursively</h4>
+<p>Let us use <code>find</code> to search for the file <code>release_names.txt</code> recursively. The <code>-name</code> option is used to specify the name of the file we are searching.</p>
+<pre class="bash"><code>find -name release_names.txt</code></pre>
+<pre><code>## ./release_names.txt
+## ./r_releases/release_names.txt</code></pre>
+<p>There are two files with the name <code>release_names.txt</code> present in the current working directory and in <code>r_releases</code> directory.</p>
+</div>
+<div id="search-by-extension" class="section level4">
+<h4>Search by Extension</h4>
+<p>Let us search for all files with <code>.txt</code> extension in the <code>r_releases</code> folder.</p>
+<pre class="bash"><code>find r_releases -name &#39;*.txt&#39;</code></pre>
+<pre><code>## r_releases/release_names.txt
+## r_releases/release_names_2.txt
+## r_releases/release_names_3.txt</code></pre>
+<p>There are 3 files with the <code>.txt</code> extension in <code>r_releases</code> folder.</p>
+</div>
+<div id="case-insensitive-mode" class="section level4">
+<h4>Case-insensitive Mode</h4>
+<p>Search for all folders with the name <code>R</code> or <code>r</code>. Here we use the <code>-iname</code> option to ignore case while searching. The <code>-type</code> option is used to specify whether we are searching for files or folders. Since we are searching for folder/directory, we use it along with <code>d</code> i.e. directory to indicate that we are searching for directories and not files.</p>
+<pre class="bash"><code>find -type d -iname R</code></pre>
+<pre><code>## ./mypackage/R
+## ./r</code></pre>
+</div>
+<div id="case-sensitive-mode" class="section level4">
+<h4>Case-sensitive Mode</h4>
+<p>Search for all folders with the name <code>r</code>. It should exclude any folder with the name <code>R</code>.</p>
+<pre class="bash"><code>find -type d -name r</code></pre>
+<pre><code>## ./r</code></pre>
+</div>
+</div>
+</div>
+<div id="datatransfer" class="section level2">
+<h2>Data Transfer &amp; Network</h2>
+<p>In this section, we will explore commands that will allow us to download files
+from the internet.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>wget</code>
+</td>
+<td style="text-align:left;">
+Download files from the web
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>curl</code>
+</td>
+<td style="text-align:left;">
+Transfer data from or to a server
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>hostname</code>
+</td>
+<td style="text-align:left;">
+Name of the current host
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ping</code>
+</td>
+<td style="text-align:left;">
+Ping a remote host
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>nslookup</code>
+</td>
+<td style="text-align:left;">
+Name server details
+</td>
+</tr>
+</tbody>
+</table>
+<p>We have not executed the commands in this ebook as downloading multiple files from the internet will take a lot of time or result in errors but we have checked all the commands offline to ensure that they work.</p>
+<div id="wget" class="section level3">
+<h3>wget</h3>
+<p>The <code>wget</code> command will download contents of a URL and files from the internet.
+Using additional options, we can</p>
+<ul>
+<li>download contents/files to a file</li>
+<li>continue incomplete downloads</li>
+<li>download multiple files</li>
+<li>limit download speed and number of retries</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>wget url</code>
+</td>
+<td style="text-align:left;">
+Download contents of a url
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget -o file url</code>
+</td>
+<td style="text-align:left;">
+Download contents of url to a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget -c</code>
+</td>
+<td style="text-align:left;">
+Continue an incomplete download
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget -P folder_name -i urls.txt</code>
+</td>
+<td style="text-align:left;">
+Download all urls stored in a text file to a specific directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --limit-rate</code>
+</td>
+<td style="text-align:left;">
+Limit download speed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --tries</code>
+</td>
+<td style="text-align:left;">
+Limit number of retries
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --quiet</code>
+</td>
+<td style="text-align:left;">
+Turn off output
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --no-verbose</code>
+</td>
+<td style="text-align:left;">
+Print basic information
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --progress-dot</code>
+</td>
+<td style="text-align:left;">
+Change progress bar type to dot
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --timestamping</code>
+</td>
+<td style="text-align:left;">
+Check if the timestamp of the file has changed before downloading
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wget --wait</code>
+</td>
+<td style="text-align:left;">
+Wait between retrievals
+</td>
+</tr>
+</tbody>
+</table>
+<div id="download-url" class="section level4">
+<h4>Download URL</h4>
+<p>Let us first use <code>wget</code> to download contents of a URL. Note, we are not downloading file as such but just the content of the URL. We will use the URL of the home page of <a href="https://www.r-project.org/">R</a> project.</p>
+<pre class="bash"><code>wget https://www.r-project.org/</code></pre>
+<p>If you look at the list of files, you can see a new file, <code>index.html</code> which we just downloaded using <code>wget</code>. Downloading contents this way will lead to confusion if we are dealing with multiple URLs. Let us learn to save the contents to a file (we can specify the name of the file which should help avoid confusion.)</p>
+</div>
+<div id="specify-filename" class="section level4">
+<h4>Specify Filename</h4>
+<p>In this example, we download contents from the same URL and in addition specify the name of the file in which the content must be saved. Here we save it in a new file, <code>rhomepage.html</code> using the <code>-o</code> option followed by the filename.</p>
+<pre class="bash"><code>wget -o rhomepage.html https://www.r-project.org/</code></pre>
+</div>
+<div id="download-file" class="section level4">
+<h4>Download File</h4>
+<p>How about downloading a file instead of a URL? In this example, we will download a logfile from the <a href="http://cran-logs.rstudio.com/">RStudio CRAN</a> mirror. It contains the details of R downloads and individual package downloads. If you are a package developer and would want to know the countries in which your packages are downloaded, you will find this useful. We will download the file for 29th September and save it as <code>sep_29.csv.gz</code>.</p>
+<pre class="bash"><code>wget -o sep_29.csv.gz http://cran-logs.rstudio.com/2019/2019-09-29.csv.gz</code></pre>
+</div>
+<div id="download-multiple-urls" class="section level4">
+<h4>Download Multiple URLs</h4>
+<p>How do we download multiple URLs? One way is to specify the URLs one after the other separated by a space or save all URLs in a file and read them one by one. In the below example, we have saved multiple URLs in the file <code>urls.txt</code>.</p>
+<pre class="bash"><code>cat urls.txt</code></pre>
+<pre><code>## http://cran-logs.rstudio.com/2019/2019-09-26.csv.gz
+## http://cran-logs.rstudio.com/2019/2019-09-27.csv.gz
+## http://cran-logs.rstudio.com/2019/2019-09-28.csv.gz</code></pre>
+<p>We will download all the above URLs and save them in a new folder <code>downloads</code>. The <code>-i</code> indicates that the URLs must be read from a file (local or external). The <code>-P</code> option allows us to specify the directory into which all the files will be downloaded.</p>
+<pre class="bash"><code>wget -P downloads -i urls.txt     </code></pre>
+</div>
+<div id="quiet" class="section level4">
+<h4>Quiet</h4>
+<p>The <code>--quiet</code> option will turn off <code>wget</code> output. It will not show any of the following details:</p>
+<ul>
+<li>name of the file being saved</li>
+<li>file size</li>
+<li>download speed</li>
+<li>eta etc.</li>
+</ul>
+<pre class="bash"><code>wget –-quiet http://cran-logs.rstudio.com/2019/2019-10-06.csv.gz</code></pre>
+</div>
+<div id="no-verbose" class="section level4">
+<h4>No Verbose</h4>
+<p>Using the <code>-nv</code> or <code>--no-verbose</code> option, we can turn off verbose without being completely quiet (as we did in the previous example). Any error messages and basic information will still be printed.</p>
+<pre class="bash"><code>wget –-no-verbose http://cran-logs.rstudio.com/2019/2019-10-13.csv.gz    </code></pre>
+</div>
+<div id="check-timestamp" class="section level4">
+<h4>Check Timestamp</h4>
+<p>Let us say we have already downloaded a file from a URL. The file is updated from time to time and we intend to keep the local copy updated as well. Using the <code>--timestamping</code> option, the local file will have timestamp matching the remote file; if the remote file is not newer (not updated), no download will occur i.e. if the timestamp of the remote file has not changed it will not be downloaded. This is very useful in case of large files where you do not want to download them unless they have been updated.</p>
+<pre class="bash"><code>wget –-timestamping http://cran-logs.rstudio.com/2019/2019-10-13.csv.gz</code></pre>
+</div>
+</div>
+<div id="curl" class="section level3">
+<h3>curl</h3>
+<p>The <code>curl</code> command will transfer data from or to a server. We will only look at
+downloading files from the internet.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>curl url</code>
+</td>
+<td style="text-align:left;">
+Download contents of a url
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>curl url -o file</code>
+</td>
+<td style="text-align:left;">
+Download contents of url to a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>curl url &amp;gt; file</code>
+</td>
+<td style="text-align:left;">
+Download contents of url to a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>curl -s</code>
+</td>
+<td style="text-align:left;">
+Download in silent or quiet mode
+</td>
+</tr>
+</tbody>
+</table>
+<div id="download-url-1" class="section level4">
+<h4>Download URL</h4>
+<p>Let us download the home page of the <a href="https://www.r-project.org/">R</a> project using <code>curl</code>.</p>
+<pre class="bash"><code>curl https://www.r-project.org/</code></pre>
+</div>
+<div id="specify-file" class="section level4">
+<h4>Specify File</h4>
+<p>Let us download another log file from the <a href="http://cran-logs.rstudio.com/">RStudio CRAN</a> mirror and save it into a file using the <code>-o</code> option.</p>
+<pre class="bash"><code>curl http://cran-logs.rstudio.com/2019/2019-09-08.csv.gz -o sept_08.csv.gz </code></pre>
+<p>Another way to save a downloaded file is to use <code>&gt;</code> followed by the name of the file as shown in the below example.</p>
+<pre class="bash"><code>curl http://cran-logs.rstudio.com/2019/2019-09-01.csv.gz &gt; sep_01.csv.gz</code></pre>
+</div>
+<div id="download-silently" class="section level4">
+<h4>Download Silently</h4>
+<p>The <code>-s</code> option will allow you to download files silently. It will mute <code>curl</code> and will not display progress meter or error messages.</p>
+<pre class="bash"><code>curl http://cran-logs.rstudio.com/2019/2019-09-01.csv.gz -o sept_01.csv.gz -s</code></pre>
+</div>
+</div>
+<div id="r-functions-2" class="section level3">
+<h3>R Functions</h3>
+<p>In R, we can use <code>download.file()</code> to download files from the internet. The following packages offer functionalities that you will find useful.</p>
+<ul>
+<li><a href="https://cran.r-project.org/package=curl">curl</a></li>
+<li><a href="https://cran.r-project.org/package=R.utils">R.utils</a></li>
+<li><a href="https://cran.r-project.org/package=pingr">pingr</a></li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>wget</code>
+</td>
+<td style="text-align:left;">
+<code>download.file()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>curl</code>
+</td>
+<td style="text-align:left;">
+<code>curl::curl_download()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>hostname</code>
+</td>
+<td style="text-align:left;">
+<code>R.utils::getHostname.System()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>ping</code>
+</td>
+<td style="text-align:left;">
+<code>pingr::ping()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>nslookup</code>
+</td>
+<td style="text-align:left;">
+<code>curl::nslookup()</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="sudo" class="section level2">
+<h2>sudo</h2>
+<p>sudo <strong>S</strong>uper <strong>U</strong>ser <strong>DO</strong> is a prefix of commands that only superuser or root users are allowed to run. It is similar to <strong>run as administrator</strong> option in Windows. It is used to install, update and remove software. We will use it in the next section to install &amp; update packages.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>dpkg --list</code>
+</td>
+<td style="text-align:left;">
+List installed packages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo apt-get update</code>
+</td>
+<td style="text-align:left;">
+Update packages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo apt-get install</code>
+</td>
+<td style="text-align:left;">
+Install packages
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo apt-get remove</code>
+</td>
+<td style="text-align:left;">
+Remove packages (retain configuration, plugins and settings
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo apt-get purge</code>
+</td>
+<td style="text-align:left;">
+Remove packages including personalized settings
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo apt-get autoremove</code>
+</td>
+<td style="text-align:left;">
+Remove any dependencies no longer in use
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="compress" class="section level2">
+<h2>File Compression</h2>
+<ul>
+<li><code>tar</code></li>
+<li><code>gzip</code></li>
+<li><code>zip</code></li>
+<li><code>unzip</code></li>
+</ul>
+<div id="tar" class="section level3">
+<h3>tar</h3>
+<p>The <code>tar</code> command is used for file compression. It works with both <code>tar</code> and
+<code>tar.gz</code> extensions. It is used to</p>
+<ul>
+<li>list files</li>
+<li>extract files</li>
+<li>create archives</li>
+<li>append file to existing archives</li>
+</ul>
+<p><code>tar</code> creates, maintains, modifies, and extracts files that are archived in the tar format. Tar stands for <strong>t</strong>ape <strong>ar</strong>chive and is an archiving file format.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>tar tvf</code>
+</td>
+<td style="text-align:left;">
+List an archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar tvfz</code>
+</td>
+<td style="text-align:left;">
+List a gzipped archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar xvf</code>
+</td>
+<td style="text-align:left;">
+Extract an archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar xvfz</code>
+</td>
+<td style="text-align:left;">
+Extract a gzipped archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar cvf</code>
+</td>
+<td style="text-align:left;">
+Create an uncompressed tar archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar cvfz</code>
+</td>
+<td style="text-align:left;">
+Create a tar gzipped archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar rvf</code>
+</td>
+<td style="text-align:left;">
+Add a file to an existing archive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar rvfz</code>
+</td>
+<td style="text-align:left;">
+Add a file to an existing gzipped archive
+</td>
+</tr>
+</tbody>
+</table>
+<p>We will use different options along with the <code>tar</code> command for listing, extracting, creating and adding files. The <code>vf</code> (<strong>v</strong> stands for verbosely show .tar file progress and <strong>f</strong> stands for file name type of the archive file) option is common for all the above operations while the following are specific.</p>
+<ul>
+<li><code>t</code> for listing</li>
+<li><code>x</code> for extracting</li>
+<li><code>c</code> for creating</li>
+<li><code>r</code> for adding files</li>
+</ul>
+<p>While dealing with <code>tar.gz</code> archives we will use <code>z</code> in addition to <code>vf</code> and the above options.</p>
+<div id="list" class="section level4">
+<h4>List</h4>
+<p>Let us list all the files &amp; folders in <code>release_names.tar</code>. As mentioned above. to list the files in the archive, we use the <code>t</code> option.</p>
+<pre class="bash"><code>tar -tvf release_names.tar </code></pre>
+<pre><code>## -rwxrwxrwx aravind/aravind 546 2019-09-16 15:59 release_names.txt
+## -rwxrwxrwx aravind/aravind  65 2019-09-16 15:58 release_names_18.txt
+## -rwxrwxrwx aravind/aravind  53 2019-09-16 15:59 release_names_19.txt</code></pre>
+</div>
+<div id="extract" class="section level4">
+<h4>Extract</h4>
+<p>Let us extract files from <code>release_names.tar</code> using the <code>x</code> option in addition to <code>vf</code>.</p>
+<pre class="bash"><code>tar -xvf release_names.tar 
+ls</code></pre>
+<pre><code>## release_names.txt
+## release_names_18.txt
+## release_names_19.txt
+## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_18_19.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="add" class="section level4">
+<h4>Add</h4>
+<p>To add a file to an existing archive, use the <code>r</code> option. Let us add <code>release_names_18.txt</code> and <code>release_names_19.txt</code> to the archive we created in the previous step.</p>
+<pre class="bash"><code>tar -rvf release_names.tar release_names_18.txt release_names_19.txt</code></pre>
+<pre><code>## release_names_18.txt
+## release_names_19.txt</code></pre>
+</div>
+<div id="create" class="section level4">
+<h4>Create</h4>
+<p>Using the <code>c</code> option we can create tar archives. In the below example, we are using a single file but you can specify multiple files and folders as well.</p>
+<pre class="bash"><code>tar -cvf pkg_names.tar pkg_names.txt</code></pre>
+<pre><code>## pkg_names.txt</code></pre>
+</div>
+</div>
+<div id="gzip" class="section level3">
+<h3>gzip</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>gzip</code>
+</td>
+<td style="text-align:left;">
+Compress a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>gzip -d</code>
+</td>
+<td style="text-align:left;">
+Decompress a file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>gzip -c</code>
+</td>
+<td style="text-align:left;">
+Compress a file and specify the output file name
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>zip -r</code>
+</td>
+<td style="text-align:left;">
+Compress a directory
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>zip</code>
+</td>
+<td style="text-align:left;">
+Add files to an existing zip file
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip</code>
+</td>
+<td style="text-align:left;">
+Extract files from a zip files
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip -d</code>
+</td>
+<td style="text-align:left;">
+Extract files from a zip file and specify the output file name
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip -l</code>
+</td>
+<td style="text-align:left;">
+List contents of a zip file
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>gzip</code>, <code>gunzip</code>, and <code>zcat</code> commands are used to compress or expand files in the GNU GZIP format i.e. files with <code>.gz</code> extension</p>
+<div id="compress-1" class="section level4">
+<h4>Compress</h4>
+<p>Let us compress <code>release_names.txt</code> file using <code>gzip</code>.</p>
+<pre class="bash"><code>gzip release_names.txt
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.tar
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt.gz
+## release_names_18.txt
+## release_names_18_19.txt
+## release_names_19.txt
+## sept_15.csv.gz
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="decompress" class="section level4">
+<h4>Decompress</h4>
+<p>Use the <code>-d</code> option with <code>gzip</code> to decompress a file. In the below example, we decompress the <code>sept_15.csv.gz</code> file (downloaded using <code>wget</code> or <code>curl</code> earlier). You can also use <code>gunzip</code> for the same result.</p>
+<pre class="bash"><code>gzip -d sept_15.csv.gz
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.tar
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_18_19.txt
+## release_names_19.txt
+## sept_15.csv
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+<div id="specify-filename-1" class="section level4">
+<h4>Specify Filename</h4>
+<p>Use <code>-c</code> and <code>&gt;</code> to specify a different file name while compressing using <code>gzip</code>. In the below example, <code>gzip</code> will create <code>releases.txt.gz</code> instead of <code>release_names.txt.gz</code>.</p>
+<pre class="bash"><code>gzip -c release_names.txt &gt; releases.txt.gz
+ls</code></pre>
+<pre><code>## analysis.R
+## bash.R
+## bash.Rmd
+## bash.sh
+## imports_blorr.txt
+## imports_olsrr.txt
+## lorem-ipsum.txt
+## main_project.zip
+## myfiles
+## mypackage
+## myproject
+## myproject3
+## myproject4
+## package_names.txt
+## pkg_names.tar
+## pkg_names.txt
+## r
+## r2
+## r_releases
+## release_names.tar
+## release_names.tar.gz
+## release_names.txt
+## release_names_18.txt
+## release_names_18_19.txt
+## release_names_19.txt
+## releases.txt.gz
+## sept_15.csv
+## urls.txt
+## zip_example.zip</code></pre>
+</div>
+</div>
+<div id="zip-unzip" class="section level3">
+<h3>zip &amp; unzip</h3>
+<p><code>zip</code> creates ZIP archives while <code>unzip</code> lists and extracts compressed files in a ZIP archive.</p>
+<div id="list-1" class="section level4">
+<h4>List</h4>
+<p>Let us list all the files and folders in <code>main_project.zip()</code> using <code>unzip</code> and the <code>-l</code> option.</p>
+<pre class="bash"><code>unzip -l main_project.zip</code></pre>
+<pre><code>## Archive:  main_project.zip
+##   Length      Date    Time    Name
+## ---------  ---------- -----   ----
+##         0  2019-09-23 18:07   myproject/
+##         0  2019-09-20 14:02   myproject/.gitignore
+##         0  2019-09-23 18:07   myproject/data/
+##         0  2019-09-20 14:02   myproject/data/processed/
+##         0  2019-09-20 14:02   myproject/data/raw/
+##         0  2019-09-20 14:02   myproject/output/
+##         0  2019-09-20 14:02   myproject/README.md
+##        13  2019-09-20 14:02   myproject/run_analysis.R
+##         0  2019-09-20 14:02   myproject/src/
+##         0  2019-09-23 18:07   mypackage/
+##         0  2019-09-20 14:11   mypackage/.gitignore
+##         0  2019-09-20 14:11   mypackage/.Rbuildignore
+##         0  2019-09-20 14:10   mypackage/data/
+##         0  2019-09-20 14:11   mypackage/DESCRIPTION
+##         0  2019-09-20 14:10   mypackage/docs/
+##         0  2019-09-20 14:11   mypackage/LICENSE
+##         0  2019-09-20 14:10   mypackage/man/
+##         0  2019-09-20 14:11   mypackage/NAMESPACE
+##         0  2019-09-20 14:11   mypackage/NEWS.md
+##         0  2019-09-20 14:10   mypackage/R/
+##         0  2019-09-20 14:11   mypackage/README.md
+##         0  2019-09-20 14:11   mypackage/src/
+##         0  2019-09-20 14:10   mypackage/tests/
+##         0  2019-09-20 14:10   mypackage/vignettes/
+##         0  2019-09-23 18:07   myfiles/
+##        12  2019-09-20 15:30   myfiles/analysis.R
+##         7  2019-09-20 15:31   myfiles/NEWS.md
+##         9  2019-09-20 15:31   myfiles/README.md
+##       546  2019-09-20 15:29   myfiles/release_names.txt
+##        65  2019-09-20 15:29   myfiles/release_names_18.txt
+##        53  2019-09-20 15:30   myfiles/release_names_19.txt
+##        12  2019-09-20 15:30   myfiles/visualization.R
+##     15333  2019-10-01 16:58   bash.sh
+##         0  2019-09-16 12:42   r/
+## ---------                     -------
+##     16050                     34 files</code></pre>
+</div>
+<div id="extract-1" class="section level4">
+<h4>Extract</h4>
+<p>Using <code>unzip</code>, let us now extract files and folders from <code>zip_example.zip</code>.</p>
+<pre class="bash"><code>unzip zip_example.zip</code></pre>
+<pre><code>## Archive:  zip_example.zip
+##    creating: zip_example/
+##   inflating: zip_example/bash.sh     
+##   inflating: zip_example/pkg_names.txt</code></pre>
+<p>Using the <code>-d</code> option, we can extract the contents of <code>zip_example.zip</code> to a specific folder. In the below example, we extract it to a new folder <code>examples</code>.</p>
+<pre class="bash"><code>unzip zip_example.zip –d myexamples</code></pre>
+<pre><code>## [1] &quot;Archive:  zip_example.zip&quot;                        
+## [2] &quot;   creating: examples/zip_example/&quot;               
+## [3] &quot;  inflating: examples/zip_example/bash.sh  &quot;      
+## [4] &quot;  inflating: examples/zip_example/pkg_names.txt  &quot;</code></pre>
+</div>
+<div id="compress-2" class="section level4">
+<h4>Compress</h4>
+<p>Use the <code>-r</code> option along with <code>zip</code> to create a ZIP archive. In the below example, we create a ZIP archive of <code>myproject</code> folder.</p>
+<pre class="bash"><code>zip -r myproject.zip myproject
+ls</code></pre>
+<pre><code>##   adding: myproject/ (stored 0%)
+##   adding: myproject/.gitignore (stored 0%)
+##   adding: myproject/data/ (stored 0%)
+##   adding: myproject/data/processed/ (stored 0%)
+##   adding: myproject/data/raw/ (stored 0%)
+##   adding: myproject/output/ (stored 0%)
+##   adding: myproject/README.md (stored 0%)
+##   adding: myproject/run_analysis.R (stored 0%)
+##   adding: myproject/src/ (stored 0%)</code></pre>
+<p>We can compress multiple directories using <code>zip</code>. The names of the directories must be separated by a space as shown in the below example where we compress <code>myproject</code> and <code>mypackage</code> into a single ZIP archive.</p>
+<pre class="bash"><code>zip -r packproj.zip myproject mypackage
+ls</code></pre>
+<pre><code>##   adding: myproject/ (stored 0%)
+##   adding: myproject/.gitignore (stored 0%)
+##   adding: myproject/data/ (stored 0%)
+##   adding: myproject/data/processed/ (stored 0%)
+##   adding: myproject/data/raw/ (stored 0%)
+##   adding: myproject/output/ (stored 0%)
+##   adding: myproject/README.md (stored 0%)
+##   adding: myproject/run_analysis.R (stored 0%)
+##   adding: myproject/src/ (stored 0%)
+##   adding: mypackage/ (stored 0%)
+##   adding: mypackage/.gitignore (stored 0%)
+##   adding: mypackage/.Rbuildignore (stored 0%)
+##   adding: mypackage/data/ (stored 0%)
+##   adding: mypackage/DESCRIPTION (stored 0%)
+##   adding: mypackage/docs/ (stored 0%)
+##   adding: mypackage/LICENSE (stored 0%)
+##   adding: mypackage/man/ (stored 0%)
+##   adding: mypackage/NAMESPACE (stored 0%)
+##   adding: mypackage/NEWS.md (stored 0%)
+##   adding: mypackage/R/ (stored 0%)
+##   adding: mypackage/README.md (stored 0%)
+##   adding: mypackage/src/ (stored 0%)
+##   adding: mypackage/tests/ (stored 0%)
+##   adding: mypackage/vignettes/ (stored 0%)</code></pre>
+</div>
+<div id="add-1" class="section level4">
+<h4>Add</h4>
+<p>To add a new file/folder to an existing archive, specify the name of the archive followed by the name of the file or the folder. In the below example, we add the <code>bash.sh</code> file to the <code>myproject.zip</code> archive created in a previous step.</p>
+<pre class="bash"><code>zip myproject.zip bash.sh</code></pre>
+<pre><code>##   adding: bash.sh (deflated 78%)</code></pre>
+</div>
+</div>
+<div id="r-functions-3" class="section level3">
+<h3>R Functions</h3>
+<div id="tar-tar.gz" class="section level4">
+<h4>tar &amp; tar.gz</h4>
+<p>In R, we can use the <code>tar()</code> and <code>untar()</code> functions from the <code>utils</code> package to handle <code>.tar</code> and <code>.tar.gz</code> archives.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>tar tvf</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar('archive.tar', list = TRUE)</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar tvfz</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar('archive.tar.gz', list = TRUE)</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar xvf</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar('archive.tar')</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar xvfz</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar('archive.tar.gz')</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar cvf</code>
+</td>
+<td style="text-align:left;">
+<code>utils::tar('archive.tar')</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>tar cvfz</code>
+</td>
+<td style="text-align:left;">
+<code>utils::tar('archive.tar', compression = 'gzip')</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="zip-gzip" class="section level4">
+<h4>zip &amp; gzip</h4>
+<p>The <a href="https://cran.r-project.org/package=zip">zip</a> package has the functionalities to handle ZIP archives. The <code>tar()</code> and <code>untar()</code> functions from the <code>utils</code> package can handle GZIP archives.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>gzip</code>
+</td>
+<td style="text-align:left;">
+<code>utils::tar(compression = 'gzip'</code> / <code>R.utils::gzip()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>gzip -d</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar()</code> / <code>R.utils::gunzip()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>gzip -c</code>
+</td>
+<td style="text-align:left;">
+<code>utils::untar(exdir = filename)</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>zip -r</code>
+</td>
+<td style="text-align:left;">
+<code>zip::zip()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>zip</code>
+</td>
+<td style="text-align:left;">
+<code>zip::zipr_append()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip</code>
+</td>
+<td style="text-align:left;">
+<code>zip::unzip()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip -d</code>
+</td>
+<td style="text-align:left;">
+<code>zip::unzip(exdir = dir_name)</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>unzip -l</code>
+</td>
+<td style="text-align:left;">
+<code>zip::zip_list()</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="sysinfo" class="section level2">
+<h2>System Info</h2>
+<p>In this section, we will explore commands that will allow us to</p>
+<ul>
+<li>display information about the system</li>
+<li>display memory usage information</li>
+<li>display file system disk space usage</li>
+<li>exit the terminal</li>
+<li>run commands a superuser</li>
+<li>shutdown the system</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>uname</code>
+</td>
+<td style="text-align:left;">
+Display important information about the system
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>free</code>
+</td>
+<td style="text-align:left;">
+Display free, used, swap memory in the system
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>df</code>
+</td>
+<td style="text-align:left;">
+Display file system disk space usage
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>exit</code>
+</td>
+<td style="text-align:left;">
+Exit the terminal
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sudo</code>
+</td>
+<td style="text-align:left;">
+Run command as super user
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>shutdown</code>
+</td>
+<td style="text-align:left;">
+Shutdown the system
+</td>
+</tr>
+</tbody>
+</table>
+<div id="uname" class="section level3">
+<h3>uname</h3>
+<p>The <code>uname</code> command is used to view important information about the system. Using additional options, we can</p>
+<ul>
+<li>print details about operating system</li>
+<li>hardware &amp; software related information</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>uname</code>
+</td>
+<td style="text-align:left;">
+Print details about the current machine and the operating system running on it
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>uname -mp</code>
+</td>
+<td style="text-align:left;">
+Hardware related information; machine &amp; processor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>uname -srv</code>
+</td>
+<td style="text-align:left;">
+Software related information; operating system, release number and version
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>uname -n</code>
+</td>
+<td style="text-align:left;">
+Nodename of the system
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>uname -a</code>
+</td>
+<td style="text-align:left;">
+Print all available information system
+</td>
+</tr>
+</tbody>
+</table>
+<div id="print-all-available-information-about-the-system" class="section level4">
+<h4>Print all available information about the system</h4>
+<pre class="bash"><code>uname -a</code></pre>
+<pre><code>## Linux Aravind 4.4.0-18362-Microsoft #1-Microsoft Mon Mar 18 12:02:00 PST 2019 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
+</div>
+<div id="display-free-used-swap-memory-in-the-system" class="section level4">
+<h4>Display free, used, swap memory in the system</h4>
+<pre class="bash"><code>free</code></pre>
+<pre><code>##               total        used        free      shared  buff/cache   available
+## Mem:        3621900     2732932      659616       17720      229352      755236
+## Swap:      11010048      662160    10347888</code></pre>
+</div>
+<div id="display-file-system-disk-space-usage" class="section level4">
+<h4>Display file system disk space usage</h4>
+<pre class="bash"><code>df</code></pre>
+<pre><code>## Filesystem     1K-blocks      Used Available Use% Mounted on
+## rootfs         188482144 134467048  54015096  72% /
+## none           188482144 134467048  54015096  72% /dev
+## none           188482144 134467048  54015096  72% /run
+## none           188482144 134467048  54015096  72% /run/lock
+## none           188482144 134467048  54015096  72% /run/shm
+## none           188482144 134467048  54015096  72% /run/user
+## cgroup         188482144 134467048  54015096  72% /sys/fs/cgroup
+## C:\            188482144 134467048  54015096  72% /mnt/c
+## D:\             18660348  17154376   1505972  92% /mnt/d
+## F:\              3196924    231760   2965164   8% /mnt/f
+## G:\             86383612  29503152  56880460  35% /mnt/g
+## H:\             86383612  14755908  71627704  18% /mnt/h
+## J:\             83185660  16835544  66350116  21% /mnt/j</code></pre>
+</div>
+</div>
+<div id="others" class="section level3">
+<h3>Others</h3>
+<p>In this section, let us look at a few other useful commands that will allow us
+to</p>
+<ul>
+<li>see how long a command takes to execute</li>
+<li>delay activity</li>
+<li>display and clear command history list</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>time</code>
+</td>
+<td style="text-align:left;">
+See how long a command takes to execute
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sleep</code>
+</td>
+<td style="text-align:left;">
+Delay activity in seconds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sleep 1m</code>
+</td>
+<td style="text-align:left;">
+Delay activity in minutes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>sleep 1h</code>
+</td>
+<td style="text-align:left;">
+Delay activity in hours
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>history</code>
+</td>
+<td style="text-align:left;">
+Display command history list with line numbers
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>history -c</code>
+</td>
+<td style="text-align:left;">
+Clear the command history list
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="funny-commands" class="section level3">
+<h3>Funny Commands</h3>
+<p>Below are a few funny commands for you to try out. Use <code>sudo apt-get install</code> to install fortune and banner before trying them.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>fortune</code>
+</td>
+<td style="text-align:left;">
+Poignant, inspirational &amp; silly phrases
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>yes</code>
+</td>
+<td style="text-align:left;">
+Output a string repeatedly until killed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>banner</code>
+</td>
+<td style="text-align:left;">
+ASCII banner
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>rev</code>
+</td>
+<td style="text-align:left;">
+Reverse each character
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="r-functions-4" class="section level3">
+<h3>R Functions</h3>
+<p>In R, we can use <code>Sys.sleep()</code> to delay activity and <code>history()</code> to view command history.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Command
+</th>
+<th style="text-align:left;">
+R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>sleep</code>
+</td>
+<td style="text-align:left;">
+<code>Sys.sleep()</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>history</code>
+</td>
+<td style="text-align:left;">
+<code>history()</code>
+</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+</div>
+<div id="system2" class="section level2">
+<h2>Execute Commands from R</h2>
+<p>Now, let us turn our attention to executing commands from R using <code>system2()</code>.
+Here we will focus on the following</p>
+<ul>
+<li>execute a command without arguments</li>
+<li>execute commands with arguments</li>
+<li>redirect output</li>
+</ul>
+<p>Let us try to execute a command without any additional arguments. We will execute the <code>ls</code> command to list all files and directories. Use <code>system2()</code> and specify the command using the <code>command</code> argument. Whenever you are trying to execute a command from R, the first argument or input should be the command and it must be enclosed in quotes.</p>
+<pre class="r"><code>system2(command = &quot;ls&quot;)</code></pre>
+<pre><code>##   [1] &quot;2016-02-07-variables.html&quot;                                      
+##   [2] &quot;2016-02-17-data-types-in-r.html&quot;                                
+##   [3] &quot;2017-02-05-variables.Rmd&quot;                                       
+##   [4] &quot;2017-02-05-variables.html&quot;                                      
+##   [5] &quot;2017-02-17-data-types-in-r.Rmd&quot;                                 
+##   [6] &quot;2017-02-17-data-types-in-r.html&quot;                                
+##   [7] &quot;2017-03-01-getting-help-in-r.html&quot;                              
+##   [8] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.Rmd&quot;          
+##   [9] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.html&quot;         
+##  [10] &quot;2017-03-25-vectors.Rmd&quot;                                         
+##  [11] &quot;2017-03-25-vectors.html&quot;                                        
+##  [12] &quot;2017-03-29-vectors-part-2.Rmd&quot;                                  
+##  [13] &quot;2017-03-29-vectors-part-2.html&quot;                                 
+##  [14] &quot;2017-04-03-vectors-part-3.Rmd&quot;                                  
+##  [15] &quot;2017-04-03-vectors-part-3.html&quot;                                 
+##  [16] &quot;2017-04-06-matrix.Rmd&quot;                                          
+##  [17] &quot;2017-04-06-matrix.html&quot;                                         
+##  [18] &quot;2017-04-12-matrix-part-2.Rmd&quot;                                   
+##  [19] &quot;2017-04-12-matrix-part-2.html&quot;                                  
+##  [20] &quot;2017-04-18-lists.Rmd&quot;                                           
+##  [21] &quot;2017-04-18-lists.html&quot;                                          
+##  [22] &quot;2017-04-30-factors.Rmd&quot;                                         
+##  [23] &quot;2017-04-30-factors.html&quot;                                        
+##  [24] &quot;2017-05-12-dataframes.Rmd&quot;                                      
+##  [25] &quot;2017-05-12-dataframes.html&quot;                                     
+##  [26] &quot;2017-05-24-data-visualization-with-r-introduction.Rmd&quot;          
+##  [27] &quot;2017-05-24-data-visualization-with-r-introduction.html&quot;         
+##  [28] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.Rmd&quot; 
+##  [29] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.html&quot;
+##  [30] &quot;2017-06-17-data-visualization-with-r-scatter-plots.Rmd&quot;         
+##  [31] &quot;2017-06-17-data-visualization-with-r-scatter-plots.html&quot;        
+##  [32] &quot;2017-06-29-data-visualization-with-r-line-graphs.Rmd&quot;           
+##  [33] &quot;2017-06-29-data-visualization-with-r-line-graphs.html&quot;          
+##  [34] &quot;2017-07-11-data-visualization-with-r-bar-plots.Rmd&quot;             
+##  [35] &quot;2017-07-11-data-visualization-with-r-bar-plots.html&quot;            
+##  [36] &quot;2017-07-23-data-visualization-with-r-box-plots.Rmd&quot;             
+##  [37] &quot;2017-07-23-data-visualization-with-r-box-plots.html&quot;            
+##  [38] &quot;2017-08-04-data-visualization-with-r-histogram.Rmd&quot;             
+##  [39] &quot;2017-08-04-data-visualization-with-r-histogram.html&quot;            
+##  [40] &quot;2017-08-16-data-visualization-with-r-legends.Rmd&quot;               
+##  [41] &quot;2017-08-16-data-visualization-with-r-legends.html&quot;              
+##  [42] &quot;2017-08-28-data-visualization-with-r-text-annotations.Rmd&quot;      
+##  [43] &quot;2017-08-28-data-visualization-with-r-text-annotations.html&quot;     
+##  [44] &quot;2017-09-09-data-visualization-with-r-combining-plots.Rmd&quot;       
+##  [45] &quot;2017-09-09-data-visualization-with-r-combining-plots.html&quot;      
+##  [46] &quot;2017-10-03-ggplot2-quick-tour.Rmd&quot;                              
+##  [47] &quot;2017-10-03-ggplot2-quick-tour.html&quot;                             
+##  [48] &quot;2017-10-15-ggplot2-introduction-to-geoms.Rmd&quot;                   
+##  [49] &quot;2017-10-15-ggplot2-introduction-to-geoms.html&quot;                  
+##  [50] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.Rmd&quot;              
+##  [51] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.html&quot;             
+##  [52] &quot;2017-11-08-ggplot2-axis-plot-labels.Rmd&quot;                        
+##  [53] &quot;2017-11-08-ggplot2-axis-plot-labels.html&quot;                       
+##  [54] &quot;2017-11-20-ggplot2-text-annotations.Rmd&quot;                        
+##  [55] &quot;2017-11-20-ggplot2-text-annotations.html&quot;                       
+##  [56] &quot;2017-12-02-ggplot2-scatter-plots.Rmd&quot;                           
+##  [57] &quot;2017-12-02-ggplot2-scatter-plots.html&quot;                          
+##  [58] &quot;2017-12-14-ggplot2-line-graphs.Rmd&quot;                             
+##  [59] &quot;2017-12-14-ggplot2-line-graphs.html&quot;                            
+##  [60] &quot;2017-12-26-ggplot2-bar-plots.Rmd&quot;                               
+##  [61] &quot;2017-12-26-ggplot2-bar-plots.html&quot;                              
+##  [62] &quot;2018-01-07-ggplot2-box-plots.Rmd&quot;                               
+##  [63] &quot;2018-01-07-ggplot2-box-plots.html&quot;                              
+##  [64] &quot;2018-01-19-ggplot2-histogram.Rmd&quot;                               
+##  [65] &quot;2018-01-19-ggplot2-histogram.html&quot;                              
+##  [66] &quot;2018-01-31-ggplot2-guides-axes.Rmd&quot;                             
+##  [67] &quot;2018-01-31-ggplot2-guides-axes.html&quot;                            
+##  [68] &quot;2018-02-12-ggplot2-guides-legends.Rmd&quot;                          
+##  [69] &quot;2018-02-12-ggplot2-guides-legends.html&quot;                         
+##  [70] &quot;2018-02-24-guides-legends-part-2.Rmd&quot;                           
+##  [71] &quot;2018-02-24-guides-legends-part-2.html&quot;                          
+##  [72] &quot;2018-03-08-legend-part-3.Rmd&quot;                                   
+##  [73] &quot;2018-03-08-legend-part-3.html&quot;                                  
+##  [74] &quot;2018-03-20-legend-part-4.Rmd&quot;                                   
+##  [75] &quot;2018-03-20-legend-part-4.html&quot;                                  
+##  [76] &quot;2018-04-01-legend-part-5.Rmd&quot;                                   
+##  [77] &quot;2018-04-01-legend-part-5.html&quot;                                  
+##  [78] &quot;2018-04-13-legend-part-6.Rmd&quot;                                   
+##  [79] &quot;2018-04-13-legend-part-6.html&quot;                                  
+##  [80] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.Rmd&quot;           
+##  [81] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.html&quot;          
+##  [82] &quot;2018-05-07-ggplot2-themes.Rmd&quot;                                  
+##  [83] &quot;2018-05-07-ggplot2-themes.html&quot;                                 
+##  [84] &quot;2018-07-30-importing-data-into-r-part-1.Rmd&quot;                    
+##  [85] &quot;2018-07-30-importing-data-into-r-part-1.html&quot;                   
+##  [86] &quot;2018-08-11-importing-data-into-r-part-2.Rmd&quot;                    
+##  [87] &quot;2018-08-11-importing-data-into-r-part-2.html&quot;                   
+##  [88] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.Rmd&quot;                
+##  [89] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.html&quot;               
+##  [90] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.Rmd&quot;                
+##  [91] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.html&quot;               
+##  [92] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.Rmd&quot;                
+##  [93] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.html&quot;               
+##  [94] &quot;2018-09-28-introduction-to-tibbles.Rmd&quot;                         
+##  [95] &quot;2018-09-28-introduction-to-tibbles.html&quot;                        
+##  [96] &quot;2018-10-10-readable-code-with-pipes.Rmd&quot;                        
+##  [97] &quot;2018-10-10-readable-code-with-pipes.html&quot;                       
+##  [98] &quot;2018-10-22-hacking-strings-with-stringr.Rmd&quot;                    
+##  [99] &quot;2018-10-22-hacking-strings-with-stringr.html&quot;                   
+## [100] &quot;2018-11-03-working-with-dates-in-r.Rmd&quot;                         
+## [101] &quot;2018-11-03-working-with-dates-in-r.html&quot;                        
+## [102] &quot;2018-11-15-working-with-categorical-data-using-forcats.Rmd&quot;     
+## [103] &quot;2018-11-15-working-with-categorical-data-using-forcats.html&quot;    
+## [104] &quot;2018-11-27-quick-guide-r-sqlite.Rmd&quot;                            
+## [105] &quot;2018-11-27-quick-guide-r-sqlite.html&quot;                           
+## [106] &quot;2018-12-09-data-wrangling-with-dbplyr.Rmd&quot;                      
+## [107] &quot;2018-12-09-data-wrangling-with-dbplyr.html&quot;                     
+## [108] &quot;2018-12-21-sql-for-data-science.Rmd&quot;                            
+## [109] &quot;2018-12-21-sql-for-data-science.html&quot;                           
+## [110] &quot;2019-01-02-sql-for-data-science-part-2.Rmd&quot;                     
+## [111] &quot;2019-01-02-sql-for-data-science-part-2.html&quot;                    
+## [112] &quot;2019-02-08-introducing-olsrr.Rmd&quot;                               
+## [113] &quot;2019-02-08-introducing-olsrr.html&quot;                              
+## [114] &quot;2019-02-12-introducing-rfm.Rmd&quot;                                 
+## [115] &quot;2019-02-12-introducing-rfm.html&quot;                                
+## [116] &quot;2019-02-19-introducing-descriptr.Rmd&quot;                           
+## [117] &quot;2019-02-19-introducing-descriptr.html&quot;                          
+## [118] &quot;2019-02-20-introducing-descriptr.Rmd&quot;                           
+## [119] &quot;2019-02-20-introducing-descriptr.html&quot;                          
+## [120] &quot;2019-02-26-introducing-blorr.Rmd&quot;                               
+## [121] &quot;2019-02-26-introducing-blorr.html&quot;                              
+## [122] &quot;2019-03-05-getting-help-in-r.Rmd&quot;                               
+## [123] &quot;2019-03-05-getting-help-in-r.html&quot;                              
+## [124] &quot;2019-03-12-introducing-rbin.Rmd&quot;                                
+## [125] &quot;2019-03-12-introducing-rbin.html&quot;                               
+## [126] &quot;2019-03-14-introducing-vistributions.Rmd&quot;                       
+## [127] &quot;2019-03-14-introducing-vistributions.html&quot;                      
+## [128] &quot;2019-04-01-shiny-apps.Rmd&quot;                                      
+## [129] &quot;2019-04-01-shiny-apps.html&quot;                                     
+## [130] &quot;2019-04-11-web-scraping.Rmd&quot;                                    
+## [131] &quot;2019-04-11-web-scraping.html&quot;                                   
+## [132] &quot;2019-04-13-web-scraping-note.Rmd&quot;                               
+## [133] &quot;2019-04-13-web-scraping-note.html&quot;                              
+## [134] &quot;2019-05-02-mba.Rmd&quot;                                             
+## [135] &quot;2019-05-02-mba.html&quot;                                            
+## [136] &quot;2019-05-27-regex.Rmd&quot;                                           
+## [137] &quot;2019-05-27-regex.html&quot;                                          
+## [138] &quot;2019-07-05-pkginfo.Rmd&quot;                                         
+## [139] &quot;2019-07-05-pkginfo.html&quot;                                        
+## [140] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.Rmd&quot;        
+## [141] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.html&quot;       
+## [142] &quot;2019-08-08-working-with-databases-using-r.Rmd&quot;                  
+## [143] &quot;2019-08-08-working-with-databases-using-r.html&quot;                 
+## [144] &quot;2019-10-22-command-line-crash-course.Rmd&quot;                       
+## [145] &quot;2019-10-22-command-line-crash-course.html&quot;                      
+## [146] &quot;2019-10-22-command-line-crash-course_files&quot;                     
+## [147] &quot;airline.dta&quot;                                                    
+## [148] &quot;airline.sas7bdat&quot;                                               
+## [149] &quot;analysis.R&quot;                                                     
+## [150] &quot;cline&quot;                                                          
+## [151] &quot;config.yml&quot;                                                     
+## [152] &quot;employee.sav&quot;                                                   
+## [153] &quot;examples&quot;                                                       
+## [154] &quot;hsb2.csv&quot;                                                       
+## [155] &quot;hsb3.csv&quot;                                                       
+## [156] &quot;hsb4.csv&quot;                                                       
+## [157] &quot;imports_blorr.txt&quot;                                              
+## [158] &quot;imports_olsrr.txt&quot;                                              
+## [159] &quot;mydatabase.db&quot;                                                  
+## [160] &quot;online-retail.xlsx&quot;                                             
+## [161] &quot;options.R&quot;                                                      
+## [162] &quot;package_names.csv&quot;                                              
+## [163] &quot;release.txt&quot;                                                    
+## [164] &quot;sample.xls&quot;                                                     
+## [165] &quot;transaction_data.csv&quot;                                           
+## [166] &quot;zip_example.zip&quot;</code></pre>
+<p>Great! Now, how do we specify the options? The additional options of a
+command must be stored as a character vector and specified using the <code>args</code>
+argument. In the below example, we delete the <code>examples</code> folder we created earlier while decompressing the <code>zip_example.zip</code> file.</p>
+<pre class="r"><code>system2(command = &quot;rm&quot;,
+        args    = c(&quot;-r&quot;, &quot;examples&quot;))</code></pre>
+<pre><code>## character(0)</code></pre>
+<p>In some cases, we might want to redirect the output. Let us say we are writing
+message to a file using the <code>echo</code> command. In this cases, we want the output
+to be redirected to the <code>release.txt</code> file. The <code>stdout</code> argument can be used to redirect output to a file or the R console. In the below example, we redirect the output to a file.</p>
+<pre class="r"><code>system2(command = &quot;echo&quot;, 
+        args    = c(&quot;Great Truth&quot;), 
+        stdout  = &quot;release.txt&quot;)</code></pre>
+<p>In the next example, we redirect the output to the R console by setting the value of the <code>stdout</code> argument to <code>TRUE</code>. If you are curious, set the value to <code>FALSE</code> and see what happens.</p>
+<pre class="r"><code>system2(command = &quot;diff&quot;, 
+        args    = c(&quot;imports_olsrr.txt&quot;, &quot;imports_blorr.txt&quot;),  
+        stdout  = TRUE)</code></pre>
+<pre><code>## Warning in system2(command = &quot;diff&quot;, args = c(&quot;imports_olsrr.txt&quot;,
+## &quot;imports_blorr.txt&quot;), : running command &#39;&quot;diff&quot; imports_olsrr.txt
+## imports_blorr.txt&#39; had status 1</code></pre>
+<pre><code>##  [1] &quot;1,4c1,5&quot;      &quot;&lt; car &quot;       &quot;&lt; checkmate&quot;  &quot;&lt; cli&quot;       
+##  [5] &quot;&lt; clisymbols&quot; &quot;---&quot;          &quot;&gt; car&quot;        &quot;&gt; caret&quot;     
+##  [9] &quot;&gt; checkmate&quot;  &quot;&gt; clisymbols&quot; &quot;&gt; cli&quot;       
+## attr(,&quot;status&quot;)
+## [1] 1</code></pre>
+<p>The <code>run()</code> command from the <a href="https://processx.r-lib.org/">processx</a> package can be used to execute shell commands as well.</p>
+</div>
+<div id="shellrstudio" class="section level2">
+<h2>Execute Shell Commands in RStudio</h2>
+<p>In RStudio, commands can be executed from shell scripts by pressing <code>Ctrl + Enter</code>. Instead of sending the command to the R console, it is redirected to
+the terminal where it is executed as shown below.</p>
+<p><img src="/img/cline_rstudio_shell.gif" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="shellrmarkdown" class="section level2">
+<h2>RMarkdown</h2>
+<p>RMarkdown supports <code>bash</code>, <code>sh</code> and <code>awk</code>. This post was initially created using <code>sh</code> as the underlying operating system is Windows. Later, we used <code>bash</code> after installing the Windows subsystem for Linux. Click <a href="https://bookdown.org/yihui/rmarkdown/language-engines.html#shell-scripts">here</a> to learn more.</p>
+<p><img src="/img/cline_shell_markdown.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="rinshell" class="section level2">
+<h2>R in the Shell</h2>
+<p>In this section, we will learn to execute R commands and scripts in the command line using:</p>
+<ul>
+<li><code>R -e</code></li>
+<li><code>Rscript -e</code></li>
+<li><code>R CMD BATCH</code></li>
+</ul>
+<p>The <code>-e</code> option allows us to specify R expression(s). <code>R -e</code> will launch R and then execute the code specified within quotes. Use semi-colon to execute multiple expressions as shown below. You will be able to run the below commands only if you are able to launch R from the command line. Windows users need to ensure that R is added to the path environment.</p>
+<pre class="sh"><code>R -e &quot;head(mtcars); tail(mtcars)&quot;</code></pre>
+<pre><code>## 
+## R version 3.6.1 (2019-07-05) -- &quot;Action of the Toes&quot;
+## Copyright (C) 2019 The R Foundation for Statistical Computing
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## 
+## R is free software and comes with ABSOLUTELY NO WARRANTY.
+## You are welcome to redistribute it under certain conditions.
+## Type &#39;license()&#39; or &#39;licence()&#39; for distribution details.
+## 
+##   Natural language support but running in an English locale
+## 
+## R is a collaborative project with many contributors.
+## Type &#39;contributors()&#39; for more information and
+## &#39;citation()&#39; on how to cite R or R packages in publications.
+## 
+## Type &#39;demo()&#39; for some demos, &#39;help()&#39; for on-line help, or
+## &#39;help.start()&#39; for an HTML browser interface to help.
+## Type &#39;q()&#39; to quit R.
+## 
+## &gt; head(mtcars); tail(mtcars)
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+##                 mpg cyl  disp  hp drat    wt qsec vs am gear carb
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.7  0  1    5    2
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
+## Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4
+## Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6
+## Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.6  0  1    5    8
+## Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.6  1  1    4    2
+## &gt; 
+## &gt;</code></pre>
+<p><code>Rscript -e</code> will run code without launching R.</p>
+<pre class="sh"><code>Rscript -e &quot;head(mtcars)&quot;</code></pre>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<p>We can use <code>Rscript</code> to execute a R script as well. In the below example, we execute the code in <code>analysis.R</code> file.</p>
+<pre class="sh"><code>Rscript analysis.R</code></pre>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<p>If you are more interested, try the <a href="https://cran.r-project.org/package=littler">littler</a> package as well.</p>
+<div id="what-we-have-not-covered" class="section level3">
+<h3>What we have not covered…</h3>
+<ul>
+<li>shell scripting</li>
+<li>editing files</li>
+<li>file permissions</li>
+<li>user information</li>
+<li>pipes</li>
+<li>awk</li>
+<li>sed</li>
+</ul>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<ul>
+<li>Shell is a text based application for viewing, handling and manipulating files</li>
+<li>It is also known by the following names
+<ul>
+<li>CLI (Command Line Inteface)</li>
+<li>Terminal</li>
+<li>Bash (Bourne Again Shell)</li>
+</ul></li>
+<li>Use <code>system2()</code> and <code>processx::run()</code> in R to execute shell commands</li>
+<li>Use <code>Rscript -e</code> or <code>R -e</code> to execute R scripts from the command line</li>
+<li>RStudio includes a Terminal (from version 1.1.383)</li>
+<li>Execute commands from shell script in RStudio using Ctrl + Enter</li>
+<li>RMarkdown supports <code>bash</code>, <code>sh</code> and <code>awk</code></li>
+</ul>
+</div>
+<div id="references" class="section level2">
+<h2>References &amp; Further Readings</h2>
+<ul>
+<li><a href="https://tldr.sh/" class="uri">https://tldr.sh/</a></li>
+<li><a href="https://blog.rstudio.com/2017/08/11/rstudio-v1-1-preview-terminal/" class="uri">https://blog.rstudio.com/2017/08/11/rstudio-v1-1-preview-terminal/</a></li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/115010737148-Using-the-RStudio-Terminal" class="uri">https://support.rstudio.com/hc/en-us/articles/115010737148-Using-the-RStudio-Terminal</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown/language-engines.html#shell-scripts" class="uri">https://bookdown.org/yihui/rmarkdown/language-engines.html#shell-scripts</a></li>
+<li><a href="https://github.com/kirillseva/tldrrr" class="uri">https://github.com/kirillseva/tldrrr</a></li>
+<li><a href="https://fs.r-lib.org/articles/function-comparisons.html" class="uri">https://fs.r-lib.org/articles/function-comparisons.html</a></li>
+<li><a href="https://livefreeordichotomize.com/2017/09/28/r-release-names/" class="uri">https://livefreeordichotomize.com/2017/09/28/r-release-names/</a></li>
+<li><a href="https://stackoverflow.com/questions/13478375/is-there-any-authoritative-documentation-on-r-release-nicknames" class="uri">https://stackoverflow.com/questions/13478375/is-there-any-authoritative-documentation-on-r-release-nicknames</a></li>
+<li><a href="http://www2.imm.dtu.dk/courses/02333/cygwin_tutorial/index.html" class="uri">http://www2.imm.dtu.dk/courses/02333/cygwin_tutorial/index.html</a></li>
+<li><a href="https://tutorial.djangogirls.org/en/intro_to_command_line/" class="uri">https://tutorial.djangogirls.org/en/intro_to_command_line/</a></li>
+<li><a href="https://ss64.com/" class="uri">https://ss64.com/</a></li>
+<li><a href="https://www.learnenough.com/command-line-tutorial" class="uri">https://www.learnenough.com/command-line-tutorial</a></li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source
+repository</a> or reach out to us at <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a>.</p>
+<!-- clean up folder structure -->
+</div>
