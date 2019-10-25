@@ -1,9 +1,9 @@
 ---
-title: "Command Line Basics for R Users"
+title: "A Comprehensive Introduction to Command Line for R Users"
 author: Aravind Hebbali
 twitterImg: /img/cline_cover_image.png
 description: "Getting Started with the Command Line"
-date: '2019-10-22'
+date: '2019-10-25'
 slug: command-line-basics-for-r-users
 categories:
   - bash
@@ -29,7 +29,7 @@ library(magrittr)
 knitr::include_graphics("/img/cline_cover_image.png")
 ```
 
-In this tutorial, you will be introduced to shell commands. We have selected a set of commands we think will be useful in general to a wide range of audience.
+In this tutorial, you will be introduced to the command line. We have selected a set of commands we think will be useful in general to a wide range of audience.
 We have created a [RStudio Cloud Project](https://rstudio.cloud/project/518720) to ensure that all readers are using the same environment while going through the tutorial. Our goal was to ensure that after completing this tutorial, readers should be able to use the shell for version control, managing cloud services (like deploying your own shiny server etc.), execute commands in R & RMarkdown and execute R scripts in the shell. Apart from learning shell commands, the tutorial will also focus on
 
 - exploring R release names
@@ -67,13 +67,13 @@ Below are the links to all the resources related to this post:
 - <a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code & Data</a>
 - <a href="https://rstudio.cloud/project/518720" target="_blank">RStudio Cloud</a>
 
-You can try our **free online course** [**Command Line Basics for R Users**](https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users) if you prefer to learn through self paced online courses.
-
-```{r dbi_youtube_demo, eval=TRUE, echo=FALSE}
-blogdown::shortcode("youtube", "")
-```
+You can try our **free online course** [**Command Line Basics for R Users**](https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users) if you prefer to learn through self paced online courses or our [**ebook**](https://bash-intro.rsquaredacademy.com) if you like to read the tutorial in a book format.
 
 ## Introduction {#intro}
+
+```{r cline_youtube_intro, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "62hgg26RCC0")
+```
 
 ### What is Shell/Terminal?
 
@@ -309,6 +309,10 @@ tldrrr::tldr("pwd")
 
 ## Navigating File System {#navigate}
 
+```{r cline_youtube_navigate, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "yn0sVrEM8AA")
+```
+
 In this section, we will learn commands that will help us
 
 - navigate between different folders/directories 
@@ -420,7 +424,7 @@ data.frame(Command = cname, Description = descrip) %>%
   )
 ```
 
-All files and directories stem from one main directory, the root directory. All the other directories in the system are sub-directories of the root directory and the root directory has no parent directory. It is represented by a single slash (`/`). `cd /` will change the current working directory to the root directory.
+All files and directories stem from one main directory, the root directory. All the other directories in the system are sub-directories of the root directory and the root directory has no parent directory. It is represented by a single slash (`/`). `cd /` will change the current working directory to the root directory. In RStudio Cloud, use `cd` and `cd ..` to navigate back to the current working directory. If you get confused, close the terminal and relaunch it.
 
 ```{bash c8a, eval=FALSE}
 cd /
@@ -446,7 +450,7 @@ cd ..
 pwd
 ```
 
-The home directory is the directory we are placed in, by default, when we launch a new terminal session. It is represented by the tilde (`~`).
+The home directory is the directory we are placed in, by default, when we launch a new terminal session. It is represented by the tilde (`~`). In RStudio Cloud, use `cd` and `cd ..` to navigate back to the current working directory. If you get confused, close the terminal and relaunch it.
 
 ```{bash c74a, eval=FALSE}
 cd ~
@@ -584,6 +588,10 @@ data.frame(Command = cname, R  = r_map) %>%
 ```
 
 ## File Management {#filemanage}
+
+```{r cline_youtube_file_1, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "Ahk7UoPrzcw")
+```
 
 In this section, we will explore commands for file management including:
 
@@ -848,6 +856,10 @@ data.frame(Command = cname, Description = descrip) %>%
 
 #### Remove files
 
+```{r cline_youtube_file_2, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "aEDvqZvUESk")
+```
+
 Let us use `rm` to  remove the file `myanalysis.R` (we created it earlier using the `touch` command). 
 
 ```{bash c25a, eval=FALSE}
@@ -1037,6 +1049,10 @@ data.frame(Command = cname, R = descrip) %>%
 ```
 
 ## Input/Output {#inputoutput}
+
+```{r cline_youtube_io, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "tfoW1uluD2w")
+```
 
 In this section, we will explore commands that will
 
@@ -1516,6 +1532,10 @@ wc -c release_names.txt
 
 ## Search & Regular Expressions {#regex}
 
+```{r cline_youtube_regex, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "8BkandsUpeI")
+```
+
 In this section, we will explore commands that will
 
 - search for a given string in a file
@@ -1744,6 +1764,10 @@ find -type d -name r
 ```
 
 ## Data Transfer & Network {#datatransfer}
+
+```{r cline_youtube_curl, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "06QPodqmAO0")
+```
 
 In this section, we will explore commands that will allow us to download files 
 from the internet.
@@ -1979,7 +2003,7 @@ data.frame(Command = cname, R = descrip) %>%
 
 ## sudo
 
-sudo **S**uper **U**ser **DO** is a prefix of commands that only superuser or root users are allowed to run. It is similar to **run as administrator** option in Windows. It is used to install, update and remove software. We will use it in the next section to install & update packages.
+sudo **S**uper **U**ser **DO** is a prefix of commands that only superuser or root users are allowed to run. It is similar to **run as administrator** option in Windows. It is used to install, update and remove software. We will use it in the next section to install & update packages. If you are using RStudio Cloud, you will not be able to run **sudo** (users do not have root privileges).
 
 ```{r table_sudo, echo=FALSE}
 cname   <- c("`dpkg --list`", "`sudo apt-get update`", "`sudo apt-get install`", 
@@ -1999,10 +2023,9 @@ data.frame(Command = cname, Description = descrip) %>%
 
 ## File Compression {#compress}
 
-- `tar`
-- `gzip`
-- `zip`
-- `unzip`
+```{r cline_youtube_fc, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "ucF-wwfmAwM")
+```
 
 ### tar
 
@@ -2174,7 +2197,7 @@ ls
 
 ### zip & unzip
 
-`zip` creates ZIP archives while `unzip` lists and extracts compressed files in a ZIP archive.
+`zip` creates ZIP archives while `unzip` lists and extracts compressed files in a ZIP archive. 
 
 #### List 
 
@@ -2421,6 +2444,10 @@ data.frame(Command = cname, R = descrip) %>%
 <hr>
 
 ## Execute Commands from R {#system2}
+
+```{r cline_youtube_rinshell, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "r7N5HNtmKIc")
+```
 
 Now, let us turn our attention to executing commands from R using `system2()`. 
 Here we will focus on the following
