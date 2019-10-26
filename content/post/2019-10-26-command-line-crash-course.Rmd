@@ -3,7 +3,7 @@ title: "A Comprehensive Introduction to Command Line for R Users"
 author: Aravind Hebbali
 twitterImg: /img/cline_cover_image.png
 description: "Getting Started with the Command Line"
-date: '2019-10-25'
+date: '2019-10-26'
 slug: command-line-basics-for-r-users
 categories:
   - bash
@@ -246,7 +246,7 @@ date
 
 `cal` will display a formatted calendar and `clear` will clear all text on the screen and display a new prompt. You can clear the screen by pressing `Ctrl + L` as well.
 
-```{bash cal}
+```{bash cal, eval=FALSE}
 cal
 ```
 
