@@ -1,0 +1,204 @@
+---
+title: "Introducing nse2r"
+author: Aravind Hebbali
+twitterImg: /img/github_nse2r.png
+description: "Fetch data from the National Stock Exchange, India"
+date: '2020-01-17'
+slug: nse2r-fetch-data-from-nse
+categories:
+  - packages
+tags:
+  - nse
+  - finance
+  - stock
+---
+
+
+
+<p><img src="/img/github_nse2r.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>We are excited to announce the <a href="https://nse2r.rsquaredacademy.com">nse2r</a> package. <a href="https://www.nseindia.com/">NSE</a> (National Stock Exchange) is the leading stock exchange of India, located in the city of Mumbai. While users can manually download data from NSE through a browser, importing this data into R becomes cumbersome. The nse2r R package implements the retrieval of data from NSE and aims to reduce the pre-processing steps needed in analyzing such data.</p>
+<p>nse2r is inspired by and a port of the Python package <a href="https://nsetools.readthedocs.io/en/latest/">nsetools</a>. The authors and contributors for this R package are not affiliated with NSE and NSE does not offer support for this R package.</p>
+<p>With nse2r, you can fetch the following data related to:</p>
+<ul>
+<li>stocks
+<ul>
+<li>quote for a given stock</li>
+<li>stock description</li>
+<li>validate stock symbol/ticker</li>
+<li>most actively traded stocks in a month</li>
+<li>52 week high/low</li>
+<li>top gainers/losers for the last trading session</li>
+</ul></li>
+<li>index
+<ul>
+<li>list of NSE indices</li>
+<li>validate index symbol/ticker</li>
+<li>quote for a given index</li>
+</ul></li>
+<li>futures &amp; options
+<ul>
+<li>top gainers/losers for the last trading session</li>
+</ul></li>
+<li>pre open market data
+<ul>
+<li>nifty</li>
+<li>nifty bank</li>
+</ul></li>
+<li>indices advances &amp; declines</li>
+</ul>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;nse2r&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/nse2r&quot;)</code></pre>
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>nse2r uses consistent prefix <code>nse_</code> for easy tab completion.</p>
+<ul>
+<li><code>nse_index_</code> for index</li>
+<li><code>nse_stock_</code> for stocks</li>
+<li><code>nse_fo_</code> for futures and options</li>
+<li><code>nse_preopen_</code> for preopen data</li>
+</ul>
+</div>
+<div id="preprocessing" class="section level2">
+<h2>Preprocessing</h2>
+<p>nse2r does basic data preprocessing which are listed below:</p>
+<ul>
+<li>modify column data types from <code>character</code> to <code>numeric</code> and <code>Date</code></li>
+<li>modify column names
+<ul>
+<li>make them more descriptive</li>
+<li>to <code>snake_case</code> from <code>camelCase</code></li>
+</ul></li>
+</ul>
+<p>Users can retain the names and format as returned by NSE using the <code>clean_names</code> argument and setting it to <code>FALSE</code>.</p>
+</div>
+<div id="quick-overview" class="section level2">
+<h2>Quick Overview</h2>
+<div id="fetch-indices-quote" class="section level4">
+<h4>Fetch Indices Quote</h4>
+<pre class="r"><code>nse_index_quote()</code></pre>
+<pre><code>## # A tibble: 55 x 4
+##    index_name        last_traded_price  change percent_change
+##    &lt;chr&gt;                         &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+##  1 NIFTY 50 Pre Open           12328.   -27.1          -0.22 
+##  2 NIFTY 50                    12371.    15.4           0.12 
+##  3 NIFTY NEXT 50               29009.    30.2           0.1  
+##  4 NIFTY100 LIQ 15              3794.   -11.2          -0.290
+##  5 NIFTY BANK                  31661.  -193.           -0.6  
+##  6 INDIA VIX                      14.4    0.24          1.67 
+##  7 NIFTY 100                   12486.    15.2           0.12 
+##  8 NIFTY 500                   10125.    15.4           0.15 
+##  9 NIFTY MIDCAP 100            18037.    52.1           0.290
+## 10 NIFTY MIDCAP 50              4978.     9.5           0.19 
+## # ... with 45 more rows</code></pre>
+<pre class="r"><code># retain original column names as returned by NSE
+nse_index_quote(clean_names = FALSE)</code></pre>
+<pre><code>## # A tibble: 55 x 4
+##    name              lastPrice  change pChange
+##    &lt;chr&gt;                 &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 NIFTY 50 Pre Open   12328.   -27.1   -0.22 
+##  2 NIFTY 50            12371.    15.4    0.12 
+##  3 NIFTY NEXT 50       29009.    30.2    0.1  
+##  4 NIFTY100 LIQ 15      3794.   -11.2   -0.290
+##  5 NIFTY BANK          31661.  -193.    -0.6  
+##  6 INDIA VIX              14.4    0.24   1.67 
+##  7 NIFTY 100           12486.    15.2    0.12 
+##  8 NIFTY 500           10125.    15.4    0.15 
+##  9 NIFTY MIDCAP 100    18037.    52.1    0.290
+## 10 NIFTY MIDCAP 50      4978.     9.5    0.19 
+## # ... with 45 more rows</code></pre>
+</div>
+<div id="top-gainers-for-the-last-trading-session." class="section level4">
+<h4>Top gainers for the last trading session.</h4>
+<pre class="r"><code>nse_stock_top_gainers()</code></pre>
+<pre><code>## # A tibble: 10 x 12
+##    symbol series last_corp_annou~ last_corp_annou~ open_price high_price
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;           &lt;chr&gt;                 &lt;dbl&gt;      &lt;dbl&gt;
+##  1 BHART~ EQ     2019-04-23       Rights 19:67 @ ~       475.       499.
+##  2 RELIA~ EQ     2019-08-02       Annual General ~      1554.      1572.
+##  3 HEROM~ EQ     2019-07-16       Annual General ~      2445       2475.
+##  4 WIPRO  EQ     2020-01-24       Interim Dividen~       252        254.
+##  5 M&amp;M    EQ     2019-07-18       Annual General ~       567.       574.
+##  6 NESTL~ EQ     2019-12-10       Interim Dividen~     15399      15600 
+##  7 DRRED~ EQ     2019-07-15       Annual General ~      2944.      2990 
+##  8 UPL    EQ     2019-07-02       Bonus 1:2              590.       597.
+##  9 EICHE~ EQ     2019-07-24       Annual General ~     21509.     21770 
+## 10 ULTRA~ EQ     2019-07-10       Annual General ~      4440       4522.
+## # ... with 6 more variables: low_price &lt;dbl&gt;, last_traded_price &lt;dbl&gt;,
+## #   prev_close_price &lt;dbl&gt;, percent_change &lt;dbl&gt;, traded_quantity &lt;dbl&gt;,
+## #   turnover_in_lakhs &lt;dbl&gt;</code></pre>
+<pre class="r"><code># retain original column names as returned by NSE
+nse_stock_top_gainers(clean_names = FALSE)</code></pre>
+<pre><code>## # A tibble: 10 x 12
+##    symbol series lastCorpAnnounc~ lastCorpAnnounc~ openPrice highPrice
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;           &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;
+##  1 BHART~ EQ     2019-04-23       Rights 19:67 @ ~      475.      499.
+##  2 RELIA~ EQ     2019-08-02       Annual General ~     1554.     1572.
+##  3 HEROM~ EQ     2019-07-16       Annual General ~     2445      2475.
+##  4 WIPRO  EQ     2020-01-24       Interim Dividen~      252       254.
+##  5 M&amp;M    EQ     2019-07-18       Annual General ~      567.      574.
+##  6 NESTL~ EQ     2019-12-10       Interim Dividen~    15399     15600 
+##  7 DRRED~ EQ     2019-07-15       Annual General ~     2944.     2990 
+##  8 UPL    EQ     2019-07-02       Bonus 1:2             590.      597.
+##  9 EICHE~ EQ     2019-07-24       Annual General ~    21509.    21770 
+## 10 ULTRA~ EQ     2019-07-10       Annual General ~     4440      4522.
+## # ... with 6 more variables: lowPrice &lt;dbl&gt;, ltp &lt;dbl&gt;,
+## #   previousPrice &lt;dbl&gt;, netPrice &lt;dbl&gt;, tradedQuantity &lt;dbl&gt;,
+## #   turnoverInLakhs &lt;dbl&gt;</code></pre>
+</div>
+<div id="stocks-that-have-touched-their-52-week-highs-during-the-day" class="section level4">
+<h4>Stocks that have touched their 52 week highs during the day</h4>
+<pre class="r"><code>nse_stock_year_high()</code></pre>
+<pre><code>## # A tibble: 55 x 10
+##    symbol symbol_desc date       new_high   year last_traded_pri~ prev_high
+##    &lt;chr&gt;  &lt;chr&gt;       &lt;date&gt;        &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+##  1 AGCNET AGC Networ~ 2020-01-16    202.   202.             202.      193. 
+##  2 ALKYL~ Alkyl Amin~ 2020-01-16   1300   1300             1297.     1300  
+##  3 APOLL~ Apollo Pip~ 2020-01-16    408.   408.             403       399  
+##  4 AUBANK AU Small F~ 2020-01-16    888    888              874.      885. 
+##  5 AVANT~ Avanti Fee~ 2020-01-16    770    770              732.      756  
+##  6 BAJAJ~ Bajaj Fins~ 2020-01-16   9681.  9681.            9656      9640  
+##  7 BALKR~ Balkrishna~ 2020-01-16   1112.  1112.            1096      1107. 
+##  8 BCP    B.C. Power~ 2020-01-16     20.2   20.2             19.0      20.0
+##  9 BERGE~ Berger Pai~ 2020-01-16    556.   556.             554.      550  
+## 10 BHART~ Bharti Air~ 2019-12-02    499.   499.             493.      486. 
+## # ... with 45 more rows, and 3 more variables: prev_close &lt;dbl&gt;,
+## #   change &lt;dbl&gt;, percent_change &lt;dbl&gt;</code></pre>
+<pre class="r"><code># retain original column names as returned by NSE
+nse_stock_year_high(clean_names = FALSE)</code></pre>
+<pre><code>## # A tibble: 55 x 10
+##    symbol symbolDesc dt          value   year    ltp value_old   prev
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+##  1 AGCNET AGC Netwo~ 2020-01-16  202.   202.   202.      193.   193. 
+##  2 ALKYL~ Alkyl Ami~ 2020-01-16 1300   1300   1297.     1300   1296. 
+##  3 APOLL~ Apollo Pi~ 2020-01-16  408.   408.   403       399    395. 
+##  4 AUBANK AU Small ~ 2020-01-16  888    888    874.      885.   877. 
+##  5 AVANT~ Avanti Fe~ 2020-01-16  770    770    732.      756    746. 
+##  6 BAJAJ~ Bajaj Fin~ 2020-01-16 9681.  9681.  9656      9640   9622. 
+##  7 BALKR~ Balkrishn~ 2020-01-16 1112.  1112.  1096      1107.  1103. 
+##  8 BCP    B.C. Powe~ 2020-01-16   20.2   20.2   19.0      20.0   19.6
+##  9 BERGE~ Berger Pa~ 2020-01-16  556.   556.   554.      550    547. 
+## 10 BHART~ Bharti Ai~ 2019-12-02  499.   499.   493.      486.   474. 
+## # ... with 45 more rows, and 2 more variables: change &lt;dbl&gt;, pChange &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<ul>
+<li><a href="https://nse2r.rsquaredacademy.com">Documentation</a></li>
+<li><a href="https://github.com/rsquaredacademy/nse2r">GitHub</a></li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>All feedback is welcome. Issues (bugs and feature requests) can be posted to
+<a href="https://github.com/rsquaredacademy/nse2r/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach out to us
+at <a href="mailto:pkgs@rsquaredacademy.com" class="email">pkgs@rsquaredacademy.com</a>.</p>
+</div>

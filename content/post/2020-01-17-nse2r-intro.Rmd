@@ -1,0 +1,128 @@
+---
+title: "Introducing nse2r"
+author: Aravind Hebbali
+twitterImg: /img/github_nse2r.png
+description: "Fetch data from the National Stock Exchange, India"
+date: '2020-01-17'
+slug: nse2r-fetch-data-from-nse
+categories:
+  - packages
+tags:
+  - nse
+  - finance
+  - stock
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libs, echo=FALSE, message=FALSE, warning=FALSE}
+options(kableExtra.html.bsTable = TRUE)
+library(knitr)
+library(nse2r)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="70%"}
+knitr::include_graphics("/img/github_nse2r.png")
+```
+
+We are excited to announce the [nse2r](https://nse2r.rsquaredacademy.com) package. [NSE](https://www.nseindia.com/) (National Stock Exchange) is the leading stock exchange of India, located in the city of Mumbai. While users can manually download data from NSE through a browser, importing this data into R becomes cumbersome. The nse2r R package implements the retrieval of data from NSE and aims to reduce the pre-processing steps needed in analyzing such data.
+
+nse2r is inspired by and a port of the Python package [nsetools](https://nsetools.readthedocs.io/en/latest/). The authors and contributors for this R package are not affiliated with NSE and NSE does not offer support for this R package.
+
+With nse2r, you can fetch the following data related to:
+
+- stocks
+    - quote for a given stock
+    - stock description
+    - validate stock symbol/ticker
+    - most actively traded stocks in a month
+    - 52 week high/low
+    - top gainers/losers for the last trading session
+- index
+    - list of NSE indices
+    - validate index symbol/ticker
+    - quote for a given index
+- futures & options
+    - top gainers/losers for the last trading session
+- pre open market data
+    - nifty
+    - nifty bank
+- indices advances & declines
+
+## Installation
+
+```{r cran-install, eval=FALSE}
+# Install release version from CRAN
+install.packages("nse2r")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/nse2r")
+```
+
+## Usage
+
+```{r load_nse2r, echo=FALSE, message=FALSE, warning=FALSE}
+library(nse2r)
+```
+
+nse2r uses consistent prefix `nse_` for easy tab completion.
+
+- `nse_index_` for index 
+- `nse_stock_` for stocks
+- `nse_fo_` for futures and options
+- `nse_preopen_` for preopen data
+
+## Preprocessing
+
+nse2r does basic data preprocessing which are listed below:
+
+- modify column data types from `character` to `numeric` and `Date` 
+- modify column names
+    - make them more descriptive 
+    - to `snake_case` from `camelCase` 
+
+Users can retain the names and format as returned by NSE using the `clean_names` argument and setting it to `FALSE`.
+
+## Quick Overview
+
+#### Fetch Indices Quote
+
+```{r index_quote}
+nse_index_quote()
+
+# retain original column names as returned by NSE
+nse_index_quote(clean_names = FALSE)
+```
+
+#### Top gainers for the last trading session.
+
+```{r stock_top_gainers}
+nse_stock_top_gainers()
+
+# retain original column names as returned by NSE
+nse_stock_top_gainers(clean_names = FALSE)
+```
+
+#### Stocks that have touched their 52 week highs during the day
+
+```{r stock_year_high}
+nse_stock_year_high()
+
+# retain original column names as returned by NSE
+nse_stock_year_high(clean_names = FALSE)
+```
+
+## Learning More
+
+- [Documentation](https://nse2r.rsquaredacademy.com)
+- [GitHub](https://github.com/rsquaredacademy/nse2r)
+
+## Feedback
+
+All feedback is welcome. Issues (bugs and feature requests) can be posted to 
+[github tracker](https://github.com/rsquaredacademy/nse2r/issues).
+For help with code or other related questions, feel free to reach out to us
+at pkgs@rsquaredacademy.com.
