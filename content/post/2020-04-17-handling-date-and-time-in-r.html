@@ -1,9 +1,9 @@
 ---
 title: "A Comprehensive Introduction to Handling Date & Time in R"
 author: Aravind Hebbali
-twitterImg: /img/handling-date-and-time-r.png
+twitterImg: /img/handling-date-and-time-in-r.png
 description: "Learn to handle date & time in R"
-date: '2020-04-05'
+date: '2020-04-17'
 slug: handling-date-and-time-in-r
 categories:
   - data-wrangling
@@ -73,11 +73,11 @@ concepts we learn. Happy learning!</p>
 <h3>Time</h3>
 <p><code>Sys.time()</code> and <code>now()</code> return the date, time and the timezone. In <code>now()</code>, we can specify the timezone using the <code>tzone</code> argument.</p>
 <pre class="r"><code>Sys.time()</code></pre>
-<pre><code>## [1] &quot;2020-04-17 17:21:28 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-17 17:37:21 IST&quot;</code></pre>
 <pre class="r"><code>lubridate::now()</code></pre>
-<pre><code>## [1] &quot;2020-04-17 17:21:28 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-17 17:37:21 IST&quot;</code></pre>
 <pre class="r"><code>lubridate::now(tzone = &quot;UTC&quot;)</code></pre>
-<pre><code>## [1] &quot;2020-04-17 11:51:28 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-17 12:07:21 UTC&quot;</code></pre>
 </div>
 <div id="am-or-pm" class="section level3">
 <h3>AM or PM?</h3>
@@ -410,7 +410,7 @@ learn to create POSIX objects, let us look at <code>now()</code> from lubridate.
 <p><code>now()</code> returns current date/time as a POSIXct object. Let us look at its
 internal representation using <code>unclass()</code></p>
 <pre class="r"><code>unclass(lubridate::now())</code></pre>
-<pre><code>## [1] 1587124294
+<pre><code>## [1] 1587125246
 ## attr(,&quot;tzone&quot;)
 ## [1] &quot;&quot;</code></pre>
 <p>The output you see is the number of seconds since January 1, 1970.</p>
@@ -785,7 +785,7 @@ reside or work.</p>
 <p>If you want to view the time in a different timezone, use <code>with_tz()</code>. Let us
 look at the current time in <strong>UTC</strong> instead of <strong>Indian Standard Time</strong>.</p>
 <pre class="r"><code>lubridate::with_tz(Sys.time(), &quot;UTC&quot;)</code></pre>
-<pre><code>## [1] &quot;2020-04-17 11:51:36 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2020-04-17 12:07:28 UTC&quot;</code></pre>
 </div>
 <div id="daylight-savings" class="section level3">
 <h3>Daylight Savings</h3>
