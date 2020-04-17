@@ -1,0 +1,2601 @@
+---
+title: "A Comprehensive Introduction to Handling Date & Time in R"
+author: Aravind Hebbali
+twitterImg: /img/handling-date-and-time-r.png
+description: "Learn to handle date & time in R"
+date: '2020-04-05'
+slug: handling-date-and-time-in-r
+categories:
+  - data-wrangling
+tags:
+  - lubridate
+  - datetime
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p><img src="/img/handling-date-and-time-in-r.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In this tutorial, we will learn to handle date &amp; time in R. We will start off by learning how
+to <strong>get current date &amp; time</strong> before moving on to understand <strong>how R handles date/time internally</strong>
+and the different classes such as <code>Date</code> &amp; <code>POSIXct/lt</code>. We will spend some time
+exploring <strong>time zones, daylight savings and ISO 8001 standard</strong> for representing date/time.
+We will look at all the <strong>weird formats in which date/time come in real world</strong> and learn to
+<strong>parse them using conversion specifications</strong>. After this, we will also <strong>learn how to handle date/time
+columns while reading external data into R</strong>. We will learn to <strong>extract and update different date/time
+components</strong> such as year, month, day, hour, minute etc., <strong>create sequence of dates</strong> in different ways
+and explore intervals, durations and period. We will end the tutorial by learning how to <strong>round/rollback
+dates</strong>. Throughout the tutorial, we will also <strong>work through a case study</strong> to better understand the
+concepts we learn. Happy learning!</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#casestudy">Case Study</a></li>
+<li><a href="#classes">Date &amp; Time Classes</a></li>
+<li><a href="#arithmetic">Date Arithmetic</a></li>
+<li><a href="#timezones">Timezones &amp; Daylight Savings</a></li>
+<li><a href="#formats">Date &amp; Time Formats</a></li>
+<li><a href="#parse">Parse/Read Date &amp; Time</a></li>
+<li><a href="#components">Date &amp; Time Components</a></li>
+<li><a href="#createupdate">Create, Update &amp; Verify</a></li>
+<li><a href="#intervals">Intervals, Durations &amp; Period</a></li>
+<li><a href="#others">Round &amp; Rollback</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this tutorial:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/handling-date-and-time-in-r.pdf" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/1072419" target="_blank">RStudio Cloud Project</a></li>
+<li><a href="https://wrangle-r.rsquaredacademy.com/lubridate.html" target="_blank">ebook</a></li>
+</ul>
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank"><img src="/img/lubirdate-blog-course-ad.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+{{% youtube "322IcnZiYx4" %}}
+<div id="date" class="section level3">
+<h3>Date</h3>
+<p>Let us begin by looking at the current date and time. <code>Sys.Date()</code> and <code>today()</code> will return the current date.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre class="r"><code>lubridate::today()</code></pre>
+<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+</div>
+<div id="time" class="section level3">
+<h3>Time</h3>
+<p><code>Sys.time()</code> and <code>now()</code> return the date, time and the timezone. In <code>now()</code>, we can specify the timezone using the <code>tzone</code> argument.</p>
+<pre class="r"><code>Sys.time()</code></pre>
+<pre><code>## [1] &quot;2020-04-17 17:21:28 IST&quot;</code></pre>
+<pre class="r"><code>lubridate::now()</code></pre>
+<pre><code>## [1] &quot;2020-04-17 17:21:28 IST&quot;</code></pre>
+<pre class="r"><code>lubridate::now(tzone = &quot;UTC&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-04-17 11:51:28 UTC&quot;</code></pre>
+</div>
+<div id="am-or-pm" class="section level3">
+<h3>AM or PM?</h3>
+<p><code>am()</code> and <code>pm()</code> allow us to check whether date/time occur in the <code>AM</code> or <code>PM</code>? They return a logical value i.e. <code>TRUE</code> or <code>FALSE</code></p>
+<pre class="r"><code>lubridate::am(now())</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>lubridate::pm(now())</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="leap-year" class="section level3">
+<h3>Leap Year</h3>
+<p>We can also check if the current year is a leap year using <code>leap_year()</code>.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre class="r"><code>lubridate::leap_year(Sys.Date())</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>Sys.Date()</code>
+</td>
+<td style="text-align:left;">
+Current Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::today()</code>
+</td>
+<td style="text-align:left;">
+Current Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Sys.time()</code>
+</td>
+<td style="text-align:left;">
+Current Time
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::now()</code>
+</td>
+<td style="text-align:left;">
+Current Time
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::am()</code>
+</td>
+<td style="text-align:left;">
+Whether time occurs in am?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::pm()</code>
+</td>
+<td style="text-align:left;">
+Whether time occurs in pm?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::leap_year()</code>
+</td>
+<td style="text-align:left;">
+Check if the year is a leap year?
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="your-turn" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>get current date</li>
+<li>get current time</li>
+<li>check whether the time occurs in am or pm?</li>
+<li>check whether the following years were leap years
+<ul>
+<li>2018</li>
+<li>2016</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="casestudy" class="section level2">
+<h2>Case Study</h2>
+<p>Throughout the tutorial, we will work on a case study related to transactions of an imaginary trading company. The data set includes information about invoice and payment dates.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<pre class="r"><code>transact &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv&#39;)</code></pre>
+<pre><code>## # A tibble: 2,466 x 3
+##    Invoice    Due        Payment   
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    
+##  1 2013-01-02 2013-02-01 2013-01-15
+##  2 2013-01-26 2013-02-25 2013-03-03
+##  3 2013-07-03 2013-08-02 2013-07-08
+##  4 2013-02-10 2013-03-12 2013-03-17
+##  5 2012-10-25 2012-11-24 2012-11-28
+##  6 2012-01-27 2012-02-26 2012-02-22
+##  7 2013-08-13 2013-09-12 2013-09-09
+##  8 2012-12-16 2013-01-15 2013-01-12
+##  9 2012-05-14 2012-06-13 2012-07-01
+## 10 2013-07-01 2013-07-31 2013-07-26
+## # ... with 2,456 more rows</code></pre>
+<p>We will explore more about reading data sets with date/time columns after learning how to
+parse date/time. We have shared the code for reading the data sets used in the practice
+questions both in the Learning Management System as well as in our GitHub repo.</p>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<p>The data set has 3 columns. All the dates are in the format (yyyy-mm-dd).</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Column
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Invoice
+</td>
+<td style="text-align:left;">
+Invoice Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Due
+</td>
+<td style="text-align:left;">
+Due Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Payment
+</td>
+<td style="text-align:left;">
+Payment Date
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the case study, we will try to answer a few questions we have about the <code>transact</code> data.</p>
+<ul>
+<li>extract date, month and year from Due</li>
+<li>compute the number of days to settle invoice</li>
+<li>compute days over due</li>
+<li>check if due year is a leap year</li>
+<li>check when due day in february is 29, whether it is a leap year</li>
+<li>how many invoices were settled within due date</li>
+<li>how many invoices are due in each quarter</li>
+</ul>
+</div>
+</div>
+<div id="classes" class="section level2">
+<h2>Date &amp; Time Classes</h2>
+{{% youtube "IEX49t8sSgw" %}}
+<p>In this section, we will look at two things. First, how to create date/time
+data in R, and second, how to convert other data types to date/time. Let us
+begin by creating the release date of R 3.6.2.</p>
+<pre class="r"><code>release_date &lt;- 2019-12-12
+release_date</code></pre>
+<pre><code>## [1] 1995</code></pre>
+<p>Okay! Why do we see <code>1995</code> when we call the date? What is happening here? Let us
+quickly check the data type of <code>release_date</code>.</p>
+<pre class="r"><code>class(release_date)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>The data type is <code>numeric</code> i.e. R has subtracted <code>12</code> twice from <code>2019</code> to
+return <code>1995</code>. Clearly, the above method is not the right way to store
+date/time. Let us see if we can get some hints from the built-in R functions we
+used in the previous section. If you observe the output, all of them returned
+date/time wrapped in quotes. Hmmm… let us wrap our date in quotes and see what
+happens.</p>
+<pre class="r"><code>release_date &lt;- &quot;2019-12-12&quot;
+release_date</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>Alright, now R does not do any arithmetic and returns the date as we specified.
+Great! Is this the right format to store date/time then? No. Why? What is the problem
+if date/time is saved as character/string? The problem is the nature or type of
+operations done on date/time are different when compared to string/character,
+number or logical values.</p>
+<ul>
+<li>how do we add/subtract dates?</li>
+<li>how do we extract components such as year, month, day etc.</li>
+</ul>
+<p>To answer the above questions, we will first check the data type of <code>Sys.Date()</code>
+and <code>now()</code>.</p>
+<pre class="r"><code>class(Sys.Date())</code></pre>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<pre class="r"><code>class(lubridate::now())</code></pre>
+<pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
+<pre class="r"><code>class(release_date)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>As you can see from the above output, there are 3 different classes for storing
+date/time in R</p>
+<ul>
+<li><code>Date</code></li>
+<li><code>POSIXct</code></li>
+<li><code>POSIXlt</code></li>
+</ul>
+<p>Let us explore each of the above classes one by one.</p>
+<div id="date-1" class="section level3">
+<h3>Date</h3>
+<div id="introduction" class="section level4">
+<h4>Introduction</h4>
+<p>The <code>Date</code> class represents calendar dates. Let us go back to <code>Sys.Date()</code>. If
+you check the class of <code>Sys.Date()</code>, it is <code>Date</code>. Internally, this date is a
+number i.e. an integer. The <code>unclass()</code> function will show how dates are stored
+internally.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre class="r"><code>unclass(Sys.Date())</code></pre>
+<pre><code>## [1] 18369</code></pre>
+<p>What does this integer represent? Why has R stored the date as an integer?
+In R, dates are represented as the number of days since <code>1970-01-01</code>. All the dates in R are
+internally stored in this way. Before we explore this concept further, let us
+learn to create <code>Date</code> objects in R. We will continue to use the release date
+of R 3.6.2, <code>2019-12-12</code>.</p>
+<p>Until now, we have stored the above date as character/string but now we will use
+<code>as.Date()</code> to save it as a <code>Date</code> object. <code>as.Date()</code> is the easiest and
+simplest way to create dates in R.</p>
+<pre class="r"><code>release_date &lt;- as.Date(&quot;2019-12-12&quot;)
+release_date</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>The <code>as_date()</code> function from the lubridate package is similar to <code>as.Date()</code>.</p>
+<pre class="r"><code>release_date &lt;- lubridate::as_date(&quot;2019-12-12&quot;)
+release_date</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>If you look at the difference between <code>release_date</code> and <code>1970-01-01</code>, it will
+be the same as <code>unclass(release_date)</code>.</p>
+<pre class="r"><code>release_date - as.Date(&quot;1970-01-01&quot;)</code></pre>
+<pre><code>## Time difference of 18242 days</code></pre>
+<pre class="r"><code>unclass(release_date)</code></pre>
+<pre><code>## [1] 18242</code></pre>
+<p>Let us come back to <code>1970-01-01</code> i.e. the origin for dates in R.</p>
+<pre class="r"><code>lubridate::origin</code></pre>
+<pre><code>## [1] &quot;1970-01-01 UTC&quot;</code></pre>
+<p>From the previous examples, we know that dates are internally stored as number
+of days since <code>1970-01-01</code>. How about dates older than the origin? How are they
+stored? Let us look at that briefly.</p>
+<pre class="r"><code>unclass(as.Date(&quot;1963-08-28&quot;))</code></pre>
+<pre><code>## [1] -2318</code></pre>
+<p>Dates older than the origin are stored as negative integers. For those who are
+not aware, Martin Luther King, Jr. delivered his famous <strong>I Have a Dream</strong>
+speech on <code>1963-08-28</code>. Let us move on and learn how to convert numbers into
+dates.</p>
+</div>
+<div id="convert-numeric" class="section level4">
+<h4>Convert Numeric</h4>
+<p>The <code>as.Date()</code> function can be used to convert any of the following to a <code>Date</code>
+object</p>
+<ul>
+<li>character/string</li>
+<li>number</li>
+<li>factor (categorical/qualitative)</li>
+</ul>
+<p>We have explored how to convert strings to date. How about converting numbers to
+date? Sure, we can create date from numbers by specifying the origin and number
+of days since it.</p>
+<pre class="r"><code>as.Date(18242, origin = &quot;1970-01-01&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>The origin can be changed to another date (while changing the number as well.)</p>
+<pre class="r"><code>as.Date(7285, origin = &quot;2000-01-01&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+</div>
+</div>
+<div id="iso-8601" class="section level3">
+<h3>ISO 8601</h3>
+<p><img src="/img/iso.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>If you have carefully observed, the format in which we have been specifying the
+dates as well as of those returned by functions such as <code>Sys.Date()</code> or
+<code>Sys.time()</code> is the same i.e. <code>YYYY-MM-DD</code>. It includes</p>
+<ul>
+<li>the year including the century</li>
+<li>the month</li>
+<li>the date</li>
+</ul>
+<p>The month and date separated by <code>-</code>. This default format used in R is the ISO
+8601 standard for date/time. ISO 8601 is the internationally accepted way to
+represent dates and times and uses the 24 hour clock system. Let us create the
+release date using another function <code>ISOdate()</code>.</p>
+<pre class="r"><code>ISOdate(year  = 2019,
+        month = 12,
+        day   = 12,
+        hour  = 8,
+        min   = 5, 
+        sec   = 3,
+        tz    = &quot;UTC&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:03 UTC&quot;</code></pre>
+<p>We will look at all the different weird ways in which date/time are specified in
+the real world in the <a href="#formats">Date &amp; Time Formats</a> section. For the time being, let us
+continue exploring date/time classes in R. The next class we are going to look
+at is <code>POSIXct/POSIXlt</code>.</p>
+</div>
+<div id="posix" class="section level3">
+<h3>POSIX</h3>
+<p>You might be wondering what is this POSIX thing? POSIX stands for <strong>P</strong>ortable
+<strong>O</strong>perating <strong>S</strong>ystem <strong>I</strong>nterface. It is a family of standards specified for
+maintaining compatibility between different operating systems. Before we
+learn to create POSIX objects, let us look at <code>now()</code> from lubridate.</p>
+<pre class="r"><code>class(lubridate::now())</code></pre>
+<pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
+<p><code>now()</code> returns current date/time as a POSIXct object. Let us look at its
+internal representation using <code>unclass()</code></p>
+<pre class="r"><code>unclass(lubridate::now())</code></pre>
+<pre><code>## [1] 1587124294
+## attr(,&quot;tzone&quot;)
+## [1] &quot;&quot;</code></pre>
+<p>The output you see is the number of seconds since January 1, 1970.</p>
+<div id="posixct" class="section level4">
+<h4>POSIXct</h4>
+<p><code>POSIXct</code> represents the number of seconds since the beginning of 1970 (UTC) and
+<code>ct</code> stands for calendar time. To store date/time as <code>POSIXct</code> objects, use
+<code>as.POSIXct()</code>. Let us now store the release date of R 3.6.2 as <code>POSIXct</code> as shown
+below</p>
+<pre class="r"><code>release_date &lt;- as.POSIXct(&quot;2019-12-12 08:05:03&quot;)
+class(release_date)</code></pre>
+<pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
+<pre class="r"><code>unclass(release_date) </code></pre>
+<pre><code>## [1] 1576118103
+## attr(,&quot;tzone&quot;)
+## [1] &quot;&quot;</code></pre>
+</div>
+<div id="posixlt" class="section level4">
+<h4>POSIXlt</h4>
+<p><code>POSIXlt</code> represents the following information in a list</p>
+<ul>
+<li>seconds</li>
+<li>minutes</li>
+<li>hour</li>
+<li>day of the month</li>
+<li>month</li>
+<li>year</li>
+<li>day of week</li>
+<li>day of year</li>
+<li>daylight saving time flag</li>
+<li>time zone</li>
+<li>offset in seconds from GMT</li>
+</ul>
+<p>The <code>lt</code> in <code>POSIXlt</code> stands for local time. Use <code>as.POSIXlt()</code> to store
+date/time as <code>POSIXlt</code> objects. Let us store the release date as a <code>POSIXlt</code>
+object as shown below</p>
+<pre class="r"><code>release_date &lt;- as.POSIXlt(&quot;2019-12-12 08:05:03&quot;)
+release_date</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:03 IST&quot;</code></pre>
+<p>As we said earlier, <code>POSIXlt</code> stores date/time components in a list and these
+can be extracted. Let us look at the date/time components returned by <code>POSIXlt</code>
+using <code>unclass()</code>.</p>
+<pre class="r"><code>release_date &lt;- as.POSIXlt(&quot;2019-12-12 08:05:03&quot;)
+unclass(release_date)</code></pre>
+<pre><code>## $sec
+## [1] 3
+## 
+## $min
+## [1] 5
+## 
+## $hour
+## [1] 8
+## 
+## $mday
+## [1] 12
+## 
+## $mon
+## [1] 11
+## 
+## $year
+## [1] 119
+## 
+## $wday
+## [1] 4
+## 
+## $yday
+## [1] 345
+## 
+## $isdst
+## [1] 0
+## 
+## $zone
+## [1] &quot;IST&quot;
+## 
+## $gmtoff
+## [1] NA</code></pre>
+<p>Use <code>unlist()</code> if you want the components returned as a <code>vector</code>.</p>
+<pre class="r"><code>release_date &lt;- as.POSIXlt(&quot;2019-12-12 08:05:03&quot;)
+unlist(release_date)</code></pre>
+<pre><code>##    sec    min   hour   mday    mon   year   wday   yday  isdst   zone gmtoff 
+##    &quot;3&quot;    &quot;5&quot;    &quot;8&quot;   &quot;12&quot;   &quot;11&quot;  &quot;119&quot;    &quot;4&quot;  &quot;345&quot;    &quot;0&quot;  &quot;IST&quot;     NA</code></pre>
+<p>To extract specific components, use <code>$</code>.</p>
+<pre class="r"><code>release_date &lt;- as.POSIXlt(&quot;2019-12-12 08:05:03&quot;)
+release_date$hour</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>release_date$mon</code></pre>
+<pre><code>## [1] 11</code></pre>
+<pre class="r"><code>release_date$zone</code></pre>
+<pre><code>## [1] &quot;IST&quot;</code></pre>
+<p>Now, let us look at the components returned by <code>POSIXlt</code>. Some of them are
+intuitive</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Component
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>sec</code>
+</td>
+<td style="text-align:left;">
+Second
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>min</code>
+</td>
+<td style="text-align:left;">
+Minute
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>hour</code>
+</td>
+<td style="text-align:left;">
+Hour of the day
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mon</code>
+</td>
+<td style="text-align:left;">
+Month of the year (0-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>zone</code>
+</td>
+<td style="text-align:left;">
+Timezone
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wday</code>
+</td>
+<td style="text-align:left;">
+Day of week
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mday</code>
+</td>
+<td style="text-align:left;">
+Day of month
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>year</code>
+</td>
+<td style="text-align:left;">
+Years since 1900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>yday</code>
+</td>
+<td style="text-align:left;">
+Day of year
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>isdst</code>
+</td>
+<td style="text-align:left;">
+Daylight saving flag
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>gmtoff</code>
+</td>
+<td style="text-align:left;">
+Offset is seconds from GMT
+</td>
+</tr>
+</tbody>
+</table>
+<p>Great! We will end this section with a few tips/suggestions on when to use
+<code>Date</code> or <code>POSIXct/POSIXlt</code>.</p>
+<ul>
+<li>use <code>Date</code> when there is no time component</li>
+<li>use <code>POSIX</code> when dealing with time and timezones</li>
+<li>use <code>POSIXlt</code> when you want to access/extract the different components</li>
+</ul>
+</div>
+</div>
+<div id="your-turn-1" class="section level3">
+<h3>Your Turn</h3>
+<p>R 1.0.0 was released on <code>2000-02-29 08:55:23 UTC</code>. Save it as</p>
+<ul>
+<li><code>Date</code> using character</li>
+<li><code>Date</code> using origin and number</li>
+<li><code>POSIXct</code></li>
+<li><code>POSIXlt</code> and extract
+<ul>
+<li>month day</li>
+<li>day of year</li>
+<li>month</li>
+<li>zone</li>
+</ul></li>
+<li>ISODate</li>
+</ul>
+</div>
+</div>
+<div id="arithmetic" class="section level2">
+<h2>Date Arithmetic</h2>
+{{% youtube "iNzv8Ezpjw0" %}}
+<p>Time to do some arithmetic with the dates. Let us calculate the length of a
+course you have enrolled for (Become a Rock Star Data Scientist in 10 Days) by subtracting the course start date from the course end date.</p>
+<p><br></p>
+<p><img src="/img/course_duration.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>course_start    &lt;- as_date(&#39;2017-04-12&#39;)
+course_end      &lt;- as_date(&#39;2017-04-21&#39;)
+course_duration &lt;- course_end - course_start
+course_duration
+## Time difference of 9 days</code></pre>
+<div id="shift-date" class="section level3">
+<h3>Shift Date</h3>
+<p>Time to shift the course dates. We can shift a date by days, weeks or months. Let us shift the course start date by:</p>
+<ul>
+<li>2 days</li>
+<li>3 weeks</li>
+<li>1 year</li>
+</ul>
+<p><br></p>
+<p><img src="/img/shift_dates.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>course_start + days(2)
+## [1] &quot;2017-04-14&quot;
+course_start + weeks(3)
+## [1] &quot;2017-05-03&quot;
+course_start + years(1)
+## [1] &quot;2018-04-12&quot;</code></pre>
+</div>
+<div id="case-study" class="section level3">
+<h3>Case Study</h3>
+<div id="compute-days-to-settle-invoice" class="section level4">
+<h4>Compute days to settle invoice</h4>
+<p>Let us estimate the number of days to settle the invoice by subtracting the
+date of invoice from the date of payment.</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    days_to_pay = Payment - Invoice
+  )</code></pre>
+<pre><code>## # A tibble: 2,466 x 4
+##    Invoice    Due        Payment    days_to_pay
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;drtn&gt;     
+##  1 2013-01-02 2013-02-01 2013-01-15 13 days    
+##  2 2013-01-26 2013-02-25 2013-03-03 36 days    
+##  3 2013-07-03 2013-08-02 2013-07-08  5 days    
+##  4 2013-02-10 2013-03-12 2013-03-17 35 days    
+##  5 2012-10-25 2012-11-24 2012-11-28 34 days    
+##  6 2012-01-27 2012-02-26 2012-02-22 26 days    
+##  7 2013-08-13 2013-09-12 2013-09-09 27 days    
+##  8 2012-12-16 2013-01-15 2013-01-12 27 days    
+##  9 2012-05-14 2012-06-13 2012-07-01 48 days    
+## 10 2013-07-01 2013-07-31 2013-07-26 25 days    
+## # ... with 2,456 more rows</code></pre>
+</div>
+<div id="compute-days-over-due" class="section level4">
+<h4>Compute days over due</h4>
+<p>How many of the invoices were settled post the due date? We can find this by:</p>
+<ul>
+<li>subtracting the due date from the payment date</li>
+<li>counting the number of rows where delay &gt; 0</li>
+</ul>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    delay = Payment - Due
+  ) %&gt;%
+  filter(delay &gt; 0) %&gt;% 
+  count(delay)</code></pre>
+<pre><code>## # A tibble: 36 x 2
+##    delay       n
+##    &lt;drtn&gt;  &lt;int&gt;
+##  1  1 days    61
+##  2  2 days    65
+##  3  3 days    51
+##  4  4 days    62
+##  5  5 days    69
+##  6  6 days    56
+##  7  7 days    55
+##  8  8 days    49
+##  9  9 days    38
+## 10 10 days    33
+## # ... with 26 more rows</code></pre>
+</div>
+</div>
+<div id="your-turn-2" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>compute the length of a vacation which begins on <code>2020-04-19</code> and ends on <code>2020-04-25</code></li>
+<li>recompute the length of the vacation after shifting the vacation start and end date by <code>10</code> days and <code>2</code> weeks</li>
+<li>compute the days to settle invoice and days overdue from the <code>receivables.csv</code> data set</li>
+<li>compute the length of employment (only for those employees who have been terminated) from the <code>hr-data.csv</code> data set (use date of hire and termination)</li>
+</ul>
+</div>
+</div>
+<div id="timezones" class="section level2">
+<h2>Time Zones &amp; Daylight Savings</h2>
+{{% youtube "Sz-Zf0s9Ubg" %}}
+<div id="introduction-1" class="section level3">
+<h3>Introduction</h3>
+<p><img src="/img/lub_timezones.jpg" width="70%" style="display: block; margin: auto;" /></p>
+<p>In the previous section, <code>POSIXlt</code> stored date/time components as a list. Among
+the different components it returned were</p>
+<ul>
+<li><code>gmtoff</code></li>
+<li><code>zone</code></li>
+</ul>
+<p><code>gmtoff</code> is offset in seconds from GMT i.e. difference in hours and minutes from
+UTC. Wait.. What do UTC and GMT stand for?</p>
+<ul>
+<li>Coordinated Universal Time (UTC)</li>
+<li>Greenwich Meridian Time (GMT)</li>
+</ul>
+<p>Since we are talking about UTC, GMT etc., let us spend a little time on
+understanding the basics of time zones and daylight savings.</p>
+</div>
+<div id="time-zones" class="section level3">
+<h3>Time Zones</h3>
+<p>Timezones exist because different parts of the Earth receive sun light at
+different times. If there was a single timezone, noon or morning would mean
+different things in different parts of the world. The timezones are based on
+Earth’s rotation. The Earth moves ~15 degrees every 60 minutes i.e. 360 degrees
+in 24 hours. The planet is divided into 24 timezones, each 15 degrees of
+longitude width.</p>
+<p>Now, you have heard of Greenwich Meridian Time (GMT) right? We just saw GMT off
+set in <code>POSIXlt</code> and you would have come across it in other time formats as
+well. For example, India timezone is given as GMT +5:30. Let us explore GMT in a
+little more detail. Greenwich is a suburb of London and the time at Greenwich
+is <strong>G</strong>reenwich <strong>M</strong>ean <strong>T</strong>ime. As you move West from Greenwich, every 15
+degree section is one hour earlier than GMT and every 15 degree section to the
+East is an hour later.</p>
+<p>Alright! What is <strong>UTC</strong> then? <strong>C</strong>oordinated <strong>U</strong>niversal <strong>T</strong>ime (UTC) ,
+on the other hand, is the time standard commonly used across the world. Even
+though they share the same current time, <strong>GMT</strong> is a <strong>timezone</strong> while
+<strong>UTC</strong> is a <strong>time standard</strong>.</p>
+<p>So how do we check the timezone in R? When you run <code>Sys.timezone()</code>, you should
+be able to see the timezone you are in.</p>
+<pre class="r"><code>Sys.timezone()</code></pre>
+<pre><code>## [1] &quot;Asia/Calcutta&quot;</code></pre>
+<p>If you do not see the timezone, use <code>Sys.getenv()</code> to get the value of the
+<strong>TZ</strong> environment variable.</p>
+<pre class="r"><code>Sys.getenv(&quot;TZ&quot;)</code></pre>
+<pre><code>## [1] &quot;&quot;</code></pre>
+<p>If nothing is returned, it means we have to set the timezone. Use <code>Sys.setenv()</code>
+to set the timezone as shown below. The author resides in India and hence the
+timezone is set to <code>Asia/Calcutta</code>. You need to set the timezone in which you
+reside or work.</p>
+<pre class="r"><code>Sys.setenv(TZ = &quot;Asia/Calcutta&quot;)</code></pre>
+<p>Another way to get the timezone is through <code>tz()</code> from the lubridate package.</p>
+<pre class="r"><code>lubridate::tz(Sys.time())</code></pre>
+<pre><code>## [1] &quot;Asia/Calcutta&quot;</code></pre>
+<p>If you want to view the time in a different timezone, use <code>with_tz()</code>. Let us
+look at the current time in <strong>UTC</strong> instead of <strong>Indian Standard Time</strong>.</p>
+<pre class="r"><code>lubridate::with_tz(Sys.time(), &quot;UTC&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-04-17 11:51:36 UTC&quot;</code></pre>
+</div>
+<div id="daylight-savings" class="section level3">
+<h3>Daylight Savings</h3>
+<p><img src="/img/lub_daylight_savings.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Daylight savings also known as</p>
+<ul>
+<li>daylight saving time</li>
+<li>daylight savings time</li>
+<li>daylight time</li>
+<li>summer time</li>
+</ul>
+<p>is the practice of advancing clocks during summer months so that darkness falls
+later each day according to the clock. In other words</p>
+<ul>
+<li>advance clock by one hour in spring (spring forward)</li>
+<li>retard clocks by one hour in autumn (fall back)</li>
+</ul>
+<p>In R, the <code>dst()</code> function is an indicator for daylight savings. It returns
+<code>TRUE</code> if daylight saving is in force, <code>FALSE</code> if not and <code>NA</code> if unknown.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre class="r"><code>dst(Sys.Date()) </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="your-turn-3" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>check the timezone you live in</li>
+<li>check if daylight savings in on</li>
+<li>check the current time in <strong>UTC</strong> or a different time zone</li>
+</ul>
+</div>
+</div>
+<div id="formats" class="section level2">
+<h2>Date &amp; Time Formats</h2>
+{{% youtube "BdHTrItYKJw" %}}
+<p>After the timezones and daylight savings detour, let us get back on path and
+explore another important aspect, date &amp; time formats. Although it is a good
+practice to adher to ISO 8601 format, not all date/time data will comply with
+it. In real world, date/time data may come in all types of weird formats. Below
+is a sample</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Format
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+December 12, 2019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12th Dec, 2019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dec 12th, 19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12-Dec-19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2019 December
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12.12.19
+</td>
+</tr>
+</tbody>
+</table>
+<p>When the data is not in the default ISO 8601 format, we need to explicitly
+specify the format in R. We do this using conversion specifications. A
+conversion specification is introduced by %, usually followed by a single
+letter or O or E and then a single letter.</p>
+<div id="conversion-specifications" class="section level3">
+<h3>Conversion Specifications</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Specification
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Example
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>%d</code>
+</td>
+<td style="text-align:left;">
+Day of the month (decimal number)
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%m</code>
+</td>
+<td style="text-align:left;">
+Month (decimal number)
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%b</code>
+</td>
+<td style="text-align:left;">
+Month (abbreviated)
+</td>
+<td style="text-align:left;">
+Dec
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%B</code>
+</td>
+<td style="text-align:left;">
+Month (full name)
+</td>
+<td style="text-align:left;">
+December
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%y</code>
+</td>
+<td style="text-align:left;">
+Year (2 digit)
+</td>
+<td style="text-align:left;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%Y</code>
+</td>
+<td style="text-align:left;">
+Year (4 digit)
+</td>
+<td style="text-align:left;">
+2019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+%H
+</td>
+<td style="text-align:left;">
+Hour
+</td>
+<td style="text-align:left;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+%M
+</td>
+<td style="text-align:left;">
+Minute
+</td>
+<td style="text-align:left;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+%S
+</td>
+<td style="text-align:left;">
+Second
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+</tbody>
+</table>
+<p>Time to work through a few examples. Let us say you are dealing with dates in
+the format <code>19/12/12</code>. In this format, the year comes first followed by month
+and the date; each separated by a slash (<code>/</code>). The year consists of only 2
+digits i.e. it does not include the century. Let us now map each component of
+the date to the conversion specification table shown at the beginning.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:left;">
+Specification
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+<code>%y</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+<code>%m</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+<code>%d</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Using the format argument, we will specify the conversion specification as a character vector
+i.e. enclosed in quotes.</p>
+<pre class="r"><code>as.Date(&quot;19/12/12&quot;, format = &quot;%y/%m/%d&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>Another way in which the release data can be written is <code>2019-Dec-12</code>. We still
+have the year followed by the month and the date but there are a few changes
+here:</p>
+<ul>
+<li>the components are separated by a <code>-</code> instead of <code>/</code></li>
+<li>year has 4 digits i.e. includes the century</li>
+<li>the month is specified using abbreviation instead of digits</li>
+</ul>
+<p>Let us map the components to the format table:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:left;">
+Specification
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2019
+</td>
+<td style="text-align:left;">
+<code>%Y</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dec
+</td>
+<td style="text-align:left;">
+<code>%b</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+<code>%d</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Let us specify the format for the date using the above mapping.</p>
+<pre class="r"><code>as.Date(&quot;2019-Dec-12&quot;, format = &quot;%Y-%b-%d&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>In both the above examples, we have not dealt with time components. Let us
+include the release time of R 3.6.2 in the next one i.e. 
+<code>19/12/12 08:05:03</code>.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:left;">
+Specification
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+<code>%y</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+<code>%m</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+<code>%d</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+<code>%H</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+<code>%M</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+<code>%S</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Since we are dealing with time, we will use <code>as.POSIXct()</code> instead of
+<code>as.Date()</code>.</p>
+<pre class="r"><code>as.POSIXct(&quot;19/12/12 08:05:03&quot;, tz = &quot;UTC&quot;, format = &quot;%y/%m/%d %H:%M:%S&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:03 UTC&quot;</code></pre>
+<p>In the below table, we look at some of the most widely used conversion
+specifications. You can learn more about these specifications by running
+<code>?strptime</code> or <code>help(strptime)</code>.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Specification
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>%a</code>
+</td>
+<td style="text-align:left;">
+Abbreviated weekday
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%A</code>
+</td>
+<td style="text-align:left;">
+Full weekday
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%C</code>
+</td>
+<td style="text-align:left;">
+Century (00-99)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%D</code>
+</td>
+<td style="text-align:left;">
+Same as <code>%m/%d/%y</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%e</code>
+</td>
+<td style="text-align:left;">
+Day of month [1 - 31]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%F</code>
+</td>
+<td style="text-align:left;">
+Same as <code>%Y-%m-%d</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%h</code>
+</td>
+<td style="text-align:left;">
+Same as <code>%b</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%I</code>
+</td>
+<td style="text-align:left;">
+Hours as decimal [01 - 12]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%j</code>
+</td>
+<td style="text-align:left;">
+Day of year [001 - 366]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%R</code>
+</td>
+<td style="text-align:left;">
+Same as <code>%H:%M</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%t</code>
+</td>
+<td style="text-align:left;">
+Tab
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%T</code>
+</td>
+<td style="text-align:left;">
+Same as <code>%H:%M:%S</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%u</code>
+</td>
+<td style="text-align:left;">
+Weekday <a href="Monday%20is%201">1 - 7</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%U</code>
+</td>
+<td style="text-align:left;">
+Week of year [00 - 53]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%V</code>
+</td>
+<td style="text-align:left;">
+Week of year [01 - 53]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%w</code>
+</td>
+<td style="text-align:left;">
+Weekday <a href="sunday%20is%200">0 - 6</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>%W</code>
+</td>
+<td style="text-align:left;">
+Week of year [00 - 53]
+</td>
+</tr>
+</tbody>
+</table>
+<p>We have included a lot of practice questions for you to explore the different
+date/time formats. The solutions are available in the Learning Management System
+as well as in our GitHub repo. Try them and let us know if you have any doubts.</p>
+</div>
+<div id="guess-format" class="section level3">
+<h3>Guess Format</h3>
+<p><code>guess_formats()</code> from lubridate is a very useful function. It will guess the
+date/time format if you specify the order in which year, month, date, hour,
+minute and second appear.</p>
+<pre class="r"><code>release_date_formats &lt;- c(&quot;December 12th 2019&quot;,
+                        &quot;Dec 12th 19&quot;,
+                        &quot;dec 12 2019&quot;)
+
+guess_formats(release_date_formats, 
+              orders = &quot;mdy&quot;, 
+              print_matches = TRUE)</code></pre>
+<pre><code>##                           Omdy          mdy         
+## [1,] &quot;December 12th 2019&quot; &quot;%Om %dth %Y&quot; &quot;%B %dth %Y&quot;
+## [2,] &quot;Dec 12th 19&quot;        &quot;%Om %dth %y&quot; &quot;%b %dth %y&quot;
+## [3,] &quot;dec 12 2019&quot;        &quot;%Om %d %Y&quot;   &quot;%b %d %Y&quot;</code></pre>
+<pre><code>##          Omdy          Omdy          Omdy           mdy           mdy 
+## &quot;%Om %dth %Y&quot; &quot;%Om %dth %y&quot;   &quot;%Om %d %Y&quot;  &quot;%B %dth %Y&quot;  &quot;%b %dth %y&quot; 
+##           mdy 
+##    &quot;%b %d %Y&quot;</code></pre>
+</div>
+<div id="your-turn-4" class="section level3">
+<h3>Your Turn</h3>
+<p>Below, we have specified <code>July 5th, 2019</code> in different ways. Create the date using <code>as.Date()</code> while specifying the correct format for each of them.</p>
+<ul>
+<li><code>05.07.19</code></li>
+<li><code>5-July 2019</code></li>
+<li><code>July 5th, 2019</code></li>
+<li><code>July 05, 2019</code></li>
+<li><code>2019-July- 05</code></li>
+<li><code>05/07/2019</code></li>
+<li><code>07/05/2019</code></li>
+<li><code>7/5/2019</code></li>
+<li><code>07/5/19</code></li>
+<li><code>2019-07-05</code></li>
+</ul>
+</div>
+</div>
+<div id="parse" class="section level2">
+<h2>Parse Date &amp; Time</h2>
+{{% youtube "FqWb-OS6wu4" %}}
+<p>While creating date-time objects, we specified different formats using the
+conversion specification but most often you will not create date/time and
+instead deal with data that comes your way from a database or API or
+colleague/collaborator. In such cases, we need to be able to parse date/time
+from the data provided to us. In this section, we will focus on parsing
+date/time from character data. Both base R and the lubridate package offer
+functions to parse date and time and we will explore a few of them in this
+section. We will initially use functions from base R and later on explore those
+from lubridate which will give us an opportunity to compare and contrast. It
+will also allow us to choose the functions based on the data we are dealing
+with.</p>
+<p><code>strptime()</code> will convert character data to <code>POSIXlt</code>. You will use this when
+converting from character data to date/time. On the other hand, if you want to
+convert date/time to character data, use any of the following:</p>
+<ul>
+<li><code>strftime()</code></li>
+<li><code>format()</code></li>
+<li><code>as.character()</code></li>
+</ul>
+<p>The above functions will convert <code>POSIXct/POSIXlt</code> to character. Let us start
+with a simple example. The data we have been supplied has date/time as
+character data and in the format <code>YYYYMMDD</code> i.e. nothing separates the year,
+month and date from each other. We will use <code>strptime()</code> to convert this to an
+object of class <code>POSIXlt</code>.</p>
+<pre class="r"><code>rel_date &lt;- strptime(&quot;20191212&quot;, format = &quot;%Y%m%d&quot;)
+class(rel_date)</code></pre>
+<pre><code>## [1] &quot;POSIXlt&quot; &quot;POSIXt&quot;</code></pre>
+<p>If you have a basic knowledge of conversion specifications, you can use
+<code>strptime()</code> to convert character data to <code>POSIXlt</code>. Let us quickly explore the
+functions to convert date/time to character data before moving on to the
+functions from lubridate.</p>
+<pre class="r"><code>rel_date_strf &lt;- strftime(rel_date)
+class(rel_date_strf)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>rel_date_format &lt;- format(rel_date)
+class(rel_date_format)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>rel_date_char &lt;- as.character(rel_date)
+class(rel_date_char)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>As you can see, all the 3 functions converted date/time to character. Time to
+move on and explore the lubridate package. We will start with an example in
+which the release date is formatted in 3 different ways but they have one thing
+in common i.e. the order in which the components appear. In all the 3 formats,
+the year is followed by the month and then the date.</p>
+<p>To parse the release date, we will use <code>parse_date_time()</code> from lubridate which
+parses the input into <code>POSIXct</code> objects.</p>
+<pre class="r"><code>release_date &lt;- c(&quot;19-12-12&quot;, &quot;20191212&quot;, &quot;19-12 12&quot;)
+parse_date_time(release_date, &quot;ymd&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot;</code></pre>
+<pre class="r"><code>parse_date_time(release_date, &quot;y m d&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot;</code></pre>
+<pre class="r"><code>parse_date_time(release_date, &quot;%y%m%d&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot; &quot;2019-12-12 UTC&quot;</code></pre>
+<p>Try to use <code>strptime()</code> in the above example and see what happens. Now, let us
+look at another data set.</p>
+<pre class="r"><code>release_date &lt;- c(&quot;19-07-05&quot;, &quot;2019-07-05&quot;, &quot;05-07-2019&quot;)</code></pre>
+<p>What happens in the below case? The same date appears in multiple formats. How
+do we parse them? <code>parse_date_time()</code> allows us to specify mutiple date-time
+formats. Let us first map the dates to their formats.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:left;">
+Specification
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+19-07-05
+</td>
+<td style="text-align:left;">
+<code>ymd</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2019-07-05
+</td>
+<td style="text-align:left;">
+<code>ymd</code>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05-07-2019
+</td>
+<td style="text-align:left;">
+<code>dmy</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The above specifications can be supplied as a character vector.</p>
+<pre class="r"><code>parse_date_time(release_date, c(&quot;ymd&quot;, &quot;ymd&quot;, &quot;dmy&quot;))</code></pre>
+<pre><code>## [1] &quot;2019-07-05 UTC&quot; &quot;2019-07-05 UTC&quot; &quot;2019-07-05 UTC&quot;</code></pre>
+<p>Great! We have used both <code>strptime()</code> and <code>parse_date_time()</code> now. Can you tell
+what differentiates <code>parse_date_time()</code> when compared to <code>strptime()</code>? We
+summarize it in the points below:</p>
+<ul>
+<li>no need to include <code>%</code> prefix or separator</li>
+<li>specify several date/time formats</li>
+</ul>
+<p>There are other helper functions that can be used to</p>
+<ul>
+<li>parse dates with only year, month, day components</li>
+<li>parse dates with year, month, day, hour, minute, seconds components</li>
+<li>parse dates with only hour, minute, second components</li>
+</ul>
+<p>and are explored in the below examples.</p>
+<pre class="r"><code># year/month/date
+ymd(&quot;2019-12-12&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<pre class="r"><code># year/month/date
+ymd(&quot;19/12/12&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<pre class="r"><code># date/month/year
+dmy(121219)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<pre class="r"><code># year/month/date/hour/minute/second
+ymd_hms(191212080503)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:03 UTC&quot;</code></pre>
+<pre class="r"><code># hour/minute/second
+hms(&quot;8, 5, 3&quot;)</code></pre>
+<pre><code>## [1] &quot;8H 5M 3S&quot;</code></pre>
+<pre class="r"><code># hour/minute/second
+hms(&quot;08:05:03&quot;)</code></pre>
+<pre><code>## [1] &quot;8H 5M 3S&quot;</code></pre>
+<pre class="r"><code># minute/second
+ms(&quot;5,3&quot;)</code></pre>
+<pre><code>## [1] &quot;5M 3S&quot;</code></pre>
+<pre class="r"><code># hour/minute
+hm(&quot;8, 5&quot;)</code></pre>
+<pre><code>## [1] &quot;8H 5M 0S&quot;</code></pre>
+<p>Note, in a couple of cases where the components are not separated by <code>/</code>, <code>-</code> or
+space, we have not enclosed the values in quotes.</p>
+<div id="your-turn-5" class="section level3">
+<h3>Your Turn</h3>
+<p>Below, we have specified <code>July 5th, 2019</code> in different ways. Parse the dates using <code>strptime()</code> or <code>parse_date_time()</code> or any other helper function.</p>
+<ul>
+<li><code>July-05-19</code></li>
+<li><code>JUL-05-19</code></li>
+<li><code>05.07.19</code></li>
+<li><code>5-July 2019</code></li>
+<li><code>July 5th, 2019</code></li>
+<li><code>July 05, 2019</code></li>
+<li><code>2019-July- 05</code></li>
+<li><code>05/07/2019</code></li>
+<li><code>07/05/2019</code></li>
+<li><code>7/5/2019</code></li>
+<li><code>07/5/19</code></li>
+<li><code>2019-07-05</code></li>
+</ul>
+</div>
+</div>
+<div id="components" class="section level2">
+<h2>Date &amp; Time Components</h2>
+{{% youtube "88iUo0Z06ZI" %}}
+<p>In the second section, we discussed the downside of saving date/time as
+character/string in R. One of the points we discussed was that we can’t extract
+components such as year, month, day etc. In this section, we will learn to
+extract date/time components such as</p>
+<ul>
+<li>year</li>
+<li>month</li>
+<li>date</li>
+<li>week</li>
+<li>day</li>
+<li>quarter</li>
+<li>semester</li>
+<li>hour</li>
+<li>minute</li>
+<li>second</li>
+<li>timezone</li>
+</ul>
+<p><img src="/img/day_week_month.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The below table outlines the functions we will explore in the first part of this
+section.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>year()</code>
+</td>
+<td style="text-align:left;">
+Get year
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>month()</code>
+</td>
+<td style="text-align:left;">
+Get month (number)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>month(label = TRUE)</code>
+</td>
+<td style="text-align:left;">
+Get month (abbreviated name)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>month(abbr = FALSE)</code>
+</td>
+<td style="text-align:left;">
+Get month (full name)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>months()</code>
+</td>
+<td style="text-align:left;">
+Get month
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>week()</code>
+</td>
+<td style="text-align:left;">
+Get week
+</td>
+</tr>
+</tbody>
+</table>
+<div id="year" class="section level3">
+<h3>Year</h3>
+<pre class="r"><code>release_date &lt;- ymd_hms(&quot;2019-12-12 08:05:03&quot;)
+year(release_date) </code></pre>
+<pre><code>## [1] 2019</code></pre>
+</div>
+<div id="month" class="section level3">
+<h3>Month</h3>
+<p><code>month()</code> will return the month as a number i.e. <code>12</code> for December.</p>
+<pre class="r"><code>month(release_date)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<p>Instead, if you want the name of the month , use the <code>label</code> argument and set it
+to <code>TRUE</code>. Now it returns <code>Dec</code> instead of <code>12</code>.</p>
+<pre class="r"><code>month(release_date, label = TRUE)</code></pre>
+<pre><code>## [1] Dec
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+<p>But this is the abbreviated name and not the full name. How do we get the full
+name of the month? Set the <code>abbr</code> argument to <code>FALSE</code>.</p>
+<pre class="r"><code>month(release_date, label = TRUE, abbr  = FALSE)</code></pre>
+<pre><code>## [1] December
+## 12 Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; ... &lt; December</code></pre>
+<p>Ah! now we can see the full name of the month. <code>months()</code> from base R will
+return the full name of the month by default. If you want the abbreviated name,
+use the <code>abbreviate</code> argument and set it to <code>TRUE</code>.</p>
+<pre class="r"><code>months(release_date)</code></pre>
+<pre><code>## [1] &quot;December&quot;</code></pre>
+</div>
+<div id="week" class="section level3">
+<h3>Week</h3>
+<p><code>week()</code> returns the number of complete 7 day periods between the date and 1st
+January plus one.</p>
+<pre class="r"><code>week(release_date)</code></pre>
+<pre><code>## [1] 50</code></pre>
+</div>
+<div id="day" class="section level3">
+<h3>Day</h3>
+<p>Use <code>day()</code> to extract the date component. There are other variations such as</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>day</code>
+</td>
+<td style="text-align:left;">
+Get day
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>mday()</code>
+</td>
+<td style="text-align:left;">
+Day of the month
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>wday()</code>
+</td>
+<td style="text-align:left;">
+Day of the week
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>qday()</code>
+</td>
+<td style="text-align:left;">
+Day of quarter
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>yday()</code>
+</td>
+<td style="text-align:left;">
+Day of year
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>weekdays()</code>
+</td>
+<td style="text-align:left;">
+Day of week
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>days_in_month()</code>
+</td>
+<td style="text-align:left;">
+Days in the month
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>day(release_date)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>mday(release_date)                 </code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>qday(release_date)                 </code></pre>
+<pre><code>## [1] 73</code></pre>
+<pre class="r"><code>yday(release_date)                 </code></pre>
+<pre><code>## [1] 346</code></pre>
+<p><code>wday</code> can return</p>
+<ul>
+<li>a number</li>
+<li>abbreviation of the weekday</li>
+<li>full name of the weekday</li>
+</ul>
+<pre class="r"><code>wday(release_date)  </code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>wday(release_date, label = TRUE)</code></pre>
+<pre><code>## [1] Thu
+## Levels: Sun &lt; Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat</code></pre>
+<pre class="r"><code>wday(release_date, label = TRUE, abbr  = FALSE)  </code></pre>
+<pre><code>## [1] Thursday
+## 7 Levels: Sunday &lt; Monday &lt; Tuesday &lt; Wednesday &lt; Thursday &lt; ... &lt; Saturday</code></pre>
+<p><code>weekdays()</code> from base R also returns the day of the week (the name and not
+the number). If you want the abbreviated name, use the <code>abbreviate</code> argument.</p>
+<pre class="r"><code>weekdays(release_date)</code></pre>
+<pre><code>## [1] &quot;Thursday&quot;</code></pre>
+<pre class="r"><code>weekdays(release_date, abbreviate = TRUE)</code></pre>
+<pre><code>## [1] &quot;Thu&quot;</code></pre>
+</div>
+<div id="days-in-month" class="section level3">
+<h3>Days in Month</h3>
+<p>If you want to know the number of days in the month, use <code>days_in_month()</code>.
+In our example, the month is December and it has 31 days.</p>
+<pre class="r"><code>days_in_month(release_date)</code></pre>
+<pre><code>## Dec 
+##  31</code></pre>
+</div>
+<div id="hour-minute-seconds" class="section level3">
+<h3>Hour, Minute &amp; Seconds</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>hour()</code>
+</td>
+<td style="text-align:left;">
+Get hour
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>minute()</code>
+</td>
+<td style="text-align:left;">
+Get minute
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>second()</code>
+</td>
+<td style="text-align:left;">
+Get second
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>seconds()</code>
+</td>
+<td style="text-align:left;">
+Number of seconds since <code>1970-01-01</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p>So far we have been looking at date components. Now, let us look at time
+components.</p>
+<pre class="r"><code>hour(release_date)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>minute(release_date)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>second(release_date)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p><code>seconds()</code> returns the number of seconds since <code>1970-01-01</code>.</p>
+<pre class="r"><code>seconds(release_date)</code></pre>
+<pre><code>## [1] &quot;1576137903S&quot;</code></pre>
+</div>
+<div id="quarter-semester" class="section level3">
+<h3>Quarter &amp; Semester</h3>
+<p><img src="/img/quarter_semester.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><code>quarter()</code> will return the quarter from the date. December is in the 4th
+quarter and hence it returns 4.</p>
+<pre class="r"><code>quarter(release_date)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>If you want the year along with the quarter, set the <code>with_year</code> argument to
+<code>TRUE</code>.</p>
+<pre class="r"><code>quarter(release_date, with_year = TRUE)</code></pre>
+<pre><code>## [1] 2019.4</code></pre>
+<p>In India, the fiscal starts in April and December falls in the 3rd quarter. How
+can we accommodate this change? The <code>fiscal_start</code> argument allows us to set the
+month in which the fiscal begins. We will set it to 4 for April. Now it returns
+3 instead of 4.</p>
+<pre class="r"><code>quarter(release_date, fiscal_start = 4)    </code></pre>
+<pre><code>## [1] 3</code></pre>
+<p><code>quarters()</code> from base R also returns the quarter.</p>
+<pre class="r"><code>quarters(release_date)</code></pre>
+<pre><code>## [1] &quot;Q4&quot;</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>quarter()</code>
+</td>
+<td style="text-align:left;">
+Get quarter
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>quarter(with_year = TRUE)</code>
+</td>
+<td style="text-align:left;">
+Quarter with year
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>quarter(fiscal_start = 4)</code>
+</td>
+<td style="text-align:left;">
+Fiscal starts in April
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>quarters()</code>
+</td>
+<td style="text-align:left;">
+Get quarter
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>semester()</code>
+</td>
+<td style="text-align:left;">
+Get semester
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="case-study-1" class="section level3">
+<h3>Case Study</h3>
+<div id="extract-date-month-year-from-due-date" class="section level4">
+<h4>Extract Date, Month &amp; Year from Due Date</h4>
+<p>Let us now extract the date, month and year from the <code>Due</code> column.</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    due_day   = day(Due),
+    due_month = month(Due),
+    due_year  = year(Due)
+  )</code></pre>
+<pre><code>## # A tibble: 2,466 x 6
+##    Invoice    Due        Payment    due_day due_month due_year
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;       &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 2013-01-02 2013-02-01 2013-01-15       1         2     2013
+##  2 2013-01-26 2013-02-25 2013-03-03      25         2     2013
+##  3 2013-07-03 2013-08-02 2013-07-08       2         8     2013
+##  4 2013-02-10 2013-03-12 2013-03-17      12         3     2013
+##  5 2012-10-25 2012-11-24 2012-11-28      24        11     2012
+##  6 2012-01-27 2012-02-26 2012-02-22      26         2     2012
+##  7 2013-08-13 2013-09-12 2013-09-09      12         9     2013
+##  8 2012-12-16 2013-01-15 2013-01-12      15         1     2013
+##  9 2012-05-14 2012-06-13 2012-07-01      13         6     2012
+## 10 2013-07-01 2013-07-31 2013-07-26      31         7     2013
+## # ... with 2,456 more rows</code></pre>
+</div>
+<div id="data-sanitization" class="section level4">
+<h4>Data Sanitization</h4>
+<p>Let us do some data sanitization. If the due day happens to be February 29,
+let us ensure that the due year is a leap year. Below are the steps to check
+if the due year is a leap year:</p>
+<ul>
+<li>we will extract the following from the due date:
+<ul>
+<li>day</li>
+<li>month</li>
+<li>year</li>
+</ul></li>
+<li>we will then create a new column <code>is_leap</code> which will have be set to <code>TRUE</code> if
+the year is a leap year else it will be set to <code>FALSE</code></li>
+<li>filter all the payments due on 29th Feb</li>
+<li>select the following columns:
+<ul>
+<li><code>Due</code></li>
+<li><code>is_leap</code></li>
+</ul></li>
+</ul>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    due_day   = day(Due),
+    due_month = month(Due),
+    due_year  = year(Due),
+    is_leap   = leap_year(due_year)
+  ) %&gt;%
+  filter(due_month == 2 &amp; due_day == 29) %&gt;%
+  select(Due, is_leap) </code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   Due        is_leap
+##   &lt;date&gt;     &lt;lgl&gt;  
+## 1 2012-02-29 TRUE   
+## 2 2012-02-29 TRUE   
+## 3 2012-02-29 TRUE   
+## 4 2012-02-29 TRUE</code></pre>
+</div>
+<div id="invoices-distribution-by-quarter" class="section level4">
+<h4>Invoices Distribution by Quarter</h4>
+<p>Let us count the invoices due for each quarter.</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    quarter_due = quarter(Due)
+  ) %&gt;%
+  count(quarter_due)</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   quarter_due     n
+##         &lt;int&gt; &lt;int&gt;
+## 1           1   521
+## 2           2   661
+## 3           3   618
+## 4           4   666</code></pre>
+</div>
+</div>
+<div id="your-turn-6" class="section level3">
+<h3>Your Turn</h3>
+<p>Get the R release dates using <code>r_versions()</code> from the <strong>rversions</strong> package and
+tabulate the following</p>
+<ul>
+<li>year</li>
+<li>month with label</li>
+<li>weekday with label</li>
+<li>hour</li>
+<li>and quarter</li>
+</ul>
+</div>
+</div>
+<div id="createupdate" class="section level2">
+<h2>Create, Update &amp; Verify</h2>
+{{% youtube "agGDD-xbtDo" %}}
+<p>In the second section, we learnt to create date-time objects using <code>as.Date()</code>,
+<code>as.POSIXct()</code> etc. In this section, we will explore a few other functions that
+will allow us to do the same</p>
+<ul>
+<li><code>make_date()</code></li>
+<li><code>make_datetime()</code></li>
+</ul>
+<div id="create" class="section level3">
+<h3>Create</h3>
+<p>To create date without time components, use <code>make_date()</code> and specify the
+following:</p>
+<ul>
+<li>year</li>
+<li>month</li>
+<li>date</li>
+</ul>
+<p>We need to specify all the components in numbers i.e. we cannot use <code>Dec</code> or
+<code>December</code> for the month. It has to be <code>12</code>.</p>
+<pre class="r"><code>make_date(year  = 2019,
+          month = 12,
+          day   = 12)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+<p>When you need to include time components, use <code>make_datetime()</code>.</p>
+<pre class="r"><code>make_datetime(year  = 2019,
+              month = 12,
+              day   = 12,
+              hour  = 08,
+              min   = 05,
+              sec   = 03,
+              tz    = &quot;UTC&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:03 UTC&quot;</code></pre>
+</div>
+<div id="update" class="section level3">
+<h3>Update</h3>
+<p>Let us look at another scenario. You have a date-time object and want to change
+one of its components i.e. any of the following</p>
+<ul>
+<li>year</li>
+<li>month</li>
+<li>date</li>
+</ul>
+<p>Instead of creating another date-time object, you can change any of the
+components using <code>update()</code>. In the below example, we will start with the date
+of release of R version 3.6.1 and using <code>update()</code>, we will change it to
+<code>2019-12-12</code>.</p>
+<pre class="r"><code>prev_release &lt;- ymd(&quot;2019-07-05&quot;)
+prev_release %&gt;% 
+  update(year  = 2019,
+         month = 12,
+         mday  = 12)</code></pre>
+<pre><code>## [1] &quot;2019-12-12&quot;</code></pre>
+</div>
+<div id="date-sequence" class="section level3">
+<h3>Date Sequence</h3>
+<p>So far we have created a single date-time instance. How about creating a
+sequence of dates? We can do that using <code>seq.Date()</code>. We need to specify the
+from date as the bare minimum input. If the end date is not specified, it will
+create the sequence uptil the current date.</p>
+<p>The interval of the sequence can be specified in any of the following units:</p>
+<ul>
+<li>day</li>
+<li>week</li>
+<li>month</li>
+<li>quarter</li>
+<li>year</li>
+</ul>
+<p>We can add the following to the interval units</p>
+<ul>
+<li>integer</li>
+<li><code>+</code> / <code>-</code> (increment or decrement)</li>
+</ul>
+<p>Using the integer, we can specify multiples of the units mentioned and using the
+sign, we can specify whether to increment or decrement.</p>
+<p>The below table displays the main arguments used in <code>seq.Date()</code>:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>from</code>
+</td>
+<td style="text-align:left;">
+Starting date of the sequence
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>by</code>
+</td>
+<td style="text-align:left;">
+End date of the sequence
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>to</code>
+</td>
+<td style="text-align:left;">
+Date increment of the sequence
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>length.out</code>
+</td>
+<td style="text-align:left;">
+Length of the sequence
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>along.with</code>
+</td>
+<td style="text-align:left;">
+Use length of this value as length of sequence
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the first example, we will create a sequence of dates from <code>2010-01-01</code> to
+<code>2019-12-31</code>. The unit of increment should be a year i.e. the difference
+between the dates in the sequence should be 1 year, specified using the <code>by</code>
+argument.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), to = as.Date(&quot;2019-12-31&quot;), by = &quot;year&quot;)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2011-01-01&quot; &quot;2012-01-01&quot; &quot;2013-01-01&quot; &quot;2014-01-01&quot;
+##  [6] &quot;2015-01-01&quot; &quot;2016-01-01&quot; &quot;2017-01-01&quot; &quot;2018-01-01&quot; &quot;2019-01-01&quot;</code></pre>
+<p>In the next example, we change the unit of increment to a quarter i.e. the
+difference between the dates in the sequence should be a quarter or 3 months.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2009-12-12&quot;), to = as.Date(&quot;2019-12-12&quot;), by = &quot;quarter&quot;)</code></pre>
+<pre><code>##  [1] &quot;2009-12-12&quot; &quot;2010-03-12&quot; &quot;2010-06-12&quot; &quot;2010-09-12&quot; &quot;2010-12-12&quot;
+##  [6] &quot;2011-03-12&quot; &quot;2011-06-12&quot; &quot;2011-09-12&quot; &quot;2011-12-12&quot; &quot;2012-03-12&quot;
+## [11] &quot;2012-06-12&quot; &quot;2012-09-12&quot; &quot;2012-12-12&quot; &quot;2013-03-12&quot; &quot;2013-06-12&quot;
+## [16] &quot;2013-09-12&quot; &quot;2013-12-12&quot; &quot;2014-03-12&quot; &quot;2014-06-12&quot; &quot;2014-09-12&quot;
+## [21] &quot;2014-12-12&quot; &quot;2015-03-12&quot; &quot;2015-06-12&quot; &quot;2015-09-12&quot; &quot;2015-12-12&quot;
+## [26] &quot;2016-03-12&quot; &quot;2016-06-12&quot; &quot;2016-09-12&quot; &quot;2016-12-12&quot; &quot;2017-03-12&quot;
+## [31] &quot;2017-06-12&quot; &quot;2017-09-12&quot; &quot;2017-12-12&quot; &quot;2018-03-12&quot; &quot;2018-06-12&quot;
+## [36] &quot;2018-09-12&quot; &quot;2018-12-12&quot; &quot;2019-03-12&quot; &quot;2019-06-12&quot; &quot;2019-09-12&quot;
+## [41] &quot;2019-12-12&quot;</code></pre>
+<p>We will now create a sequence of dates but instead of specifying the unit of
+increment, we specify the number of dates in the sequence i.e. the length of the
+sequence. We do this using the <code>length.out</code> argument which specifies the desired
+length of the sequence. We want the sequence to have 10 dates including the
+start and end date, and hence we supply the value <code>10</code> for the <code>length.out</code>
+argument.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), to = as.Date(&quot;2019-12-31&quot;), length.out = 10)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2011-02-10&quot; &quot;2012-03-22&quot; &quot;2013-05-02&quot; &quot;2014-06-11&quot;
+##  [6] &quot;2015-07-22&quot; &quot;2016-08-31&quot; &quot;2017-10-10&quot; &quot;2018-11-20&quot; &quot;2019-12-31&quot;</code></pre>
+<p>In all of the previous examples, we have specified both the start and the end
+date. Let us look at a few examples where we create a sequence of dates where
+we only specify the start date. In the below example, we want to create a
+sequence of dates starting from <code>2010-01-01</code>. The unit of increment should be 1
+year i.e. the difference between the dates in the sequence should be 1 year and
+the length of the sequence should be <code>10</code> i.e. the number of dates including the
+start date should be <code>10</code>.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), by = &quot;year&quot;, length.out = 10)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2011-01-01&quot; &quot;2012-01-01&quot; &quot;2013-01-01&quot; &quot;2014-01-01&quot;
+##  [6] &quot;2015-01-01&quot; &quot;2016-01-01&quot; &quot;2017-01-01&quot; &quot;2018-01-01&quot; &quot;2019-01-01&quot;</code></pre>
+<p>The unit of increment can include multiples and <code>+/-</code> sign i.e. it can be an
+unit of increment or decrement. In the next example, we can increment the dates
+in the sequence by <code>2</code> i.e. the difference between the dates should be <code>2</code>
+instead of <code>1</code>. This is achieved by specifying the unit of increment (multiple)
+first followed by a space and then the unit. In our example, it is <code>2 year</code>. As
+you can see, the sequence now goes all the way till <code>2028</code> and the gap between
+the dates is 2 years.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), by = &quot;2 year&quot;, length.out = 10)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2012-01-01&quot; &quot;2014-01-01&quot; &quot;2016-01-01&quot; &quot;2018-01-01&quot;
+##  [6] &quot;2020-01-01&quot; &quot;2022-01-01&quot; &quot;2024-01-01&quot; &quot;2026-01-01&quot; &quot;2028-01-01&quot;</code></pre>
+<p>Let us say instead of increment we want to decrement the dates i.e. the sequence
+of dates will go backwards as shown in the next example. We achieve this by
+using the <code>-</code> sign along with the unit of decrement. The sequence of dates in
+next example starts from <code>2010</code> and goes back upto <code>1992</code> and the difference
+between the dates in 2 years.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), by = &quot;-2 year&quot;, length.out = 10)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2008-01-01&quot; &quot;2006-01-01&quot; &quot;2004-01-01&quot; &quot;2002-01-01&quot;
+##  [6] &quot;2000-01-01&quot; &quot;1998-01-01&quot; &quot;1996-01-01&quot; &quot;1994-01-01&quot; &quot;1992-01-01&quot;</code></pre>
+<p>In the last example, we will explore the <code>along.with</code> argument. Here we have
+supplied a vector which is a sequence of numbers from 1 to 10. The length of
+this vector is 10 and the same length is used as the length of the sequence i.e. 
+the length of value supplied to <code>along.with</code> is also the length of the sequence.</p>
+<pre class="r"><code>seq.Date(from = as.Date(&quot;2010-01-01&quot;), by = &quot;-2 year&quot;, along.with = 1:10)</code></pre>
+<pre><code>##  [1] &quot;2010-01-01&quot; &quot;2008-01-01&quot; &quot;2006-01-01&quot; &quot;2004-01-01&quot; &quot;2002-01-01&quot;
+##  [6] &quot;2000-01-01&quot; &quot;1998-01-01&quot; &quot;1996-01-01&quot; &quot;1994-01-01&quot; &quot;1992-01-01&quot;</code></pre>
+</div>
+<div id="verify-type" class="section level3">
+<h3>Verify Type</h3>
+<p>How do you check if the data is a date-time object? You can do that using any
+of the following from the lubridate package.</p>
+<ul>
+<li><code>is.Date()</code></li>
+<li><code>is.POSIXct()</code></li>
+<li><code>is.POSIXlt()</code></li>
+</ul>
+<pre class="r"><code>is.Date(release_date)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>is.POSIXct(release_date)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.POSIXlt(release_date)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="your-turn-7" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li><p>R 2.0.0 was released on <code>2004-10-04 14:24:38</code>. Create this date using both
+<code>make_date()</code> and <code>make_datetime()</code></p></li>
+<li><p>R 3.0.0 was released on <code>2013-04-03 07:12:36</code>. Update the date created in the
+previous step to the above using <code>update()</code></p></li>
+</ul>
+</div>
+</div>
+<div id="intervals-duration-period" class="section level2">
+<h2>Intervals, Duration &amp; Period</h2>
+{{% youtube "8LW7vSx4cew" %}}
+<p>In this section, we will learn about</p>
+<ul>
+<li>intervals</li>
+<li>duration</li>
+<li>and period</li>
+</ul>
+<div id="intervals" class="section level3">
+<h3>Interval</h3>
+<p>An interval is a timespan defined by two date-times. Let us represent the length
+of the course using <code>interval</code>.</p>
+<p><br></p>
+<p><img src="/img/course_interval.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>course_start    &lt;- as_date(&#39;2017-04-12&#39;)
+course_end      &lt;- as_date(&#39;2017-04-21&#39;)
+interval(course_start, course_end)</code></pre>
+<pre><code>## [1] 2017-04-12 UTC--2017-04-21 UTC</code></pre>
+<p>If you observe carefully, the interval is represented by the course start and
+end dates. We will learn how to use intervals in the case study.</p>
+<div id="overlapping-intervals" class="section level4">
+<h4>Overlapping Intervals</h4>
+<p>Let us say you are planning a vacation and want to check if the vacation
+dates overlap with the course dates. You can do this by:</p>
+<ul>
+<li>creating vacation and course intervals</li>
+<li>use <code>int_overlaps()</code> to check if two intervals overlap. It returns <code>TRUE</code>
+if the intervals overlap else <code>FALSE</code>.</li>
+</ul>
+<p>Let us use the vacation start and end dates to create <code>vacation_interval</code>
+and then check if it overlaps with <code>course_interval</code>.</p>
+<p><br></p>
+<p><img src="/img/interval_overlap.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>vacation_start    &lt;- as_date(&#39;2017-04-19&#39;)
+vacation_end      &lt;- as_date(&#39;2017-04-25&#39;)
+course_interval   &lt;- interval(course_start, course_end)
+vacation_interval &lt;- interval(vacation_start, vacation_end)
+int_overlaps(course_interval, vacation_interval)
+## [1] TRUE</code></pre>
+</div>
+<div id="how-many-invoices-were-settled-within-due-date" class="section level4">
+<h4>How many invoices were settled within due date?</h4>
+<p>Let us use intervals to count the number of invoices that were settled within
+the due date. To do this, we will:</p>
+<ul>
+<li>create an interval for the invoice and due date</li>
+<li>create a new column <code>due_next</code> by incrementing the due date by 1 day</li>
+<li>another interval for <code>due_next</code> and the payment date</li>
+<li>if the intervals overlap, the payment was made within the due date</li>
+</ul>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    inv_due_interval = interval(Invoice, Due),
+    due_next         = Due + days(1),
+    due_pay_interval = interval(due_next, Payment),
+    overlaps         = int_overlaps(inv_due_interval, due_pay_interval)
+  ) %&gt;%
+  select(Invoice, Due, Payment, overlaps)</code></pre>
+<pre><code>## # A tibble: 2,466 x 4
+##    Invoice    Due        Payment    overlaps
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;   
+##  1 2013-01-02 2013-02-01 2013-01-15 TRUE    
+##  2 2013-01-26 2013-02-25 2013-03-03 FALSE   
+##  3 2013-07-03 2013-08-02 2013-07-08 TRUE    
+##  4 2013-02-10 2013-03-12 2013-03-17 FALSE   
+##  5 2012-10-25 2012-11-24 2012-11-28 FALSE   
+##  6 2012-01-27 2012-02-26 2012-02-22 TRUE    
+##  7 2013-08-13 2013-09-12 2013-09-09 TRUE    
+##  8 2012-12-16 2013-01-15 2013-01-12 TRUE    
+##  9 2012-05-14 2012-06-13 2012-07-01 FALSE   
+## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
+## # ... with 2,456 more rows</code></pre>
+<p>Below we show another method to count the number of invoices paid within the
+due date. Instead of using <code>days</code> to change the due date, we use <code>int_shift</code>
+to shift it by 1 day.</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    inv_due_interval = interval(Invoice, Due),
+    due_pay_interval = interval(Due, Payment),  
+    due_pay_next     = int_shift(due_pay_interval, by = days(1)),
+    overlaps         = int_overlaps(inv_due_interval, due_pay_next)
+  ) %&gt;%
+  select(Invoice, Due, Payment, overlaps)</code></pre>
+<pre><code>## # A tibble: 2,466 x 4
+##    Invoice    Due        Payment    overlaps
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;   
+##  1 2013-01-02 2013-02-01 2013-01-15 TRUE    
+##  2 2013-01-26 2013-02-25 2013-03-03 FALSE   
+##  3 2013-07-03 2013-08-02 2013-07-08 TRUE    
+##  4 2013-02-10 2013-03-12 2013-03-17 FALSE   
+##  5 2012-10-25 2012-11-24 2012-11-28 FALSE   
+##  6 2012-01-27 2012-02-26 2012-02-22 TRUE    
+##  7 2013-08-13 2013-09-12 2013-09-09 TRUE    
+##  8 2012-12-16 2013-01-15 2013-01-12 TRUE    
+##  9 2012-05-14 2012-06-13 2012-07-01 FALSE   
+## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
+## # ... with 2,456 more rows</code></pre>
+<p>You might be thinking why we incremented the due date by a day before creating
+the interval between the due day and the payment day. If we do not increment,
+both the intervals will share a common date i.e. the due date and they will
+always overlap as shown below:</p>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    inv_due_interval = interval(Invoice, Due),
+    due_pay_interval = interval(Due, Payment),
+    overlaps         = int_overlaps(inv_due_interval, due_pay_interval)
+  ) %&gt;%
+  select(Invoice, Due, Payment, overlaps)</code></pre>
+<pre><code>## # A tibble: 2,466 x 4
+##    Invoice    Due        Payment    overlaps
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;   
+##  1 2013-01-02 2013-02-01 2013-01-15 TRUE    
+##  2 2013-01-26 2013-02-25 2013-03-03 TRUE    
+##  3 2013-07-03 2013-08-02 2013-07-08 TRUE    
+##  4 2013-02-10 2013-03-12 2013-03-17 TRUE    
+##  5 2012-10-25 2012-11-24 2012-11-28 TRUE    
+##  6 2012-01-27 2012-02-26 2012-02-22 TRUE    
+##  7 2013-08-13 2013-09-12 2013-09-09 TRUE    
+##  8 2012-12-16 2013-01-15 2013-01-12 TRUE    
+##  9 2012-05-14 2012-06-13 2012-07-01 TRUE    
+## 10 2013-07-01 2013-07-31 2013-07-26 TRUE    
+## # ... with 2,456 more rows</code></pre>
+</div>
+<div id="shift-interval" class="section level4">
+<h4>Shift Interval</h4>
+<p>Intervals can be shifted too. In the below example, we shift the course
+interval by:</p>
+<ul>
+<li>1 day</li>
+<li>3 weeks</li>
+<li>1 year</li>
+</ul>
+<p><br></p>
+<p><img src="/img/shift_interval.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>course_interval &lt;- interval(course_start, course_end)
+
+# shift course_interval by 1 day 
+int_shift(course_interval, by = days(1))
+## [1] 2017-04-13 UTC--2017-04-22 UTC
+
+# shift course_interval by 3 weeks
+int_shift(course_interval, by = weeks(3))
+## [1] 2017-05-03 UTC--2017-05-12 UTC
+
+# shift course_interval by 1 year
+int_shift(course_interval, by = years(1))
+## [1] 2018-04-12 UTC--2018-04-21 UTC</code></pre>
+</div>
+</div>
+<div id="within" class="section level3">
+<h3>Within</h3>
+<p>Let us assume that we have to attend a conference in April 2017. Does it
+clash with the course? We can answer this using <code>%within%</code> which will
+return <code>TRUE</code> if a date falls within an interval.</p>
+<p><br></p>
+<p><img src="/img/within.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>conference &lt;- as_date(&#39;2017-04-15&#39;)
+conference %within% course_interval
+## [1] TRUE</code></pre>
+<div id="how-many-invoices-were-settled-within-due-date-1" class="section level4">
+<h4>How many invoices were settled within due date?</h4>
+<p>Let us use <code>%within%</code> to count the number of invoices that were settled within
+the due date. We will do this by:</p>
+<ul>
+<li>creating an interval for the invoice and due date</li>
+<li>check if the payment date falls within the above interval</li>
+</ul>
+<pre class="r"><code>transact %&gt;%
+  mutate(
+    inv_due_interval = interval(Invoice, Due),
+    overlaps         = Payment %within% inv_due_interval
+  ) %&gt;%
+  select(Due, Payment, overlaps)</code></pre>
+<pre><code>## # A tibble: 2,466 x 3
+##    Due        Payment    overlaps
+##    &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;   
+##  1 2013-02-01 2013-01-15 TRUE    
+##  2 2013-02-25 2013-03-03 FALSE   
+##  3 2013-08-02 2013-07-08 TRUE    
+##  4 2013-03-12 2013-03-17 FALSE   
+##  5 2012-11-24 2012-11-28 FALSE   
+##  6 2012-02-26 2012-02-22 TRUE    
+##  7 2013-09-12 2013-09-09 TRUE    
+##  8 2013-01-15 2013-01-12 TRUE    
+##  9 2012-06-13 2012-07-01 FALSE   
+## 10 2013-07-31 2013-07-26 TRUE    
+## # ... with 2,456 more rows</code></pre>
+</div>
+</div>
+<div id="duration" class="section level3">
+<h3>Duration</h3>
+<p>Duration is timespan measured in seconds. To create a duration object, use
+<code>duration()</code>. The timespan can be anything from seconds to years but it will be
+represented as seconds. Let us begin by creating a duration object where the timespan is in seconds.</p>
+<pre class="r"><code>duration(50, &quot;seconds&quot;)</code></pre>
+<pre><code>## [1] &quot;50s&quot;</code></pre>
+<p>Another way to specify the above timespan is shown below:</p>
+<pre class="r"><code>duration(second = 50)</code></pre>
+<pre><code>## [1] &quot;50s&quot;</code></pre>
+<p>As you can see, the output is same in both the cases. Let us increase the timespan to 60 seconds and see what happens.</p>
+<pre class="r"><code>duration(second = 60)</code></pre>
+<pre><code>## [1] &quot;60s (~1 minutes)&quot;</code></pre>
+<p>Although the timespan is primarily measured in seconds, it also shows <code>~1 minutes</code> in the brackets. As the length of the timespan increases i.e. the number becomes large, it is represented using larger units such as hours and days. In the below examples, as the number of seconds increases, you can observe larger units being used to represent the timespan.</p>
+<pre class="r"><code># minutes
+duration(minute = 50)</code></pre>
+<pre><code>## [1] &quot;3000s (~50 minutes)&quot;</code></pre>
+<pre class="r"><code>duration(minute = 60)</code></pre>
+<pre><code>## [1] &quot;3600s (~1 hours)&quot;</code></pre>
+<pre class="r"><code># hours
+duration(hour = 23)</code></pre>
+<pre><code>## [1] &quot;82800s (~23 hours)&quot;</code></pre>
+<pre class="r"><code>duration(hour = 24)</code></pre>
+<pre><code>## [1] &quot;86400s (~1 days)&quot;</code></pre>
+<p>The following helper functions can be used to create duration objects as well.</p>
+<pre class="r"><code># default
+dseconds()</code></pre>
+<pre><code>## [1] &quot;1s&quot;</code></pre>
+<pre class="r"><code>dminutes()</code></pre>
+<pre><code>## [1] &quot;60s (~1 minutes)&quot;</code></pre>
+<pre class="r"><code># seconds
+duration(second = 59)</code></pre>
+<pre><code>## [1] &quot;59s&quot;</code></pre>
+<pre class="r"><code>dseconds(59)</code></pre>
+<pre><code>## [1] &quot;59s&quot;</code></pre>
+<pre class="r"><code># minutes
+duration(minute = 50)</code></pre>
+<pre><code>## [1] &quot;3000s (~50 minutes)&quot;</code></pre>
+<pre class="r"><code>dminutes(50)</code></pre>
+<pre><code>## [1] &quot;3000s (~50 minutes)&quot;</code></pre>
+<pre class="r"><code># hours
+duration(hour = 36)</code></pre>
+<pre><code>## [1] &quot;129600s (~1.5 days)&quot;</code></pre>
+<pre class="r"><code>dhours(36)</code></pre>
+<pre><code>## [1] &quot;129600s (~1.5 days)&quot;</code></pre>
+<pre class="r"><code># weeks
+duration(week = 56)</code></pre>
+<pre><code>## [1] &quot;33868800s (~1.07 years)&quot;</code></pre>
+<pre class="r"><code>dweeks(56)</code></pre>
+<pre><code>## [1] &quot;33868800s (~1.07 years)&quot;</code></pre>
+<p>Let us use the above helper functions to get the course length in different units.</p>
+<p><img src="/img/convert.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code># course length in seconds 
+course_interval / dseconds()
+## [1] 777600
+
+# course length in minutes
+course_interval / dminutes()
+## [1] 12960
+
+# course length in hours
+course_interval / dhours()
+## [1] 216
+
+# course length in weeks
+course_interval / dweeks()
+## [1] 1.285714
+
+# course length in years
+course_interval / dyears()
+## [1] 0.02465753</code></pre>
+</div>
+<div id="period" class="section level3">
+<h3>Period</h3>
+<p>A <code>period</code> is a timespan defined in units such as years, months, and days. In
+the below examples, we use <code>period()</code> to represent timespan using different
+units.</p>
+<pre class="r"><code># second
+period(5, &quot;second&quot;)</code></pre>
+<pre><code>## [1] &quot;5S&quot;</code></pre>
+<pre class="r"><code>period(second = 5)</code></pre>
+<pre><code>## [1] &quot;5S&quot;</code></pre>
+<pre class="r"><code># minute &amp; second
+period(c(3, 5), c(&quot;minute&quot;, &quot;second&quot;))</code></pre>
+<pre><code>## [1] &quot;3M 5S&quot;</code></pre>
+<pre class="r"><code>period(minute = 3, second = 5)</code></pre>
+<pre><code>## [1] &quot;3M 5S&quot;</code></pre>
+<pre class="r"><code># hour, minte &amp; second
+period(c(1, 3, 5), c(&quot;hour&quot;, &quot;minute&quot;, &quot;second&quot;))</code></pre>
+<pre><code>## [1] &quot;1H 3M 5S&quot;</code></pre>
+<pre class="r"><code>period(hour = 1, minute = 3, second = 5)</code></pre>
+<pre><code>## [1] &quot;1H 3M 5S&quot;</code></pre>
+<pre class="r"><code># day, hour, minute &amp; second
+period(c(3, 1, 3, 5), c(&quot;day&quot;, &quot;hour&quot;, &quot;minute&quot;, &quot;second&quot;))</code></pre>
+<pre><code>## [1] &quot;3d 1H 3M 5S&quot;</code></pre>
+<pre class="r"><code>period(day = 3, hour = 1, minute = 3, second = 5)</code></pre>
+<pre><code>## [1] &quot;3d 1H 3M 5S&quot;</code></pre>
+<p><br></p>
+<p><img src="/img/as_period.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>Let us get the course length in different units using <code>as.period()</code>.</p>
+<pre class="r"><code># course length in second
+as.period(course_interval, unit = &quot;seconds&quot;)
+## [1] &quot;777600S&quot;
+
+# course length in hours and minutes
+as.period(course_interval, unit = &quot;minutes&quot;)
+## [1] &quot;12960M 0S&quot;
+
+# course length in hours, minutes and seconds
+as.period(course_interval, unit = &quot;hours&quot;)
+## [1] &quot;216H 0M 0S&quot;</code></pre>
+<p><code>time_length()</code> computes the exact length of a timespan i.e. <code>duration</code>, <code>interval</code> or <code>period</code>. Let us use <code>time_length()</code> to compute the length of the
+course in different units.</p>
+<p><br></p>
+<p><img src="/img/time_length.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code># course length in seconds
+time_length(course_interval, unit = &quot;seconds&quot;)
+## [1] 777600
+
+# course length in minutes
+time_length(course_interval, unit = &quot;minutes&quot;)
+## [1] 12960
+
+# course length in hours
+time_length(course_interval, unit = &quot;hours&quot;)
+## [1] 216</code></pre>
+</div>
+</div>
+<div id="others" class="section level2">
+<h2>Round &amp; Rollback</h2>
+{{% youtube "ZI1s6XQgCbo" %}}
+<p>In this section, we will learn to round date/time to the nearest unit and roll
+back dates.</p>
+<div id="rounding-dates" class="section level3">
+<h3>Rounding Dates</h3>
+<p>We will explore functions for rounding dates</p>
+<ul>
+<li>to the nearest value using <code>round_dates()</code></li>
+<li>down using <code>floor_date()</code></li>
+<li>up using <code>ceiling_date()</code></li>
+</ul>
+<p>The unit for rounding can be any of the following:</p>
+<ul>
+<li>second</li>
+<li>minute</li>
+<li>hour</li>
+<li>day</li>
+<li>week</li>
+<li>month</li>
+<li>bimonth</li>
+<li>quarter</li>
+<li>season</li>
+<li>halfyear</li>
+<li>and year</li>
+</ul>
+<p>We will look at a few examples using <code>round_date()</code> and you will then practice
+using the other two functions.</p>
+<pre class="r"><code># minute
+round_date(release_date, unit = &quot;minute&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:00 UTC&quot;</code></pre>
+<pre class="r"><code>round_date(release_date, unit = &quot;mins&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:00 UTC&quot;</code></pre>
+<pre class="r"><code>round_date(release_date, unit = &quot;5 mins&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:05:00 UTC&quot;</code></pre>
+<pre class="r"><code># hour
+round_date(release_date, unit = &quot;hour&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 08:00:00 UTC&quot;</code></pre>
+<pre class="r"><code># day
+round_date(release_date, unit = &quot;day&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-12 UTC&quot;</code></pre>
+</div>
+<div id="rollback" class="section level3">
+<h3>Rollback</h3>
+<p>Use <code>rollback()</code> if you want to change the date to the last day of the previous
+month or the first day of the month.</p>
+<pre class="r"><code>rollback(release_date)</code></pre>
+<pre><code>## [1] &quot;2019-11-30 08:05:03 UTC&quot;</code></pre>
+<p>To change the date to the first day of the month, use the <code>roll_to_first</code>
+argument and set it to <code>TRUE</code>.</p>
+<pre class="r"><code>rollback(release_date, roll_to_first = TRUE)</code></pre>
+<pre><code>## [1] &quot;2019-12-01 08:05:03 UTC&quot;</code></pre>
+</div>
+<div id="your-turn-8" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>round up R release dates to hours</li>
+<li>round down R release dates to minutes</li>
+<li>rollback R release dates to the beginning of the month</li>
+</ul>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>Readings &amp; References</h2>
+<ul>
+<li><a href="https://lubridate.tidyverse.org/" class="uri">https://lubridate.tidyverse.org/</a></li>
+<li><a href="https://r4ds.had.co.nz/dates-and-times.html" class="uri">https://r4ds.had.co.nz/dates-and-times.html</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Daylight_saving_time" class="uri">https://en.wikipedia.org/wiki/Daylight_saving_time</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Time_zone" class="uri">https://en.wikipedia.org/wiki/Time_zone</a></li>
+<li><a href="https://www.worldtimebuddy.com/" class="uri">https://www.worldtimebuddy.com/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/POSIX" class="uri">https://en.wikipedia.org/wiki/POSIX</a></li>
+</ul>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>
