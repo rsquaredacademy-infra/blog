@@ -21,7 +21,7 @@ New to our blog? Welcome aboard! There are posts on a wide variety of topics lis
 - [Data Wrangling with dplyr - Part 3](/data-wrangling-with-dplyr-part-3/)
 - [Introduction to tibbles](/introduction-to-tibbles/)
 - [Readable Code with Pipes](/readable-code-with-pipes/)
-- [How to work with dates in R?](/working-with-dates-in-r/)
+- [How to work with dates in R?](/handling-date-and-time-in-r/)
 - [Working with strings in R using stringr](/hacking-strings-with-stringr/)
 - [Demystifying Regular Expressions](/regular-expression-in-r/)
 - [Working with factors using forcats](/working-with-categorical-data-using-forcats/)
