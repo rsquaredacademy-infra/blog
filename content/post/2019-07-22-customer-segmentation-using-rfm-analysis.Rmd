@@ -13,6 +13,7 @@ tags:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(kableExtra.html.bsTable = TRUE)
 ```
 
 ```{r rfm_cover_image, echo=FALSE, fig.align="center", out.width="100%"}
@@ -479,7 +480,7 @@ rfm_result %>%
 Let us classify our customers based on the individual recency, frequency and 
 monetary scores.
 
-```{r segments}
+```{r segments, echo=FALSE}
 segment <- c(
   "Champions", "Loyal Customers", "Potential Loyalist",
   "New Customers", "Promising", "Need Attention",
@@ -525,7 +526,7 @@ We can use the segmented data to identify
 Once we have classified a customer into a particular segment, we can take 
 appropriate action to increase his/her lifetime value. 
 
-```{r criteria, echo=FALSE}
+```{r criteria}
 segment_names <- c("Champions", "Loyal Customers", "Potential Loyalist",
   "New Customers", "Promising", "Need Attention", "About To Sleep",
   "At Risk", "Can't Lose Them", "Hibernating", "Lost")
@@ -540,16 +541,7 @@ monetary_upper  <- c(5, 5, 3, 1, 1, 4, 2, 5, 5, 3, 1)
 segments <- rfm_segment(rfm_result, segment_names, recency_lower, recency_upper,
 frequency_lower, frequency_upper, monetary_lower, monetary_upper)
 
-# use datatable
-segments %>%
-  datatable(
-    filter = "top",
-    options = list(pageLength = 5, autoWidth = TRUE),
-    colnames = c(
-      "Customer", "Segment", "RFM",
-      "Orders", "Recency", "Total Spend"
-    )
-  )
+segments 
 ```
 
 <hr>
