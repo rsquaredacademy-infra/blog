@@ -479,7 +479,7 @@ rfm_result %>%
 Let us classify our customers based on the individual recency, frequency and 
 monetary scores.
 
-```{r segments, echo=FALSE}
+```{r segments}
 segment <- c(
   "Champions", "Loyal Customers", "Potential Loyalist",
   "New Customers", "Promising", "Need Attention",
