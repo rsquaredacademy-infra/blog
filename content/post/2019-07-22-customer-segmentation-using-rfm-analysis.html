@@ -946,35 +946,25 @@ frequency_upper &lt;- c(5, 4, 3, 1, 1, 4, 2, 5, 5, 3, 1)
 monetary_lower  &lt;- c(4, 4, 1, 1, 1, 3, 1, 2, 4, 2, 1)
 monetary_upper  &lt;- c(5, 5, 3, 1, 1, 4, 2, 5, 5, 3, 1)
 
-segments &lt;- rfm_segment(rfm_result, segment_names, recency_lower, recency_upper,
-frequency_lower, frequency_upper, monetary_lower, monetary_upper)
+segments &lt;- 
+  rfm_segment(rfm_result, segment_names, recency_lower, recency_upper,
+              frequency_lower, frequency_upper, monetary_lower, monetary_upper)
 
-segments </code></pre>
-<pre><code>## # A tibble: 995 x 9
-##    customer_id        segment            rfm_score transaction_count
-##    &lt;chr&gt;              &lt;chr&gt;                  &lt;dbl&gt;             &lt;dbl&gt;
-##  1 Abbey O&#39;Reilly DVM Need Attention           343                 6
-##  2 Add Senger         Potential Loyalist       412                 3
-##  3 Aden Lesch Sr.     Hibernating              323                 4
-##  4 Admiral Senger     Need Attention           433                 5
-##  5 Agness O&#39;Keefe     Champions                555                 9
-##  6 Aileen Barton      Champions                555                 9
-##  7 Ailene Hermann     Others                   355                 8
-##  8 Aiyanna Bruen PhD  About To Sleep           321                 4
-##  9 Ala Schmidt DDS    About To Sleep           212                 3
-## 10 Alannah Borer      Others                   121                 4
-##    recency_days amount recency_score frequency_score monetary_score
-##           &lt;dbl&gt;  &lt;dbl&gt;         &lt;int&gt;           &lt;int&gt;          &lt;int&gt;
-##  1          205    472             3               4              3
-##  2          140    340             4               1              2
-##  3          194    405             3               2              3
-##  4          132    448             4               3              3
-##  5           90    843             5               5              5
-##  6           84    763             5               5              5
-##  7          281    699             3               5              5
-##  8          246    157             3               2              1
-##  9          349    363             2               1              2
-## 10          619    196             1               2              1
+segments %&gt;% 
+  select(customer_id, segment, rfm_score)</code></pre>
+<pre><code>## # A tibble: 995 x 3
+##    customer_id        segment            rfm_score
+##    &lt;chr&gt;              &lt;chr&gt;                  &lt;dbl&gt;
+##  1 Abbey O&#39;Reilly DVM Need Attention           343
+##  2 Add Senger         Potential Loyalist       412
+##  3 Aden Lesch Sr.     Hibernating              323
+##  4 Admiral Senger     Need Attention           433
+##  5 Agness O&#39;Keefe     Champions                555
+##  6 Aileen Barton      Champions                555
+##  7 Ailene Hermann     Others                   355
+##  8 Aiyanna Bruen PhD  About To Sleep           321
+##  9 Ala Schmidt DDS    About To Sleep           212
+## 10 Alannah Borer      Others                   121
 ## # ... with 985 more rows</code></pre>
 <hr>
 <p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
