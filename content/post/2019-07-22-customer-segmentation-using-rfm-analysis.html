@@ -45,11 +45,6 @@ respond to promotions by segmenting them into various categories.</p>
 <p>You can try our free online course
 <a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank">Customer Segmentation using RFM Analysis</a>
 if you like to learn through self paced online courses.</p>
-<hr>
-<p align="center">
-<a href="https://rsquared-academy.thinkific.com/" target="_blank"><img src="/img/ad_courses.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
-</p>
-<hr>
 </div>
 <div id="case-study" class="section level2">
 <h2>Case Study</h2>
@@ -272,11 +267,6 @@ who visited in the recent past (&lt; 114 days) compared to those who visited way
 back (&gt; 481 days). In our case study, Jaineel visited in the past 3 months and
 hence the score of 5 where as Taj visited almost 20 months back and has been
 assigned the score 1.</p>
-<hr>
-<p>
-<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
-</p>
-<hr>
 </div>
 <div id="rfm-score-1" class="section level3">
 <h3>RFM Score</h3>
@@ -935,9 +925,11 @@ Lowest recency, frequency &amp; monetary scores
 </ul>
 <p>Once we have classified a customer into a particular segment, we can take
 appropriate action to increase his/her lifetime value.</p>
-<pre class="r"><code>segment_names &lt;- c(&quot;Champions&quot;, &quot;Loyal Customers&quot;, &quot;Potential Loyalist&quot;,
-  &quot;New Customers&quot;, &quot;Promising&quot;, &quot;Need Attention&quot;, &quot;About To Sleep&quot;,
-  &quot;At Risk&quot;, &quot;Can&#39;t Lose Them&quot;, &quot;Hibernating&quot;, &quot;Lost&quot;)
+<pre class="r"><code>segment_names &lt;- 
+  c(&quot;Champions&quot;, &quot;Loyal Customers&quot;, &quot;Potential Loyalist&quot;,
+    &quot;New Customers&quot;, &quot;Promising&quot;, &quot;Need Attention&quot;, 
+    &quot;About To Sleep&quot;, &quot;At Risk&quot;, &quot;Can&#39;t Lose Them&quot;, 
+    &quot;Hibernating&quot;, &quot;Lost&quot;)
 
 recency_lower   &lt;- c(4, 2, 3, 4, 3, 3, 2, 1, 1, 2, 1)
 recency_upper   &lt;- c(5, 4, 5, 5, 4, 4, 3, 2, 1, 3, 1)
@@ -947,8 +939,9 @@ monetary_lower  &lt;- c(4, 4, 1, 1, 1, 3, 1, 2, 4, 2, 1)
 monetary_upper  &lt;- c(5, 5, 3, 1, 1, 4, 2, 5, 5, 3, 1)
 
 segments &lt;- 
-  rfm_segment(rfm_result, segment_names, recency_lower, recency_upper,
-              frequency_lower, frequency_upper, monetary_lower, monetary_upper)
+  rfm_segment(rfm_result, segment_names, recency_lower, 
+              recency_upper, frequency_lower, frequency_upper, 
+              monetary_lower, monetary_upper)
 
 segments %&gt;% 
   select(customer_id, segment, rfm_score)</code></pre>
@@ -966,9 +959,6 @@ segments %&gt;%
 ##  9 Ala Schmidt DDS    About To Sleep           212
 ## 10 Alannah Borer      Others                   121
 ## # ... with 985 more rows</code></pre>
-<hr>
-<p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
-<hr>
 </div>
 <div id="segment-size" class="section level3">
 <h3>Segment Size</h3>

@@ -53,14 +53,6 @@ You can try our free online course
 <a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank">Customer Segmentation using RFM Analysis</a>
 if you like to learn through self paced online courses.
 
-<hr>
-
-<p align="center">
-<a href="https://rsquared-academy.thinkific.com/" target="_blank"><img src="/img/ad_courses.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
-</p>
-
-<hr>
-
 ## Case Study
 
 We will work through a case study to better understand the underlying concepts
@@ -333,14 +325,6 @@ back (> 481 days). In our case study, Jaineel visited in the past 3 months and
 hence the score of 5 where as Taj visited almost 20 months back and has been 
 assigned the score 1.
 
-<hr>
-
-<p>
-<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
-</p>
-
-<hr>
-
 ### RFM Score
 
 Now that we have calculated the individual scores, let us compute the RFM score
@@ -527,9 +511,11 @@ Once we have classified a customer into a particular segment, we can take
 appropriate action to increase his/her lifetime value. 
 
 ```{r criteria}
-segment_names <- c("Champions", "Loyal Customers", "Potential Loyalist",
-  "New Customers", "Promising", "Need Attention", "About To Sleep",
-  "At Risk", "Can't Lose Them", "Hibernating", "Lost")
+segment_names <- 
+  c("Champions", "Loyal Customers", "Potential Loyalist",
+    "New Customers", "Promising", "Need Attention", 
+    "About To Sleep", "At Risk", "Can't Lose Them", 
+    "Hibernating", "Lost")
 
 recency_lower   <- c(4, 2, 3, 4, 3, 3, 2, 1, 1, 2, 1)
 recency_upper   <- c(5, 4, 5, 5, 4, 4, 3, 2, 1, 3, 1)
@@ -539,18 +525,13 @@ monetary_lower  <- c(4, 4, 1, 1, 1, 3, 1, 2, 4, 2, 1)
 monetary_upper  <- c(5, 5, 3, 1, 1, 4, 2, 5, 5, 3, 1)
 
 segments <- 
-  rfm_segment(rfm_result, segment_names, recency_lower, recency_upper,
-              frequency_lower, frequency_upper, monetary_lower, monetary_upper)
+  rfm_segment(rfm_result, segment_names, recency_lower, 
+              recency_upper, frequency_lower, frequency_upper, 
+              monetary_lower, monetary_upper)
 
 segments %>% 
   select(customer_id, segment, rfm_score)
 ```
-
-<hr>
-
-<a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a>
-
-<hr>
 
 ### Segment Size
 
