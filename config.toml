@@ -1,6 +1,6 @@
 baseurl = "https://blog.rsquaredacademy.com/"
 languageCode = "en-us"
-title = "Rsquared Academy Blog"
+title = "Rsquared Academy Blog - Explore Discover Learn"
 theme = "hugo-lithium-theme"
 copyright = "&copy; 2014-2020. All rights reserved."
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
