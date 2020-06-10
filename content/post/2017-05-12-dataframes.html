@@ -50,7 +50,7 @@ colnames(students)
 ## [1] &quot;name&quot;     &quot;age&quot;      &quot;graduate&quot;
 str(students)
 ## &#39;data.frame&#39;:    3 obs. of  3 variables:
-##  $ name    : Factor w/ 3 levels &quot;Jack&quot;,&quot;Jill&quot;,..: 3 1 2
+##  $ name    : chr  &quot;John&quot; &quot;Jack&quot; &quot;Jill&quot;
 ##  $ age     : num  29 25 27
 ##  $ graduate: logi  TRUE TRUE FALSE
 dim(students)
@@ -76,13 +76,11 @@ students[1]
 
 # using [[
 students[[1]]
-## [1] John Jack Jill
-## Levels: Jack Jill John
+## [1] &quot;John&quot; &quot;Jack&quot; &quot;Jill&quot;
 
 # using $
 students$name
-## [1] John Jack Jill
-## Levels: Jack Jill John</code></pre>
+## [1] &quot;John&quot; &quot;Jack&quot; &quot;Jill&quot;</code></pre>
 <div id="multiple-columns" class="section level3">
 <h3>Multiple Columns</h3>
 <pre class="r"><code>students[, 1:3]

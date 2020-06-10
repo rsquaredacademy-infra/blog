@@ -177,18 +177,18 @@ combinations of the matches are returned.</p>
 <code>customer</code> data using <code>right_join</code>.</p>
 <pre class="r"><code>right_join(customer, order, by = &quot;id&quot;)</code></pre>
 <pre><code>## # A tibble: 300 x 5
-##       id first_name city      order_date amount
-##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
-##  1   368 &lt;NA&gt;       &lt;NA&gt;      7/2/2016     365.
-##  2   286 &lt;NA&gt;       &lt;NA&gt;      11/2/2016   2064.
-##  3    28 Avrit      Texas     2/22/2017    432.
-##  4   309 &lt;NA&gt;       &lt;NA&gt;      3/5/2017     480.
-##  5     2 Marcella   Colorado  12/28/2016   235.
-##  6    31 Clemmie    Tennessee 12/30/2016  2745.
-##  7   179 &lt;NA&gt;       &lt;NA&gt;      12/21/2016  2358.
-##  8   484 &lt;NA&gt;       &lt;NA&gt;      11/24/2016  1031.
-##  9   115 &lt;NA&gt;       &lt;NA&gt;      9/9/2016    1218.
-## 10   340 &lt;NA&gt;       &lt;NA&gt;      5/6/2017    1184.
+##       id first_name city       order_date amount
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+##  1     2 Marcella   Colorado   12/28/2016   235.
+##  2     2 Marcella   Colorado   8/31/2016   1150.
+##  3     5 Ketty      Texas      1/17/2017    346.
+##  4     6 Jethro     California 1/27/2017   2317.
+##  5     7 Jeremiah   California 6/21/2016    136.
+##  6     7 Jeremiah   California 2/13/2017   1407.
+##  7     7 Jeremiah   California 7/8/2016    1914.
+##  8     8 Constancia Texas      11/5/2016   2461.
+##  9     8 Constancia Texas      5/19/2017   2714.
+## 10     9 Muire      Idaho      12/28/2016   187.
 ## # ... with 290 more rows</code></pre>
 </div>
 </div>

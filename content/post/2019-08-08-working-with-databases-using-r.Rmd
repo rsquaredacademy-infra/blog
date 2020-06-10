@@ -861,7 +861,7 @@ knitr::include_graphics("/img/dbi_ask_credentials.png")
 The second method is store the credentials as environment variables. This can
 be achieved using `Sys.setenv()` or using .Renviron file. The credentials can then be retrieved using `Sys.getenv()` as shown in the below example:
 
-```{r cred_3}
+```{r cred_3, eval=FALSE}
 db_con <- DBI::dbConnect(drv      = RMySQL::MySQL(), 
                          username = Sys.getenv("db_uid"), 
                          password = Sys.getenv("db_pwd"), 
@@ -901,7 +901,7 @@ options(db_password = "pass_word")
 
 The above code can be stored in a R file which can then be sourced before opening a new connection to the database. The credentials can be retrieved using `getOptions()`. We have added the `options.R` file used to store credentials to the database in the resources section of the learning management system as well as in the GitHub repo.
 
-```{r cred_4}
+```{r cred_4, eval=FALSE}
 source("options.R")
 db_con <- DBI::dbConnect(drv      = RMySQL::MySQL(), 
                          username = getOption("db_userid"), 
@@ -919,7 +919,7 @@ DBI::dbDisconnect(db_con)
 
 The [config](https://github.com/rstudio/config) package allows you to manage environment specific configuration values. Configurations are defined using a YAML text file and are read by default from a file named config.yml in the current working directory. Store the database connection details such as driver, username, password, host, port, database name etc. in a YAML file and read it using `get()`. We have added the `config.yml` file used to store the credentials in the resources section of the learning management system as well as in the GitHub repo.
 
-```{r cred_5}
+```{r cred_5, eval=FALSE}
 # read configurations
 md <- config::get("mysql-dev")
 

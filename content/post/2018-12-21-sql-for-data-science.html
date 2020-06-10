@@ -72,58 +72,58 @@ If you want to fetch all the fields, use the following syntax.</p>
 <h4>Select Single Column</h4>
 <p>Let us begin by selecting the <code>device</code> field from the <code>ecom</code> table.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT device FROM ecom&quot;)</code></pre>
-<pre><code>##      device
-## 1    laptop
-## 2    tablet
-## 3    laptop
-## 4    tablet
-## 5    mobile
-## 6    laptop
-## 7    mobile
-## 8    mobile
-## 9    mobile
-## 10   mobile
-## 11   laptop
-## 12   tablet
-## 13   mobile
-## 14   tablet
-## 15   mobile
-## 16   laptop
-## 17   tablet
-## 18   tablet
-## 19   tablet
-## 20   tablet
-## 21   laptop
-## 22   mobile
-## 23   mobile
-## 24   laptop
-## 25   laptop
-## 26   laptop
-## 27   tablet
-## 28   laptop
-## 29   mobile
-## 30   mobile
-## 31   tablet
-## 32   mobile
-## 33   laptop
-## 34   tablet
-## 35   mobile
-## 36   mobile
-## 37   laptop
-## 38   mobile
-## 39   mobile
-## 40   mobile
-## 41   mobile
-## 42   mobile
-## 43   laptop
-## 44   tablet
-## 45   laptop
-## 46   tablet
-## 47   mobile
-## 48   laptop
-## 49   mobile
-## 50   tablet
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 950 rows ]</code></pre>
+<pre><code>##    device
+## 1  laptop
+## 2  tablet
+## 3  laptop
+## 4  tablet
+## 5  mobile
+## 6  laptop
+## 7  mobile
+## 8  mobile
+## 9  mobile
+## 10 mobile
+## 11 laptop
+## 12 tablet
+## 13 mobile
+## 14 tablet
+## 15 mobile
+## 16 laptop
+## 17 tablet
+## 18 tablet
+## 19 tablet
+## 20 tablet
+## 21 laptop
+## 22 mobile
+## 23 mobile
+## 24 laptop
+## 25 laptop
+## 26 laptop
+## 27 tablet
+## 28 laptop
+## 29 mobile
+## 30 mobile
+## 31 tablet
+## 32 mobile
+## 33 laptop
+## 34 tablet
+## 35 mobile
+## 36 mobile
+## 37 laptop
+## 38 mobile
+## 39 mobile
+## 40 mobile
+## 41 mobile
+## 42 mobile
+## 43 laptop
+## 44 tablet
+## 45 laptop
+## 46 tablet
+## 47 mobile
+## 48 laptop
+## 49 mobile
+## 50 tablet
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 950 rows ]</code></pre>
 </div>
 <div id="select-multiple-columns" class="section level4">
 <h4>Select Multiple Columns</h4>
@@ -134,57 +134,57 @@ If you want to fetch all the fields, use the following syntax.</p>
 <li><code>purchase</code></li>
 </ul>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT referrer, device, purchase  FROM ecom&quot;)</code></pre>
-<pre><code>##      referrer device purchase
-## 1      google laptop        0
-## 2       yahoo tablet        0
-## 3      direct laptop        0
-## 4        bing tablet        1
-## 5       yahoo mobile        0
-## 6       yahoo laptop        0
-## 7       yahoo mobile        0
-## 8      direct mobile        0
-## 9        bing mobile        0
-## 10     google mobile        0
-## 11     direct laptop        0
-## 12     direct tablet        0
-## 13     direct mobile        1
-## 14      yahoo tablet        0
-## 15      yahoo mobile        0
-## 16       bing laptop        0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 984 rows ]</code></pre>
+<pre><code>##    referrer device purchase
+## 1    google laptop        0
+## 2     yahoo tablet        0
+## 3    direct laptop        0
+## 4      bing tablet        1
+## 5     yahoo mobile        0
+## 6     yahoo laptop        0
+## 7     yahoo mobile        0
+## 8    direct mobile        0
+## 9      bing mobile        0
+## 10   google mobile        0
+## 11   direct laptop        0
+## 12   direct tablet        0
+## 13   direct mobile        1
+## 14    yahoo tablet        0
+## 15    yahoo mobile        0
+## 16     bing laptop        0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 984 rows ]</code></pre>
 </div>
 <div id="select-all-columns" class="section level4">
 <h4>Select All Columns</h4>
 <p>Select all the fields from the <code>ecom</code> table.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * FROM ecom&quot;)</code></pre>
-<pre><code>##        id referrer device bouncers n_visit n_pages duration
-## 1       1   google laptop        1      10       1      693
-## 2       2    yahoo tablet        1       9       1      459
-## 3       3   direct laptop        1       0       1      996
-## 4       4     bing tablet        0       3      18      468
-##                               country purchase order_items order_value
-## 1                      Czech Republic        0           0           0
-## 2                               Yemen        0           0           0
-## 3                              Brazil        0           0           0
-## 4                               China        1           6         434
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 996 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration        country purchase
+## 1  1   google laptop        1      10       1      693 Czech Republic        0
+## 2  2    yahoo tablet        1       9       1      459          Yemen        0
+## 3  3   direct laptop        1       0       1      996         Brazil        0
+## 4  4     bing tablet        0       3      18      468          China        1
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           6         434
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 996 rows ]</code></pre>
 </div>
 <div id="limit" class="section level4">
 <h4>Limit</h4>
 <p>If you have a large table with thousands of rows, returning all the records
 will take time. Use LIMIT to specify the number of records to return.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * FROM ecom limit 10&quot;)</code></pre>
-<pre><code>##    id referrer device bouncers n_visit n_pages duration        country
-## 1   1   google laptop        1      10       1      693 Czech Republic
-## 2   2    yahoo tablet        1       9       1      459          Yemen
-## 3   3   direct laptop        1       0       1      996         Brazil
-## 4   4     bing tablet        0       3      18      468          China
-##    purchase order_items order_value
-## 1         0           0           0
-## 2         0           0           0
-## 3         0           0           0
-## 4         1           6         434
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 6 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration        country purchase
+## 1  1   google laptop        1      10       1      693 Czech Republic        0
+## 2  2    yahoo tablet        1       9       1      459          Yemen        0
+## 3  3   direct laptop        1       0       1      996         Brazil        0
+## 4  4     bing tablet        0       3      18      468          China        1
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           6         434
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 6 rows ]</code></pre>
 </div>
 <div id="distinct" class="section level4">
 <h4>Distinct</h4>
@@ -215,33 +215,33 @@ is greater than 300.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE duration &gt; 300&quot;)</code></pre>
-<pre><code>##      id referrer device bouncers n_visit n_pages duration
-## 1     1   google laptop        1      10       1      693
-## 2     2    yahoo tablet        1       9       1      459
-## 3     3   direct laptop        1       0       1      996
-## 4     4     bing tablet        0       3      18      468
-##                              country purchase order_items order_value
-## 1                     Czech Republic        0           0           0
-## 2                              Yemen        0           0           0
-## 3                             Brazil        0           0           0
-## 4                              China        1           6         434
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 472 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration        country purchase
+## 1  1   google laptop        1      10       1      693 Czech Republic        0
+## 2  2    yahoo tablet        1       9       1      459          Yemen        0
+## 3  3   direct laptop        1       0       1      996         Brazil        0
+## 4  4     bing tablet        0       3      18      468          China        1
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           6         434
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 472 rows ]</code></pre>
 <p>Let us filter data based on a text value. In the following example, we filter all rows
 from the <code>ecom</code> table where the <code>device</code> used is <code>mobile</code>.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE device == &#39;mobile&#39;&quot;)</code></pre>
-<pre><code>##       id referrer device bouncers n_visit n_pages duration
-## 1      5    yahoo mobile        1       9       1      955
-## 2      7    yahoo mobile        1      10       1       75
-## 3      8   direct mobile        1      10       1      908
-## 4      9     bing mobile        0       3      19      209
-##                   country purchase order_items order_value
-## 1                  Poland        0           0           0
-## 2              Bangladesh        0           0           0
-## 3               Indonesia        0           0           0
-## 4             Netherlands        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 340 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration     country purchase
+## 1  5    yahoo mobile        1       9       1      955      Poland        0
+## 2  7    yahoo mobile        1      10       1       75  Bangladesh        0
+## 3  8   direct mobile        1      10       1      908   Indonesia        0
+## 4  9     bing mobile        0       3      19      209 Netherlands        0
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 340 rows ]</code></pre>
 <div id="and-or-not" class="section level5">
 <h5>And, Or &amp; Not</h5>
 <p>The WHERE clause can be combined with other operators such as</p>
@@ -257,17 +257,17 @@ is greater than 100. We use AND to create multiple conditions.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE n_visit &gt; 3 AND duration &gt; 100&quot;)</code></pre>
-<pre><code>##       id referrer device bouncers n_visit n_pages duration
-## 1      1   google laptop        1      10       1      693
-## 2      2    yahoo tablet        1       9       1      459
-## 3      5    yahoo mobile        1       9       1      955
-## 4      6    yahoo laptop        0       5       5      135
-##                              country purchase order_items order_value
-## 1                     Czech Republic        0           0           0
-## 2                              Yemen        0           0           0
-## 3                             Poland        0           0           0
-## 4                       South Africa        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 509 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration        country purchase
+## 1  1   google laptop        1      10       1      693 Czech Republic        0
+## 2  2    yahoo tablet        1       9       1      459          Yemen        0
+## 3  5    yahoo mobile        1       9       1      955         Poland        0
+## 4  6    yahoo laptop        0       5       5      135   South Africa        0
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 509 rows ]</code></pre>
 <p>In the next example, we will use both AND &amp; OR. Our goal is to filter all
 rows from the <code>ecom</code> table that follow the below conditions:</p>
 <ul>
@@ -277,17 +277,17 @@ rows from the <code>ecom</code> table that follow the below conditions:</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom WHERE (n_visit == 5 OR n_visit == 3)  
                  AND (device = &#39;mobile&#39; OR device = &#39;tablet&#39;)&quot;)</code></pre>
-<pre><code>##      id referrer device bouncers n_visit n_pages duration
-## 1     4     bing tablet        0       3      18      468
-## 2     9     bing mobile        0       3      19      209
-## 3    14    yahoo tablet        0       5       8       80
-## 4    17     bing tablet        0       5      16      368
-##                   country purchase order_items order_value
-## 1                   China        1           6         434
-## 2             Netherlands        0           0           0
-## 3             Philippines        0           2         362
-## 4                    Peru        1           6        1049
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 130 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration     country purchase
+## 1  4     bing tablet        0       3      18      468       China        1
+## 2  9     bing mobile        0       3      19      209 Netherlands        0
+## 3 14    yahoo tablet        0       5       8       80 Philippines        0
+## 4 17     bing tablet        0       5      16      368        Peru        1
+##   order_items order_value
+## 1           6         434
+## 2           0           0
+## 3           2         362
+## 4           6        1049
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 130 rows ]</code></pre>
 </div>
 <div id="between" class="section level5">
 <h5>BETWEEN</h5>
@@ -297,17 +297,17 @@ the <code>ecom</code> table where the visit count is between 1 and 3, and the <c
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom
                  WHERE n_visit BETWEEN 1 AND 3 AND device = &#39;mobile&#39;&quot;)</code></pre>
-<pre><code>##     id referrer device bouncers n_visit n_pages duration
-## 1    9     bing mobile        0       3      19      209
-## 2   32   direct mobile        1       2       1      501
-## 3   36     bing mobile        0       1       1       25
-## 4   38    yahoo mobile        1       3       1      700
-##                  country purchase order_items order_value
-## 1            Netherlands        0           0           0
-## 2            El Salvador        0           0           0
-## 3                Ireland        0          10        1885
-## 4                 Canada        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 86 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration     country purchase
+## 1  9     bing mobile        0       3      19      209 Netherlands        0
+## 2 32   direct mobile        1       2       1      501 El Salvador        0
+## 3 36     bing mobile        0       1       1       25     Ireland        0
+## 4 38    yahoo mobile        1       3       1      700      Canada        0
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3          10        1885
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 86 rows ]</code></pre>
 </div>
 <div id="in" class="section level5">
 <h5>IN</h5>
@@ -318,17 +318,17 @@ we use the IN operator.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE n_visit IN (2, 4, 6, 8, 10)&quot;)</code></pre>
-<pre><code>##      id referrer device bouncers n_visit n_pages duration
-## 1     1   google laptop        1      10       1      693
-## 2     7    yahoo mobile        1      10       1       75
-## 3     8   direct mobile        1      10       1      908
-## 4    10   google mobile        1       6       1      208
-##                              country purchase order_items order_value
-## 1                     Czech Republic        0           0           0
-## 2                         Bangladesh        0           0           0
-## 3                          Indonesia        0           0           0
-## 4                     Czech Republic        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 443 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration        country purchase
+## 1  1   google laptop        1      10       1      693 Czech Republic        0
+## 2  7    yahoo mobile        1      10       1       75     Bangladesh        0
+## 3  8   direct mobile        1      10       1      908      Indonesia        0
+## 4 10   google mobile        1       6       1      208 Czech Republic        0
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           0           0
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 443 rows ]</code></pre>
 </div>
 <div id="is-null" class="section level5">
 <h5>IS NULL</h5>
@@ -337,9 +337,8 @@ has NULL values.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE device IS NULL&quot;)</code></pre>
-<pre><code>##  [1] id          referrer    device      bouncers    n_visit    
-##  [6] n_pages     duration    country     purchase    order_items
-## [11] order_value
+<pre><code>##  [1] id          referrer    device      bouncers    n_visit     n_pages    
+##  [7] duration    country     purchase    order_items order_value
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
 <div id="like" class="section level5">
@@ -353,17 +352,17 @@ has NULL values.</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE country LIKE &#39;P%&#39;&quot;)</code></pre>
-<pre><code>##      id referrer device bouncers n_visit n_pages duration
-## 1     5    yahoo mobile        1       9       1      955
-## 2    14    yahoo tablet        0       5       8       80
-## 3    17     bing tablet        0       5      16      368
-## 4    43     bing laptop        1       0       1      456
-##                   country purchase order_items order_value
-## 1                  Poland        0           0           0
-## 2             Philippines        0           2         362
-## 3                    Peru        1           6        1049
-## 4                Portugal        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 135 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration     country purchase
+## 1  5    yahoo mobile        1       9       1      955      Poland        0
+## 2 14    yahoo tablet        0       5       8       80 Philippines        0
+## 3 17     bing tablet        0       5      16      368        Peru        1
+## 4 43     bing laptop        1       0       1      456    Portugal        0
+##   order_items order_value
+## 1           0           0
+## 2           2         362
+## 3           6        1049
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 135 rows ]</code></pre>
 <p>Let us look at another example where we filter all rows from the <code>ecom</code> table where the name of the
 country should follow the below conditions:</p>
 <ul>
@@ -374,17 +373,17 @@ country should follow the below conditions:</p>
 <pre class="r"><code>dbGetQuery(con, &quot;SELECT * 
                  FROM ecom 
                  WHERE country LIKE &#39;_o%&#39;&quot;)</code></pre>
-<pre><code>##      id referrer device bouncers n_visit n_pages duration
-## 1     5    yahoo mobile        1       9       1      955
-## 2     6    yahoo laptop        0       5       5      135
-## 3    19   social tablet        0       7      10      290
-## 4    30    yahoo mobile        0       8       9      225
-##                    country purchase order_items order_value
-## 1                   Poland        0           0           0
-## 2             South Africa        0           0           0
-## 3                 Colombia        1           9        1304
-## 4                 Colombia        0           0           0
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 117 rows ]</code></pre>
+<pre><code>##   id referrer device bouncers n_visit n_pages duration      country purchase
+## 1  5    yahoo mobile        1       9       1      955       Poland        0
+## 2  6    yahoo laptop        0       5       5      135 South Africa        0
+## 3 19   social tablet        0       7      10      290     Colombia        1
+## 4 30    yahoo mobile        0       8       9      225     Colombia        0
+##   order_items order_value
+## 1           0           0
+## 2           0           0
+## 3           9        1304
+## 4           0           0
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 117 rows ]</code></pre>
 </div>
 </div>
 <div id="summary" class="section level3">

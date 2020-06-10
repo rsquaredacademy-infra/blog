@@ -95,7 +95,7 @@ values over 0.30 are sought after.</p>
 <pre class="r"><code>blr_woe_iv(bank_marketing, job, y)</code></pre>
 <pre><code>##                                Weight of Evidence                                
 ## --------------------------------------------------------------------------------
-##    levels        0s_count    1s_count    0s_dist    1s_dist        woe      iv   
+##    levels        count_0s    count_1s    dist_0s    dist_1s        woe      iv   
 ## --------------------------------------------------------------------------------
 ##  management        809         130          0.20       0.25      -0.22     0.01  
 ##  technician        682          79          0.17       0.15       0.11     0.00  
@@ -132,7 +132,7 @@ variables using <code>blr_woe_iv_stats()</code>.</p>
 ## 
 ##                                Weight of Evidence                                
 ## --------------------------------------------------------------------------------
-##    levels        0s_count    1s_count    0s_dist    1s_dist        woe      iv   
+##    levels        count_0s    count_1s    dist_0s    dist_1s        woe      iv   
 ## --------------------------------------------------------------------------------
 ##  management        809         130          0.20       0.25      -0.22     0.01  
 ##  technician        682          79          0.17       0.15       0.11     0.00  
@@ -160,7 +160,7 @@ variables using <code>blr_woe_iv_stats()</code>.</p>
 ## 
 ##                             Weight of Evidence                              
 ## ---------------------------------------------------------------------------
-##  levels     0s_count    1s_count    0s_dist    1s_dist        woe      iv   
+##  levels     count_0s    count_1s    dist_0s    dist_1s        woe      iv   
 ## ---------------------------------------------------------------------------
 ## married       2467        273          0.62       0.53       0.15     0.01  
 ##  single       1079        191          0.27       0.37      -0.32     0.03  
@@ -179,7 +179,7 @@ variables using <code>blr_woe_iv_stats()</code>.</p>
 ## 
 ##                              Weight of Evidence                              
 ## ----------------------------------------------------------------------------
-##  levels      0s_count    1s_count    0s_dist    1s_dist        woe      iv   
+##  levels      count_0s    count_1s    dist_0s    dist_1s        woe      iv   
 ## ----------------------------------------------------------------------------
 ## tertiary       1104        195          0.28       0.38      -0.31     0.03  
 ## secondary      2121        231          0.53       0.45       0.17     0.01  
@@ -336,10 +336,6 @@ either of the following</p>
 <h4>Using Model</h4>
 <p>Let us look at the output generated from <code>blr_regress()</code>:</p>
 <pre class="r"><code>blr_regress(model)</code></pre>
-<pre><code>## - Creating model overview. 
-## - Creating response profile. 
-## - Extracting maximum likelihood estimates. 
-## - Estimating concordant and discordant pairs.</code></pre>
 <pre><code>##                              Model Overview                              
 ## ------------------------------------------------------------------------
 ## Data Set    Resp Var    Obs.    Df. Model    Df. Residual    Convergence 
@@ -399,10 +395,6 @@ increase in computation time when dealing with large data sets.</p>
 <p>Let us use the model formula and the data set to generate the above results.</p>
 <pre class="r"><code>blr_regress(y ~  age + duration + previous + housing + default +
              loan + poutcome + job + marital, data = bank_marketing)</code></pre>
-<pre><code>## - Creating model overview. 
-## - Creating response profile. 
-## - Extracting maximum likelihood estimates. 
-## - Estimating concordant and discordant pairs.</code></pre>
 <pre><code>##                              Model Overview                              
 ## ------------------------------------------------------------------------
 ## Data Set    Resp Var    Obs.    Df. Model    Df. Residual    Convergence 
@@ -526,20 +518,28 @@ cumulative number of observations and events are then computed for each
 decile/percentile. The lift curve is the created using the cumulative %
 population as the x-axis and the cumulative percentage of events as the y-axis.</p>
 <pre class="r"><code>blr_gains_table(model)</code></pre>
-<pre><code>## # A tibble: 10 x 12
-##    decile total   `1`   `0`    ks    tp    tn    fp    fn sensitivity
-##     &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
-##  1      1   452   256   196  44.6   256  3808   196   261        49.5
-##  2      2   452   128   324  61.3   384  3484   520   133        74.3
-##  3      3   452    62   390  63.5   446  3094   910    71        86.3
-##  4      4   452    31   421  59.0   477  2673  1331    40        92.3
-##  5      5   452    10   442  49.9   487  2231  1773    30        94.2
-##  6      6   452    14   438  41.7   501  1793  2211    16        96.9
-##  7      7   452     7   445  31.9   508  1348  2656     9        98.3
-##  8      8   452     4   448  21.5   512   900  3104     5        99.0
-##  9      9   452     3   449  10.9   515   451  3553     2        99.6
-## 10     10   453     2   451   0     517     0  4004     0       100  
-## # ... with 2 more variables: specificity &lt;dbl&gt;, accuracy &lt;dbl&gt;</code></pre>
+<pre><code>##    decile total   1   0       ks  tp   tn   fp  fn sensitivity specificity
+## 1       1   452 256 196 44.62134 256 3808  196 261    49.51644    95.10490
+## 2       2   452 128 324 61.28765 384 3484  520 133    74.27466    87.01299
+## 3       3   452  62 390 63.53965 446 3094  910  71    86.26692    77.27273
+## 4       4   452  31 421 59.02130 477 2673 1331  40    92.26306    66.75824
+## 5       5   452  10 442 49.91657 487 2231 1773  30    94.19729    55.71928
+## 6       6   452  14 438 41.68544 501 1793 2211  16    96.90522    44.78022
+## 7       7   452   7 445 31.92552 508 1348 2656   9    98.25919    33.66633
+## 8       8   452   4 448 21.51040 512  900 3104   5    99.03288    22.47752
+## 9       9   452   3 449 10.87689 515  451 3553   2    99.61315    11.26374
+## 10     10   453   2 451  0.00000 517    0 4004   0   100.00000     0.00000
+##    accuracy
+## 1  89.89162
+## 2  85.55629
+## 3  78.30126
+## 4  69.67485
+## 5  60.11944
+## 6  50.74099
+## 7  41.05286
+## 8  31.23203
+## 9  21.36695
+## 10 11.43552</code></pre>
 <div id="lift-chart" class="section level4">
 <h4>Lift Chart</h4>
 <pre class="r"><code>model %&gt;%

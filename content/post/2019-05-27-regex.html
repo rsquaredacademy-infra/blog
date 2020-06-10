@@ -453,10 +453,9 @@ following pattern:</p>
 </ul>
 <p><img src="/img/regex_quantifier_question_mark.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(.)?data&quot;, value = TRUE)</code></pre>
-<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;dplyr.teradata&quot;  
-##  [4] &quot;engsoccerdata&quot;    &quot;historydata&quot;      &quot;icpsrdata&quot;       
-##  [7] &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;   &quot;qrmdata&quot;         
-## [10] &quot;rdatacite&quot;        &quot;rdataretriever&quot;   &quot;rqdatatable&quot;     
+<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;dplyr.teradata&quot;   &quot;engsoccerdata&quot;   
+##  [5] &quot;historydata&quot;      &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;  
+##  [9] &quot;qrmdata&quot;          &quot;rdatacite&quot;        &quot;rdataretriever&quot;   &quot;rqdatatable&quot;     
 ## [13] &quot;smartdata&quot;</code></pre>
 <p>In the below example, we are looking for package names that include the
 following pattern:</p>
@@ -467,9 +466,8 @@ following pattern:</p>
 </ul>
 <p><img src="/img/regex_quantifier_question_mark_2.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(\\.)?data&quot;, value = TRUE)</code></pre>
-<pre><code>## [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;   
-## [4] &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;  
-## [7] &quot;rdatacite&quot;        &quot;rdataretriever&quot;</code></pre>
+<pre><code>## [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;    &quot;icpsrdata&quot;       
+## [5] &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;   &quot;rdatacite&quot;        &quot;rdataretriever&quot;</code></pre>
 <p>In the next example, we are looking for package names that include the
 following pattern:</p>
 <ul>
@@ -504,10 +502,9 @@ following pattern:</p>
 </ul>
 <p><img src="/img/regex_quantifier_question_mark_4.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = data_pkgs, pattern = &quot;r(\\.|m|y|q)?data&quot;, value = TRUE)</code></pre>
-<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;   
-##  [4] &quot;historydata&quot;      &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;   
-##  [7] &quot;prioritizrdata&quot;   &quot;qrmdata&quot;          &quot;rdatacite&quot;       
-## [10] &quot;rdataretriever&quot;   &quot;rqdatatable&quot;</code></pre>
+<pre><code>##  [1] &quot;cluster.datasets&quot; &quot;ctrdata&quot;          &quot;engsoccerdata&quot;    &quot;historydata&quot;     
+##  [5] &quot;icpsrdata&quot;        &quot;mldr.datasets&quot;    &quot;prioritizrdata&quot;   &quot;qrmdata&quot;         
+##  [9] &quot;rdatacite&quot;        &quot;rdataretriever&quot;   &quot;rqdatatable&quot;</code></pre>
 </div>
 <div id="asterik-symbol" class="section level4">
 <h4>Asterik Symbol</h4>
@@ -598,8 +595,8 @@ include the following pattern:</p>
 </ul>
 <p><img src="/img/regex_quantifier_match_between_canva.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = plot_pkgs, pattern = &quot;(t){1,3}plot&quot;, value = TRUE)</code></pre>
-<pre><code>## [1] &quot;forestplot&quot;   &quot;limitplot&quot;    &quot;nhstplot&quot;     &quot;productplots&quot;
-## [5] &quot;tttplot&quot;      &quot;txtplot&quot;</code></pre>
+<pre><code>## [1] &quot;forestplot&quot;   &quot;limitplot&quot;    &quot;nhstplot&quot;     &quot;productplots&quot; &quot;tttplot&quot;     
+## [6] &quot;txtplot&quot;</code></pre>
 </div>
 </div>
 <div id="or" class="section level2">
@@ -630,22 +627,18 @@ example where we are looking for package names that begin with the letter
 include a digit.</p>
 <p><img src="/img/regex_match_digit.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = r_packages, pattern = &quot;\\d&quot;, value = TRUE)[1:50]</code></pre>
-<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;           
-##  [4] &quot;Ac3net&quot;          &quot;acm4r&quot;           &quot;ade4&quot;           
-##  [7] &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;         &quot;ALA4R&quot;          
-## [10] &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
-## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;        
-## [16] &quot;APML0&quot;           &quot;aprean3&quot;         &quot;AR1seg&quot;         
-## [19] &quot;arena2r&quot;         &quot;arf3DS4&quot;         &quot;argon2&quot;         
-## [22] &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
-## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;            
-## [28] &quot;b6e6rl&quot;          &quot;base2grob&quot;       &quot;base64&quot;         
-## [31] &quot;base64enc&quot;       &quot;base64url&quot;       &quot;BaTFLED3D&quot;      
-## [34] &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
-## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;          
-## [40] &quot;BHH2&quot;            &quot;bikeshare14&quot;     &quot;bio3d&quot;          
-## [43] &quot;biomod2&quot;         &quot;Bios2cor&quot;        &quot;bios2mds&quot;       
-## [46] &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
+<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;            &quot;Ac3net&quot;         
+##  [5] &quot;acm4r&quot;           &quot;ade4&quot;            &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;        
+##  [9] &quot;ALA4R&quot;           &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
+## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;         &quot;APML0&quot;          
+## [17] &quot;aprean3&quot;         &quot;AR1seg&quot;          &quot;arena2r&quot;         &quot;arf3DS4&quot;        
+## [21] &quot;argon2&quot;          &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
+## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;             &quot;b6e6rl&quot;         
+## [29] &quot;base2grob&quot;       &quot;base64&quot;          &quot;base64enc&quot;       &quot;base64url&quot;      
+## [33] &quot;BaTFLED3D&quot;       &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
+## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;           &quot;BHH2&quot;           
+## [41] &quot;bikeshare14&quot;     &quot;bio3d&quot;           &quot;biomod2&quot;         &quot;Bios2cor&quot;       
+## [45] &quot;bios2mds&quot;        &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
 ## [49] &quot;Bolstad2&quot;        &quot;BradleyTerry2&quot;</code></pre>
 <pre class="r"><code># invert
 grep(x = r_packages, pattern = &quot;\\d&quot;, value = TRUE, invert = TRUE)[1:50]</code></pre>
@@ -743,8 +736,7 @@ word characters.</p>
 <pre class="r"><code>grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
            &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
      pattern = &quot;\\w&quot;, value = TRUE)</code></pre>
-<pre><code>## [1] &quot;R536365&quot;  &quot;R536671&quot;  &quot;R536915&quot;  &quot;R5362@87&quot; &quot;53+67$41&quot; &quot;R536893&quot; 
-## [7] &quot;536#999&quot;</code></pre>
+<pre><code>## [1] &quot;R536365&quot;  &quot;R536671&quot;  &quot;R536915&quot;  &quot;R5362@87&quot; &quot;53+67$41&quot; &quot;R536893&quot;  &quot;536#999&quot;</code></pre>
 <pre class="r"><code># invert
 grep(x = c(&quot;R536365&quot;, &quot;%+$!#@?&quot;, &quot;R536671&quot;, &quot;R536915&quot;, &quot;$%+#!@?&quot;, &quot;R5362@87&quot;,
            &quot;53+67$41&quot;, &quot;R536893&quot;, &quot;@$+%#!&quot;, &quot;536#999&quot;), 
@@ -842,26 +834,21 @@ beginning or in the middle but not at the end. Suffix <code>\\B</code> to <code>
 answer this question.</p>
 <p><img src="/img/regex_word_boundary_4.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grep(x = r_packages, pattern = &quot;stat\\B&quot;, value = TRUE)</code></pre>
-<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;       
-##  [4] &quot;cumstats&quot;         &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot;
-##  [7] &quot;dbstats&quot;          &quot;descstatsr&quot;       &quot;DistatisR&quot;       
-## [10] &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
-## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;         
-## [16] &quot;getmstatistic&quot;    &quot;ggstatsplot&quot;      &quot;groupedstats&quot;    
-## [19] &quot;haplo.stats&quot;      &quot;hydrostats&quot;       &quot;labstatR&quot;        
-## [22] &quot;labstats&quot;         &quot;learnstats&quot;       &quot;mlbstats&quot;        
-## [25] &quot;mstate&quot;           &quot;multistate&quot;       &quot;multistateutils&quot; 
-## [28] &quot;ohtadstats&quot;       &quot;orderstats&quot;       &quot;p3state.msm&quot;     
-## [31] &quot;PRISMAstatement&quot;  &quot;raustats&quot;         &quot;readstata13&quot;     
-## [34] &quot;realestateDK&quot;     &quot;restatapi&quot;        &quot;rstatscn&quot;        
-## [37] &quot;runstats&quot;         &quot;scanstatistics&quot;   &quot;sjstats&quot;         
-## [40] &quot;statar&quot;           &quot;statcheck&quot;        &quot;statebins&quot;       
-## [43] &quot;states&quot;           &quot;statGraph&quot;        &quot;stationery&quot;      
-## [46] &quot;statip&quot;           &quot;statmod&quot;          &quot;statnet&quot;         
-## [49] &quot;statnet.common&quot;   &quot;statnetWeb&quot;       &quot;statprograms&quot;    
-## [52] &quot;statquotes&quot;       &quot;stats19&quot;          &quot;statsDK&quot;         
-## [55] &quot;statsr&quot;           &quot;statVisual&quot;       &quot;TDAstats&quot;        
-## [58] &quot;tidystats&quot;        &quot;tigerstats&quot;       &quot;tradestatistics&quot; 
+<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;        &quot;cumstats&quot;        
+##  [5] &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot; &quot;dbstats&quot;          &quot;descstatsr&quot;      
+##  [9] &quot;DistatisR&quot;        &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
+## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;          &quot;getmstatistic&quot;   
+## [17] &quot;ggstatsplot&quot;      &quot;groupedstats&quot;     &quot;haplo.stats&quot;      &quot;hydrostats&quot;      
+## [21] &quot;labstatR&quot;         &quot;labstats&quot;         &quot;learnstats&quot;       &quot;mlbstats&quot;        
+## [25] &quot;mstate&quot;           &quot;multistate&quot;       &quot;multistateutils&quot;  &quot;ohtadstats&quot;      
+## [29] &quot;orderstats&quot;       &quot;p3state.msm&quot;      &quot;PRISMAstatement&quot;  &quot;raustats&quot;        
+## [33] &quot;readstata13&quot;      &quot;realestateDK&quot;     &quot;restatapi&quot;        &quot;rstatscn&quot;        
+## [37] &quot;runstats&quot;         &quot;scanstatistics&quot;   &quot;sjstats&quot;          &quot;statar&quot;          
+## [41] &quot;statcheck&quot;        &quot;statebins&quot;        &quot;states&quot;           &quot;statGraph&quot;       
+## [45] &quot;stationery&quot;       &quot;statip&quot;           &quot;statmod&quot;          &quot;statnet&quot;         
+## [49] &quot;statnet.common&quot;   &quot;statnetWeb&quot;       &quot;statprograms&quot;     &quot;statquotes&quot;      
+## [53] &quot;stats19&quot;          &quot;statsDK&quot;          &quot;statsr&quot;           &quot;statVisual&quot;      
+## [57] &quot;TDAstats&quot;         &quot;tidystats&quot;        &quot;tigerstats&quot;       &quot;tradestatistics&quot; 
 ## [61] &quot;unsystation&quot;      &quot;USGSstates2k&quot;     &quot;wbstats&quot;</code></pre>
 <p>Prefix and suffix <code>\\B</code> to <code>stat</code> to look at package names that include the
 string <code>stat</code> but neither in the beginning nor in the end.</p>
@@ -870,21 +857,18 @@ string <code>stat</code> but neither in the beginning nor in the end.</p>
 two word characters. Those examples we showed in the case of <code>\\b</code> where it
 was surrounded by a dot do not hold here.</p>
 <pre class="r"><code>grep(x = r_packages, pattern = &quot;\\Bstat\\B&quot;, value = TRUE)</code></pre>
-<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;       
-##  [4] &quot;cumstats&quot;         &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot;
-##  [7] &quot;dbstats&quot;          &quot;descstatsr&quot;       &quot;DistatisR&quot;       
-## [10] &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
-## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;         
-## [16] &quot;getmstatistic&quot;    &quot;ggstatsplot&quot;      &quot;groupedstats&quot;    
-## [19] &quot;hydrostats&quot;       &quot;labstatR&quot;         &quot;labstats&quot;        
-## [22] &quot;learnstats&quot;       &quot;mlbstats&quot;         &quot;mstate&quot;          
-## [25] &quot;multistate&quot;       &quot;multistateutils&quot;  &quot;ohtadstats&quot;      
-## [28] &quot;orderstats&quot;       &quot;p3state.msm&quot;      &quot;PRISMAstatement&quot; 
-## [31] &quot;raustats&quot;         &quot;readstata13&quot;      &quot;realestateDK&quot;    
-## [34] &quot;restatapi&quot;        &quot;rstatscn&quot;         &quot;runstats&quot;        
-## [37] &quot;scanstatistics&quot;   &quot;sjstats&quot;          &quot;TDAstats&quot;        
-## [40] &quot;tidystats&quot;        &quot;tigerstats&quot;       &quot;tradestatistics&quot; 
-## [43] &quot;unsystation&quot;      &quot;USGSstates2k&quot;     &quot;wbstats&quot;</code></pre>
+<pre><code>##  [1] &quot;bigstatsr&quot;        &quot;biostat3&quot;         &quot;compstatr&quot;        &quot;cumstats&quot;        
+##  [5] &quot;curstatCI&quot;        &quot;CytobankAPIstats&quot; &quot;dbstats&quot;          &quot;descstatsr&quot;      
+##  [9] &quot;DistatisR&quot;        &quot;dlstats&quot;          &quot;dostats&quot;          &quot;estatapi&quot;        
+## [13] &quot;freestats&quot;        &quot;geostatsp&quot;        &quot;gestate&quot;          &quot;getmstatistic&quot;   
+## [17] &quot;ggstatsplot&quot;      &quot;groupedstats&quot;     &quot;hydrostats&quot;       &quot;labstatR&quot;        
+## [21] &quot;labstats&quot;         &quot;learnstats&quot;       &quot;mlbstats&quot;         &quot;mstate&quot;          
+## [25] &quot;multistate&quot;       &quot;multistateutils&quot;  &quot;ohtadstats&quot;       &quot;orderstats&quot;      
+## [29] &quot;p3state.msm&quot;      &quot;PRISMAstatement&quot;  &quot;raustats&quot;         &quot;readstata13&quot;     
+## [33] &quot;realestateDK&quot;     &quot;restatapi&quot;        &quot;rstatscn&quot;         &quot;runstats&quot;        
+## [37] &quot;scanstatistics&quot;   &quot;sjstats&quot;          &quot;TDAstats&quot;         &quot;tidystats&quot;       
+## [41] &quot;tigerstats&quot;       &quot;tradestatistics&quot;  &quot;unsystation&quot;      &quot;USGSstates2k&quot;    
+## [45] &quot;wbstats&quot;</code></pre>
 </div>
 <div id="character-classes" class="section level2">
 <h2>Character Classes</h2>
@@ -906,22 +890,18 @@ grep(x = top_downloads, pattern = &quot;[aeiou]&quot;, value = TRUE)</code></pre
 ## [6] &quot;pillar&quot;     &quot;cli&quot;        &quot;data.table&quot;</code></pre>
 <pre class="r"><code># package names that include a number
 grep(x = r_packages, pattern = &quot;[0-9]&quot;, value = TRUE)[1:50]</code></pre>
-<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;           
-##  [4] &quot;Ac3net&quot;          &quot;acm4r&quot;           &quot;ade4&quot;           
-##  [7] &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;         &quot;ALA4R&quot;          
-## [10] &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
-## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;        
-## [16] &quot;APML0&quot;           &quot;aprean3&quot;         &quot;AR1seg&quot;         
-## [19] &quot;arena2r&quot;         &quot;arf3DS4&quot;         &quot;argon2&quot;         
-## [22] &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
-## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;            
-## [28] &quot;b6e6rl&quot;          &quot;base2grob&quot;       &quot;base64&quot;         
-## [31] &quot;base64enc&quot;       &quot;base64url&quot;       &quot;BaTFLED3D&quot;      
-## [34] &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
-## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;          
-## [40] &quot;BHH2&quot;            &quot;bikeshare14&quot;     &quot;bio3d&quot;          
-## [43] &quot;biomod2&quot;         &quot;Bios2cor&quot;        &quot;bios2mds&quot;       
-## [46] &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
+<pre><code>##  [1] &quot;A3&quot;              &quot;ABCp2&quot;           &quot;abf2&quot;            &quot;Ac3net&quot;         
+##  [5] &quot;acm4r&quot;           &quot;ade4&quot;            &quot;ade4TkGUI&quot;       &quot;AdvDif4&quot;        
+##  [9] &quot;ALA4R&quot;           &quot;alphashape3d&quot;    &quot;alr3&quot;            &quot;alr4&quot;           
+## [13] &quot;ANN2&quot;            &quot;aods3&quot;           &quot;aplore3&quot;         &quot;APML0&quot;          
+## [17] &quot;aprean3&quot;         &quot;AR1seg&quot;          &quot;arena2r&quot;         &quot;arf3DS4&quot;        
+## [21] &quot;argon2&quot;          &quot;ARTP2&quot;           &quot;aster2&quot;          &quot;auth0&quot;          
+## [25] &quot;aws.ec2metadata&quot; &quot;aws.s3&quot;          &quot;B2Z&quot;             &quot;b6e6rl&quot;         
+## [29] &quot;base2grob&quot;       &quot;base64&quot;          &quot;base64enc&quot;       &quot;base64url&quot;      
+## [33] &quot;BaTFLED3D&quot;       &quot;BayClone2&quot;       &quot;BayesS5&quot;         &quot;bc3net&quot;         
+## [37] &quot;BCC1997&quot;         &quot;BDP2&quot;            &quot;BEQI2&quot;           &quot;BHH2&quot;           
+## [41] &quot;bikeshare14&quot;     &quot;bio3d&quot;           &quot;biomod2&quot;         &quot;Bios2cor&quot;       
+## [45] &quot;bios2mds&quot;        &quot;biostat3&quot;        &quot;bipartiteD3&quot;     &quot;bit64&quot;          
 ## [49] &quot;Bolstad2&quot;        &quot;BradleyTerry2&quot;</code></pre>
 <pre class="r"><code># package names that begin with a number
 grep(x = r_packages, pattern = &quot;^[0-9]&quot;, value = TRUE)</code></pre>

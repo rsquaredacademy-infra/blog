@@ -1,0 +1,70 @@
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{ if eq .URL "/" }}
+  <title>{{ .Site.Title }}</title>
+  <meta property="og:title" content="{{ .Site.Title }}">
+  <meta property="og:type" content="website">
+  <meta property="description" content="{{ .Site.Params.description }}">
+  <meta property="og:description" content="{{ .Site.Params.description }}">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/logo.jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="referrer" content="no-referrer">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://blog.rsquaredacademy.com/img/logo.jpeg" >
+  {{ else }}
+  {{ $defaultDescription := printf "Article posted by %s, on %s" .Params.author (.Date.Format "Monday, January 2nd, 2006") }}
+  <title>{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}</title>
+  <meta property="og:title" content="{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}">
+  <meta property="og:type" content="article">
+  <meta property="og:description" content="{{ .Description | default $defaultDescription }}">
+  <meta name="twitter:title" content="{{ .Title }}{{ with .Params.subtitle }} - {{ . }} {{ end }} - {{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Description | default $defaultDescription }}">
+  <meta name="twitter:domain" content="blog.rsquaredacademy.com">
+  <meta name="twitter:creator" content="@rsquaredacademy">
+  <meta name="twitter:site" content="@rsquaredacademy">
+
+    {{ if .Params.twitterImg }}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://blog.rsquaredacademy.com/{{ .Params.twitterImg }}" >
+    <meta name="twitter:image:width" content="300">
+    <meta name="twitter:image:height" content="300">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/{{ .Params.twitterImg }}" />
+    <meta property="og:image:width" content="1129" />
+    <meta property="og:image:height" content="1129" />
+    {{ else }}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="https://blog.rsquaredacademy.com/img/logo.jpeg" >
+    <meta name="twitter:image:width" content="300">
+    <meta name="twitter:image:height" content="300">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/logo.jpeg" />
+    <meta property="og:image:width" content="1129" />
+    <meta property="og:image:height" content="1129" />
+    {{ end }}
+      
+  <meta property="description" content="{{ .Description | default $defaultDescription }}">
+  <meta property="og:description" content="{{ .Description | default $defaultDescription }}">
+  {{ end }}
+
+{{ if .Keywords }}
+<meta property="keywords" content ="{{ delimit .Keywords ", " }}">
+{{ end }}
+
+<link rel="stylesheet" href="{{"css/github-gist.css" | absURL}}" rel="stylesheet" id="theme-stylesheet">
+<script src="{{ "js/highlight.pack.js" | absURL }}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="https://assets.digitalclimatestrike.net/widget.js" async></script>
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us15.list-manage.com","uuid":"00a5f99bc28388fc407bb2114","lid":"a7a9981dfc","uniqueMethods":true}) })</script>
+<link rel="stylesheet" href="https://unpkg.com/comicgen/dist/comicgen.min.css">
+<script async src="https://unpkg.com/comicgen"></script>
+
+{{ if .RSSLink }}
+<link href="{{ .RSSLink | relURL }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+{{ end }}
+{{ partial "head_highlightjs" . }}
+<link rel="stylesheet" href="{{ "css/fonts.css" | relURL }}" media="all">
+<link rel="stylesheet" href="{{ "css/main.css" | relURL }}" media="all">
+{{ range .Site.Params.customCSS }}
+<link rel="stylesheet" href="{{ . | relURL }}">
+{{ end }}
+{{ partial "head_custom" . }}

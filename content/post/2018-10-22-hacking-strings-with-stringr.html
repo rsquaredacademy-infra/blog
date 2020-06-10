@@ -53,20 +53,19 @@ library(readr)</code></pre>
 <pre class="r"><code>mockstring &lt;- read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/mock_strings.csv&#39;)
 mockstring</code></pre>
 <pre><code>## # A tibble: 1,000 x 12
-##       id image_url domain imageurl email filename phone address url  
-##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
-##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~
-##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~
-##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~
-##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~
-##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~
-##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~
-##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~
-##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~
-##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~
-## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~
-## # ... with 990 more rows, and 3 more variables: full_name &lt;chr&gt;,
-## #   currency &lt;chr&gt;, passwords &lt;chr&gt;</code></pre>
+##       id image_url domain imageurl email filename phone address url   full_name
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    
+##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~ Mufi Ruit
+##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~ Leese Fu~
+##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~ Blakelee~
+##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~ Terencio~
+##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~ Debee Mc~
+##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~ Fran Pai~
+##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~ Frasco B~
+##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~ Car Pont~
+##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~ Tades Ch~
+## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~ Wilton K~
+## # ... with 990 more rows, and 2 more variables: currency &lt;chr&gt;, passwords &lt;chr&gt;</code></pre>
 </div>
 <div id="data-dictionary" class="section level3">
 <h3>Data Dictionary</h3>
@@ -99,20 +98,19 @@ use a smaller sample in the examples.</p>
 <pre class="r"><code>mockdata &lt;- slice(mockstring, 1:10)
 mockdata</code></pre>
 <pre><code>## # A tibble: 10 x 12
-##       id image_url domain imageurl email filename phone address url  
-##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
-##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~
-##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~
-##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~
-##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~
-##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~
-##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~
-##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~
-##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~
-##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~
-## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~
-## # ... with 3 more variables: full_name &lt;chr&gt;, currency &lt;chr&gt;,
-## #   passwords &lt;chr&gt;</code></pre>
+##       id image_url domain imageurl email filename phone address url   full_name
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    
+##  1     1 https://~ addto~ http://~ mnew~ PedeMal~ 66-(~ 8 Anha~ http~ Mufi Ruit
+##  2     2 https://~ gmpg.~ http://~ mdan~ Loborti~ 351-~ 697 Ea~ http~ Leese Fu~
+##  3     3 https://~ samsu~ http://~ hgir~ CongueD~ 33-(~ 89 Dot~ http~ Blakelee~
+##  4     4 https://~ spoti~ http://~ pmcm~ Eleifen~ 86-(~ 98135 ~ http~ Terencio~
+##  5     5 https://~ wunde~ http://~ dris~ PurusPh~ 223-~ 7814 P~ http~ Debee Mc~
+##  6     6 https://~ alexa~ http://~ cphl~ Element~ 420-~ 4897 L~ http~ Fran Pai~
+##  7     7 https://~ googl~ http://~ kdod~ Mattis.~ 1-(7~ 53541 ~ http~ Frasco B~
+##  8     8 https://~ ed.gov http://~ vhou~ PurusEu~ 62-(~ 4819 H~ http~ Car Pont~
+##  9     9 https://~ jigsy~ http://~ rdik~ JustoEt~ 1-(6~ 68096 ~ http~ Tades Ch~
+## 10    10 https://~ jugem~ http://~ tdud~ Ante.ti~ 30-(~ 9595 S~ http~ Wilton K~
+## # ... with 2 more variables: currency &lt;chr&gt;, passwords &lt;chr&gt;</code></pre>
 <p><br></p>
 <p><img src="/img/str_count.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><br></p>
@@ -319,8 +317,8 @@ to extract the first and last name from the <code>full_name</code> column.</p>
 <pre><code>##  [1] &quot;Mufi&quot;     &quot;Leese&quot;    &quot;Blakelee&quot; &quot;Terencio&quot; &quot;Debee&quot;    &quot;Fran&quot;    
 ##  [7] &quot;Frasco&quot;   &quot;Car&quot;      &quot;Tades&quot;    &quot;Wilton&quot;</code></pre>
 <pre class="r"><code>word(mockdata$full_name, 2)</code></pre>
-<pre><code>##  [1] &quot;Ruit&quot;      &quot;Furmagier&quot; &quot;Wilshire&quot;  &quot;McIllrick&quot; &quot;McErlaine&quot;
-##  [6] &quot;Painten&quot;   &quot;Bowich&quot;    &quot;Ponten&quot;    &quot;Checcucci&quot; &quot;Kemmey&quot;</code></pre>
+<pre><code>##  [1] &quot;Ruit&quot;      &quot;Furmagier&quot; &quot;Wilshire&quot;  &quot;McIllrick&quot; &quot;McErlaine&quot; &quot;Painten&quot;  
+##  [7] &quot;Bowich&quot;    &quot;Ponten&quot;    &quot;Checcucci&quot; &quot;Kemmey&quot;</code></pre>
 <p>Alright, now let us apply what we have learned so far to our case study.</p>
 </div>
 <div id="extract-domain-name-from-email-ids" class="section level2">

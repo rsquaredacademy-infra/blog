@@ -84,34 +84,34 @@ devtools::install_github(&quot;rsquaredacademy/nse2r&quot;)</code></pre>
 <h4>Fetch Indices Quote</h4>
 <pre class="r"><code>nse_index_quote()</code></pre>
 <pre><code>## # A tibble: 55 x 4
-##    index_name        last_traded_price  change percent_change
-##    &lt;chr&gt;                         &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;
-##  1 NIFTY 50 Pre Open           12328.   -27.1          -0.22 
-##  2 NIFTY 50                    12371.    15.4           0.12 
-##  3 NIFTY NEXT 50               29009.    30.2           0.1  
-##  4 NIFTY100 LIQ 15              3794.   -11.2          -0.290
-##  5 NIFTY BANK                  31661.  -193.           -0.6  
-##  6 INDIA VIX                      14.4    0.24          1.67 
-##  7 NIFTY 100                   12486.    15.2           0.12 
-##  8 NIFTY 500                   10125.    15.4           0.15 
-##  9 NIFTY MIDCAP 100            18037.    52.1           0.290
-## 10 NIFTY MIDCAP 50              4978.     9.5           0.19 
+##    index_name        last_traded_price change percent_change
+##    &lt;chr&gt;                         &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;
+##  1 NIFTY 50 Pre Open           10073.   26.0            0.26
+##  2 NIFTY 50                    10116.   69.5            0.69
+##  3 NIFTY NEXT 50               25154.   -8.9           -0.04
+##  4 NIFTY100 LIQ 15              2587    17.3            0.67
+##  5 NIFTY BANK                  21100.  375.             1.81
+##  6 INDIA VIX                      29.4  -0.77          -2.54
+##  7 NIFTY 100                   10292.   60.4            0.59
+##  8 NIFTY 500                    8293.   55.2            0.67
+##  9 NIFTY MIDCAP 100            14342   173.             1.22
+## 10 NIFTY MIDCAP 50              3993.   52              1.32
 ## # ... with 45 more rows</code></pre>
 <pre class="r"><code># retain original column names as returned by NSE
 nse_index_quote(clean_names = FALSE)</code></pre>
 <pre><code>## # A tibble: 55 x 4
-##    name              lastPrice  change pChange
-##    &lt;chr&gt;                 &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1 NIFTY 50 Pre Open   12328.   -27.1   -0.22 
-##  2 NIFTY 50            12371.    15.4    0.12 
-##  3 NIFTY NEXT 50       29009.    30.2    0.1  
-##  4 NIFTY100 LIQ 15      3794.   -11.2   -0.290
-##  5 NIFTY BANK          31661.  -193.    -0.6  
-##  6 INDIA VIX              14.4    0.24   1.67 
-##  7 NIFTY 100           12486.    15.2    0.12 
-##  8 NIFTY 500           10125.    15.4    0.15 
-##  9 NIFTY MIDCAP 100    18037.    52.1    0.290
-## 10 NIFTY MIDCAP 50      4978.     9.5    0.19 
+##    name              lastPrice change pChange
+##    &lt;chr&gt;                 &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1 NIFTY 50 Pre Open   10073.   26.0     0.26
+##  2 NIFTY 50            10116.   69.5     0.69
+##  3 NIFTY NEXT 50       25154.   -8.9    -0.04
+##  4 NIFTY100 LIQ 15      2587    17.3     0.67
+##  5 NIFTY BANK          21100.  375.      1.81
+##  6 INDIA VIX              29.4  -0.77   -2.54
+##  7 NIFTY 100           10292.   60.4     0.59
+##  8 NIFTY 500            8293.   55.2     0.67
+##  9 NIFTY MIDCAP 100    14342   173.      1.22
+## 10 NIFTY MIDCAP 50      3993.   52       1.32
 ## # ... with 45 more rows</code></pre>
 </div>
 <div id="top-gainers-for-the-last-trading-session." class="section level4">
@@ -120,72 +120,71 @@ nse_index_quote(clean_names = FALSE)</code></pre>
 <pre><code>## # A tibble: 10 x 12
 ##    symbol series last_corp_annou~ last_corp_annou~ open_price high_price
 ##    &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;           &lt;chr&gt;                 &lt;dbl&gt;      &lt;dbl&gt;
-##  1 BHART~ EQ     2019-04-23       Rights 19:67 @ ~       475.       499.
-##  2 RELIA~ EQ     2019-08-02       Annual General ~      1554.      1572.
-##  3 HEROM~ EQ     2019-07-16       Annual General ~      2445       2475.
-##  4 WIPRO  EQ     2020-01-24       Interim Dividen~       252        254.
-##  5 M&amp;M    EQ     2019-07-18       Annual General ~       567.       574.
-##  6 NESTL~ EQ     2019-12-10       Interim Dividen~     15399      15600 
-##  7 DRRED~ EQ     2019-07-15       Annual General ~      2944.      2990 
-##  8 UPL    EQ     2019-07-02       Bonus 1:2              590.       597.
-##  9 EICHE~ EQ     2019-07-24       Annual General ~     21509.     21770 
-## 10 ULTRA~ EQ     2019-07-10       Annual General ~      4440       4522.
+##  1 INDUS~ EQ     2019-08-08       Annual General ~       464        510.
+##  2 HINDA~ EQ     2019-08-14       Annual General ~       144.       148 
+##  3 AXISB~ EQ     2019-07-04       Annual General ~       422.       433.
+##  4 SHREE~ EQ     2020-02-24       Interim Dividen~     21171.     21611.
+##  5 KOTAK~ EQ     2019-07-12       Annual General ~      1304.      1344.
+##  6 RELIA~ EQ     2020-05-13       Rights 1:15 @ P~      1543.      1580.
+##  7 SBIN   EQ     2018-06-15       Annual General ~       185.       189 
+##  8 ICICI~ EQ     2019-07-22       Annual General ~       349.       357.
+##  9 HDFC   EQ     2020-07-09       Annual General ~      1784       1820 
+## 10 TCS    EQ     2020-06-03       Dividend - Rs 6~      2077.      2132 
 ## # ... with 6 more variables: low_price &lt;dbl&gt;, last_traded_price &lt;dbl&gt;,
 ## #   prev_close_price &lt;dbl&gt;, percent_change &lt;dbl&gt;, traded_quantity &lt;dbl&gt;,
 ## #   turnover_in_lakhs &lt;dbl&gt;</code></pre>
 <pre class="r"><code># retain original column names as returned by NSE
 nse_stock_top_gainers(clean_names = FALSE)</code></pre>
 <pre><code>## # A tibble: 10 x 12
-##    symbol series lastCorpAnnounc~ lastCorpAnnounc~ openPrice highPrice
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;           &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;
-##  1 BHART~ EQ     2019-04-23       Rights 19:67 @ ~      475.      499.
-##  2 RELIA~ EQ     2019-08-02       Annual General ~     1554.     1572.
-##  3 HEROM~ EQ     2019-07-16       Annual General ~     2445      2475.
-##  4 WIPRO  EQ     2020-01-24       Interim Dividen~      252       254.
-##  5 M&amp;M    EQ     2019-07-18       Annual General ~      567.      574.
-##  6 NESTL~ EQ     2019-12-10       Interim Dividen~    15399     15600 
-##  7 DRRED~ EQ     2019-07-15       Annual General ~     2944.     2990 
-##  8 UPL    EQ     2019-07-02       Bonus 1:2             590.      597.
-##  9 EICHE~ EQ     2019-07-24       Annual General ~    21509.    21770 
-## 10 ULTRA~ EQ     2019-07-10       Annual General ~     4440      4522.
-## # ... with 6 more variables: lowPrice &lt;dbl&gt;, ltp &lt;dbl&gt;,
-## #   previousPrice &lt;dbl&gt;, netPrice &lt;dbl&gt;, tradedQuantity &lt;dbl&gt;,
-## #   turnoverInLakhs &lt;dbl&gt;</code></pre>
+##    symbol series lastCorpAnnounc~ lastCorpAnnounc~ openPrice highPrice lowPrice
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;           &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 INDUS~ EQ     2019-08-08       Annual General ~      464       510.     463.
+##  2 HINDA~ EQ     2019-08-14       Annual General ~      144.      148      142.
+##  3 AXISB~ EQ     2019-07-04       Annual General ~      422.      433.     415.
+##  4 SHREE~ EQ     2020-02-24       Interim Dividen~    21171.    21611.   21150.
+##  5 KOTAK~ EQ     2019-07-12       Annual General ~     1304.     1344.    1304.
+##  6 RELIA~ EQ     2020-05-13       Rights 1:15 @ P~     1543.     1580.    1540.
+##  7 SBIN   EQ     2018-06-15       Annual General ~      185.      189      184.
+##  8 ICICI~ EQ     2019-07-22       Annual General ~      349.      357.     345.
+##  9 HDFC   EQ     2020-07-09       Annual General ~     1784      1820     1782 
+## 10 TCS    EQ     2020-06-03       Dividend - Rs 6~     2077.     2132     2074.
+## # ... with 5 more variables: ltp &lt;dbl&gt;, previousPrice &lt;dbl&gt;, netPrice &lt;dbl&gt;,
+## #   tradedQuantity &lt;dbl&gt;, turnoverInLakhs &lt;dbl&gt;</code></pre>
 </div>
 <div id="stocks-that-have-touched-their-52-week-highs-during-the-day" class="section level4">
 <h4>Stocks that have touched their 52 week highs during the day</h4>
 <pre class="r"><code>nse_stock_year_high()</code></pre>
-<pre><code>## # A tibble: 55 x 10
+<pre><code>## # A tibble: 34 x 10
 ##    symbol symbol_desc date       new_high   year last_traded_pri~ prev_high
 ##    &lt;chr&gt;  &lt;chr&gt;       &lt;date&gt;        &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;
-##  1 AGCNET AGC Networ~ 2020-01-16    202.   202.             202.      193. 
-##  2 ALKYL~ Alkyl Amin~ 2020-01-16   1300   1300             1297.     1300  
-##  3 APOLL~ Apollo Pip~ 2020-01-16    408.   408.             403       399  
-##  4 AUBANK AU Small F~ 2020-01-16    888    888              874.      885. 
-##  5 AVANT~ Avanti Fee~ 2020-01-16    770    770              732.      756  
-##  6 BAJAJ~ Bajaj Fins~ 2020-01-16   9681.  9681.            9656      9640  
-##  7 BALKR~ Balkrishna~ 2020-01-16   1112.  1112.            1096      1107. 
-##  8 BCP    B.C. Power~ 2020-01-16     20.2   20.2             19.0      20.0
-##  9 BERGE~ Berger Pai~ 2020-01-16    556.   556.             554.      550  
-## 10 BHART~ Bharti Air~ 2019-12-02    499.   499.             493.      486. 
-## # ... with 45 more rows, and 3 more variables: prev_close &lt;dbl&gt;,
-## #   change &lt;dbl&gt;, percent_change &lt;dbl&gt;</code></pre>
+##  1 ADANI~ Adani Gree~ 2020-06-09   328.   328.             328.      313.  
+##  2 ALCHEM Alchemist ~ 2020-06-09     6.95   6.95             6.95      6.65
+##  3 ALOKI~ Alok Indus~ 2020-06-09    25.8   25.8             25.8      24.6 
+##  4 ANDHR~ Andhra Cem~ 2020-06-09     5.35   5.35             5.35      5.1 
+##  5 AUROP~ Aurobindo ~ 2020-06-04   800.   800.             796.      791   
+##  6 BCG    Brightcom ~ 2020-06-09     9.95   9.95             9.95      9.5 
+##  7 BIRLA~ Birla Tyre~ 2020-06-09    23.5   23.5             23.5      22.4 
+##  8 COMPU~ Compucom S~ 2020-06-09    10.8   10.8             10.8      10.6 
+##  9 DAAWAT LT Foods L~ 2020-06-09    37.8   37.8             37.2      37   
+## 10 DHANU~ Dhanuka Ag~ 2020-06-09   653.   653.             635.      620   
+## # ... with 24 more rows, and 3 more variables: prev_close &lt;dbl&gt;, change &lt;dbl&gt;,
+## #   percent_change &lt;dbl&gt;</code></pre>
 <pre class="r"><code># retain original column names as returned by NSE
 nse_stock_year_high(clean_names = FALSE)</code></pre>
-<pre><code>## # A tibble: 55 x 10
-##    symbol symbolDesc dt          value   year    ltp value_old   prev
-##    &lt;chr&gt;  &lt;chr&gt;      &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 AGCNET AGC Netwo~ 2020-01-16  202.   202.   202.      193.   193. 
-##  2 ALKYL~ Alkyl Ami~ 2020-01-16 1300   1300   1297.     1300   1296. 
-##  3 APOLL~ Apollo Pi~ 2020-01-16  408.   408.   403       399    395. 
-##  4 AUBANK AU Small ~ 2020-01-16  888    888    874.      885.   877. 
-##  5 AVANT~ Avanti Fe~ 2020-01-16  770    770    732.      756    746. 
-##  6 BAJAJ~ Bajaj Fin~ 2020-01-16 9681.  9681.  9656      9640   9622. 
-##  7 BALKR~ Balkrishn~ 2020-01-16 1112.  1112.  1096      1107.  1103. 
-##  8 BCP    B.C. Powe~ 2020-01-16   20.2   20.2   19.0      20.0   19.6
-##  9 BERGE~ Berger Pa~ 2020-01-16  556.   556.   554.      550    547. 
-## 10 BHART~ Bharti Ai~ 2019-12-02  499.   499.   493.      486.   474. 
-## # ... with 45 more rows, and 2 more variables: change &lt;dbl&gt;, pChange &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 34 x 10
+##    symbol symbolDesc dt          value   year    ltp value_old   prev change
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 ADANI~ Adani Gre~ 2020-06-09 328.   328.   328.      313.   313.    15.6 
+##  2 ALCHEM Alchemist~ 2020-06-09   6.95   6.95   6.95      6.65   6.65   0.3 
+##  3 ALOKI~ Alok Indu~ 2020-06-09  25.8   25.8   25.8      24.6   24.6    1.2 
+##  4 ANDHR~ Andhra Ce~ 2020-06-09   5.35   5.35   5.35      5.1    5.1    0.25
+##  5 AUROP~ Aurobindo~ 2020-06-04 800.   800.   796.      791    775.    21.1 
+##  6 BCG    Brightcom~ 2020-06-09   9.95   9.95   9.95      9.5    9.5    0.45
+##  7 BIRLA~ Birla Tyr~ 2020-06-09  23.5   23.5   23.5      22.4   22.4    1.1 
+##  8 COMPU~ Compucom ~ 2020-06-09  10.8   10.8   10.8      10.6   10.3    0.5 
+##  9 DAAWAT LT Foods ~ 2020-06-09  37.8   37.8   37.2      37     34.7    2.55
+## 10 DHANU~ Dhanuka A~ 2020-06-09 653.   653.   635.      620    594.    41.4 
+## # ... with 24 more rows, and 1 more variable: pChange &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <div id="learning-more" class="section level2">

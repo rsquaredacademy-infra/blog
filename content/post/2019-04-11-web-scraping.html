@@ -235,16 +235,16 @@ from <strong>robotstxt</strong> package.</p>
   paths = c(&quot;https://www.imdb.com/search/title?groups=top_250&amp;sort=user_rating&quot;)
 )</code></pre>
 <pre><code>## 
- www.imdb.com                      No encoding supplied: defaulting to UTF-8.</code></pre>
+ www.imdb.com</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Since it has returned <code>TRUE</code>, we will go ahead and download the web page using
 <code>read_html()</code> from <strong>xml2</strong> package.</p>
 <pre class="r"><code>imdb &lt;- read_html(&quot;https://www.imdb.com/search/title?groups=top_250&amp;sort=user_rating&quot;)
 imdb</code></pre>
-<pre><code>## {xml_document}
+<pre><code>## {html_document}
 ## &lt;html xmlns:og=&quot;http://ogp.me/ns#&quot; xmlns:fb=&quot;http://www.facebook.com/2008/fbml&quot;&gt;
-## [1] &lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset= ...
-## [2] &lt;body id=&quot;styleguide-v2&quot; class=&quot;fixed&quot;&gt;\n\n            &lt;img height=&quot; ...</code></pre>
+## [1] &lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8 ...
+## [2] &lt;body id=&quot;styleguide-v2&quot; class=&quot;fixed&quot;&gt;\n            &lt;img height=&quot;1&quot; widt ...</code></pre>
 </div>
 <div id="title" class="section level3">
 <h3>Title</h3>
@@ -270,49 +270,49 @@ movie_title</code></pre>
 ##  [5] &quot;The Lord of the Rings: The Return of the King&quot;    
 ##  [6] &quot;Pulp Fiction&quot;                                     
 ##  [7] &quot;Schindler&#39;s List&quot;                                 
-##  [8] &quot;Il buono, il brutto, il cattivo&quot;                  
-##  [9] &quot;12 Angry Men&quot;                                     
-## [10] &quot;Inception&quot;                                        
-## [11] &quot;Fight Club&quot;                                       
-## [12] &quot;The Lord of the Rings: The Fellowship of the Ring&quot;
-## [13] &quot;Forrest Gump&quot;                                     
+##  [8] &quot;12 Angry Men&quot;                                     
+##  [9] &quot;Inception&quot;                                        
+## [10] &quot;Fight Club&quot;                                       
+## [11] &quot;The Lord of the Rings: The Fellowship of the Ring&quot;
+## [12] &quot;Forrest Gump&quot;                                     
+## [13] &quot;Il buono, il brutto, il cattivo&quot;                  
 ## [14] &quot;The Lord of the Rings: The Two Towers&quot;            
 ## [15] &quot;The Matrix&quot;                                       
 ## [16] &quot;Goodfellas&quot;                                       
 ## [17] &quot;Star Wars: Episode V - The Empire Strikes Back&quot;   
 ## [18] &quot;One Flew Over the Cuckoo&#39;s Nest&quot;                  
-## [19] &quot;Shichinin no samurai&quot;                             
-## [20] &quot;Interstellar&quot;                                     
-## [21] &quot;Cidade de Deus&quot;                                   
-## [22] &quot;Sen to Chihiro no kamikakushi&quot;                    
-## [23] &quot;Saving Private Ryan&quot;                              
-## [24] &quot;The Green Mile&quot;                                   
-## [25] &quot;La vita è bella&quot;                                  
-## [26] &quot;The Usual Suspects&quot;                               
+## [19] &quot;Seppuku&quot;                                          
+## [20] &quot;Gisaengchung&quot;                                     
+## [21] &quot;Interstellar&quot;                                     
+## [22] &quot;Cidade de Deus&quot;                                   
+## [23] &quot;Sen to Chihiro no kamikakushi&quot;                    
+## [24] &quot;Saving Private Ryan&quot;                              
+## [25] &quot;The Green Mile&quot;                                   
+## [26] &quot;La vita è bella&quot;                                  
 ## [27] &quot;Se7en&quot;                                            
-## [28] &quot;Léon&quot;                                             
-## [29] &quot;The Silence of the Lambs&quot;                         
-## [30] &quot;Star Wars&quot;                                        
-## [31] &quot;It&#39;s a Wonderful Life&quot;                            
-## [32] &quot;Andhadhun&quot;                                        
-## [33] &quot;Dangal&quot;                                           
-## [34] &quot;Spider-Man: Into the Spider-Verse&quot;                
-## [35] &quot;Avengers: Infinity War&quot;                           
-## [36] &quot;Whiplash&quot;                                         
-## [37] &quot;The Intouchables&quot;                                 
-## [38] &quot;The Prestige&quot;                                     
-## [39] &quot;The Departed&quot;                                     
-## [40] &quot;The Pianist&quot;                                      
-## [41] &quot;Memento&quot;                                          
-## [42] &quot;Gladiator&quot;                                        
-## [43] &quot;American History X&quot;                               
+## [28] &quot;The Silence of the Lambs&quot;                         
+## [29] &quot;Star Wars&quot;                                        
+## [30] &quot;Anand&quot;                                            
+## [31] &quot;Shichinin no samurai&quot;                             
+## [32] &quot;It&#39;s a Wonderful Life&quot;                            
+## [33] &quot;Joker&quot;                                            
+## [34] &quot;Avengers: Infinity War&quot;                           
+## [35] &quot;Whiplash&quot;                                         
+## [36] &quot;The Intouchables&quot;                                 
+## [37] &quot;The Prestige&quot;                                     
+## [38] &quot;The Departed&quot;                                     
+## [39] &quot;The Pianist&quot;                                      
+## [40] &quot;Gladiator&quot;                                        
+## [41] &quot;American History X&quot;                               
+## [42] &quot;The Usual Suspects&quot;                               
+## [43] &quot;Léon&quot;                                             
 ## [44] &quot;The Lion King&quot;                                    
 ## [45] &quot;Terminator 2: Judgment Day&quot;                       
 ## [46] &quot;Nuovo Cinema Paradiso&quot;                            
 ## [47] &quot;Hotaru no haka&quot;                                   
 ## [48] &quot;Back to the Future&quot;                               
-## [49] &quot;Raiders of the Lost Ark&quot;                          
-## [50] &quot;Apocalypse Now&quot;</code></pre>
+## [49] &quot;Once Upon a Time in the West&quot;                     
+## [50] &quot;Tengoku to jigoku&quot;</code></pre>
 </div>
 <div id="year-of-release" class="section level3">
 <h3>Year of Release</h3>
@@ -326,14 +326,13 @@ movie_title</code></pre>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(&quot;.lister-item-content h3 .lister-item-year&quot;) %&gt;%
   html_text() </code></pre>
-<pre><code>##  [1] &quot;(1994)&quot; &quot;(1972)&quot; &quot;(2008)&quot; &quot;(1974)&quot; &quot;(2003)&quot; &quot;(1994)&quot; &quot;(1993)&quot;
-##  [8] &quot;(1966)&quot; &quot;(1957)&quot; &quot;(2010)&quot; &quot;(1999)&quot; &quot;(2001)&quot; &quot;(1994)&quot; &quot;(2002)&quot;
-## [15] &quot;(1999)&quot; &quot;(1990)&quot; &quot;(1980)&quot; &quot;(1975)&quot; &quot;(1954)&quot; &quot;(2014)&quot; &quot;(2002)&quot;
-## [22] &quot;(2001)&quot; &quot;(1998)&quot; &quot;(1999)&quot; &quot;(1997)&quot; &quot;(1995)&quot; &quot;(1995)&quot; &quot;(1994)&quot;
-## [29] &quot;(1991)&quot; &quot;(1977)&quot; &quot;(1946)&quot; &quot;(2018)&quot; &quot;(2016)&quot; &quot;(2018)&quot; &quot;(2018)&quot;
-## [36] &quot;(2014)&quot; &quot;(2011)&quot; &quot;(2006)&quot; &quot;(2006)&quot; &quot;(2002)&quot; &quot;(2000)&quot; &quot;(2000)&quot;
-## [43] &quot;(1998)&quot; &quot;(1994)&quot; &quot;(1991)&quot; &quot;(1988)&quot; &quot;(1988)&quot; &quot;(1985)&quot; &quot;(1981)&quot;
-## [50] &quot;(1979)&quot;</code></pre>
+<pre><code>##  [1] &quot;(1994)&quot; &quot;(1972)&quot; &quot;(2008)&quot; &quot;(1974)&quot; &quot;(2003)&quot; &quot;(1994)&quot; &quot;(1993)&quot; &quot;(1957)&quot;
+##  [9] &quot;(2010)&quot; &quot;(1999)&quot; &quot;(2001)&quot; &quot;(1994)&quot; &quot;(1966)&quot; &quot;(2002)&quot; &quot;(1999)&quot; &quot;(1990)&quot;
+## [17] &quot;(1980)&quot; &quot;(1975)&quot; &quot;(1962)&quot; &quot;(2019)&quot; &quot;(2014)&quot; &quot;(2002)&quot; &quot;(2001)&quot; &quot;(1998)&quot;
+## [25] &quot;(1999)&quot; &quot;(1997)&quot; &quot;(1995)&quot; &quot;(1991)&quot; &quot;(1977)&quot; &quot;(1971)&quot; &quot;(1954)&quot; &quot;(1946)&quot;
+## [33] &quot;(2019)&quot; &quot;(2018)&quot; &quot;(2014)&quot; &quot;(2011)&quot; &quot;(2006)&quot; &quot;(2006)&quot; &quot;(2002)&quot; &quot;(2000)&quot;
+## [41] &quot;(1998)&quot; &quot;(1995)&quot; &quot;(1994)&quot; &quot;(1994)&quot; &quot;(1991)&quot; &quot;(1988)&quot; &quot;(1988)&quot; &quot;(1985)&quot;
+## [49] &quot;(1968)&quot; &quot;(1963)&quot;</code></pre>
 <p>If you look at the output, the year is enclosed in round brackets and is a
 character vector. We need to do 2 things now:</p>
 <ul>
@@ -351,10 +350,10 @@ package to extract the year from the previous step.</p>
   year() -&gt; movie_year
 
 movie_year</code></pre>
-<pre><code>##  [1] 1994 1972 2008 1974 2003 1994 1993 1966 1957 2010 1999 2001 1994 2002
-## [15] 1999 1990 1980 1975 1954 2014 2002 2001 1998 1999 1997 1995 1995 1994
-## [29] 1991 1977 1946 2018 2016 2018 2018 2014 2011 2006 2006 2002 2000 2000
-## [43] 1998 1994 1991 1988 1988 1985 1981 1979</code></pre>
+<pre><code>##  [1] 1994 1972 2008 1974 2003 1994 1993 1957 2010 1999 2001 1994 1966 2002 1999
+## [16] 1990 1980 1975 1962 2019 2014 2002 2001 1998 1999 1997 1995 1991 1977 1971
+## [31] 1954 1946 2019 2018 2014 2011 2006 2006 2002 2000 1998 1995 1994 1994 1991
+## [46] 1988 1988 1985 1968 1963</code></pre>
 </div>
 <div id="certificate" class="section level3">
 <h3>Certificate</h3>
@@ -370,12 +369,12 @@ movie_year</code></pre>
   html_text() -&gt; movie_certificate
 
 movie_certificate</code></pre>
-<pre><code>##  [1] &quot;A&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;PG-13&quot; &quot;A&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;A&quot;    
-##  [9] &quot;PG-13&quot; &quot;PG-13&quot; &quot;PG-13&quot; &quot;A&quot;     &quot;A&quot;     &quot;PG&quot;    &quot;UA&quot;    &quot;R&quot;    
-## [17] &quot;PG&quot;    &quot;A&quot;     &quot;A&quot;     &quot;PG-13&quot; &quot;A&quot;     &quot;R&quot;     &quot;A&quot;     &quot;A&quot;    
-## [25] &quot;U&quot;     &quot;PG&quot;    &quot;UA&quot;    &quot;U&quot;     &quot;U&quot;     &quot;UA&quot;    &quot;A&quot;     &quot;UA&quot;   
-## [33] &quot;PG-13&quot; &quot;A&quot;     &quot;R&quot;     &quot;R&quot;     &quot;R&quot;     &quot;A&quot;     &quot;U&quot;     &quot;U&quot;    
-## [41] &quot;R&quot;     &quot;U&quot;     &quot;PG&quot;    &quot;R&quot;</code></pre>
+<pre><code>##  [1] &quot;A&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;A&quot;     &quot;16&quot;    &quot;A&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;A&quot;    
+## [10] &quot;U&quot;     &quot;UA&quot;    &quot;A&quot;     &quot;U&quot;     &quot;UA&quot;    &quot;A&quot;     &quot;U&quot;     &quot;A&quot;     &quot;A&quot;    
+## [19] &quot;UA&quot;    &quot;A&quot;     &quot;U&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;U&quot;     &quot;A&quot;     &quot;A&quot;     &quot;U&quot;    
+## [28] &quot;U&quot;     &quot;U&quot;     &quot;A&quot;     &quot;UA&quot;    &quot;A&quot;     &quot;UA&quot;    &quot;PG-13&quot; &quot;A&quot;     &quot;13&quot;   
+## [37] &quot;UA&quot;    &quot;R&quot;     &quot;A&quot;     &quot;A&quot;     &quot;U&quot;     &quot;U&quot;     &quot;R&quot;     &quot;UA&quot;    &quot;U&quot;    
+## [46] &quot;U&quot;</code></pre>
 </div>
 <div id="runtime" class="section level3">
 <h3>Runtime</h3>
@@ -390,13 +389,13 @@ movie_certificate</code></pre>
   html_nodes(&quot;.lister-item-content p .runtime&quot;) %&gt;%
   html_text() </code></pre>
 <pre><code>##  [1] &quot;142 min&quot; &quot;175 min&quot; &quot;152 min&quot; &quot;202 min&quot; &quot;201 min&quot; &quot;154 min&quot; &quot;195 min&quot;
-##  [8] &quot;161 min&quot; &quot;96 min&quot;  &quot;148 min&quot; &quot;139 min&quot; &quot;178 min&quot; &quot;142 min&quot; &quot;179 min&quot;
-## [15] &quot;136 min&quot; &quot;146 min&quot; &quot;124 min&quot; &quot;133 min&quot; &quot;207 min&quot; &quot;169 min&quot; &quot;130 min&quot;
-## [22] &quot;125 min&quot; &quot;169 min&quot; &quot;189 min&quot; &quot;116 min&quot; &quot;106 min&quot; &quot;127 min&quot; &quot;110 min&quot;
-## [29] &quot;118 min&quot; &quot;121 min&quot; &quot;130 min&quot; &quot;139 min&quot; &quot;161 min&quot; &quot;117 min&quot; &quot;149 min&quot;
-## [36] &quot;106 min&quot; &quot;112 min&quot; &quot;130 min&quot; &quot;151 min&quot; &quot;150 min&quot; &quot;113 min&quot; &quot;155 min&quot;
-## [43] &quot;119 min&quot; &quot;88 min&quot;  &quot;137 min&quot; &quot;155 min&quot; &quot;89 min&quot;  &quot;116 min&quot; &quot;115 min&quot;
-## [50] &quot;147 min&quot;</code></pre>
+##  [8] &quot;96 min&quot;  &quot;148 min&quot; &quot;139 min&quot; &quot;178 min&quot; &quot;142 min&quot; &quot;161 min&quot; &quot;179 min&quot;
+## [15] &quot;136 min&quot; &quot;146 min&quot; &quot;124 min&quot; &quot;133 min&quot; &quot;133 min&quot; &quot;132 min&quot; &quot;169 min&quot;
+## [22] &quot;130 min&quot; &quot;125 min&quot; &quot;169 min&quot; &quot;189 min&quot; &quot;116 min&quot; &quot;127 min&quot; &quot;118 min&quot;
+## [29] &quot;121 min&quot; &quot;122 min&quot; &quot;207 min&quot; &quot;130 min&quot; &quot;122 min&quot; &quot;149 min&quot; &quot;106 min&quot;
+## [36] &quot;112 min&quot; &quot;130 min&quot; &quot;151 min&quot; &quot;150 min&quot; &quot;155 min&quot; &quot;119 min&quot; &quot;106 min&quot;
+## [43] &quot;110 min&quot; &quot;88 min&quot;  &quot;137 min&quot; &quot;155 min&quot; &quot;89 min&quot;  &quot;116 min&quot; &quot;165 min&quot;
+## [50] &quot;143 min&quot;</code></pre>
 <p>If you look at the output, it includes the text <strong>min</strong> and is of type
 <code>character</code>. We need to do 2 things here:</p>
 <ul>
@@ -417,9 +416,9 @@ movie_certificate</code></pre>
   as.numeric() -&gt; movie_runtime
 
 movie_runtime</code></pre>
-<pre><code>##  [1] 142 175 152 202 201 154 195 161  96 148 139 178 142 179 136 146 124
-## [18] 133 207 169 130 125 169 189 116 106 127 110 118 121 130 139 161 117
-## [35] 149 106 112 130 151 150 113 155 119  88 137 155  89 116 115 147</code></pre>
+<pre><code>##  [1] 142 175 152 202 201 154 195  96 148 139 178 142 161 179 136 146 124 133 133
+## [20] 132 169 130 125 169 189 116 127 118 121 122 207 130 122 149 106 112 130 151
+## [39] 150 155 119 106 110  88 137 155  89 116 165 143</code></pre>
 </div>
 <div id="genre" class="section level3">
 <h3>Genre</h3>
@@ -440,49 +439,49 @@ movie_runtime</code></pre>
 ##  [5] &quot;\nAdventure, Drama, Fantasy            &quot;   
 ##  [6] &quot;\nCrime, Drama            &quot;                
 ##  [7] &quot;\nBiography, Drama, History            &quot;   
-##  [8] &quot;\nWestern            &quot;                     
-##  [9] &quot;\nDrama            &quot;                       
-## [10] &quot;\nAction, Adventure, Sci-Fi            &quot;   
-## [11] &quot;\nDrama            &quot;                       
-## [12] &quot;\nAdventure, Drama, Fantasy            &quot;   
-## [13] &quot;\nDrama, Romance            &quot;              
+##  [8] &quot;\nCrime, Drama            &quot;                
+##  [9] &quot;\nAction, Adventure, Sci-Fi            &quot;   
+## [10] &quot;\nDrama            &quot;                       
+## [11] &quot;\nAction, Adventure, Drama            &quot;    
+## [12] &quot;\nDrama, Romance            &quot;              
+## [13] &quot;\nWestern            &quot;                     
 ## [14] &quot;\nAdventure, Drama, Fantasy            &quot;   
 ## [15] &quot;\nAction, Sci-Fi            &quot;              
 ## [16] &quot;\nBiography, Crime, Drama            &quot;     
 ## [17] &quot;\nAction, Adventure, Fantasy            &quot;  
 ## [18] &quot;\nDrama            &quot;                       
-## [19] &quot;\nAdventure, Drama            &quot;            
-## [20] &quot;\nAdventure, Drama, Sci-Fi            &quot;    
-## [21] &quot;\nCrime, Drama            &quot;                
-## [22] &quot;\nAnimation, Adventure, Family            &quot;
-## [23] &quot;\nDrama, War            &quot;                  
-## [24] &quot;\nCrime, Drama, Fantasy            &quot;       
-## [25] &quot;\nComedy, Drama, Romance            &quot;      
-## [26] &quot;\nCrime, Mystery, Thriller            &quot;    
+## [19] &quot;\nAction, Drama, History            &quot;      
+## [20] &quot;\nComedy, Drama, Thriller            &quot;     
+## [21] &quot;\nAdventure, Drama, Sci-Fi            &quot;    
+## [22] &quot;\nCrime, Drama            &quot;                
+## [23] &quot;\nAnimation, Adventure, Family            &quot;
+## [24] &quot;\nDrama, War            &quot;                  
+## [25] &quot;\nCrime, Drama, Fantasy            &quot;       
+## [26] &quot;\nComedy, Drama, Romance            &quot;      
 ## [27] &quot;\nCrime, Drama, Mystery            &quot;       
-## [28] &quot;\nAction, Crime, Drama            &quot;        
-## [29] &quot;\nCrime, Drama, Thriller            &quot;      
-## [30] &quot;\nAction, Adventure, Fantasy            &quot;  
-## [31] &quot;\nDrama, Family, Fantasy            &quot;      
-## [32] &quot;\nCrime, Thriller            &quot;             
-## [33] &quot;\nAction, Biography, Drama            &quot;    
-## [34] &quot;\nAnimation, Action, Adventure            &quot;
-## [35] &quot;\nAction, Adventure, Sci-Fi            &quot;   
-## [36] &quot;\nDrama, Music            &quot;                
-## [37] &quot;\nBiography, Comedy, Drama            &quot;    
-## [38] &quot;\nDrama, Mystery, Sci-Fi            &quot;      
-## [39] &quot;\nCrime, Drama, Thriller            &quot;      
-## [40] &quot;\nBiography, Drama, Music            &quot;     
-## [41] &quot;\nMystery, Thriller            &quot;           
-## [42] &quot;\nAction, Adventure, Drama            &quot;    
-## [43] &quot;\nDrama            &quot;                       
+## [28] &quot;\nCrime, Drama, Thriller            &quot;      
+## [29] &quot;\nAction, Adventure, Fantasy            &quot;  
+## [30] &quot;\nDrama, Musical            &quot;              
+## [31] &quot;\nAction, Adventure, Drama            &quot;    
+## [32] &quot;\nDrama, Family, Fantasy            &quot;      
+## [33] &quot;\nCrime, Drama, Thriller            &quot;      
+## [34] &quot;\nAction, Adventure, Sci-Fi            &quot;   
+## [35] &quot;\nDrama, Music            &quot;                
+## [36] &quot;\nBiography, Comedy, Drama            &quot;    
+## [37] &quot;\nDrama, Mystery, Sci-Fi            &quot;      
+## [38] &quot;\nCrime, Drama, Thriller            &quot;      
+## [39] &quot;\nBiography, Drama, Music            &quot;     
+## [40] &quot;\nAction, Adventure, Drama            &quot;    
+## [41] &quot;\nDrama            &quot;                       
+## [42] &quot;\nCrime, Mystery, Thriller            &quot;    
+## [43] &quot;\nAction, Crime, Drama            &quot;        
 ## [44] &quot;\nAnimation, Adventure, Drama            &quot; 
 ## [45] &quot;\nAction, Sci-Fi            &quot;              
 ## [46] &quot;\nDrama            &quot;                       
 ## [47] &quot;\nAnimation, Drama, War            &quot;       
 ## [48] &quot;\nAdventure, Comedy, Sci-Fi            &quot;   
-## [49] &quot;\nAction, Adventure            &quot;           
-## [50] &quot;\nDrama, War            &quot;</code></pre>
+## [49] &quot;\nWestern            &quot;                     
+## [50] &quot;\nCrime, Drama, Mystery            &quot;</code></pre>
 <p>The output includes <code>\n</code> and white space, both of which will be removed using
 <code>str_trim()</code>.</p>
 <pre class="r"><code>imdb %&gt;%
@@ -494,28 +493,28 @@ movie_genre</code></pre>
 <pre><code>##  [1] &quot;Drama&quot;                        &quot;Crime, Drama&quot;                
 ##  [3] &quot;Action, Crime, Drama&quot;         &quot;Crime, Drama&quot;                
 ##  [5] &quot;Adventure, Drama, Fantasy&quot;    &quot;Crime, Drama&quot;                
-##  [7] &quot;Biography, Drama, History&quot;    &quot;Western&quot;                     
-##  [9] &quot;Drama&quot;                        &quot;Action, Adventure, Sci-Fi&quot;   
-## [11] &quot;Drama&quot;                        &quot;Adventure, Drama, Fantasy&quot;   
-## [13] &quot;Drama, Romance&quot;               &quot;Adventure, Drama, Fantasy&quot;   
+##  [7] &quot;Biography, Drama, History&quot;    &quot;Crime, Drama&quot;                
+##  [9] &quot;Action, Adventure, Sci-Fi&quot;    &quot;Drama&quot;                       
+## [11] &quot;Action, Adventure, Drama&quot;     &quot;Drama, Romance&quot;              
+## [13] &quot;Western&quot;                      &quot;Adventure, Drama, Fantasy&quot;   
 ## [15] &quot;Action, Sci-Fi&quot;               &quot;Biography, Crime, Drama&quot;     
 ## [17] &quot;Action, Adventure, Fantasy&quot;   &quot;Drama&quot;                       
-## [19] &quot;Adventure, Drama&quot;             &quot;Adventure, Drama, Sci-Fi&quot;    
-## [21] &quot;Crime, Drama&quot;                 &quot;Animation, Adventure, Family&quot;
-## [23] &quot;Drama, War&quot;                   &quot;Crime, Drama, Fantasy&quot;       
-## [25] &quot;Comedy, Drama, Romance&quot;       &quot;Crime, Mystery, Thriller&quot;    
-## [27] &quot;Crime, Drama, Mystery&quot;        &quot;Action, Crime, Drama&quot;        
-## [29] &quot;Crime, Drama, Thriller&quot;       &quot;Action, Adventure, Fantasy&quot;  
-## [31] &quot;Drama, Family, Fantasy&quot;       &quot;Crime, Thriller&quot;             
-## [33] &quot;Action, Biography, Drama&quot;     &quot;Animation, Action, Adventure&quot;
-## [35] &quot;Action, Adventure, Sci-Fi&quot;    &quot;Drama, Music&quot;                
-## [37] &quot;Biography, Comedy, Drama&quot;     &quot;Drama, Mystery, Sci-Fi&quot;      
-## [39] &quot;Crime, Drama, Thriller&quot;       &quot;Biography, Drama, Music&quot;     
-## [41] &quot;Mystery, Thriller&quot;            &quot;Action, Adventure, Drama&quot;    
-## [43] &quot;Drama&quot;                        &quot;Animation, Adventure, Drama&quot; 
+## [19] &quot;Action, Drama, History&quot;       &quot;Comedy, Drama, Thriller&quot;     
+## [21] &quot;Adventure, Drama, Sci-Fi&quot;     &quot;Crime, Drama&quot;                
+## [23] &quot;Animation, Adventure, Family&quot; &quot;Drama, War&quot;                  
+## [25] &quot;Crime, Drama, Fantasy&quot;        &quot;Comedy, Drama, Romance&quot;      
+## [27] &quot;Crime, Drama, Mystery&quot;        &quot;Crime, Drama, Thriller&quot;      
+## [29] &quot;Action, Adventure, Fantasy&quot;   &quot;Drama, Musical&quot;              
+## [31] &quot;Action, Adventure, Drama&quot;     &quot;Drama, Family, Fantasy&quot;      
+## [33] &quot;Crime, Drama, Thriller&quot;       &quot;Action, Adventure, Sci-Fi&quot;   
+## [35] &quot;Drama, Music&quot;                 &quot;Biography, Comedy, Drama&quot;    
+## [37] &quot;Drama, Mystery, Sci-Fi&quot;       &quot;Crime, Drama, Thriller&quot;      
+## [39] &quot;Biography, Drama, Music&quot;      &quot;Action, Adventure, Drama&quot;    
+## [41] &quot;Drama&quot;                        &quot;Crime, Mystery, Thriller&quot;    
+## [43] &quot;Action, Crime, Drama&quot;         &quot;Animation, Adventure, Drama&quot; 
 ## [45] &quot;Action, Sci-Fi&quot;               &quot;Drama&quot;                       
 ## [47] &quot;Animation, Drama, War&quot;        &quot;Adventure, Comedy, Sci-Fi&quot;   
-## [49] &quot;Action, Adventure&quot;            &quot;Drama, War&quot;</code></pre>
+## [49] &quot;Western&quot;                      &quot;Crime, Drama, Mystery&quot;</code></pre>
 </div>
 <div id="rating" class="section level3">
 <h3>Rating</h3>
@@ -534,11 +533,11 @@ or the classes associated with <code>&lt;span&gt;</code> tag as well.</p>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(&quot;.ratings-bar .ratings-imdb-rating&quot;) %&gt;%
   html_attr(&quot;data-value&quot;) </code></pre>
-<pre><code>##  [1] &quot;9.3&quot; &quot;9.2&quot; &quot;9&quot;   &quot;9&quot;   &quot;8.9&quot; &quot;8.9&quot; &quot;8.9&quot; &quot;8.9&quot; &quot;8.9&quot; &quot;8.8&quot; &quot;8.8&quot;
-## [12] &quot;8.8&quot; &quot;8.8&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot;
-## [23] &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.5&quot; &quot;8.5&quot;
-## [34] &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot;
-## [45] &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot;</code></pre>
+<pre><code>##  [1] &quot;9.3&quot; &quot;9.2&quot; &quot;9&quot;   &quot;9&quot;   &quot;8.9&quot; &quot;8.9&quot; &quot;8.9&quot; &quot;8.9&quot; &quot;8.8&quot; &quot;8.8&quot; &quot;8.8&quot; &quot;8.8&quot;
+## [13] &quot;8.8&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.7&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot;
+## [25] &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.6&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot;
+## [37] &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot; &quot;8.5&quot;
+## [49] &quot;8.5&quot; &quot;8.5&quot;</code></pre>
 <p>Since rating is returned as a character vector, we will use <code>as.numeric()</code> to
 convert it into a number.</p>
 <pre class="r"><code>imdb %&gt;%
@@ -547,9 +546,9 @@ convert it into a number.</p>
   as.numeric() -&gt; movie_rating
 
 movie_rating</code></pre>
-<pre><code>##  [1] 9.3 9.2 9.0 9.0 8.9 8.9 8.9 8.9 8.9 8.8 8.8 8.8 8.8 8.7 8.7 8.7 8.7
-## [18] 8.7 8.7 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.5 8.5 8.5
-## [35] 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5</code></pre>
+<pre><code>##  [1] 9.3 9.2 9.0 9.0 8.9 8.9 8.9 8.9 8.8 8.8 8.8 8.8 8.8 8.7 8.7 8.7 8.7 8.7 8.7
+## [20] 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.6 8.5 8.5 8.5 8.5 8.5 8.5
+## [39] 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5 8.5</code></pre>
 <hr>
 <p><a href="https://apps.rsquaredacademy.com/" target="_blank"><img src="/img/ad_apps.png" width="100%" alt="apps ad" style="text-decoration: none;"></a></p>
 <hr>
@@ -582,14 +581,14 @@ using <code>html_text()</code>. Here, we need to extract the value assigned to t
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//meta[@itemprop=&quot;ratingCount&quot;]&#39;) %&gt;% 
   html_attr(&#39;content&#39;) </code></pre>
-<pre><code>##  [1] &quot;2072893&quot; &quot;1422292&quot; &quot;2038787&quot; &quot;987020&quot;  &quot;1475650&quot; &quot;1621033&quot; &quot;1074273&quot;
-##  [8] &quot;615219&quot;  &quot;585562&quot;  &quot;1817393&quot; &quot;1658750&quot; &quot;1492209&quot; &quot;1589127&quot; &quot;1334563&quot;
-## [15] &quot;1489071&quot; &quot;895033&quot;  &quot;1040130&quot; &quot;822277&quot;  &quot;280024&quot;  &quot;1276946&quot; &quot;637716&quot; 
-## [22] &quot;549410&quot;  &quot;1096231&quot; &quot;1000909&quot; &quot;545280&quot;  &quot;897576&quot;  &quot;1271530&quot; &quot;913352&quot; 
-## [29] &quot;1118817&quot; &quot;1109777&quot; &quot;352837&quot;  &quot;39132&quot;   &quot;118413&quot;  &quot;174125&quot;  &quot;617621&quot; 
-## [36] &quot;605417&quot;  &quot;666327&quot;  &quot;1052901&quot; &quot;1064050&quot; &quot;633675&quot;  &quot;1021511&quot; &quot;1198326&quot;
-## [43] &quot;941917&quot;  &quot;823238&quot;  &quot;897607&quot;  &quot;198398&quot;  &quot;192715&quot;  &quot;923178&quot;  &quot;803033&quot; 
-## [50] &quot;542311&quot;</code></pre>
+<pre><code>##  [1] &quot;2249246&quot; &quot;1552001&quot; &quot;2217242&quot; &quot;1084778&quot; &quot;1588695&quot; &quot;1761054&quot; &quot;1168838&quot;
+##  [8] &quot;658477&quot;  &quot;1972065&quot; &quot;1788415&quot; &quot;1602475&quot; &quot;1734160&quot; &quot;664323&quot;  &quot;1435345&quot;
+## [15] &quot;1613462&quot; &quot;978543&quot;  &quot;1121218&quot; &quot;881910&quot;  &quot;34773&quot;   &quot;424531&quot;  &quot;1422868&quot;
+## [22] &quot;679953&quot;  &quot;614374&quot;  &quot;1189533&quot; &quot;1096715&quot; &quot;598021&quot;  &quot;1384558&quot; &quot;1217882&quot;
+## [29] &quot;1193648&quot; &quot;26469&quot;   &quot;303892&quot;  &quot;383949&quot;  &quot;806007&quot;  &quot;779460&quot;  &quot;679324&quot; 
+## [36] &quot;728348&quot;  &quot;1139520&quot; &quot;1146357&quot; &quot;698328&quot;  &quot;1293047&quot; &quot;1004432&quot; &quot;958513&quot; 
+## [43] &quot;995573&quot;  &quot;906648&quot;  &quot;965426&quot;  &quot;218874&quot;  &quot;220345&quot;  &quot;1008251&quot; &quot;290832&quot; 
+## [50] &quot;29464&quot;</code></pre>
 <p>Finally, we convert the votes to a number using <code>as.numeric()</code>.</p>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//meta[@itemprop=&quot;ratingCount&quot;]&#39;) %&gt;% 
@@ -597,13 +596,12 @@ using <code>html_text()</code>. Here, we need to extract the value assigned to t
   as.numeric() -&gt; movie_votes
 
 movie_votes</code></pre>
-<pre><code>##  [1] 2072893 1422292 2038787  987020 1475650 1621033 1074273  615219
-##  [9]  585562 1817393 1658750 1492209 1589127 1334563 1489071  895033
-## [17] 1040130  822277  280024 1276946  637716  549410 1096231 1000909
-## [25]  545280  897576 1271530  913352 1118817 1109777  352837   39132
-## [33]  118413  174125  617621  605417  666327 1052901 1064050  633675
-## [41] 1021511 1198326  941917  823238  897607  198398  192715  923178
-## [49]  803033  542311</code></pre>
+<pre><code>##  [1] 2249246 1552001 2217242 1084778 1588695 1761054 1168838  658477 1972065
+## [10] 1788415 1602475 1734160  664323 1435345 1613462  978543 1121218  881910
+## [19]   34773  424531 1422868  679953  614374 1189533 1096715  598021 1384558
+## [28] 1217882 1193648   26469  303892  383949  806007  779460  679324  728348
+## [37] 1139520 1146357  698328 1293047 1004432  958513  995573  906648  965426
+## [46]  218874  220345 1008251  290832   29464</code></pre>
 </div>
 <div id="revenue" class="section level3">
 <h3>Revenue</h3>
@@ -623,26 +621,22 @@ distinct way to identify either of them.</p>
 <pre class="r"><code>imdb %&gt;%
   html_nodes(xpath = &#39;//span[@name=&quot;nv&quot;]&#39;) %&gt;%
   html_text() </code></pre>
-<pre><code>##  [1] &quot;2,072,893&quot; &quot;$28.34M&quot;   &quot;1,422,292&quot; &quot;$134.97M&quot;  &quot;2,038,787&quot;
-##  [6] &quot;$534.86M&quot;  &quot;987,020&quot;   &quot;$57.30M&quot;   &quot;1,475,650&quot; &quot;$377.85M&quot; 
-## [11] &quot;1,621,033&quot; &quot;$107.93M&quot;  &quot;1,074,273&quot; &quot;$96.07M&quot;   &quot;615,219&quot;  
-## [16] &quot;$6.10M&quot;    &quot;585,562&quot;   &quot;$4.36M&quot;    &quot;1,817,393&quot; &quot;$292.58M&quot; 
-## [21] &quot;1,658,750&quot; &quot;$37.03M&quot;   &quot;1,492,209&quot; &quot;$315.54M&quot;  &quot;1,589,127&quot;
-## [26] &quot;$330.25M&quot;  &quot;1,334,563&quot; &quot;$342.55M&quot;  &quot;1,489,071&quot; &quot;$171.48M&quot; 
-## [31] &quot;895,033&quot;   &quot;$46.84M&quot;   &quot;1,040,130&quot; &quot;$290.48M&quot;  &quot;822,277&quot;  
-## [36] &quot;$112.00M&quot;  &quot;280,024&quot;   &quot;$0.27M&quot;    &quot;1,276,946&quot; &quot;$188.02M&quot; 
-## [41] &quot;637,716&quot;   &quot;$7.56M&quot;    &quot;549,410&quot;   &quot;$10.06M&quot;   &quot;1,096,231&quot;
-## [46] &quot;$216.54M&quot;  &quot;1,000,909&quot; &quot;$136.80M&quot;  &quot;545,280&quot;   &quot;$57.60M&quot;  
-## [51] &quot;897,576&quot;   &quot;$23.34M&quot;   &quot;1,271,530&quot; &quot;$100.13M&quot;  &quot;913,352&quot;  
-## [56] &quot;$19.50M&quot;   &quot;1,118,817&quot; &quot;$130.74M&quot;  &quot;1,109,777&quot; &quot;$322.74M&quot; 
-## [61] &quot;352,837&quot;   &quot;39,132&quot;    &quot;$1.19M&quot;    &quot;118,413&quot;   &quot;$12.39M&quot;  
-## [66] &quot;174,125&quot;   &quot;$190.24M&quot;  &quot;617,621&quot;   &quot;$678.82M&quot;  &quot;605,417&quot;  
-## [71] &quot;$13.09M&quot;   &quot;666,327&quot;   &quot;$13.18M&quot;   &quot;1,052,901&quot; &quot;$53.09M&quot;  
-## [76] &quot;1,064,050&quot; &quot;$132.38M&quot;  &quot;633,675&quot;   &quot;$32.57M&quot;   &quot;1,021,511&quot;
-## [81] &quot;$25.54M&quot;   &quot;1,198,326&quot; &quot;$187.71M&quot;  &quot;941,917&quot;   &quot;$6.72M&quot;   
-## [86] &quot;823,238&quot;   &quot;$312.90M&quot;  &quot;897,607&quot;   &quot;$204.84M&quot;  &quot;198,398&quot;  
-## [91] &quot;$11.99M&quot;   &quot;192,715&quot;   &quot;923,178&quot;   &quot;$210.61M&quot;  &quot;803,033&quot;  
-## [96] &quot;$248.16M&quot;  &quot;542,311&quot;   &quot;$83.47M&quot;</code></pre>
+<pre><code>##  [1] &quot;2,249,246&quot; &quot;$28.34M&quot;   &quot;1,552,001&quot; &quot;$134.97M&quot;  &quot;2,217,242&quot; &quot;$534.86M&quot; 
+##  [7] &quot;1,084,778&quot; &quot;$57.30M&quot;   &quot;1,588,695&quot; &quot;$377.85M&quot;  &quot;1,761,054&quot; &quot;$107.93M&quot; 
+## [13] &quot;1,168,838&quot; &quot;$96.90M&quot;   &quot;658,477&quot;   &quot;$4.36M&quot;    &quot;1,972,065&quot; &quot;$292.58M&quot; 
+## [19] &quot;1,788,415&quot; &quot;$37.03M&quot;   &quot;1,602,475&quot; &quot;$315.54M&quot;  &quot;1,734,160&quot; &quot;$330.25M&quot; 
+## [25] &quot;664,323&quot;   &quot;$6.10M&quot;    &quot;1,435,345&quot; &quot;$342.55M&quot;  &quot;1,613,462&quot; &quot;$171.48M&quot; 
+## [31] &quot;978,543&quot;   &quot;$46.84M&quot;   &quot;1,121,218&quot; &quot;$290.48M&quot;  &quot;881,910&quot;   &quot;$112.00M&quot; 
+## [37] &quot;34,773&quot;    &quot;424,531&quot;   &quot;$53.37M&quot;   &quot;1,422,868&quot; &quot;$188.02M&quot;  &quot;679,953&quot;  
+## [43] &quot;$7.56M&quot;    &quot;614,374&quot;   &quot;$10.06M&quot;   &quot;1,189,533&quot; &quot;$216.54M&quot;  &quot;1,096,715&quot;
+## [49] &quot;$136.80M&quot;  &quot;598,021&quot;   &quot;$57.60M&quot;   &quot;1,384,558&quot; &quot;$100.13M&quot;  &quot;1,217,882&quot;
+## [55] &quot;$130.74M&quot;  &quot;1,193,648&quot; &quot;$322.74M&quot;  &quot;26,469&quot;    &quot;303,892&quot;   &quot;$0.27M&quot;   
+## [61] &quot;383,949&quot;   &quot;806,007&quot;   &quot;$335.45M&quot;  &quot;779,460&quot;   &quot;$678.82M&quot;  &quot;679,324&quot;  
+## [67] &quot;$13.09M&quot;   &quot;728,348&quot;   &quot;$13.18M&quot;   &quot;1,139,520&quot; &quot;$53.09M&quot;   &quot;1,146,357&quot;
+## [73] &quot;$132.38M&quot;  &quot;698,328&quot;   &quot;$32.57M&quot;   &quot;1,293,047&quot; &quot;$187.71M&quot;  &quot;1,004,432&quot;
+## [79] &quot;$6.72M&quot;    &quot;958,513&quot;   &quot;$23.34M&quot;   &quot;995,573&quot;   &quot;$19.50M&quot;   &quot;906,648&quot;  
+## [85] &quot;$422.78M&quot;  &quot;965,426&quot;   &quot;$204.84M&quot;  &quot;218,874&quot;   &quot;$11.99M&quot;   &quot;220,345&quot;  
+## [91] &quot;1,008,251&quot; &quot;$210.61M&quot;  &quot;290,832&quot;   &quot;$5.32M&quot;    &quot;29,464&quot;</code></pre>
 <p>To extract the revenue as a number, we need to do some string hacking as
 follows:</p>
 <ul>
@@ -659,17 +653,20 @@ follows:</p>
   str_extract(pattern = &quot;^\\$.*&quot;) %&gt;%
   na.omit() %&gt;%
   as.character() %&gt;%
-  append(values = NA, after = 30) %&gt;%
+  append(values = NA, after = 18) %&gt;%
+  append(values = NA, after = 29) %&gt;%
+  append(values = NA, after = 31) %&gt;%
   append(values = NA, after = 46) %&gt;%
+  append(values = NA, after = 49) %&gt;%
   str_sub(start = 2, end = nchar(.) - 1) %&gt;%
   as.numeric() -&gt; movie_revenue
 
 movie_revenue</code></pre>
-<pre><code>##  [1]  28.34 134.97 534.86  57.30 377.85 107.93  96.07   6.10   4.36 292.58
-## [11]  37.03 315.54 330.25 342.55 171.48  46.84 290.48 112.00   0.27 188.02
-## [21]   7.56  10.06 216.54 136.80  57.60  23.34 100.13  19.50 130.74 322.74
-## [31]     NA   1.19  12.39 190.24 678.82  13.09  13.18  53.09 132.38  32.57
-## [41]  25.54 187.71   6.72 312.90 204.84  11.99     NA 210.61 248.16  83.47</code></pre>
+<pre><code>##  [1]  28.34 134.97 534.86  57.30 377.85 107.93  96.90   4.36 292.58  37.03
+## [11] 315.54 330.25   6.10 342.55 171.48  46.84 290.48 112.00     NA  53.37
+## [21] 188.02   7.56  10.06 216.54 136.80  57.60 100.13 130.74 322.74     NA
+## [31]   0.27     NA 335.45 678.82  13.09  13.18  53.09 132.38  32.57 187.71
+## [41]   6.72  23.34  19.50 422.78 204.84  11.99     NA 210.61   5.32     NA</code></pre>
 </div>
 <div id="putting-it-all-together" class="section level3">
 <h3>Putting it all together…</h3>
@@ -679,18 +676,18 @@ movie_revenue</code></pre>
 
 top_50</code></pre>
 <pre><code>## # A tibble: 50 x 7
-##    title    release `runtime (mins)` genre   rating  votes `revenue ($ mil~
-##    &lt;chr&gt;      &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;
-##  1 The Sha~    1994              142 Drama      9.3 2.07e6            28.3 
-##  2 The God~    1972              175 Crime,~    9.2 1.42e6           135.  
-##  3 The Dar~    2008              152 Action~    9   2.04e6           535.  
-##  4 The God~    1974              202 Crime,~    9   9.87e5            57.3 
-##  5 The Lor~    2003              201 Advent~    8.9 1.48e6           378.  
-##  6 Pulp Fi~    1994              154 Crime,~    8.9 1.62e6           108.  
-##  7 Schindl~    1993              195 Biogra~    8.9 1.07e6            96.1 
-##  8 Il buon~    1966              161 Western    8.9 6.15e5             6.1 
-##  9 12 Angr~    1957               96 Drama      8.9 5.86e5             4.36
-## 10 Incepti~    2010              148 Action~    8.8 1.82e6           293.  
+##    title       release `runtime (mins)` genre    rating   votes `revenue ($ mil~
+##    &lt;chr&gt;         &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;
+##  1 The Shawsh~    1994              142 Drama       9.3 2249246            28.3 
+##  2 The Godfat~    1972              175 Crime, ~    9.2 1552001           135.  
+##  3 The Dark K~    2008              152 Action,~    9   2217242           535.  
+##  4 The Godfat~    1974              202 Crime, ~    9   1084778            57.3 
+##  5 The Lord o~    2003              201 Adventu~    8.9 1588695           378.  
+##  6 Pulp Ficti~    1994              154 Crime, ~    8.9 1761054           108.  
+##  7 Schindler&#39;~    1993              195 Biograp~    8.9 1168838            96.9 
+##  8 12 Angry M~    1957               96 Crime, ~    8.9  658477             4.36
+##  9 Inception      2010              148 Action,~    8.8 1972065           293.  
+## 10 Fight Club     1999              139 Drama       8.8 1788415            37.0 
 ## # ... with 40 more rows</code></pre>
 <hr>
 <p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
@@ -734,10 +731,10 @@ bank. We will extact the following details:</p>
 <code>read_html()</code> from <strong>xml2</strong> package.</p>
 <pre class="r"><code>rbi_guv &lt;- read_html(&quot;https://en.wikipedia.org/wiki/List_of_Governors_of_Reserve_Bank_of_India&quot;)
 rbi_guv</code></pre>
-<pre><code>## {xml_document}
+<pre><code>## {html_document}
 ## &lt;html class=&quot;client-nojs&quot; lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;
-## [1] &lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset= ...
-## [2] &lt;body class=&quot;mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-sub ...</code></pre>
+## [1] &lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8 ...
+## [2] &lt;body class=&quot;mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject  ...</code></pre>
 </div>
 <div id="list-of-governors" class="section level3">
 <h3>List of Governors</h3>
@@ -747,30 +744,32 @@ extract it using <code>html_table()</code>.</p>
   html_nodes(&quot;table&quot;) %&gt;%
   html_table() </code></pre>
 <pre><code>## [[1]]
-##                                            Governor of the Reserve Bank of India
-## 1 IncumbentShaktikanta Das, IASsince 12 December 2018; 3 months ago (2018-12-12)
-## 2                                                                      Appointer
-## 3                                                                    Term length
-## 4                                                        Constituting instrument
-## 5                                                               Inaugural holder
-## 6                                                                      Formation
-## 7                                                                         Deputy
-## 8                                                                        Website
-##                                            Governor of the Reserve Bank of India
-## 1 IncumbentShaktikanta Das, IASsince 12 December 2018; 3 months ago (2018-12-12)
-## 2                                          Appointments Committee of the Cabinet
-## 3                                                                    Three years
-## 4                                                Reserve Bank of India Act, 1934
-## 5                                                      Osborne Smith (1935–1937)
-## 6                                        1 April 1935; 84 years ago (1935-04-01)
-## 7                                  Deputy Governors of the Reserve Bank of India
-## 8                                                                     rbi.org.in
+##                                             Governor of the Reserve Bank of India
+## 1 IncumbentShaktikanta Das, IASsince 12 December 2018; 17 months ago (2018-12-12)
+## 2                                                                       Appointer
+## 3                                                                     Term length
+## 4                                                         Constituting instrument
+## 5                                                                Inaugural holder
+## 6                                                                       Formation
+## 7                                                                          Deputy
+## 8                                                                          Salary
+## 9                                                                         Website
+##                                             Governor of the Reserve Bank of India
+## 1 IncumbentShaktikanta Das, IASsince 12 December 2018; 17 months ago (2018-12-12)
+## 2                                                              President of India
+## 3                                                                     Three years
+## 4                                                 Reserve Bank of India Act, 1934
+## 5                                                       Osborne Smith (1935–1937)
+## 6                                         1 April 1935; 85 years ago (1935-04-01)
+## 7                                   Deputy Governors of the Reserve Bank of India
+## 8                                                               &lt;U+20B9&gt; 2,50,000
+## 9                                                                      rbi.org.in
 ## 
 ## [[2]]
 ##    No.         Officeholder Portrait        Term start          Term end
 ## 1    1        Osborne Smith       NA      1 April 1935      30 June 1937
 ## 2    2   James Braid Taylor       NA       1 July 1937  17 February 1943
-## 3    3       C. D. Deshmukh       NA  11 August 1943ii       30 May 1949
+## 3    3       C. D. Deshmukh       NA    11 August 1943      30 June 1949
 ## 4    4     Benegal Rama Rau       NA       1 July 1949   14 January 1957
 ## 5    5    K. G. Ambegaonkar       NA   14 January 1957  28 February 1957
 ## 6    6     H. V. R. Iyengar       NA      1 March 1957  28 February 1962
@@ -817,8 +816,8 @@ extract it using <code>html_table()</code>.</p>
 ## 21      1826 days                                 IAS officer
 ## 22      1825 days                                 IAS officer
 ## 23      1096 days                                   Economist
-## 24       947 days                                   Economist
-## 25       118 days                                 IAS officer
+## 24       828 days                                   Economist
+## 25       540 days                                 IAS officer
 ##                                                                                                                                                      Prior office(s)
 ## 1                                                                                                                    Managing Governor of the Imperial Bank of India
 ## 2                                                                                             Deputy Governor of the Reserve Bank of India\n\nController of Currency
@@ -842,12 +841,12 @@ extract it using <code>html_table()</code>.</p>
 ## 20                                                                       Finance Secretary\n\nBanking Secretary\n\nChief Economic Adviser to the Government of India
 ## 21                                                             Executive Director at the International Monetary Fund\n\nDeputy Governor of the Reserve Bank of India
 ## 22                                                                           Finance Secretary\n\nMember-Secretary of the Prime Minister&#39;s Economic Advisory Council
-## 23                                                                                                                 Chief Economic Adviser to the Government of India
+## 23                                                                 Chief Economic Adviser to the Government of India\nChief Economist of International Monetary Fund
 ## 24                                                                                                                               Deputy Governor of the Reserve Bank
 ## 25                                             Member of the Fifteenth Finance Commission\nSherpa of India to the G20\nEconomic Affairs Secretary\nRevenue Secretary
 ##    Reference(s)
-## 1           [1]
-## 2           [2]
+## 1           [2]
+## 2           [3]
 ## 3              
 ## 4              
 ## 5              
@@ -870,7 +869,7 @@ extract it using <code>html_table()</code>.</p>
 ## 22             
 ## 23             
 ## 24             
-## 25    [3][4][5]
+## 25    [4][5][6]
 ## 
 ## [[3]]
 ##   vte Governors of the Reserve Bank of India
@@ -915,13 +914,13 @@ order using <code>desc()</code>.</p>
 ## 12          I. G. Patel 1749
 ## 13       Raghuram Rajan 1096
 ## 14     Lakshmi Kant Jha 1037
-## 15          Urjit Patel  947
-## 16       Manmohan Singh  851
+## 15       Manmohan Singh  851
+## 16          Urjit Patel  828
 ## 17        Osborne Smith  821
 ## 18    S. Venkitaramanan  730
 ## 19           K. R. Puri  621
-## 20        M. Narasimham  211
-## 21      Shaktikanta Das  118
+## 20      Shaktikanta Das  540
+## 21        M. Narasimham  211
 ## 22      N. C. Sen Gupta   92
 ## 23    K. G. Ambegaonkar   45
 ## 24        B. N. Adarkar   42
@@ -934,18 +933,16 @@ from <strong>dplyr</strong> to look at the backgound of the Governors and the re
 counts.</p>
 <pre class="r"><code>profile %&gt;%
   count(Background) </code></pre>
-<pre><code>## # A tibble: 9 x 2
-##   Background                                      n
-##   &lt;chr&gt;                                       &lt;int&gt;
-## 1 &quot;&quot;                                              1
-## 2 Banker                                          2
-## 3 Career Reserve Bank of India officer            1
-## 4 Economist                                       7
-## 5 IAS officer                                     4
-## 6 ICS officer                                     7
-## 7 Indian Administrative Service (IAS) officer     1
-## 8 Indian Audit and Accounts Service officer       1
-## 9 Indian Civil Service (ICS) officer              1</code></pre>
+<pre><code>##                                    Background n
+## 1                                             1
+## 2                                      Banker 2
+## 3        Career Reserve Bank of India officer 1
+## 4                                   Economist 7
+## 5                                 IAS officer 4
+## 6                                 ICS officer 7
+## 7 Indian Administrative Service (IAS) officer 1
+## 8   Indian Audit and Accounts Service officer 1
+## 9          Indian Civil Service (ICS) officer 1</code></pre>
 <p>Let us club some of the categories into <strong>Bureaucrats</strong> as they belong to the
 Indian Administrative/Civil Services. The missing data will be renamed as <code>No Info</code>.
 The category <code>Career Reserve Bank of India officer</code> is renamed as <code>RBI Officer</code>

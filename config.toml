@@ -1,101 +1,46 @@
 baseurl = "https://blog.rsquaredacademy.com/"
 languageCode = "en-us"
 title = "Rsquared Academy Blog"
-theme = "blackburn"
+theme = "hugo-lithium-theme"
 copyright = "&copy; 2014-2020. All rights reserved."
-paginate = 10
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [permalinks]
-post = "/:slug/"
+    post = "/:year/:month/:day/:slug/"
 
-[indexes]
-  tag = "tags"
-  topic = "topics"
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "Online Courses"
+    url = "https://rsquared-academy.thinkific.com"   
+    weight = 2
+[[menu.main]]
+    name = "R Bloggers"
+    url = "https://r-bloggers.com/"
+    weight = 3
 
 [params]
-  # Shown in the home page
-  subtitle = "Explore..Discover..Learn"
-  description = "Rsquared Academy Blog"
-  twitterAuthor = "@hebbaliaravind"
-  twitterSite = "@rsquaredacademy"
-  brand = "![Rsquared Academy Logo](/img/logos.png)"
-  googleAnalytics = "UA-57270671-6"
-  disqus = ""
-  [params.logo]
+    subtitle = "Explore..Discover..Learn"
+    description = "Rsquared Academy Blog"
+    twitterAuthor = "@rsquaredacademy"
+    twitterSite = "@rsquaredacademy"
+    brand = "![Rsquared Academy Logo](/img/logos.png)"
+    googleAnalytics = "UA-57270671-6"
+
+    [params.logo]
     url = "logo.jpeg"
     width = 50
     height = 50
-    alt = "Aravind Hebbali"
+    alt = "Rsquared Academy Logo"
 
-  # CSS name for highlight.js
-  highlightjs = "Github"
-  highlightjs_extra_languages = ["r", "yaml", "bash"]
-  dateFormat = "02 Jan 2006"
+    # options for highlight.js (version, additional languages, and theme)
+    highlightjsVersion = "9.11.0"
+    highlightjsCDN = "//cdn.bootcss.com"
+    highlightjsLang = ["r", "yaml"]
+    highlightjsTheme = "github"
 
-[menu]
-  # Shown in the side menu.
-  [[menu.main]]
-    name = "Home"
-    pre = "<i class='fa fa-home fa-fw'></i>"
-    weight = 1
-    identifier = "home"
-    url = "/"
-  [[menu.main]]
-    name = "All Posts"
-    pre = "<i class='fa fa-road fa-fw'></i>"
-    weight = 2
-    identifier = "start-here"
-    url = "/start-here"
-  [[menu.main]]
-    name = " Data Science Courses"
-    pre = "<i class='fa fa-graduation-cap fa-fw'></i>"
-    weight = 3
-    identifier = "courses1"
-    url = "https://rsquared-academy.thinkific.com/" 
-  [[menu.main]]
-    name = "Shiny Apps"
-    pre = "<i class='fa fa-cube fa-fw'></i>"
-    weight = 6
-    identifier = "app"
-    url = "https://apps.rsquaredacademy.com/" 
-  [[menu.main]]
-    name = "R Packages"
-    pre = "<i class='fa fa-code fa-fw'></i>"
-    weight = 7
-    identifier = "package"
-    url = "https://pkgs.rsquaredacademy.com/" 
-  [[menu.main]]
-    name = "e-books"
-    pre = "<i class='fa fa-book fa-fw'></i>"
-    weight = 8
-    identifier = "ebooks"
-    url = "https://ebooks.rsquaredacademy.com/"   
-  [[menu.main]]
-    name = "About"
-    pre = "<i class='fa fa-user fa-fw'></i>"
-    weight = 9
-    identifier = "about"
-    url = "/about/"
-  [[menu.main]]
-    name = "R Bloggers"
-    pre = "<i class='fa fa-cubes fa-fw'></i>"
-    weight = 10
-    identifier = "r-blogger"
-    url = "https://r-bloggers.com/" 
+    MathJaxCDN = "//cdn.bootcss.com"
+    MathJaxVersion = "2.7.1"
 
-[social]
-  # Link your social networking accounts to the side menu
-  # by entering your username or ID.
-
-  # SNS microblogging
-  twitter = "rsquaredacademy"
-  facebook = "rsquaredacademy"
-
-  # SNS photo/video sharing
-  youtube = "rsquaredin"
-  slideshare = "rsquaredin"
-  linkedin = "rsquared-academy"
-
-  # Techie
-github = "rsquaredacademy"

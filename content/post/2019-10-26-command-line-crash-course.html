@@ -248,7 +248,7 @@ Clear the screen
 <pre><code>## aravind</code></pre>
 <p><code>date</code> will display or change the value of the system’s time and date information.</p>
 <pre class="bash"><code>date</code></pre>
-<pre><code>## Wed Jun  3 13:50:03 IST 2020</code></pre>
+<pre><code>## Wed Jun 10 22:45:47 IST 2020</code></pre>
 <p><code>cal</code> will display a formatted calendar and <code>clear</code> will clear all text on the screen and display a new prompt. You can clear the screen by pressing <code>Ctrl + L</code> as well.</p>
 <pre class="bash"><code>cal</code></pre>
 <p>In R, we can get the user information from <code>Sys.info()</code> or <code>whoami()</code> from the <a href="https://cran.r-project.org/package=whoami">whoami</a> package. The current date &amp; time are returned by <code>Sys.date()</code> &amp; <code>Sys.time()</code>. To clear the R console, we use Ctrl + L.</p>
@@ -518,7 +518,6 @@ Remove/delete directory
 <pre class="bash"><code>ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -551,7 +550,6 @@ pwd</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -581,7 +579,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -769,32 +766,31 @@ Long format list sorted by modification date
 <h4>List files one per line</h4>
 <pre class="bash"><code>ls -l</code></pre>
 <pre><code>## total 31108
-## -rwxrwxrwx 1 aravind aravind       12 Apr 30 15:26 analysis.R
-## -rwxrwxrwx 1 aravind aravind      430 Apr 30 15:26 bash.R
-## -rwxrwxrwx 1 aravind aravind      145 Apr 30 15:26 bash.Rmd
-## -rwxrwxrwx 1 aravind aravind    16242 Apr 30 15:26 bash.sh
-## -rwxrwxrwx 1 aravind aravind       35 Apr 30 15:26 imports_blorr.txt
-## -rwxrwxrwx 1 aravind aravind       34 Apr 30 15:26 imports_olsrr.txt
-## -rwxrwxrwx 1 aravind aravind    39501 Apr 30 15:26 lorem-ipsum.txt
-## -rwxrwxrwx 1 aravind aravind     9291 Apr 30 15:26 main_project.zip
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myfiles
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 mypackage
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject1
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject2
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject3
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject4
-## -rwxrwxrwx 1 aravind aravind     1498 Apr 30 15:26 package_names.txt
-## -rwxrwxrwx 1 aravind aravind     1082 Apr 30 15:26 pkg_names.txt
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 r
-## -rwxrwxrwx 1 aravind aravind    10240 Apr 30 15:26 release_names.tar
-## -rwxrwxrwx 1 aravind aravind      632 Apr 30 15:26 release_names.tar.gz
-## -rwxrwxrwx 1 aravind aravind      546 Apr 30 15:26 release_names.txt
-## -rwxrwxrwx 1 aravind aravind       65 Apr 30 15:26 release_names_18.txt
-## -rwxrwxrwx 1 aravind aravind       53 Apr 30 15:26 release_names_19.txt
-## -rwxrwxrwx 1 aravind aravind 31754998 Apr 30 15:26 sept_15.csv.gz
-## -rwxrwxrwx 1 aravind aravind      157 Apr 30 15:26 urls.txt
-## -rwxrwxrwx 1 aravind aravind     4398 Apr 30 15:26 zip_example.zip</code></pre>
+## -rwxrwxrwx 1 aravind aravind       12 Jun  3 13:51 analysis.R
+## -rwxrwxrwx 1 aravind aravind      430 Jun  3 13:51 bash.R
+## -rwxrwxrwx 1 aravind aravind    16242 Jun  3 13:51 bash.sh
+## -rwxrwxrwx 1 aravind aravind       35 Jun  3 13:51 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Jun  3 13:51 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind    39501 Jun  3 13:51 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind     9291 Jun  3 13:51 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject4
+## -rwxrwxrwx 1 aravind aravind     1498 Jun  3 13:51 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Jun  3 13:51 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 r
+## -rwxrwxrwx 1 aravind aravind    10240 Jun  3 13:51 release_names.tar
+## -rwxrwxrwx 1 aravind aravind      632 Jun  3 13:51 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Jun  3 13:51 release_names.txt
+## -rwxrwxrwx 1 aravind aravind       65 Jun  3 13:51 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Jun  3 13:51 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Jun  3 13:51 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind      157 Jun  3 13:51 urls.txt
+## -rwxrwxrwx 1 aravind aravind     4398 Jun  3 13:51 zip_example.zip</code></pre>
 </div>
 <div id="list-all-files-including-hidden-files" class="section level4">
 <h4>List all files including hidden files</h4>
@@ -803,7 +799,6 @@ Long format list sorted by modification date
 ## ..
 ## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -832,127 +827,123 @@ Long format list sorted by modification date
 <h4>Display file permissions, ownership, size &amp; modification date</h4>
 <pre class="bash"><code>ls -la</code></pre>
 <pre><code>## total 31108
-## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:50 .
-## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:49 ..
-## -rwxrwxrwx 1 aravind aravind       12 Apr 30 15:26 analysis.R
-## -rwxrwxrwx 1 aravind aravind      430 Apr 30 15:26 bash.R
-## -rwxrwxrwx 1 aravind aravind      145 Apr 30 15:26 bash.Rmd
-## -rwxrwxrwx 1 aravind aravind    16242 Apr 30 15:26 bash.sh
-## -rwxrwxrwx 1 aravind aravind       35 Apr 30 15:26 imports_blorr.txt
-## -rwxrwxrwx 1 aravind aravind       34 Apr 30 15:26 imports_olsrr.txt
-## -rwxrwxrwx 1 aravind aravind    39501 Apr 30 15:26 lorem-ipsum.txt
-## -rwxrwxrwx 1 aravind aravind     9291 Apr 30 15:26 main_project.zip
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myfiles
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 mypackage
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject1
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject2
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject3
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject4
-## -rwxrwxrwx 1 aravind aravind     1498 Apr 30 15:26 package_names.txt
-## -rwxrwxrwx 1 aravind aravind     1082 Apr 30 15:26 pkg_names.txt
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 r
-## -rwxrwxrwx 1 aravind aravind    10240 Apr 30 15:26 release_names.tar
-## -rwxrwxrwx 1 aravind aravind      632 Apr 30 15:26 release_names.tar.gz
-## -rwxrwxrwx 1 aravind aravind      546 Apr 30 15:26 release_names.txt
-## -rwxrwxrwx 1 aravind aravind       65 Apr 30 15:26 release_names_18.txt
-## -rwxrwxrwx 1 aravind aravind       53 Apr 30 15:26 release_names_19.txt
-## -rwxrwxrwx 1 aravind aravind 31754998 Apr 30 15:26 sept_15.csv.gz
-## -rwxrwxrwx 1 aravind aravind      157 Apr 30 15:26 urls.txt
-## -rwxrwxrwx 1 aravind aravind     4398 Apr 30 15:26 zip_example.zip</code></pre>
+## drwxrwxrwx 1 aravind aravind     4096 Jun 10 22:46 .
+## drwxrwxrwx 1 aravind aravind     4096 Jun 10 22:45 ..
+## -rwxrwxrwx 1 aravind aravind       12 Jun  3 13:51 analysis.R
+## -rwxrwxrwx 1 aravind aravind      430 Jun  3 13:51 bash.R
+## -rwxrwxrwx 1 aravind aravind    16242 Jun  3 13:51 bash.sh
+## -rwxrwxrwx 1 aravind aravind       35 Jun  3 13:51 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Jun  3 13:51 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind    39501 Jun  3 13:51 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind     9291 Jun  3 13:51 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject4
+## -rwxrwxrwx 1 aravind aravind     1498 Jun  3 13:51 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Jun  3 13:51 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 r
+## -rwxrwxrwx 1 aravind aravind    10240 Jun  3 13:51 release_names.tar
+## -rwxrwxrwx 1 aravind aravind      632 Jun  3 13:51 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Jun  3 13:51 release_names.txt
+## -rwxrwxrwx 1 aravind aravind       65 Jun  3 13:51 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Jun  3 13:51 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Jun  3 13:51 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind      157 Jun  3 13:51 urls.txt
+## -rwxrwxrwx 1 aravind aravind     4398 Jun  3 13:51 zip_example.zip</code></pre>
 </div>
 <div id="display-size-in-human-readable-format" class="section level4">
 <h4>Display size in human readable format</h4>
 <pre class="bash"><code>ls -lh</code></pre>
 <pre><code>## total 31M
-## -rwxrwxrwx 1 aravind aravind   12 Apr 30 15:26 analysis.R
-## -rwxrwxrwx 1 aravind aravind  430 Apr 30 15:26 bash.R
-## -rwxrwxrwx 1 aravind aravind  145 Apr 30 15:26 bash.Rmd
-## -rwxrwxrwx 1 aravind aravind  16K Apr 30 15:26 bash.sh
-## -rwxrwxrwx 1 aravind aravind   35 Apr 30 15:26 imports_blorr.txt
-## -rwxrwxrwx 1 aravind aravind   34 Apr 30 15:26 imports_olsrr.txt
-## -rwxrwxrwx 1 aravind aravind  39K Apr 30 15:26 lorem-ipsum.txt
-## -rwxrwxrwx 1 aravind aravind 9.1K Apr 30 15:26 main_project.zip
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myfiles
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 mypackage
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myproject
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myproject1
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myproject2
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myproject3
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 myproject4
-## -rwxrwxrwx 1 aravind aravind 1.5K Apr 30 15:26 package_names.txt
-## -rwxrwxrwx 1 aravind aravind 1.1K Apr 30 15:26 pkg_names.txt
-## drwxrwxrwx 1 aravind aravind 4.0K Apr 30 15:26 r
-## -rwxrwxrwx 1 aravind aravind  10K Apr 30 15:26 release_names.tar
-## -rwxrwxrwx 1 aravind aravind  632 Apr 30 15:26 release_names.tar.gz
-## -rwxrwxrwx 1 aravind aravind  546 Apr 30 15:26 release_names.txt
-## -rwxrwxrwx 1 aravind aravind   65 Apr 30 15:26 release_names_18.txt
-## -rwxrwxrwx 1 aravind aravind   53 Apr 30 15:26 release_names_19.txt
-## -rwxrwxrwx 1 aravind aravind  31M Apr 30 15:26 sept_15.csv.gz
-## -rwxrwxrwx 1 aravind aravind  157 Apr 30 15:26 urls.txt
-## -rwxrwxrwx 1 aravind aravind 4.3K Apr 30 15:26 zip_example.zip</code></pre>
+## -rwxrwxrwx 1 aravind aravind   12 Jun  3 13:51 analysis.R
+## -rwxrwxrwx 1 aravind aravind  430 Jun  3 13:51 bash.R
+## -rwxrwxrwx 1 aravind aravind  16K Jun  3 13:51 bash.sh
+## -rwxrwxrwx 1 aravind aravind   35 Jun  3 13:51 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind   34 Jun  3 13:51 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind  39K Jun  3 13:51 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind 9.1K Jun  3 13:51 main_project.zip
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myfiles
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 mypackage
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myproject
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myproject1
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myproject2
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myproject3
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 myproject4
+## -rwxrwxrwx 1 aravind aravind 1.5K Jun  3 13:51 package_names.txt
+## -rwxrwxrwx 1 aravind aravind 1.1K Jun  3 13:51 pkg_names.txt
+## drwxrwxrwx 1 aravind aravind 4.0K Jun  3 13:51 r
+## -rwxrwxrwx 1 aravind aravind  10K Jun  3 13:51 release_names.tar
+## -rwxrwxrwx 1 aravind aravind  632 Jun  3 13:51 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind  546 Jun  3 13:51 release_names.txt
+## -rwxrwxrwx 1 aravind aravind   65 Jun  3 13:51 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind   53 Jun  3 13:51 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind  31M Jun  3 13:51 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind  157 Jun  3 13:51 urls.txt
+## -rwxrwxrwx 1 aravind aravind 4.3K Jun  3 13:51 zip_example.zip</code></pre>
 </div>
 <div id="sort-list-by-size" class="section level4">
 <h4>Sort list by size</h4>
 <pre class="bash"><code>ls -lS</code></pre>
 <pre><code>## total 31108
-## -rwxrwxrwx 1 aravind aravind 31754998 Apr 30 15:26 sept_15.csv.gz
-## -rwxrwxrwx 1 aravind aravind    39501 Apr 30 15:26 lorem-ipsum.txt
-## -rwxrwxrwx 1 aravind aravind    16242 Apr 30 15:26 bash.sh
-## -rwxrwxrwx 1 aravind aravind    10240 Apr 30 15:26 release_names.tar
-## -rwxrwxrwx 1 aravind aravind     9291 Apr 30 15:26 main_project.zip
-## -rwxrwxrwx 1 aravind aravind     4398 Apr 30 15:26 zip_example.zip
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myfiles
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 mypackage
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject1
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject2
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject3
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject4
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 r
-## -rwxrwxrwx 1 aravind aravind     1498 Apr 30 15:26 package_names.txt
-## -rwxrwxrwx 1 aravind aravind     1082 Apr 30 15:26 pkg_names.txt
-## -rwxrwxrwx 1 aravind aravind      632 Apr 30 15:26 release_names.tar.gz
-## -rwxrwxrwx 1 aravind aravind      546 Apr 30 15:26 release_names.txt
-## -rwxrwxrwx 1 aravind aravind      430 Apr 30 15:26 bash.R
-## -rwxrwxrwx 1 aravind aravind      157 Apr 30 15:26 urls.txt
-## -rwxrwxrwx 1 aravind aravind      145 Apr 30 15:26 bash.Rmd
-## -rwxrwxrwx 1 aravind aravind       65 Apr 30 15:26 release_names_18.txt
-## -rwxrwxrwx 1 aravind aravind       53 Apr 30 15:26 release_names_19.txt
-## -rwxrwxrwx 1 aravind aravind       35 Apr 30 15:26 imports_blorr.txt
-## -rwxrwxrwx 1 aravind aravind       34 Apr 30 15:26 imports_olsrr.txt
-## -rwxrwxrwx 1 aravind aravind       12 Apr 30 15:26 analysis.R</code></pre>
+## -rwxrwxrwx 1 aravind aravind 31754998 Jun  3 13:51 sept_15.csv.gz
+## -rwxrwxrwx 1 aravind aravind    39501 Jun  3 13:51 lorem-ipsum.txt
+## -rwxrwxrwx 1 aravind aravind    16242 Jun  3 13:51 bash.sh
+## -rwxrwxrwx 1 aravind aravind    10240 Jun  3 13:51 release_names.tar
+## -rwxrwxrwx 1 aravind aravind     9291 Jun  3 13:51 main_project.zip
+## -rwxrwxrwx 1 aravind aravind     4398 Jun  3 13:51 zip_example.zip
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myfiles
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 mypackage
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject1
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject2
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject3
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject4
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 r
+## -rwxrwxrwx 1 aravind aravind     1498 Jun  3 13:51 package_names.txt
+## -rwxrwxrwx 1 aravind aravind     1082 Jun  3 13:51 pkg_names.txt
+## -rwxrwxrwx 1 aravind aravind      632 Jun  3 13:51 release_names.tar.gz
+## -rwxrwxrwx 1 aravind aravind      546 Jun  3 13:51 release_names.txt
+## -rwxrwxrwx 1 aravind aravind      430 Jun  3 13:51 bash.R
+## -rwxrwxrwx 1 aravind aravind      157 Jun  3 13:51 urls.txt
+## -rwxrwxrwx 1 aravind aravind       65 Jun  3 13:51 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Jun  3 13:51 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind       35 Jun  3 13:51 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       34 Jun  3 13:51 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind       12 Jun  3 13:51 analysis.R</code></pre>
 </div>
 <div id="sort-list-by-modification-date" class="section level4">
 <h4>Sort list by modification date</h4>
 <pre class="bash"><code>ls -ltr</code></pre>
 <pre><code>## total 31108
-## -rwxrwxrwx 1 aravind aravind      546 Apr 30 15:26 release_names.txt
-## -rwxrwxrwx 1 aravind aravind    10240 Apr 30 15:26 release_names.tar
-## -rwxrwxrwx 1 aravind aravind     4398 Apr 30 15:26 zip_example.zip
-## -rwxrwxrwx 1 aravind aravind     9291 Apr 30 15:26 main_project.zip
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 r
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myfiles
-## -rwxrwxrwx 1 aravind aravind      632 Apr 30 15:26 release_names.tar.gz
-## -rwxrwxrwx 1 aravind aravind       65 Apr 30 15:26 release_names_18.txt
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject3
-## -rwxrwxrwx 1 aravind aravind       35 Apr 30 15:26 imports_blorr.txt
-## -rwxrwxrwx 1 aravind aravind       53 Apr 30 15:26 release_names_19.txt
-## -rwxrwxrwx 1 aravind aravind       34 Apr 30 15:26 imports_olsrr.txt
-## -rwxrwxrwx 1 aravind aravind     1498 Apr 30 15:26 package_names.txt
-## -rwxrwxrwx 1 aravind aravind      157 Apr 30 15:26 urls.txt
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject1
-## -rwxrwxrwx 1 aravind aravind     1082 Apr 30 15:26 pkg_names.txt
-## -rwxrwxrwx 1 aravind aravind 31754998 Apr 30 15:26 sept_15.csv.gz
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 mypackage
-## -rwxrwxrwx 1 aravind aravind    16242 Apr 30 15:26 bash.sh
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject2
-## -rwxrwxrwx 1 aravind aravind      145 Apr 30 15:26 bash.Rmd
-## -rwxrwxrwx 1 aravind aravind       12 Apr 30 15:26 analysis.R
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject
-## -rwxrwxrwx 1 aravind aravind      430 Apr 30 15:26 bash.R
-## -rwxrwxrwx 1 aravind aravind    39501 Apr 30 15:26 lorem-ipsum.txt
-## drwxrwxrwx 1 aravind aravind     4096 Apr 30 15:26 myproject4</code></pre>
+## -rwxrwxrwx 1 aravind aravind      546 Jun  3 13:51 release_names.txt
+## -rwxrwxrwx 1 aravind aravind    10240 Jun  3 13:51 release_names.tar
+## -rwxrwxrwx 1 aravind aravind     4398 Jun  3 13:51 zip_example.zip
+## -rwxrwxrwx 1 aravind aravind     9291 Jun  3 13:51 main_project.zip
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 r
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myfiles
+## -rwxrwxrwx 1 aravind aravind      632 Jun  3 13:51 release_names.tar.gz
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject3
+## -rwxrwxrwx 1 aravind aravind       35 Jun  3 13:51 imports_blorr.txt
+## -rwxrwxrwx 1 aravind aravind       65 Jun  3 13:51 release_names_18.txt
+## -rwxrwxrwx 1 aravind aravind       53 Jun  3 13:51 release_names_19.txt
+## -rwxrwxrwx 1 aravind aravind       34 Jun  3 13:51 imports_olsrr.txt
+## -rwxrwxrwx 1 aravind aravind     1498 Jun  3 13:51 package_names.txt
+## -rwxrwxrwx 1 aravind aravind      157 Jun  3 13:51 urls.txt
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject1
+## -rwxrwxrwx 1 aravind aravind     1082 Jun  3 13:51 pkg_names.txt
+## -rwxrwxrwx 1 aravind aravind 31754998 Jun  3 13:51 sept_15.csv.gz
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 mypackage
+## -rwxrwxrwx 1 aravind aravind    16242 Jun  3 13:51 bash.sh
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject2
+## -rwxrwxrwx 1 aravind aravind       12 Jun  3 13:51 analysis.R
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject
+## -rwxrwxrwx 1 aravind aravind      430 Jun  3 13:51 bash.R
+## -rwxrwxrwx 1 aravind aravind    39501 Jun  3 13:51 lorem-ipsum.txt
+## drwxrwxrwx 1 aravind aravind     4096 Jun  3 13:51 myproject4</code></pre>
 </div>
 </div>
 <div id="r-functions" class="section level3">
@@ -1093,7 +1084,6 @@ Compare files
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1131,7 +1121,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1172,7 +1161,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1271,7 +1259,6 @@ Move files in verbose mode
 <pre class="bash"><code>ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1493,7 +1480,6 @@ Remove files in verbose mode, printing a message for each removed file
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1527,7 +1513,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -1560,7 +1545,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -4230,7 +4214,6 @@ ls</code></pre>
 ## release_names_19.txt
 ## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -4358,7 +4341,6 @@ List contents of a zip file
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -4392,7 +4374,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -4426,7 +4407,6 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## analysis.R
 ## bash.R
-## bash.Rmd
 ## bash.sh
 ## imports_blorr.txt
 ## imports_olsrr.txt
@@ -4855,32 +4835,32 @@ Print all available information system
 <div id="print-all-available-information-about-the-system" class="section level4">
 <h4>Print all available information about the system</h4>
 <pre class="bash"><code>uname -a</code></pre>
-<pre><code>## Linux Aravind 4.4.0-18362-Microsoft #476-Microsoft Fri Nov 01 16:53:00 PST 2019 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
+<pre><code>## Linux Aravind 4.4.0-18362-Microsoft #836-Microsoft Mon May 05 16:04:00 PST 2020 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
 </div>
 <div id="display-free-used-swap-memory-in-the-system" class="section level4">
 <h4>Display free, used, swap memory in the system</h4>
 <pre class="bash"><code>free</code></pre>
 <pre><code>##               total        used        free      shared  buff/cache   available
-## Mem:        3621900     2738168      654380       17720      229352      750000
-## Swap:      11010048      546672    10463376</code></pre>
+## Mem:        3621900     1815864     1576684       17720      229352     1672304
+## Swap:      11010048      260640    10749408</code></pre>
 </div>
 <div id="display-file-system-disk-space-usage" class="section level4">
 <h4>Display file system disk space usage</h4>
 <pre class="bash"><code>df</code></pre>
 <pre><code>## Filesystem     1K-blocks      Used Available Use% Mounted on
-## rootfs         188482144 133572184  54909960  71% /
-## none           188482144 133572184  54909960  71% /dev
-## none           188482144 133572184  54909960  71% /run
-## none           188482144 133572184  54909960  71% /run/lock
-## none           188482144 133572184  54909960  71% /run/shm
-## none           188482144 133572184  54909960  71% /run/user
-## cgroup         188482144 133572184  54909960  71% /sys/fs/cgroup
-## C:\            188482144 133572184  54909960  71% /mnt/c
+## rootfs         188482144 142470276  46011868  76% /
+## none           188482144 142470276  46011868  76% /dev
+## none           188482144 142470276  46011868  76% /run
+## none           188482144 142470276  46011868  76% /run/lock
+## none           188482144 142470276  46011868  76% /run/shm
+## none           188482144 142470276  46011868  76% /run/user
+## cgroup         188482144 142470276  46011868  76% /sys/fs/cgroup
+## C:\            188482144 142470276  46011868  76% /mnt/c
 ## D:\             18660348  17154308   1506040  92% /mnt/d
 ## F:\              3196924    231756   2965168   8% /mnt/f
 ## G:\             86383612  24561220  61822392  29% /mnt/g
 ## H:\             86383612  14755988  71627624  18% /mnt/h
-## J:\             83185660  18693888  64491772  23% /mnt/j</code></pre>
+## J:\             83185660  18797916  64387744  23% /mnt/j</code></pre>
 </div>
 </div>
 <div id="others" class="section level3">
@@ -5055,179 +5035,177 @@ Here we will focus on the following</p>
 </ul>
 <p>Let us try to execute a command without any additional arguments. We will execute the <code>ls</code> command to list all files and directories. Use <code>system2()</code> and specify the command using the <code>command</code> argument. Whenever you are trying to execute a command from R, the first argument or input should be the command and it must be enclosed in quotes.</p>
 <pre class="r"><code>system2(command = &quot;ls&quot;)</code></pre>
-<pre><code>##   [1] &quot;2016-02-07-variables.html&quot;                                      
-##   [2] &quot;2016-02-17-data-types-in-r.html&quot;                                
-##   [3] &quot;2017-02-05-variables.Rmd&quot;                                       
-##   [4] &quot;2017-02-05-variables.html&quot;                                      
-##   [5] &quot;2017-02-17-data-types-in-r.Rmd&quot;                                 
-##   [6] &quot;2017-02-17-data-types-in-r.html&quot;                                
-##   [7] &quot;2017-03-01-getting-help-in-r.html&quot;                              
-##   [8] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.Rmd&quot;          
-##   [9] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.html&quot;         
-##  [10] &quot;2017-03-25-vectors.Rmd&quot;                                         
-##  [11] &quot;2017-03-25-vectors.html&quot;                                        
-##  [12] &quot;2017-03-29-vectors-part-2.Rmd&quot;                                  
-##  [13] &quot;2017-03-29-vectors-part-2.html&quot;                                 
-##  [14] &quot;2017-04-03-vectors-part-3.Rmd&quot;                                  
-##  [15] &quot;2017-04-03-vectors-part-3.html&quot;                                 
-##  [16] &quot;2017-04-06-matrix.Rmd&quot;                                          
-##  [17] &quot;2017-04-06-matrix.html&quot;                                         
-##  [18] &quot;2017-04-12-matrix-part-2.Rmd&quot;                                   
-##  [19] &quot;2017-04-12-matrix-part-2.html&quot;                                  
-##  [20] &quot;2017-04-18-lists.Rmd&quot;                                           
-##  [21] &quot;2017-04-18-lists.html&quot;                                          
-##  [22] &quot;2017-04-30-factors.Rmd&quot;                                         
-##  [23] &quot;2017-04-30-factors.html&quot;                                        
-##  [24] &quot;2017-05-12-dataframes.Rmd&quot;                                      
-##  [25] &quot;2017-05-12-dataframes.html&quot;                                     
-##  [26] &quot;2017-05-24-data-visualization-with-r-introduction.Rmd&quot;          
-##  [27] &quot;2017-05-24-data-visualization-with-r-introduction.html&quot;         
-##  [28] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.Rmd&quot; 
-##  [29] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.html&quot;
-##  [30] &quot;2017-06-17-data-visualization-with-r-scatter-plots.Rmd&quot;         
-##  [31] &quot;2017-06-17-data-visualization-with-r-scatter-plots.html&quot;        
-##  [32] &quot;2017-06-29-data-visualization-with-r-line-graphs.Rmd&quot;           
-##  [33] &quot;2017-06-29-data-visualization-with-r-line-graphs.html&quot;          
-##  [34] &quot;2017-07-11-data-visualization-with-r-bar-plots.Rmd&quot;             
-##  [35] &quot;2017-07-11-data-visualization-with-r-bar-plots.html&quot;            
-##  [36] &quot;2017-07-23-data-visualization-with-r-box-plots.Rmd&quot;             
-##  [37] &quot;2017-07-23-data-visualization-with-r-box-plots.html&quot;            
-##  [38] &quot;2017-08-04-data-visualization-with-r-histogram.Rmd&quot;             
-##  [39] &quot;2017-08-04-data-visualization-with-r-histogram.html&quot;            
-##  [40] &quot;2017-08-16-data-visualization-with-r-legends.Rmd&quot;               
-##  [41] &quot;2017-08-16-data-visualization-with-r-legends.html&quot;              
-##  [42] &quot;2017-08-28-data-visualization-with-r-text-annotations.Rmd&quot;      
-##  [43] &quot;2017-08-28-data-visualization-with-r-text-annotations.html&quot;     
-##  [44] &quot;2017-09-09-data-visualization-with-r-combining-plots.Rmd&quot;       
-##  [45] &quot;2017-09-09-data-visualization-with-r-combining-plots.html&quot;      
-##  [46] &quot;2017-10-03-ggplot2-quick-tour.Rmd&quot;                              
-##  [47] &quot;2017-10-03-ggplot2-quick-tour.html&quot;                             
-##  [48] &quot;2017-10-15-ggplot2-introduction-to-geoms.Rmd&quot;                   
-##  [49] &quot;2017-10-15-ggplot2-introduction-to-geoms.html&quot;                  
-##  [50] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.Rmd&quot;              
-##  [51] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.html&quot;             
-##  [52] &quot;2017-11-08-ggplot2-axis-plot-labels.Rmd&quot;                        
-##  [53] &quot;2017-11-08-ggplot2-axis-plot-labels.html&quot;                       
-##  [54] &quot;2017-11-20-ggplot2-text-annotations.Rmd&quot;                        
-##  [55] &quot;2017-11-20-ggplot2-text-annotations.html&quot;                       
-##  [56] &quot;2017-12-02-ggplot2-scatter-plots.Rmd&quot;                           
-##  [57] &quot;2017-12-02-ggplot2-scatter-plots.html&quot;                          
-##  [58] &quot;2017-12-14-ggplot2-line-graphs.Rmd&quot;                             
-##  [59] &quot;2017-12-14-ggplot2-line-graphs.html&quot;                            
-##  [60] &quot;2017-12-26-ggplot2-bar-plots.Rmd&quot;                               
-##  [61] &quot;2017-12-26-ggplot2-bar-plots.html&quot;                              
-##  [62] &quot;2018-01-07-ggplot2-box-plots.Rmd&quot;                               
-##  [63] &quot;2018-01-07-ggplot2-box-plots.html&quot;                              
-##  [64] &quot;2018-01-19-ggplot2-histogram.Rmd&quot;                               
-##  [65] &quot;2018-01-19-ggplot2-histogram.html&quot;                              
-##  [66] &quot;2018-01-31-ggplot2-guides-axes.Rmd&quot;                             
-##  [67] &quot;2018-01-31-ggplot2-guides-axes.html&quot;                            
-##  [68] &quot;2018-02-12-ggplot2-guides-legends.Rmd&quot;                          
-##  [69] &quot;2018-02-12-ggplot2-guides-legends.html&quot;                         
-##  [70] &quot;2018-02-24-guides-legends-part-2.Rmd&quot;                           
-##  [71] &quot;2018-02-24-guides-legends-part-2.html&quot;                          
-##  [72] &quot;2018-03-08-legend-part-3.Rmd&quot;                                   
-##  [73] &quot;2018-03-08-legend-part-3.html&quot;                                  
-##  [74] &quot;2018-03-20-legend-part-4.Rmd&quot;                                   
-##  [75] &quot;2018-03-20-legend-part-4.html&quot;                                  
-##  [76] &quot;2018-04-01-legend-part-5.Rmd&quot;                                   
-##  [77] &quot;2018-04-01-legend-part-5.html&quot;                                  
-##  [78] &quot;2018-04-13-legend-part-6.Rmd&quot;                                   
-##  [79] &quot;2018-04-13-legend-part-6.html&quot;                                  
-##  [80] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.Rmd&quot;           
-##  [81] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.html&quot;          
-##  [82] &quot;2018-05-07-ggplot2-themes.Rmd&quot;                                  
-##  [83] &quot;2018-05-07-ggplot2-themes.html&quot;                                 
-##  [84] &quot;2018-07-30-importing-data-into-r-part-1.Rmd&quot;                    
-##  [85] &quot;2018-07-30-importing-data-into-r-part-1.html&quot;                   
-##  [86] &quot;2018-08-11-importing-data-into-r-part-2.Rmd&quot;                    
-##  [87] &quot;2018-08-11-importing-data-into-r-part-2.html&quot;                   
-##  [88] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.Rmd&quot;                
-##  [89] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.html&quot;               
-##  [90] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.Rmd&quot;                
-##  [91] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.html&quot;               
-##  [92] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.Rmd&quot;                
-##  [93] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.html&quot;               
-##  [94] &quot;2018-09-28-introduction-to-tibbles.Rmd&quot;                         
-##  [95] &quot;2018-09-28-introduction-to-tibbles.html&quot;                        
-##  [96] &quot;2018-10-10-readable-code-with-pipes.Rmd&quot;                        
-##  [97] &quot;2018-10-10-readable-code-with-pipes.html&quot;                       
-##  [98] &quot;2018-10-22-hacking-strings-with-stringr.Rmd&quot;                    
-##  [99] &quot;2018-10-22-hacking-strings-with-stringr.html&quot;                   
-## [100] &quot;2018-11-03-working-with-dates-in-r.Rmd&quot;                         
-## [101] &quot;2018-11-03-working-with-dates-in-r.html&quot;                        
-## [102] &quot;2018-11-15-working-with-categorical-data-using-forcats.Rmd&quot;     
-## [103] &quot;2018-11-15-working-with-categorical-data-using-forcats.html&quot;    
-## [104] &quot;2018-11-27-quick-guide-r-sqlite.Rmd&quot;                            
-## [105] &quot;2018-11-27-quick-guide-r-sqlite.html&quot;                           
-## [106] &quot;2018-12-09-data-wrangling-with-dbplyr.Rmd&quot;                      
-## [107] &quot;2018-12-09-data-wrangling-with-dbplyr.html&quot;                     
-## [108] &quot;2018-12-21-sql-for-data-science.Rmd&quot;                            
-## [109] &quot;2018-12-21-sql-for-data-science.html&quot;                           
-## [110] &quot;2019-01-02-sql-for-data-science-part-2.Rmd&quot;                     
-## [111] &quot;2019-01-02-sql-for-data-science-part-2.html&quot;                    
-## [112] &quot;2019-02-08-introducing-olsrr.Rmd&quot;                               
-## [113] &quot;2019-02-08-introducing-olsrr.html&quot;                              
-## [114] &quot;2019-02-12-introducing-rfm.Rmd&quot;                                 
-## [115] &quot;2019-02-12-introducing-rfm.html&quot;                                
-## [116] &quot;2019-02-19-introducing-descriptr.Rmd&quot;                           
-## [117] &quot;2019-02-19-introducing-descriptr.html&quot;                          
-## [118] &quot;2019-02-20-introducing-descriptr.Rmd&quot;                           
-## [119] &quot;2019-02-20-introducing-descriptr.html&quot;                          
-## [120] &quot;2019-02-26-introducing-blorr.Rmd&quot;                               
-## [121] &quot;2019-02-26-introducing-blorr.html&quot;                              
-## [122] &quot;2019-03-05-getting-help-in-r.Rmd&quot;                               
-## [123] &quot;2019-03-05-getting-help-in-r.html&quot;                              
-## [124] &quot;2019-03-12-introducing-rbin.Rmd&quot;                                
-## [125] &quot;2019-03-12-introducing-rbin.html&quot;                               
-## [126] &quot;2019-03-14-introducing-vistributions.Rmd&quot;                       
-## [127] &quot;2019-03-14-introducing-vistributions.html&quot;                      
-## [128] &quot;2019-04-01-shiny-apps.Rmd&quot;                                      
-## [129] &quot;2019-04-01-shiny-apps.html&quot;                                     
-## [130] &quot;2019-04-11-web-scraping.Rmd&quot;                                    
-## [131] &quot;2019-04-11-web-scraping.html&quot;                                   
-## [132] &quot;2019-04-13-web-scraping-note.Rmd&quot;                               
-## [133] &quot;2019-04-13-web-scraping-note.html&quot;                              
-## [134] &quot;2019-05-02-mba.Rmd&quot;                                             
-## [135] &quot;2019-05-02-mba.html&quot;                                            
-## [136] &quot;2019-05-27-regex.Rmd&quot;                                           
-## [137] &quot;2019-05-27-regex.html&quot;                                          
-## [138] &quot;2019-07-05-pkginfo.Rmd&quot;                                         
-## [139] &quot;2019-07-05-pkginfo.html&quot;                                        
-## [140] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.Rmd&quot;        
-## [141] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.html&quot;       
-## [142] &quot;2019-07-22-customer-segmentation-using-rfm-analysis_files&quot;      
-## [143] &quot;2019-08-08-working-with-databases-using-r.Rmd&quot;                  
-## [144] &quot;2019-08-08-working-with-databases-using-r.html&quot;                 
+<pre><code>##   [1] &quot;2017-02-05-variables.Rmd&quot;                                       
+##   [2] &quot;2017-02-05-variables.html&quot;                                      
+##   [3] &quot;2017-02-17-data-types-in-r.Rmd&quot;                                 
+##   [4] &quot;2017-02-17-data-types-in-r.html&quot;                                
+##   [5] &quot;2017-03-01-getting-help-in-r.html&quot;                              
+##   [6] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.Rmd&quot;          
+##   [7] &quot;2017-03-13-beginners-guide-to-r-package-ecosystem.html&quot;         
+##   [8] &quot;2017-03-25-vectors.Rmd&quot;                                         
+##   [9] &quot;2017-03-25-vectors.html&quot;                                        
+##  [10] &quot;2017-03-29-vectors-part-2.Rmd&quot;                                  
+##  [11] &quot;2017-03-29-vectors-part-2.html&quot;                                 
+##  [12] &quot;2017-04-03-vectors-part-3.Rmd&quot;                                  
+##  [13] &quot;2017-04-03-vectors-part-3.html&quot;                                 
+##  [14] &quot;2017-04-06-matrix.Rmd&quot;                                          
+##  [15] &quot;2017-04-06-matrix.html&quot;                                         
+##  [16] &quot;2017-04-12-matrix-part-2.Rmd&quot;                                   
+##  [17] &quot;2017-04-12-matrix-part-2.html&quot;                                  
+##  [18] &quot;2017-04-18-lists.Rmd&quot;                                           
+##  [19] &quot;2017-04-18-lists.html&quot;                                          
+##  [20] &quot;2017-04-30-factors.Rmd&quot;                                         
+##  [21] &quot;2017-04-30-factors.html&quot;                                        
+##  [22] &quot;2017-05-12-dataframes.Rmd&quot;                                      
+##  [23] &quot;2017-05-12-dataframes.html&quot;                                     
+##  [24] &quot;2017-05-24-data-visualization-with-r-introduction.Rmd&quot;          
+##  [25] &quot;2017-05-24-data-visualization-with-r-introduction.html&quot;         
+##  [26] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.Rmd&quot; 
+##  [27] &quot;2017-06-05-data-visualization-with-r-title-and-axis-labels.html&quot;
+##  [28] &quot;2017-06-17-data-visualization-with-r-scatter-plots.Rmd&quot;         
+##  [29] &quot;2017-06-17-data-visualization-with-r-scatter-plots.html&quot;        
+##  [30] &quot;2017-06-29-data-visualization-with-r-line-graphs.Rmd&quot;           
+##  [31] &quot;2017-06-29-data-visualization-with-r-line-graphs.html&quot;          
+##  [32] &quot;2017-07-11-data-visualization-with-r-bar-plots.Rmd&quot;             
+##  [33] &quot;2017-07-11-data-visualization-with-r-bar-plots.html&quot;            
+##  [34] &quot;2017-07-23-data-visualization-with-r-box-plots.Rmd&quot;             
+##  [35] &quot;2017-07-23-data-visualization-with-r-box-plots.html&quot;            
+##  [36] &quot;2017-08-04-data-visualization-with-r-histogram.Rmd&quot;             
+##  [37] &quot;2017-08-04-data-visualization-with-r-histogram.html&quot;            
+##  [38] &quot;2017-08-16-data-visualization-with-r-legends.Rmd&quot;               
+##  [39] &quot;2017-08-16-data-visualization-with-r-legends.html&quot;              
+##  [40] &quot;2017-08-28-data-visualization-with-r-text-annotations.Rmd&quot;      
+##  [41] &quot;2017-08-28-data-visualization-with-r-text-annotations.html&quot;     
+##  [42] &quot;2017-09-09-data-visualization-with-r-combining-plots.Rmd&quot;       
+##  [43] &quot;2017-09-09-data-visualization-with-r-combining-plots.html&quot;      
+##  [44] &quot;2017-10-03-ggplot2-quick-tour.Rmd&quot;                              
+##  [45] &quot;2017-10-03-ggplot2-quick-tour.html&quot;                             
+##  [46] &quot;2017-10-15-ggplot2-introduction-to-geoms.Rmd&quot;                   
+##  [47] &quot;2017-10-15-ggplot2-introduction-to-geoms.html&quot;                  
+##  [48] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.Rmd&quot;              
+##  [49] &quot;2017-10-27-ggplot2-introduction-to-aesthetics.html&quot;             
+##  [50] &quot;2017-11-08-ggplot2-axis-plot-labels.Rmd&quot;                        
+##  [51] &quot;2017-11-08-ggplot2-axis-plot-labels.html&quot;                       
+##  [52] &quot;2017-11-20-ggplot2-text-annotations.Rmd&quot;                        
+##  [53] &quot;2017-11-20-ggplot2-text-annotations.html&quot;                       
+##  [54] &quot;2017-12-02-ggplot2-scatter-plots.Rmd&quot;                           
+##  [55] &quot;2017-12-02-ggplot2-scatter-plots.html&quot;                          
+##  [56] &quot;2017-12-14-ggplot2-line-graphs.Rmd&quot;                             
+##  [57] &quot;2017-12-14-ggplot2-line-graphs.html&quot;                            
+##  [58] &quot;2017-12-26-ggplot2-bar-plots.Rmd&quot;                               
+##  [59] &quot;2017-12-26-ggplot2-bar-plots.html&quot;                              
+##  [60] &quot;2018-01-07-ggplot2-box-plots.Rmd&quot;                               
+##  [61] &quot;2018-01-07-ggplot2-box-plots.html&quot;                              
+##  [62] &quot;2018-01-19-ggplot2-histogram.Rmd&quot;                               
+##  [63] &quot;2018-01-19-ggplot2-histogram.html&quot;                              
+##  [64] &quot;2018-01-31-ggplot2-guides-axes.Rmd&quot;                             
+##  [65] &quot;2018-01-31-ggplot2-guides-axes.html&quot;                            
+##  [66] &quot;2018-02-12-ggplot2-guides-legends.Rmd&quot;                          
+##  [67] &quot;2018-02-12-ggplot2-guides-legends.html&quot;                         
+##  [68] &quot;2018-02-24-guides-legends-part-2.Rmd&quot;                           
+##  [69] &quot;2018-02-24-guides-legends-part-2.html&quot;                          
+##  [70] &quot;2018-03-08-legend-part-3.Rmd&quot;                                   
+##  [71] &quot;2018-03-08-legend-part-3.html&quot;                                  
+##  [72] &quot;2018-03-20-legend-part-4.Rmd&quot;                                   
+##  [73] &quot;2018-03-20-legend-part-4.html&quot;                                  
+##  [74] &quot;2018-04-01-legend-part-5.Rmd&quot;                                   
+##  [75] &quot;2018-04-01-legend-part-5.html&quot;                                  
+##  [76] &quot;2018-04-13-legend-part-6.Rmd&quot;                                   
+##  [77] &quot;2018-04-13-legend-part-6.html&quot;                                  
+##  [78] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.Rmd&quot;           
+##  [79] &quot;2018-04-25-ggplot2-facets-combine-multiple-plots.html&quot;          
+##  [80] &quot;2018-05-07-ggplot2-themes.Rmd&quot;                                  
+##  [81] &quot;2018-05-07-ggplot2-themes.html&quot;                                 
+##  [82] &quot;2018-07-30-importing-data-into-r-part-1.Rmd&quot;                    
+##  [83] &quot;2018-07-30-importing-data-into-r-part-1.html&quot;                   
+##  [84] &quot;2018-08-11-importing-data-into-r-part-2.Rmd&quot;                    
+##  [85] &quot;2018-08-11-importing-data-into-r-part-2.html&quot;                   
+##  [86] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.Rmd&quot;                
+##  [87] &quot;2018-08-23-data-wrangling-with-dplyr-part-1.html&quot;               
+##  [88] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.Rmd&quot;                
+##  [89] &quot;2018-09-04-data-wrangling-with-dplyr-part-2.html&quot;               
+##  [90] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.Rmd&quot;                
+##  [91] &quot;2018-09-16-data-wrangling-with-dplyr-part-3.html&quot;               
+##  [92] &quot;2018-09-28-introduction-to-tibbles.Rmd&quot;                         
+##  [93] &quot;2018-09-28-introduction-to-tibbles.html&quot;                        
+##  [94] &quot;2018-10-10-readable-code-with-pipes.Rmd&quot;                        
+##  [95] &quot;2018-10-10-readable-code-with-pipes.html&quot;                       
+##  [96] &quot;2018-10-22-hacking-strings-with-stringr.Rmd&quot;                    
+##  [97] &quot;2018-10-22-hacking-strings-with-stringr.html&quot;                   
+##  [98] &quot;2018-11-03-working-with-dates-in-r.Rmd&quot;                         
+##  [99] &quot;2018-11-03-working-with-dates-in-r.html&quot;                        
+## [100] &quot;2018-11-15-working-with-categorical-data-using-forcats.Rmd&quot;     
+## [101] &quot;2018-11-15-working-with-categorical-data-using-forcats.html&quot;    
+## [102] &quot;2018-11-27-quick-guide-r-sqlite.Rmd&quot;                            
+## [103] &quot;2018-11-27-quick-guide-r-sqlite.html&quot;                           
+## [104] &quot;2018-12-09-data-wrangling-with-dbplyr.Rmd&quot;                      
+## [105] &quot;2018-12-09-data-wrangling-with-dbplyr.html&quot;                     
+## [106] &quot;2018-12-21-sql-for-data-science.Rmd&quot;                            
+## [107] &quot;2018-12-21-sql-for-data-science.html&quot;                           
+## [108] &quot;2019-01-02-sql-for-data-science-part-2.Rmd&quot;                     
+## [109] &quot;2019-01-02-sql-for-data-science-part-2.html&quot;                    
+## [110] &quot;2019-02-08-introducing-olsrr.Rmd&quot;                               
+## [111] &quot;2019-02-08-introducing-olsrr.html&quot;                              
+## [112] &quot;2019-02-12-introducing-rfm.Rmd&quot;                                 
+## [113] &quot;2019-02-12-introducing-rfm.html&quot;                                
+## [114] &quot;2019-02-19-introducing-descriptr.Rmd&quot;                           
+## [115] &quot;2019-02-19-introducing-descriptr.html&quot;                          
+## [116] &quot;2019-02-20-introducing-descriptr.Rmd&quot;                           
+## [117] &quot;2019-02-20-introducing-descriptr.html&quot;                          
+## [118] &quot;2019-02-26-introducing-blorr.Rmd&quot;                               
+## [119] &quot;2019-02-26-introducing-blorr.html&quot;                              
+## [120] &quot;2019-03-05-getting-help-in-r.Rmd&quot;                               
+## [121] &quot;2019-03-05-getting-help-in-r.html&quot;                              
+## [122] &quot;2019-03-12-introducing-rbin.Rmd&quot;                                
+## [123] &quot;2019-03-12-introducing-rbin.html&quot;                               
+## [124] &quot;2019-03-14-introducing-vistributions.Rmd&quot;                       
+## [125] &quot;2019-03-14-introducing-vistributions.html&quot;                      
+## [126] &quot;2019-04-01-shiny-apps.Rmd&quot;                                      
+## [127] &quot;2019-04-01-shiny-apps.html&quot;                                     
+## [128] &quot;2019-04-11-web-scraping.Rmd&quot;                                    
+## [129] &quot;2019-04-11-web-scraping.html&quot;                                   
+## [130] &quot;2019-04-13-web-scraping-note.Rmd&quot;                               
+## [131] &quot;2019-04-13-web-scraping-note.html&quot;                              
+## [132] &quot;2019-05-02-mba.Rmd&quot;                                             
+## [133] &quot;2019-05-02-mba.html&quot;                                            
+## [134] &quot;2019-05-02-mba_files&quot;                                           
+## [135] &quot;2019-05-27-regex.Rmd&quot;                                           
+## [136] &quot;2019-05-27-regex.html&quot;                                          
+## [137] &quot;2019-07-05-pkginfo.Rmd&quot;                                         
+## [138] &quot;2019-07-05-pkginfo.html&quot;                                        
+## [139] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.Rmd&quot;        
+## [140] &quot;2019-07-22-customer-segmentation-using-rfm-analysis.html&quot;       
+## [141] &quot;2019-07-22-customer-segmentation-using-rfm-analysis_files&quot;      
+## [142] &quot;2019-08-08-working-with-databases-using-r.Rmd&quot;                  
+## [143] &quot;2019-08-08-working-with-databases-using-r.html&quot;                 
+## [144] &quot;2019-08-08-working-with-databases-using-r_files&quot;                
 ## [145] &quot;2019-10-26-command-line-crash-course.Rmd&quot;                       
-## [146] &quot;2019-10-26-command-line-crash-course.html&quot;                      
-## [147] &quot;2019-10-26-command-line-crash-course_files&quot;                     
-## [148] &quot;2020-01-17-nse2r-intro.Rmd&quot;                                     
-## [149] &quot;2020-01-17-nse2r-intro.html&quot;                                    
-## [150] &quot;2020-04-17-handling-date-and-time-in-r.Rmd&quot;                     
-## [151] &quot;2020-04-17-handling-date-and-time-in-r.html&quot;                    
-## [152] &quot;airline.dta&quot;                                                    
-## [153] &quot;airline.sas7bdat&quot;                                               
-## [154] &quot;analysis.R&quot;                                                     
-## [155] &quot;cline&quot;                                                          
-## [156] &quot;config.yml&quot;                                                     
-## [157] &quot;employee.sav&quot;                                                   
-## [158] &quot;examples&quot;                                                       
-## [159] &quot;hsb2.csv&quot;                                                       
-## [160] &quot;hsb3.csv&quot;                                                       
-## [161] &quot;hsb4.csv&quot;                                                       
-## [162] &quot;imports_blorr.txt&quot;                                              
-## [163] &quot;imports_olsrr.txt&quot;                                              
-## [164] &quot;mydatabase.db&quot;                                                  
-## [165] &quot;mypackage&quot;                                                      
-## [166] &quot;myproject&quot;                                                      
-## [167] &quot;online-retail.xlsx&quot;                                             
-## [168] &quot;options.R&quot;                                                      
-## [169] &quot;package_names.csv&quot;                                              
-## [170] &quot;release.txt&quot;                                                    
-## [171] &quot;sample.xls&quot;                                                     
-## [172] &quot;transaction_data.csv&quot;                                           
-## [173] &quot;zip_example.zip&quot;</code></pre>
+## [146] &quot;2019-10-26-command-line-crash-course_files&quot;                     
+## [147] &quot;2020-01-17-nse2r-intro.Rmd&quot;                                     
+## [148] &quot;2020-04-17-handling-date-and-time-in-r.Rmd&quot;                     
+## [149] &quot;2020-04-17-handling-date-and-time-in-r_files&quot;                   
+## [150] &quot;airline.dta&quot;                                                    
+## [151] &quot;airline.sas7bdat&quot;                                               
+## [152] &quot;analysis.R&quot;                                                     
+## [153] &quot;cline&quot;                                                          
+## [154] &quot;config.yml&quot;                                                     
+## [155] &quot;employee.sav&quot;                                                   
+## [156] &quot;examples&quot;                                                       
+## [157] &quot;hsb2.csv&quot;                                                       
+## [158] &quot;hsb3.csv&quot;                                                       
+## [159] &quot;hsb4.csv&quot;                                                       
+## [160] &quot;imports_blorr.txt&quot;                                              
+## [161] &quot;imports_olsrr.txt&quot;                                              
+## [162] &quot;mydatabase.db&quot;                                                  
+## [163] &quot;mypackage&quot;                                                      
+## [164] &quot;myproject&quot;                                                      
+## [165] &quot;online-retail.xlsx&quot;                                             
+## [166] &quot;options.R&quot;                                                      
+## [167] &quot;package_names.csv&quot;                                              
+## [168] &quot;release.txt&quot;                                                    
+## [169] &quot;sample.xls&quot;                                                     
+## [170] &quot;transaction_data.csv&quot;                                           
+## [171] &quot;zip_example.zip&quot;</code></pre>
 <p>Great! Now, how do we specify the options? The additional options of a
 command must be stored as a character vector and specified using the <code>args</code>
 argument. In the below example, we delete the <code>examples</code> folder we created earlier while decompressing the <code>zip_example.zip</code> file.</p>

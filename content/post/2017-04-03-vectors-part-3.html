@@ -24,19 +24,19 @@ tags:
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  7  8  3  1  6  4  2  5  9 10</code></pre>
+<pre><code>##  [1]  5  7  2  8  9  6 10  4  1  3</code></pre>
 <pre class="r"><code># return third element
 vect1[3]</code></pre>
-<pre><code>## [1] 3</code></pre>
+<pre><code>## [1] 2</code></pre>
 <pre class="r"><code># return seventh element
 vect1[7]    </code></pre>
-<pre><code>## [1] 2</code></pre>
+<pre><code>## [1] 10</code></pre>
 <div id="out-of-range-index" class="section level4">
 <h4>Out of range index</h4>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1] 10  2  8  3  5  6  4  7  9  1</code></pre>
+<pre><code>##  [1]  8  2  5  1 10  9  3  4  7  6</code></pre>
 <pre class="r"><code># return value at index 0
 vect1[0]</code></pre>
 <pre><code>## integer(0)</code></pre>
@@ -55,13 +55,13 @@ end of the vector counting backwards. Let us look at an example to understand ho
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  7  5  8  9 10  3  6  2  1  4</code></pre>
+<pre><code>##  [1]  6  9  3  2 10  8  4  7  1  5</code></pre>
 <pre class="r"><code># drop third element
 vect1[-3]</code></pre>
-<pre><code>## [1]  7  5  9 10  3  6  2  1  4</code></pre>
+<pre><code>## [1]  6  9  2 10  8  4  7  1  5</code></pre>
 <pre class="r"><code># drop seventh element
 vect1[-7]   </code></pre>
-<pre><code>## [1]  7  5  8  9 10  3  2  1  4</code></pre>
+<pre><code>## [1]  6  9  3  2 10  8  7  1  5</code></pre>
 </div>
 </div>
 <div id="subset-multiple-elements" class="section level2">
@@ -70,31 +70,31 @@ vect1[-7]   </code></pre>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  1  3  6  4  2 10  8  9  5  7</code></pre>
+<pre><code>##  [1]  2  8  1  9  7 10  5  4  3  6</code></pre>
 <pre class="r"><code># return all elements
 vect1[]</code></pre>
-<pre><code>##  [1]  1  3  6  4  2 10  8  9  5  7</code></pre>
+<pre><code>##  [1]  2  8  1  9  7 10  5  4  3  6</code></pre>
 <pre class="r"><code># return first 5 values
 vect1[1:5]</code></pre>
-<pre><code>## [1] 1 3 6 4 2</code></pre>
+<pre><code>## [1] 2 8 1 9 7</code></pre>
 <pre class="r"><code># return all values from the 5th position
 end &lt;- length(vect1)
 vect1[5:end]</code></pre>
-<pre><code>## [1]  2 10  8  9  5  7</code></pre>
+<pre><code>## [1]  7 10  5  4  3  6</code></pre>
 <p>If you are using the colon to generate the index positions, you will have to specify both the starting and ending position, else, R will return an error.</p>
 <p>What if we want elements that are not in a sequence as we saw in the last example? In such cases, we have to create a vector using <code>c()</code> and use it to extract elements from the original vector. Below is an example:</p>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  8  9  4 10  3  6  5  2  1  7</code></pre>
+<pre><code>##  [1]  7  4 10  3  9  8  5  1  2  6</code></pre>
 <pre class="r"><code># extract 2nd, 5th and 7th element
 select &lt;- c(2, 5, 7)
 vect1[select]</code></pre>
-<pre><code>## [1] 9 3 5</code></pre>
+<pre><code>## [1] 4 9 5</code></pre>
 <pre class="r"><code># extract elements in position 1 to 4, 6 and 9
 select &lt;- c(1:4, 6, 9)
 vect1[select]</code></pre>
-<pre><code>## [1]  8  9  4 10  6  1</code></pre>
+<pre><code>## [1]  7  4 10  3  8  2</code></pre>
 </div>
 <div id="subset-named-vectors" class="section level2">
 <h2>Subset Named Vectors</h2>
@@ -118,50 +118,50 @@ vect1[c(&#39;score1&#39;, &#39;score3&#39;)]</code></pre>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  6  1  5 10  4  7  3  8  2  9</code></pre>
+<pre><code>##  [1]  8  1  4  5 10  9  3  6  2  7</code></pre>
 <pre class="r"><code># returns all values
 vect1[TRUE]</code></pre>
-<pre><code>##  [1]  6  1  5 10  4  7  3  8  2  9</code></pre>
+<pre><code>##  [1]  8  1  4  5 10  9  3  6  2  7</code></pre>
 <pre class="r"><code># empty vector
 vect1[FALSE]</code></pre>
 <pre><code>## integer(0)</code></pre>
 <pre class="r"><code># values in odd positions
 vect1[c(TRUE, FALSE)]</code></pre>
-<pre><code>## [1] 6 5 4 3 2</code></pre>
+<pre><code>## [1]  8  4 10  3  2</code></pre>
 <pre class="r"><code># values in even positions
 vect1[c(FALSE, TRUE)]</code></pre>
-<pre><code>## [1]  1 10  7  8  9</code></pre>
+<pre><code>## [1] 1 5 9 6 7</code></pre>
 </div>
 <div id="subset-using-logical-expressions" class="section level2">
 <h2>Subset using logical expressions</h2>
 <p>Logical expressions can be used to extract elements that meet specific criteria. This method is most flexible and useful as we can combine multiple conditions using relational and logical operators. Before we use logical expressions, let us spend some time understanding comparison and logical operators as we will be using them extensively hereafter.</p>
 <div id="comparison-operators" class="section level4">
 <h4>Comparison Operators</h4>
-<p>When you create an expression using a comparison operator, the output is always a logical value i.e. <code>TRUE</code> or <code>FALSE</code>. Let us see how we can use comparison operators to subset data:</p>
+<p>When you create an expression using a comparison operator, the output is always a logical value i.e. <code>TRUE</code> or <code>FALSE</code>. Let us see how we can use comparison operators to subset data:</p>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1] 10  4  1  2  5  9  7  8  3  6</code></pre>
+<pre><code>##  [1]  3  1  9 10  5  8  2  6  4  7</code></pre>
 <pre class="r"><code># return elements greater than 5
 vect1 &gt; 5</code></pre>
-<pre><code>##  [1]  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
 <pre class="r"><code>vect1[vect1 &gt; 5]</code></pre>
-<pre><code>## [1] 10  9  7  8  6</code></pre>
+<pre><code>## [1]  9 10  8  6  7</code></pre>
 <pre class="r"><code># return elements greater than or equal to 5
 vect1 &gt;= 5</code></pre>
-<pre><code>##  [1]  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
 <pre class="r"><code>vect1[vect1 &gt;= 5]</code></pre>
-<pre><code>## [1] 10  5  9  7  8  6</code></pre>
+<pre><code>## [1]  9 10  5  8  6  7</code></pre>
 <pre class="r"><code># return elements lesser than 5
 vect1 &lt; 5</code></pre>
-<pre><code>##  [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<pre><code>##  [1]  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE</code></pre>
 <pre class="r"><code>vect1[vect1 &lt; 5]</code></pre>
-<pre><code>## [1] 4 1 2 3</code></pre>
+<pre><code>## [1] 3 1 2 4</code></pre>
 <pre class="r"><code># return elements lesser than or equal to 5
 vect1 &lt;= 5</code></pre>
-<pre><code>##  [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<pre><code>##  [1]  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE</code></pre>
 <pre class="r"><code>vect1[vect1 &lt;= 5]</code></pre>
-<pre><code>## [1] 4 1 2 5 3</code></pre>
+<pre><code>## [1] 3 1 5 2 4</code></pre>
 <pre class="r"><code># return elements equal to 5
 vect1 == 5</code></pre>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE</code></pre>
@@ -171,7 +171,7 @@ vect1 == 5</code></pre>
 vect1 != 5</code></pre>
 <pre><code>##  [1]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
 <pre class="r"><code>vect1[vect1 != 5]</code></pre>
-<pre><code>## [1] 10  4  1  2  9  7  8  3  6</code></pre>
+<pre><code>## [1]  3  1  9 10  8  2  6  4  7</code></pre>
 </div>
 </div>
 <div id="logical-operators" class="section level2">
@@ -180,11 +180,11 @@ vect1 != 5</code></pre>
 <pre class="r"><code># random sample of 10 values
 vect1 &lt;- sample(10)
 vect1</code></pre>
-<pre><code>##  [1]  4  1  5 10  8  3  9  7  6  2</code></pre>
+<pre><code>##  [1]  3  2  9  7  5 10  4  8  6  1</code></pre>
 <pre class="r"><code># return all elements less than 8 or divisible by 3
 vect1[(vect1 &lt; 8 | (vect1 %% 3 == 0))]</code></pre>
-<pre><code>## [1] 4 1 5 3 9 7 6 2</code></pre>
+<pre><code>## [1] 3 2 9 7 5 4 6 1</code></pre>
 <pre class="r"><code># return all elements less than 7 or divisible by 2
 vect1[(vect1 &lt; 7 | (vect1 %% 2 == 0))]</code></pre>
-<pre><code>## [1]  4  1  5 10  8  3  6  2</code></pre>
+<pre><code>## [1]  3  2  5 10  4  8  6  1</code></pre>
 </div>

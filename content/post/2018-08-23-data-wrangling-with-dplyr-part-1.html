@@ -60,19 +60,19 @@ manipulation challenges while working with tabular data (dataframes, tibbles):</
 
 ecom</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 google   laptop      10       1      693 FALSE              0
-##  2 yahoo    tablet       9       1      459 FALSE              0
-##  3 direct   laptop       0       1      996 FALSE              0
-##  4 bing     tablet       3      18      468 TRUE               6
-##  5 yahoo    mobile       9       1      955 FALSE              0
-##  6 yahoo    laptop       5       5      135 FALSE              0
-##  7 yahoo    mobile      10       1       75 FALSE              0
-##  8 direct   mobile      10       1      908 FALSE              0
-##  9 bing     mobile       3      19      209 FALSE              0
-## 10 google   mobile       6       1      208 FALSE              0
-## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 google   laptop      10       1      693 FALSE              0           0
+##  2 yahoo    tablet       9       1      459 FALSE              0           0
+##  3 direct   laptop       0       1      996 FALSE              0           0
+##  4 bing     tablet       3      18      468 TRUE               6         434
+##  5 yahoo    mobile       9       1      955 FALSE              0           0
+##  6 yahoo    laptop       5       5      135 FALSE              0           0
+##  7 yahoo    mobile      10       1       75 FALSE              0           0
+##  8 direct   mobile      10       1      908 FALSE              0           0
+##  9 bing     mobile       3      19      209 FALSE              0           0
+## 10 google   mobile       6       1      208 FALSE              0           0
+## # ... with 990 more rows</code></pre>
 <div id="data-dictionary" class="section level6">
 <h6>Data Dictionary</h6>
 <p>Below is the description of the data set:</p>
@@ -114,6 +114,19 @@ using mobile?</li>
   ) %&gt;%
   select(device, aov) %&gt;%
   arrange(aov)</code></pre>
+<pre><code>## Warning: `funs()` is deprecated as of dplyr 0.8.0.
+## Please use a list of either functions or lambdas: 
+## 
+##   # Simple named list: 
+##   list(mean = mean, median = median)
+## 
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   device   aov
 ##   &lt;fct&gt;  &lt;dbl&gt;
@@ -147,19 +160,19 @@ and the next argument is the condition for filtering rows.</p>
 <p><br></p>
 <pre class="r"><code>filter(ecom, device == &quot;mobile&quot;)</code></pre>
 <pre><code>## # A tibble: 344 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 yahoo    mobile       9       1      955 FALSE              0
-##  2 yahoo    mobile      10       1       75 FALSE              0
-##  3 direct   mobile      10       1      908 FALSE              0
-##  4 bing     mobile       3      19      209 FALSE              0
-##  5 google   mobile       6       1      208 FALSE              0
-##  6 direct   mobile       9      14      406 TRUE               3
-##  7 yahoo    mobile       7       1       19 FALSE              7
-##  8 google   mobile       5       1      147 FALSE              0
-##  9 bing     mobile       0       7      196 FALSE              4
-## 10 google   mobile      10       1      338 FALSE              0
-## # ... with 334 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 yahoo    mobile       9       1      955 FALSE              0           0
+##  2 yahoo    mobile      10       1       75 FALSE              0           0
+##  3 direct   mobile      10       1      908 FALSE              0           0
+##  4 bing     mobile       3      19      209 FALSE              0           0
+##  5 google   mobile       6       1      208 FALSE              0           0
+##  6 direct   mobile       9      14      406 TRUE               3         651
+##  7 yahoo    mobile       7       1       19 FALSE              7        2423
+##  8 google   mobile       5       1      147 FALSE              0           0
+##  9 bing     mobile       0       7      196 FALSE              4         237
+## 10 google   mobile      10       1      338 FALSE              0           0
+## # ... with 334 more rows</code></pre>
 <p>We can specify multiple filtering conditions as well. In the below example, we
 specify two filter conditions:</p>
 <ul>
@@ -171,19 +184,19 @@ specify two filter conditions:</p>
 <p><br></p>
 <pre class="r"><code>filter(ecom, device == &quot;mobile&quot;, purchase)</code></pre>
 <pre><code>## # A tibble: 36 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 direct   mobile       9      14      406 TRUE               3
-##  2 bing     mobile       4      20      440 TRUE               3
-##  3 bing     mobile       3      18      288 TRUE               6
-##  4 social   mobile      10      11      242 TRUE               4
-##  5 yahoo    mobile       6      14      322 TRUE               3
-##  6 google   mobile       1      18      252 TRUE               3
-##  7 social   mobile       7      16      352 TRUE              10
-##  8 direct   mobile       4      18      324 TRUE               3
-##  9 social   mobile       1      20      520 TRUE               5
-## 10 yahoo    mobile       0      13      351 TRUE              10
-## # ... with 26 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 direct   mobile       9      14      406 TRUE               3         651
+##  2 bing     mobile       4      20      440 TRUE               3         184
+##  3 bing     mobile       3      18      288 TRUE               6         764
+##  4 social   mobile      10      11      242 TRUE               4         287
+##  5 yahoo    mobile       6      14      322 TRUE               3        1443
+##  6 google   mobile       1      18      252 TRUE               3        2449
+##  7 social   mobile       7      16      352 TRUE              10        2824
+##  8 direct   mobile       4      18      324 TRUE               3        1670
+##  9 social   mobile       1      20      520 TRUE               5        1021
+## 10 yahoo    mobile       0      13      351 TRUE              10         288
+## # ... with 26 more rows</code></pre>
 <p>Here is another example where we specify multiple conditions:</p>
 <ul>
 <li>visit from device <strong>tablet</strong></li>
@@ -192,40 +205,39 @@ specify two filter conditions:</p>
 </ul>
 <pre class="r"><code>filter(ecom, device == &quot;tablet&quot;, purchase, n_pages &lt; 15)</code></pre>
 <pre><code>## # A tibble: 12 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 social   tablet       7      10      290 TRUE               9
-##  2 yahoo    tablet       2      14      364 TRUE               6
-##  3 google   tablet       7      12      324 TRUE               2
-##  4 direct   tablet       3      12      324 TRUE              10
-##  5 yahoo    tablet       0      13      390 TRUE               5
-##  6 social   tablet       2      12      300 TRUE               2
-##  7 direct   tablet       6      13      338 TRUE               5
-##  8 yahoo    tablet       2      10      280 TRUE               4
-##  9 social   tablet      10      10      290 TRUE               9
-## 10 direct   tablet       3      10      260 TRUE               7
-## 11 google   tablet       9      14      308 TRUE               7
-## 12 social   tablet      10      11      330 TRUE               1
-## # ... with 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 social   tablet       7      10      290 TRUE               9        1304
+##  2 yahoo    tablet       2      14      364 TRUE               6        1667
+##  3 google   tablet       7      12      324 TRUE               2        1358
+##  4 direct   tablet       3      12      324 TRUE              10        1257
+##  5 yahoo    tablet       0      13      390 TRUE               5        1748
+##  6 social   tablet       2      12      300 TRUE               2        2754
+##  7 direct   tablet       6      13      338 TRUE               5         683
+##  8 yahoo    tablet       2      10      280 TRUE               4         293
+##  9 social   tablet      10      10      290 TRUE               9          37
+## 10 direct   tablet       3      10      260 TRUE               7         980
+## 11 google   tablet       9      14      308 TRUE               7        2436
+## 12 social   tablet      10      11      330 TRUE               1        2171</code></pre>
 <div id="case-study-1" class="section level5">
 <h5>Case Study</h5>
 <p>Let us apply what we have learnt to the case study. We want to filter all
 visits that resulted in a purchase.</p>
 <pre class="r"><code>filter(ecom, purchase)</code></pre>
 <pre><code>## # A tibble: 103 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 bing     tablet       3      18      468 TRUE               6
-##  2 direct   mobile       9      14      406 TRUE               3
-##  3 bing     tablet       5      16      368 TRUE               6
-##  4 social   tablet       7      10      290 TRUE               9
-##  5 direct   tablet       2      19      342 TRUE               5
-##  6 social   tablet       9      20      420 TRUE               7
-##  7 bing     mobile       4      20      440 TRUE               3
-##  8 yahoo    tablet       2      16      480 TRUE               9
-##  9 bing     mobile       3      18      288 TRUE               6
-## 10 yahoo    tablet       2      14      364 TRUE               6
-## # ... with 93 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 bing     tablet       3      18      468 TRUE               6         434
+##  2 direct   mobile       9      14      406 TRUE               3         651
+##  3 bing     tablet       5      16      368 TRUE               6        1049
+##  4 social   tablet       7      10      290 TRUE               9        1304
+##  5 direct   tablet       2      19      342 TRUE               5         622
+##  6 social   tablet       9      20      420 TRUE               7        1613
+##  7 bing     mobile       4      20      440 TRUE               3         184
+##  8 yahoo    tablet       2      16      480 TRUE               9         286
+##  9 bing     mobile       3      18      288 TRUE               6         764
+## 10 yahoo    tablet       2      14      364 TRUE               6        1667
+## # ... with 93 more rows</code></pre>
 </div>
 </div>
 <div id="select-columns" class="section level2">
@@ -235,7 +247,7 @@ AOV. Remember, we do not need all the columns in the data to compute a required
 metric (in our case, AOV). The <code>select()</code> function allows us to select a subset
 of columns. The first argument is the name of the data frame and the subsequent
 arguments specify the columns by name or position.</p>
-<p>To select the <code>device</code> and <code>duration</code> columns, we specify the data set i.e.
+<p>To select the <code>device</code> and <code>duration</code> columns, we specify the data set i.e. 
 <code>ecom</code> followed by the name of the columns.</p>
 <p><br></p>
 <p><img src="/img/select_1.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -356,23 +368,23 @@ or split data based on particular (discrete) variable. The first argument is the
 name of the data set and the second argument is the name of the column based on
 which the data will be split.</p>
 <p>To split the data by referrer type, we use <code>group_by</code> and specify the data set
-i.e. <code>ecom</code> and the column based on which to split the data i.e. <code>referrer</code>.</p>
+i.e. <code>ecom</code> and the column based on which to split the data i.e. <code>referrer</code>.</p>
 <pre class="r"><code>group_by(ecom, referrer)</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
 ## # Groups:   referrer [5]
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 google   laptop      10       1      693 FALSE              0
-##  2 yahoo    tablet       9       1      459 FALSE              0
-##  3 direct   laptop       0       1      996 FALSE              0
-##  4 bing     tablet       3      18      468 TRUE               6
-##  5 yahoo    mobile       9       1      955 FALSE              0
-##  6 yahoo    laptop       5       5      135 FALSE              0
-##  7 yahoo    mobile      10       1       75 FALSE              0
-##  8 direct   mobile      10       1      908 FALSE              0
-##  9 bing     mobile       3      19      209 FALSE              0
-## 10 google   mobile       6       1      208 FALSE              0
-## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 google   laptop      10       1      693 FALSE              0           0
+##  2 yahoo    tablet       9       1      459 FALSE              0           0
+##  3 direct   laptop       0       1      996 FALSE              0           0
+##  4 bing     tablet       3      18      468 TRUE               6         434
+##  5 yahoo    mobile       9       1      955 FALSE              0           0
+##  6 yahoo    laptop       5       5      135 FALSE              0           0
+##  7 yahoo    mobile      10       1       75 FALSE              0           0
+##  8 direct   mobile      10       1      908 FALSE              0           0
+##  9 bing     mobile       3      19      209 FALSE              0           0
+## 10 google   mobile       6       1      208 FALSE              0           0
+## # ... with 990 more rows</code></pre>
 <div id="case-study-3" class="section level5">
 <h5>Case Study</h5>
 <p>In the second line in the previous output, you can observe <code>Groups: referrer [5]</code>
@@ -417,11 +429,12 @@ summarise data. For example, we can use <code>min</code>, <code>max</code>, <cod
 step_1 &lt;- group_by(ecom, referrer)
 
 # compute average number of pages
-step_2 &lt;- summarise(step_1, mean(n_pages))
-step_2</code></pre>
+step_2 &lt;- summarise(step_1, mean(n_pages))</code></pre>
+<pre><code>## `summarise()` ungrouping (override with `.groups` argument)</code></pre>
+<pre class="r"><code>step_2</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   referrer `mean(n_pages)`
-##   &lt;fct&gt;              &lt;dbl&gt;
+## * &lt;fct&gt;              &lt;dbl&gt;
 ## 1 bing                6.13
 ## 2 direct              6.38
 ## 3 social              5.42
@@ -432,11 +445,12 @@ step_2</code></pre>
 step_1 &lt;- group_by(ecom, referrer)
 
 # compute average number of pages
-step_2 &lt;- summarise(step_1, mean(n_pages), median(n_pages))
-step_2</code></pre>
+step_2 &lt;- summarise(step_1, mean(n_pages), median(n_pages))</code></pre>
+<pre><code>## `summarise()` ungrouping (override with `.groups` argument)</code></pre>
+<pre class="r"><code>step_2</code></pre>
 <pre><code>## # A tibble: 5 x 3
 ##   referrer `mean(n_pages)` `median(n_pages)`
-##   &lt;fct&gt;              &lt;dbl&gt;             &lt;dbl&gt;
+## * &lt;fct&gt;              &lt;dbl&gt;             &lt;dbl&gt;
 ## 1 bing                6.13                 1
 ## 2 direct              6.38                 1
 ## 3 social              5.42                 1
@@ -464,7 +478,7 @@ step_3 &lt;- summarise_all(step_2, funs(mean))
 step_3</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   referrer order_value
-##   &lt;fct&gt;          &lt;dbl&gt;
+## * &lt;fct&gt;          &lt;dbl&gt;
 ## 1 bing            316.
 ## 2 direct          441.
 ## 3 social          380.
@@ -483,7 +497,7 @@ step_3 &lt;- summarise_all(step_2, funs(mean, median))
 step_3</code></pre>
 <pre><code>## # A tibble: 5 x 3
 ##   referrer  mean median
-##   &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+## * &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt;
 ## 1 bing      316.      0
 ## 2 direct    441.      0
 ## 3 social    380.      0
@@ -497,11 +511,12 @@ order items. What function can we use to obtain them? The <code>sum()</code> fun
 generate the sum of the values and hence we will use it inside the <code>summarise()</code>
 function. Remember, we need to provide a name to the summary being generated.</p>
 <pre class="r"><code>ecom4 &lt;- summarise(ecom3, revenue = sum(order_value),
-          orders = n())
-ecom4</code></pre>
+          orders = n())</code></pre>
+<pre><code>## `summarise()` ungrouping (override with `.groups` argument)</code></pre>
+<pre class="r"><code>ecom4</code></pre>
 <pre><code>## # A tibble: 3 x 3
 ##   device revenue orders
-##   &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt;
+## * &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt;
 ## 1 laptop   56531     31
 ## 2 tablet   51321     36
 ## 3 mobile   51504     36</code></pre>
@@ -514,7 +529,7 @@ functions.</p>
 ecom4</code></pre>
 <pre><code>## # A tibble: 3 x 3
 ##   device revenue orders
-##   &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt;
+## * &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt;
 ## 1 laptop   56531     31
 ## 2 tablet   51321     36
 ## 3 mobile   51504     36</code></pre>
@@ -574,7 +589,7 @@ create a new column to store AOV.</p>
 ecom5</code></pre>
 <pre><code>## # A tibble: 3 x 4
 ##   device revenue orders   aov
-##   &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt; &lt;dbl&gt;
+## * &lt;fct&gt;    &lt;dbl&gt;  &lt;int&gt; &lt;dbl&gt;
 ## 1 laptop   56531     31 1824.
 ## 2 tablet   51321     36 1426.
 ## 3 mobile   51504     36 1431.</code></pre>
@@ -604,53 +619,53 @@ Let us say we want to arrange data by the number of pages browsed.</p>
 <p><br></p>
 <pre class="r"><code>arrange(ecom, n_pages)</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 google   laptop      10       1      693 FALSE              0
-##  2 yahoo    tablet       9       1      459 FALSE              0
-##  3 direct   laptop       0       1      996 FALSE              0
-##  4 yahoo    mobile       9       1      955 FALSE              0
-##  5 yahoo    mobile      10       1       75 FALSE              0
-##  6 direct   mobile      10       1      908 FALSE              0
-##  7 google   mobile       6       1      208 FALSE              0
-##  8 direct   laptop       9       1      738 FALSE              0
-##  9 yahoo    mobile       7       1       19 FALSE              7
-## 10 bing     laptop       1       1      995 FALSE              0
-## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 google   laptop      10       1      693 FALSE              0           0
+##  2 yahoo    tablet       9       1      459 FALSE              0           0
+##  3 direct   laptop       0       1      996 FALSE              0           0
+##  4 yahoo    mobile       9       1      955 FALSE              0           0
+##  5 yahoo    mobile      10       1       75 FALSE              0           0
+##  6 direct   mobile      10       1      908 FALSE              0           0
+##  7 google   mobile       6       1      208 FALSE              0           0
+##  8 direct   laptop       9       1      738 FALSE              0           0
+##  9 yahoo    mobile       7       1       19 FALSE              7        2423
+## 10 bing     laptop       1       1      995 FALSE              0           0
+## # ... with 990 more rows</code></pre>
 <p>If we want to arrange the data in descending order, we can use <code>desc()</code>. Let us
 arrange the data in descending order.</p>
 <pre class="r"><code>arrange(ecom , desc(n_pages))</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 social   tablet       9      20      420 TRUE               7
-##  2 bing     mobile       4      20      440 TRUE               3
-##  3 yahoo    tablet       0      20      200 FALSE              0
-##  4 direct   tablet       6      20      580 TRUE               5
-##  5 social   mobile       1      20      520 TRUE               5
-##  6 google   mobile       8      20      300 TRUE               7
-##  7 social   laptop       4      20      200 FALSE              0
-##  8 yahoo    mobile       3      20      480 FALSE              0
-##  9 social   laptop      10      20      280 TRUE               1
-## 10 yahoo    mobile       2      20      240 FALSE              0
-## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 social   tablet       9      20      420 TRUE               7        1613
+##  2 bing     mobile       4      20      440 TRUE               3         184
+##  3 yahoo    tablet       0      20      200 FALSE              0           0
+##  4 direct   tablet       6      20      580 TRUE               5        1155
+##  5 social   mobile       1      20      520 TRUE               5        1021
+##  6 google   mobile       8      20      300 TRUE               7        2091
+##  7 social   laptop       4      20      200 FALSE              0           0
+##  8 yahoo    mobile       3      20      480 FALSE              0           0
+##  9 social   laptop      10      20      280 TRUE               1        2011
+## 10 yahoo    mobile       2      20      240 FALSE              0           0
+## # ... with 990 more rows</code></pre>
 <p>Data can be arranged by multiple variables as well. Let us arrange data first by
 number of visits and then by number of pages in a descending order.</p>
 <pre class="r"><code>arrange(ecom, n_visit, desc(n_pages))</code></pre>
 <pre><code>## # A tibble: 1,000 x 8
-##    referrer device n_visit n_pages duration purchase order_items
-##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;
-##  1 yahoo    tablet       0      20      200 FALSE              0
-##  2 google   laptop       0      19      418 TRUE               2
-##  3 bing     laptop       0      18      180 FALSE              0
-##  4 yahoo    laptop       0      18      522 TRUE               8
-##  5 direct   tablet       0      18      252 FALSE              0
-##  6 social   laptop       0      17      204 FALSE              0
-##  7 bing     laptop       0      17      272 TRUE               9
-##  8 bing     mobile       0      16      272 FALSE              0
-##  9 yahoo    mobile       0      15      255 FALSE              0
-## 10 direct   laptop       0      15      255 FALSE              0
-## # ... with 990 more rows, and 1 more variable: order_value &lt;dbl&gt;</code></pre>
+##    referrer device n_visit n_pages duration purchase order_items order_value
+##    &lt;fct&gt;    &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##  1 yahoo    tablet       0      20      200 FALSE              0           0
+##  2 google   laptop       0      19      418 TRUE               2         996
+##  3 bing     laptop       0      18      180 FALSE              0           0
+##  4 yahoo    laptop       0      18      522 TRUE               8        1523
+##  5 direct   tablet       0      18      252 FALSE              0           0
+##  6 social   laptop       0      17      204 FALSE              0           0
+##  7 bing     laptop       0      17      272 TRUE               9        1384
+##  8 bing     mobile       0      16      272 FALSE              0           0
+##  9 yahoo    mobile       0      15      255 FALSE              0           0
+## 10 direct   laptop       0      15      255 FALSE              0           0
+## # ... with 990 more rows</code></pre>
 <div id="case-study-6" class="section level5">
 <h5>Case Study</h5>
 <p>If you observe <code>ecom6</code>, the <code>aov</code> column is arranged in descending order.</p>
@@ -682,7 +697,7 @@ ecom7</code></pre>
 ## 3 laptop 1824.</code></pre>
 <p>If you observe, at each step we create a new variable(data frame) and then use
 it as an input in the next step i.e. the output from one step becomes the input
-for the next. Can we achieve the final outcome i.e. <code>ecom7</code> without creating the
+for the next. Can we achieve the final outcome i.e. <code>ecom7</code> without creating the
 intermediate data (ecom1 - ecom6)? Yes, we can. We will use the <code>%&gt;%</code> operator
 to chain the steps and get rid of the intermediate data.</p>
 <pre class="r"><code>ecom %&gt;%

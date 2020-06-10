@@ -88,7 +88,7 @@ difference between the two data sets is related to the variable types.</p>
 <p>The <code>ds_summary_stats()</code> function returns a comprehensive set of statistics
 including measures of location, variation, symmetry and extreme observations.</p>
 <pre class="r"><code>ds_summary_stats(mtcarz, mpg)</code></pre>
-<pre><code>## ------------------------------ Variable: mpg ------------------------------
+<pre><code>## --------------------------------- Variable: mpg --------------------------------
 ## 
 ##                         Univariate Analysis                          
 ## 
@@ -129,7 +129,7 @@ including measures of location, variation, symmetry and extreme observations.</p
 ##   17                         14.7        26                         27.3</code></pre>
 <p>You can pass multiple variables as shown below:</p>
 <pre class="r"><code>ds_summary_stats(mtcarz, mpg, disp)</code></pre>
-<pre><code>## ------------------------------ Variable: mpg ------------------------------
+<pre><code>## --------------------------------- Variable: mpg --------------------------------
 ## 
 ##                         Univariate Analysis                          
 ## 
@@ -171,7 +171,7 @@ including measures of location, variation, symmetry and extreme observations.</p
 ## 
 ## 
 ## 
-## ------------------------------ Variable: disp -----------------------------
+## -------------------------------- Variable: disp --------------------------------
 ## 
 ##                           Univariate Analysis                            
 ## 
@@ -245,11 +245,11 @@ plot(k)</code></pre>
 <p>If you want to view summary statistics and frequency tables of all or subset of
 variables in a data set, use <code>ds_auto_summary()</code>.</p>
 <pre class="r"><code>ds_auto_summary_stats(mtcarz, disp, mpg)</code></pre>
-<pre><code>## ------------------------------ Variable: disp -----------------------------
+<pre><code>## -------------------------------- Variable: disp --------------------------------
 ## 
-## ---------------------------- Summary Statistics ---------------------------
+## ------------------------------ Summary Statistics ------------------------------
 ## 
-## ------------------------------ Variable: disp -----------------------------
+## -------------------------------- Variable: disp --------------------------------
 ## 
 ##                           Univariate Analysis                            
 ## 
@@ -294,7 +294,7 @@ variables in a data set, use <code>ds_auto_summary()</code>.</p>
 ## NULL
 ## 
 ## 
-## -------------------------- Frequency Distribution -------------------------
+## ---------------------------- Frequency Distribution ----------------------------
 ## 
 ##                                Variable: disp                                 
 ## |---------------------------------------------------------------------------|
@@ -314,11 +314,11 @@ variables in a data set, use <code>ds_auto_summary()</code>.</p>
 ## |---------------------------------------------------------------------------|
 ## 
 ## 
-## ------------------------------ Variable: mpg ------------------------------
+## -------------------------------- Variable: mpg --------------------------------
 ## 
-## ---------------------------- Summary Statistics ---------------------------
+## ------------------------------ Summary Statistics ------------------------------
 ## 
-## ------------------------------ Variable: mpg ------------------------------
+## --------------------------------- Variable: mpg --------------------------------
 ## 
 ##                         Univariate Analysis                          
 ## 
@@ -363,7 +363,7 @@ variables in a data set, use <code>ds_auto_summary()</code>.</p>
 ## NULL
 ## 
 ## 
-## -------------------------- Frequency Distribution -------------------------
+## ---------------------------- Frequency Distribution ----------------------------
 ## 
 ##                               Variable: mpg                               
 ## |-----------------------------------------------------------------------|
@@ -412,13 +412,13 @@ k</code></pre>
 <p><code>ds_group_summary()</code> returns a tibble which can be used for further analysis.</p>
 <pre class="r"><code>k$tidy_stats</code></pre>
 <pre><code>## # A tibble: 3 x 15
-##   cyl   length   min   max  mean median  mode    sd variance skewness
-##   &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 4         11  21.4  33.9  26.7   26    22.8  4.51    20.3     0.348
-## 2 6          7  17.8  21.4  19.7   19.7  21    1.45     2.11   -0.259
-## 3 8         14  10.4  19.2  15.1   15.2  10.4  2.56     6.55   -0.456
-## # ... with 5 more variables: kurtosis &lt;dbl&gt;, coeff_var &lt;dbl&gt;,
-## #   std_error &lt;dbl&gt;, range &lt;dbl&gt;, iqr &lt;dbl&gt;</code></pre>
+##   cyl   length   min   max  mean median  mode    sd variance skewness kurtosis
+## * &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 4         11  21.4  33.9  26.7   26    22.8  4.51    20.3     0.348   -1.43 
+## 2 6          7  17.8  21.4  19.7   19.7  21    1.45     2.11   -0.259   -1.83 
+## 3 8         14  10.4  19.2  15.1   15.2  10.4  2.56     6.55   -0.456    0.330
+## # ... with 4 more variables: coeff_var &lt;dbl&gt;, std_error &lt;dbl&gt;, range &lt;dbl&gt;,
+## #   iqr &lt;dbl&gt;</code></pre>
 <div id="box-plot" class="section level4">
 <h4>Box Plot</h4>
 <p>A <code>plot()</code> method has been defined for comparing distributions.</p>
@@ -486,7 +486,7 @@ variables in a data frame/tibble.</p>
 <pre class="r"><code>ds_tidy_stats(mtcarz, mpg, disp, hp)</code></pre>
 <pre><code>## # A tibble: 3 x 16
 ##   vars    min   max  mean t_mean median  mode range variance  stdev  skew
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## * &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 disp   71.1 472   231.   228    196.  276.  401.   15361.  124.   0.420
 ## 2 hp     52   335   147.   144.   123   110   283     4701.   68.6  0.799
 ## 3 mpg    10.4  33.9  20.1   20.0   19.2  10.4  23.5     36.3   6.03 0.672
@@ -542,15 +542,14 @@ continuous variables in the data set.</p>
 <h4>Percentiles</h4>
 <pre class="r"><code>ds_percentiles(mtcarz)</code></pre>
 <pre><code>## # A tibble: 6 x 12
-##   var     min  per1  per5 per10     q1 median     q3  per95  per90  per99
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 disp  71.1  72.5  77.4  80.6  121.   196.   326    449    396.   468.  
-## 2 drat   2.76  2.76  2.85  3.01   3.08   3.70   3.92   4.31   4.21   4.78
-## 3 hp    52    55.1  63.6  66     96.5  123    180    254.   244.   313.  
-## 4 mpg   10.4  10.4  12.0  14.3   15.4   19.2   22.8   31.3   30.1   33.4 
-## 5 qsec  14.5  14.5  15.0  15.5   16.9   17.7   18.9   20.1   20.0   22.1 
-## 6 wt     1.51  1.54  1.74  1.96   2.58   3.32   3.61   5.29   4.05   5.40
-## # ... with 1 more variable: max &lt;dbl&gt;</code></pre>
+##   var     min  per1  per5 per10     q1 median     q3  per95  per90  per99    max
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 disp  71.1  72.5  77.4  80.6  121.   196.   326    449    396.   468.   472   
+## 2 drat   2.76  2.76  2.85  3.01   3.08   3.70   3.92   4.31   4.21   4.78   4.93
+## 3 hp    52    55.1  63.6  66     96.5  123    180    254.   244.   313.   335   
+## 4 mpg   10.4  10.4  12.0  14.3   15.4   19.2   22.8   31.3   30.1   33.4   33.9 
+## 5 qsec  14.5  14.5  15.0  15.5   16.9   17.7   18.9   20.1   20.0   22.1   22.9 
+## 6 wt     1.51  1.54  1.74  1.96   2.58   3.32   3.61   5.29   4.05   5.40   5.42</code></pre>
 </div>
 </div>
 </div>
@@ -850,5 +849,5 @@ generating different types of plots.</p></li>
 <h2>Feedback</h2>
 <p>All feedback is welcome. Issues (bugs and feature
 requests) can be posted to <a href="https://github.com/rsquaredacademy/descriptr/issues">github tracker</a>.
-For help with code or other related questions, feel free to reach me <a href="mailto:hebbali.aravind@gmail.com">hebbali.aravind@gmail.com</a>.</p>
+For help with code or other related questions, feel free to reach me <a href="mailto:hebbali.aravind@gmail.com" class="email">hebbali.aravind@gmail.com</a>.</p>
 </div>

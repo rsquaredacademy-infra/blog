@@ -97,7 +97,7 @@ cell range and we will look at them one by one:</p>
 <p><br></p>
 <p>The first method uses the cell names along with <code>:</code> to specify the cell range.
 For example, to read data from first 4 rows of columns <strong>B</strong> and <strong>C</strong>, we will
-specify the range as <code>&quot;B1:C4&quot;</code>.</p>
+specify the range as <code>"B1:C4"</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = &quot;B1:C4&quot;)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   users new_users
@@ -105,7 +105,7 @@ specify the range as <code>&quot;B1:C4&quot;</code>.</p>
 ## 1 43296     40238
 ## 2 12916     12311
 ## 3 10983      7636</code></pre>
-<p>To read data from first 5 rows of columns <strong>A</strong>, <strong>B</strong> and <strong>C</strong>, we will specify the range as <code>&quot;A1:C5&quot;</code>.</p>
+<p>To read data from first 5 rows of columns <strong>A</strong>, <strong>B</strong> and <strong>C</strong>, we will specify the range as <code>"A1:C5"</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = &quot;A1:C5&quot;)</code></pre>
 <pre><code>## # A tibble: 4 x 3
 ##   channel        users new_users
@@ -126,7 +126,7 @@ cell <code>A4</code>.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, col_names = FALSE,
   range = anchored(&quot;A4&quot;, dim = c(3, 2)))</code></pre>
 <pre><code>## # A tibble: 3 x 2
-##   X__1      X__2
+##   ...1      ...2
 ##   &lt;chr&gt;    &lt;dbl&gt;
 ## 1 Referral 10983
 ## 2 Social   10346
@@ -241,7 +241,7 @@ column range. In the below example, we want to read the 2nd, 4th and 6th column 
 the <code>sample.xls</code> file.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(c(2, 4, 6)))</code></pre>
 <pre><code>## # A tibble: 7 x 5
-##   users new_users sessions bounce_rate X__1 
+##   users new_users sessions bounce_rate ...5 
 ##   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;lgl&gt;
 ## 1 43296     40238    50810 48.72%      NA   
 ## 2 12916     12311    16419 49.27%      NA   
@@ -254,7 +254,7 @@ the <code>sample.xls</code> file.</p>
 including the 6th column.</p>
 <pre class="r"><code>read_excel(&#39;sample.xls&#39;, sheet = 1, range = cell_cols(c(2:6)))</code></pre>
 <pre><code>## # A tibble: 7 x 5
-##   users new_users sessions bounce_rate X__1 
+##   users new_users sessions bounce_rate ...5 
 ##   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;lgl&gt;
 ## 1 43296     40238    50810 48.72%      NA   
 ## 2 12916     12311    16419 49.27%      NA   
@@ -280,7 +280,6 @@ including the 6th column.</p>
 <div id="library" class="section level3">
 <h3>Library</h3>
 <pre class="r"><code>library(haven)</code></pre>
-<pre><code>## Warning: package &#39;haven&#39; was built under R version 3.5.2</code></pre>
 </div>
 <div id="stata" class="section level3">
 <h3>STATA</h3>
@@ -304,18 +303,18 @@ including the 6th column.</p>
 <h3>SPSS</h3>
 <pre class="r"><code>read_spss(&#39;employee.sav&#39;)  </code></pre>
 <pre><code>## # A tibble: 474 x 9
-##       id gender  educ    jobcat  salary  salbegin  jobtime prevexp minority
-##    &lt;dbl&gt; &lt;chr+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lbl&gt; &lt;dbl+l&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt;
-##  1     1 m       15      3       57000   27000     98      144     0       
-##  2     2 m       16      1       40200   18750     98       36     0       
-##  3     3 f       12      1       21450   12000     98      381     0       
-##  4     4 f        8      1       21900   13200     98      190     0       
-##  5     5 m       15      1       45000   21000     98      138     0       
-##  6     6 m       15      1       32100   13500     98       67     0       
-##  7     7 m       15      1       36000   18750     98      114     0       
-##  8     8 f       12      1       21900    9750     98        0     0       
-##  9     9 f       15      1       27900   12750     98      115     0       
-## 10    10 f       12      1       24000   13500     98      244     0       
+##       id gender       educ    jobcat  salary salbegin jobtime   prevexp minority
+##    &lt;dbl&gt; &lt;chr+lb&gt; &lt;dbl+lb&gt; &lt;dbl+lbl&gt; &lt;dbl+l&gt; &lt;dbl+lb&gt; &lt;dbl+l&gt; &lt;dbl+lbl&gt; &lt;dbl+lb&gt;
+##  1     1 m [Male]  15 [15] 3 [Manag~   57000    27000      98 144         0 [No]
+##  2     2 m [Male]  16 [16] 1 [Cleri~   40200    18750      98  36         0 [No]
+##  3     3 f [Fema~  12 [12] 1 [Cleri~   21450    12000      98 381         0 [No]
+##  4     4 f [Fema~   8 [8]  1 [Cleri~   21900    13200      98 190         0 [No]
+##  5     5 m [Male]  15 [15] 1 [Cleri~   45000    21000      98 138         0 [No]
+##  6     6 m [Male]  15 [15] 1 [Cleri~   32100    13500      98  67         0 [No]
+##  7     7 m [Male]  15 [15] 1 [Cleri~   36000    18750      98 114         0 [No]
+##  8     8 f [Fema~  12 [12] 1 [Cleri~   21900     9750      98   0 [mis~   0 [No]
+##  9     9 f [Fema~  15 [15] 1 [Cleri~   27900    12750      98 115         0 [No]
+## 10    10 f [Fema~  12 [12] 1 [Cleri~   24000    13500      98 244         0 [No]
 ## # ... with 464 more rows</code></pre>
 </div>
 <div id="sas" class="section level3">

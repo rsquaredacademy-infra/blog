@@ -65,19 +65,19 @@ concepts we learn. Happy learning!</p>
 <h3>Date</h3>
 <p>Let us begin by looking at the current date and time. <code>Sys.Date()</code> and <code>today()</code> will return the current date.</p>
 <pre class="r"><code>Sys.Date()</code></pre>
-<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 <pre class="r"><code>lubridate::today()</code></pre>
-<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 </div>
 <div id="time" class="section level3">
 <h3>Time</h3>
 <p><code>Sys.time()</code> and <code>now()</code> return the date, time and the timezone. In <code>now()</code>, we can specify the timezone using the <code>tzone</code> argument.</p>
 <pre class="r"><code>Sys.time()</code></pre>
-<pre><code>## [1] &quot;2020-04-17 17:37:21 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10 22:47:50 IST&quot;</code></pre>
 <pre class="r"><code>lubridate::now()</code></pre>
-<pre><code>## [1] &quot;2020-04-17 17:37:21 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10 22:47:50 IST&quot;</code></pre>
 <pre class="r"><code>lubridate::now(tzone = &quot;UTC&quot;)</code></pre>
-<pre><code>## [1] &quot;2020-04-17 12:07:21 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10 17:17:50 UTC&quot;</code></pre>
 </div>
 <div id="am-or-pm" class="section level3">
 <h3>AM or PM?</h3>
@@ -91,7 +91,7 @@ concepts we learn. Happy learning!</p>
 <h3>Leap Year</h3>
 <p>We can also check if the current year is a leap year using <code>leap_year()</code>.</p>
 <pre class="r"><code>Sys.Date()</code></pre>
-<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 <pre class="r"><code>lubridate::leap_year(Sys.Date())</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 </div>
@@ -315,9 +315,9 @@ you check the class of <code>Sys.Date()</code>, it is <code>Date</code>. Interna
 number i.e. an integer. The <code>unclass()</code> function will show how dates are stored
 internally.</p>
 <pre class="r"><code>Sys.Date()</code></pre>
-<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 <pre class="r"><code>unclass(Sys.Date())</code></pre>
-<pre><code>## [1] 18369</code></pre>
+<pre><code>## [1] 18423</code></pre>
 <p>What does this integer represent? Why has R stored the date as an integer?
 In R, dates are represented as the number of days since <code>1970-01-01</code>. All the dates in R are
 internally stored in this way. Before we explore this concept further, let us
@@ -410,7 +410,7 @@ learn to create POSIX objects, let us look at <code>now()</code> from lubridate.
 <p><code>now()</code> returns current date/time as a POSIXct object. Let us look at its
 internal representation using <code>unclass()</code></p>
 <pre class="r"><code>unclass(lubridate::now())</code></pre>
-<pre><code>## [1] 1587125246
+<pre><code>## [1] 1591809475
 ## attr(,&quot;tzone&quot;)
 ## [1] &quot;&quot;</code></pre>
 <p>The output you see is the number of seconds since January 1, 1970.</p>
@@ -702,7 +702,7 @@ date of invoice from the date of payment.</p>
   count(delay)</code></pre>
 <pre><code>## # A tibble: 36 x 2
 ##    delay       n
-##    &lt;drtn&gt;  &lt;int&gt;
+##  * &lt;drtn&gt;  &lt;int&gt;
 ##  1  1 days    61
 ##  2  2 days    65
 ##  3  3 days    51
@@ -781,11 +781,11 @@ reside or work.</p>
 <pre class="r"><code>Sys.setenv(TZ = &quot;Asia/Calcutta&quot;)</code></pre>
 <p>Another way to get the timezone is through <code>tz()</code> from the lubridate package.</p>
 <pre class="r"><code>lubridate::tz(Sys.time())</code></pre>
-<pre><code>## [1] &quot;Asia/Calcutta&quot;</code></pre>
+<pre><code>## [1] &quot;&quot;</code></pre>
 <p>If you want to view the time in a different timezone, use <code>with_tz()</code>. Let us
 look at the current time in <strong>UTC</strong> instead of <strong>Indian Standard Time</strong>.</p>
 <pre class="r"><code>lubridate::with_tz(Sys.time(), &quot;UTC&quot;)</code></pre>
-<pre><code>## [1] &quot;2020-04-17 12:07:28 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10 17:17:58 UTC&quot;</code></pre>
 </div>
 <div id="daylight-savings" class="section level3">
 <h3>Daylight Savings</h3>
@@ -806,7 +806,7 @@ later each day according to the clock. In other words</p>
 <p>In R, the <code>dst()</code> function is an indicator for daylight savings. It returns
 <code>TRUE</code> if daylight saving is in force, <code>FALSE</code> if not and <code>NA</code> if unknown.</p>
 <pre class="r"><code>Sys.Date()</code></pre>
-<pre><code>## [1] &quot;2020-04-17&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 <pre class="r"><code>dst(Sys.Date()) </code></pre>
 <pre><code>## [1] FALSE</code></pre>
 </div>
@@ -1952,7 +1952,7 @@ the year is a leap year else it will be set to <code>FALSE</code></li>
   count(quarter_due)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   quarter_due     n
-##         &lt;int&gt; &lt;int&gt;
+## *       &lt;int&gt; &lt;int&gt;
 ## 1           1   521
 ## 2           2   661
 ## 3           3   618
@@ -2458,7 +2458,7 @@ course_interval / dweeks()
 
 # course length in years
 course_interval / dyears()
-## [1] 0.02465753</code></pre>
+## [1] 0.02464066</code></pre>
 </div>
 <div id="period" class="section level3">
 <h3>Period</h3>

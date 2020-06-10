@@ -51,9 +51,9 @@ calculations in R.</p>
 or pm. <code>now()</code> returns the date time as well as the time zone whereas <code>today()</code>
 will return only the current date. <code>am()</code> and <code>pm()</code> return <code>TRUE</code> or <code>FALSE</code>.</p>
 <pre class="r"><code>now()</code></pre>
-<pre><code>## [1] &quot;2019-01-29 14:26:58 IST&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10 18:52:25 IST&quot;</code></pre>
 <pre class="r"><code>today()</code></pre>
-<pre><code>## [1] &quot;2019-01-29&quot;</code></pre>
+<pre><code>## [1] &quot;2020-06-10&quot;</code></pre>
 <pre class="r"><code>am(now())  </code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>pm(now())</code></pre>
@@ -157,7 +157,7 @@ date of invoice from the date of payment.</p>
   )</code></pre>
 <pre><code>## # A tibble: 2,466 x 4
 ##    Invoice    Due        Payment    days_to_pay
-##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;time&gt;     
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;drtn&gt;     
 ##  1 2013-01-02 2013-02-01 2013-01-15 13 days    
 ##  2 2013-01-26 2013-02-25 2013-03-03 36 days    
 ##  3 2013-07-03 2013-08-02 2013-07-08  5 days    
@@ -465,7 +465,7 @@ semester(course_start)
   count(quarter_due)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   quarter_due     n
-##         &lt;int&gt; &lt;int&gt;
+## *       &lt;int&gt; &lt;int&gt;
 ## 1           1   521
 ## 2           2   661
 ## 3           3   618
@@ -502,7 +502,7 @@ course_interval / dhours()
 course_interval / dweeks()
 ## [1] 1.285714
 course_interval / dyears()
-## [1] 0.02465753</code></pre>
+## [1] 0.02464066</code></pre>
 <p>We can use <code>time_length()</code> to get the course interval in different units.</p>
 <p><br></p>
 <p><img src="/img/time_length.png" width="100%" style="display: block; margin: auto;" /></p>

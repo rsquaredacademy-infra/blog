@@ -129,12 +129,12 @@ extracting the <code>referrer</code> column from the above data in later example
     page = mean(n_pages),
     tos = mean(duration),
     n = n()
-  )
-
-refer_summary</code></pre>
+  )</code></pre>
+<pre><code>## `summarise()` ungrouping (override with `.groups` argument)</code></pre>
+<pre class="r"><code>refer_summary</code></pre>
 <pre><code>## # A tibble: 5 x 4
 ##   referrer  page   tos     n
-##   &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## * &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
 ## 1 bing      6.13  368.   194
 ## 2 direct    6.38  358.   191
 ## 3 social    5.42  355.   200
@@ -326,10 +326,10 @@ traffics %&gt;%
   fct_lump() %&gt;% 
   table()
 ## .
-## affiliates       bing   facebook      yahoo     google  instagram 
-##       7641       5893       8135       4899       9229       3907 
-##    twitter    unknown      Other 
-##       4521       2657       1350</code></pre>
+## affiliates       bing   facebook      yahoo     google  instagram    twitter 
+##       7641       5893       8135       4899       9229       3907       4521 
+##    unknown      Other 
+##       2657       1350</code></pre>
 </div>
 <div id="retain-top-3-referrers" class="section level2">
 <h2>Retain top 3 referrers</h2>
@@ -508,8 +508,8 @@ It contains response to an imaginary survey.</p>
 <code>use_series()</code> and save it as <code>responses</code>.</p>
 <pre class="r"><code>responses &lt;- use_series(response_data, response)
 levels(responses)</code></pre>
-<pre><code>## [1] &quot;like&quot;             &quot;like somewhat&quot;    &quot;neutral&quot;         
-## [4] &quot;dislike somewhat&quot; &quot;dislike&quot;</code></pre>
+<pre><code>## [1] &quot;like&quot;             &quot;like somewhat&quot;    &quot;neutral&quot;          &quot;dislike somewhat&quot;
+## [5] &quot;dislike&quot;</code></pre>
 </div>
 </div>
 <div id="shift-levels" class="section level2">
@@ -523,8 +523,8 @@ the left by 2 positions.</p>
 <p><br></p>
 <pre class="r"><code>fct_shift(responses, 2) %&gt;%
   levels()</code></pre>
-<pre><code>## [1] &quot;neutral&quot;          &quot;dislike somewhat&quot; &quot;dislike&quot;         
-## [4] &quot;like&quot;             &quot;like somewhat&quot;</code></pre>
+<pre><code>## [1] &quot;neutral&quot;          &quot;dislike somewhat&quot; &quot;dislike&quot;          &quot;like&quot;            
+## [5] &quot;like somewhat&quot;</code></pre>
 <p>To shift the levels to the right, supply a negative value to the <code>n</code> argument
 in <code>fct_shift()</code>. In the below example, we shift the levels to the right by
 2 positions.</p>
@@ -533,8 +533,8 @@ in <code>fct_shift()</code>. In the below example, we shift the levels to the ri
 <p><br></p>
 <pre class="r"><code>fct_shift(responses, -2) %&gt;%
   levels()</code></pre>
-<pre><code>## [1] &quot;dislike somewhat&quot; &quot;dislike&quot;          &quot;like&quot;            
-## [4] &quot;like somewhat&quot;    &quot;neutral&quot;</code></pre>
+<pre><code>## [1] &quot;dislike somewhat&quot; &quot;dislike&quot;          &quot;like&quot;             &quot;like somewhat&quot;   
+## [5] &quot;neutral&quot;</code></pre>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

@@ -48,7 +48,7 @@ dplyr statements.</p>
 <pre class="r"><code>mtcars2 &lt;- dplyr::tbl(con, &quot;mtcars&quot;)
 mtcars2</code></pre>
 <pre><code>## # Source:   table&lt;mtcars&gt; [?? x 11]
-## # Database: sqlite 3.22.0 [:memory:]
+## # Database: sqlite 3.30.1 [:memory:]
 ##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
@@ -69,7 +69,7 @@ mtcars2</code></pre>
 columns from <code>mtcars2</code>.</p>
 <pre class="r"><code>select(mtcars2, mpg, cyl, drat)</code></pre>
 <pre><code>## # Source:   lazy query [?? x 3]
-## # Database: sqlite 3.22.0 [:memory:]
+## # Database: sqlite 3.30.1 [:memory:]
 ##      mpg   cyl  drat
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1  21       6  3.9 
@@ -87,7 +87,7 @@ columns from <code>mtcars2</code>.</p>
 greater than 25.</p>
 <pre class="r"><code>filter(mtcars2, mpg &gt; 25)</code></pre>
 <pre><code>## # Source:   lazy query [?? x 11]
-## # Database: sqlite 3.22.0 [:memory:]
+## # Database: sqlite 3.30.1 [:memory:]
 ##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1  32.4     4  78.7    66  4.08  2.2   19.5     1     1     4     1
@@ -102,9 +102,10 @@ different types of cylinders.</p>
   group_by(cyl) %&gt;%
   summarise(mileage = mean(mpg))</code></pre>
 <pre><code>## Warning: Missing values are always removed in SQL.
-## Use `AVG(x, na.rm = TRUE)` to silence this warning</code></pre>
+## Use `mean(x, na.rm = TRUE)` to silence this warning
+## This warning is displayed only once per session.</code></pre>
 <pre><code>## # Source:   lazy query [?? x 2]
-## # Database: sqlite 3.22.0 [:memory:]
+## # Database: sqlite 3.30.1 [:memory:]
 ##     cyl mileage
 ##   &lt;dbl&gt;   &lt;dbl&gt;
 ## 1     4    26.7
@@ -120,70 +121,21 @@ different types of cylinders.</p>
   summarise(mileage = mean(mpg))
 
 dplyr::show_query(mileages)
-## Warning: Missing values are always removed in SQL.
-## Use `AVG(x, na.rm = TRUE)` to silence this warning
 ## &lt;SQL&gt;
 ## SELECT `cyl`, AVG(`mpg`) AS `mileage`
 ## FROM `mtcars`
 ## GROUP BY `cyl`
 
 dplyr::explain(mileages)
-## Warning: Missing values are always removed in SQL.
-## Use `AVG(x, na.rm = TRUE)` to silence this warning
 ## &lt;SQL&gt;
 ## SELECT `cyl`, AVG(`mpg`) AS `mileage`
 ## FROM `mtcars`
 ## GROUP BY `cyl`
 ## 
-## Warning: Missing values are always removed in SQL.
-## Use `AVG(x, na.rm = TRUE)` to silence this warning
 ## &lt;PLAN&gt;
-##    addr       opcode p1 p2 p3     p4 p5 comment
-## 1     0         Init  0 43  0        00      NA
-## 2     1   SorterOpen  1  2  0 k(1,B) 00      NA
-## 3     2      Integer  0  5  0        00      NA
-## 4     3      Integer  0  4  0        00      NA
-## 5     4         Null  0  8  8        00      NA
-## 6     5        Gosub  7 40  0        00      NA
-## 7     6     OpenRead  0  2  1      2 00      NA
-## 8     7       Rewind  0 15  0        00      NA
-## 9     8       Column  0  1 10        00      NA
-## 10    9 RealAffinity 10  0  0        00      NA
-## 11   10       Column  0  0 11        00      NA
-## 12   11 RealAffinity 11  0  0        00      NA
-## 13   12   MakeRecord 10  2 12        00      NA
-## 14   13 SorterInsert  1 12  0        00      NA
-## 15   14         Next  0  8  0        01      NA
-## 16   15   OpenPseudo  2 12  2        00      NA
-## 17   16   SorterSort  1 42  0        00      NA
-## 18   17   SorterData  1 12  2        00      NA
-## 19   18       Column  2  0  9        00      NA
-## 20   19      Compare  8  9  1 k(1,B) 00      NA
-## 21   20         Jump 21 25 21        00      NA
-## 22   21         Move  9  8  1        00      NA
-## 23   22        Gosub  6 34  0        00      NA
-## 24   23        IfPos  5 42  0        00      NA
-## 25   24        Gosub  7 40  0        00      NA
-## 26   25       Column  2  1 13        00      NA
-## 27   26     AggStep0  0 13  2 avg(1) 01      NA
-## 28   27       Column  2  0  1        00      NA
-## 29   28      Integer  1  4  0        00      NA
-## 30   29   SorterNext  1 17  0        00      NA
-## 31   30        Gosub  6 34  0        00      NA
-## 32   31         Goto  0 42  0        00      NA
-## 33   32      Integer  1  5  0        00      NA
-## 34   33       Return  6  0  0        00      NA
-## 35   34        IfPos  4 36  0        00      NA
-## 36   35       Return  6  0  0        00      NA
-## 37   36     AggFinal  2  1  0 avg(1) 00      NA
-## 38   37         Copy  1 14  1        00      NA
-## 39   38    ResultRow 14  2  0        00      NA
-## 40   39       Return  6  0  0        00      NA
-## 41   40         Null  0  1  3        00      NA
-## 42   41       Return  7  0  0        00      NA
-## 43   42         Halt  0  0  0        00      NA
-## 44   43  Transaction  1  0  2      0 01      NA
-## 45   44         Goto  0  1  0        00      NA</code></pre>
+##   id parent notused                       detail
+## 1  6      0       0            SCAN TABLE mtcars
+## 2  8      0       0 USE TEMP B-TREE FOR GROUP BY</code></pre>
 </div>
 <div id="collect-data" class="section level4">
 <h4>Collect Data</h4>
@@ -191,8 +143,6 @@ dplyr::explain(mileages)
 So how do we pull all the data and store it for further analysis? <code>collect()</code> will pull all
 the data and store it in a tibble and you can use it for any further analysis.</p>
 <pre class="r"><code>dplyr::collect(mileages)</code></pre>
-<pre><code>## Warning: Missing values are always removed in SQL.
-## Use `AVG(x, na.rm = TRUE)` to silence this warning</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##     cyl mileage
 ##   &lt;dbl&gt;   &lt;dbl&gt;
