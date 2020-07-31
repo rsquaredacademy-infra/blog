@@ -1,0 +1,217 @@
+---
+title: "rfm 0.2.2"
+author: Aravind Hebbali
+twitterImg: /img/github_rfm.png
+description: "rfm package version 0.2.2"
+date: '2020-07-31'
+slug: rfm-0-2-2
+topics:
+  - packages
+tags:
+  - rfm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libs, echo=FALSE, message=FALSE, warning=FALSE}
+options(kableExtra.html.bsTable = TRUE)
+library(knitr)
+library(rfm)
+library(patchwork)
+library(dplyr)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="70%"}
+knitr::include_graphics("/img/github_rfm.png")
+```
+
+We're excited to announce the release of `rfm` 0.2.2 on CRAN! `rfm` provides tools for customer segmentation using **R**ecency **F**requency **M**onetary value analysis. It includes a Shiny app for interactive segmentation. You can install rfm with:
+
+```{r install, eval=FALSE}
+install.packages("rfm")
+```
+
+In this blog post, we will summarize the changes implemented in the current (`0.2.2`) and previous release (`0.2.1`).
+
+## Segmentation
+
+In previous versions, `rfm_segment()` would overwrite a segment if the intervals used to define the segment was a subset of another segment. It was expected that the end user would be careful to ensure that the intervals for each segment would be unique and not a subset of any other segment. You can see the example [here](https://github.com/rsquaredacademy/rfm/issues/67).
+
+We are grateful to <a href="https://github.com/leungi" target="_blank">@leungi</a> for bringing this to our attention and also for fixing it. Now, `rfm_segment()` does not overwrite 
+the segments even if the intervals for one segment is a subset of another. 
+
+```{r segment}
+# analysis date
+analysis_date <- lubridate::as_date("2006-12-31")
+
+# rfm score
+rfm_result <- rfm_table_order(rfm_data_orders, customer_id, order_date,
+                              revenue, analysis_date)
+
+rfm_result
+
+# segmentation
+segment_names <- c(
+  "Champions", "Loyal Customers", "Potential Loyalist",
+  "New Customers", "Promising", "Need Attention", "About To Sleep",
+  "At Risk", "Can't Lose Them", "Lost"
+)
+
+recency_lower <- c(4, 2, 3, 4, 3, 2, 2, 1, 1, 1)
+recency_upper <- c(5, 5, 5, 5, 4, 3, 3, 2, 1, 2)
+frequency_lower <- c(4, 3, 1, 1, 1, 2, 1, 2, 4, 1)
+frequency_upper <- c(5, 5, 3, 1, 1, 3, 2, 5, 5, 2)
+monetary_lower <- c(4, 3, 1, 1, 1, 2, 1, 2, 4, 1)
+monetary_upper <- c(5, 5, 3, 1, 1, 3, 2, 5, 5, 2)
+
+segments <-
+  rfm_segment(
+    rfm_result,
+    segment_names,
+    recency_lower,
+    recency_upper,
+    frequency_lower,
+    frequency_upper,
+    monetary_lower,
+    monetary_upper
+  )
+
+# segment size
+segments %>%
+  count(segment) %>%
+  arrange(desc(n)) %>%
+  rename(Segment = segment, Count = n)
+```
+
+In the above example, the interval used to define the **Champions** segment is a subset of **Loyal Customers**. In the previous versions, those customers who
+should have been assigned **Champions** were reassigned as **Loyal Customers** if the criteria for **Champions** was evaluated before **Loyal Customers**. From version 0.2.0, `rfm_segment()` will avoid such overwriting. 
+
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/courses/" target="_blank"><img src="/img/rfm-course-ad.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+
+
+## Visualization
+
+`rfm` used print all the plots by default instead of returning a plot object. This resulted in difficulties for some end users who wanted to:
+
+- further modify the plot
+- include the plot in a panel of other plots
+
+From version 0.2.1, all plotting functions use an additional argument `print_plot`. It is set to `TRUE` by default to avoid any disruption to current work flows. Those users who want a plot object to be returned can set the above argument to `FALSE`.
+
+```{r viz, fig.width=10}
+# analysis date
+analysis_date <- lubridate::as_date('2007-01-01')
+
+# transactions data
+rfm_order <- rfm_table_order(rfm_data_orders, customer_id, order_date,
+                             revenue, analysis_date)
+
+# customer data
+rfm_customer <- rfm_table_customer(rfm_data_customer, customer_id,
+                                   number_of_orders, recency_days, revenue,
+                                   analysis_date)
+
+# plots
+p1 <- 
+  rfm_heatmap(rfm_order, 
+              plot_title = "Transaction Data", 
+              print_plot = FALSE)
+
+p2 <- 
+  rfm_heatmap(rfm_customer, 
+              plot_title = "Customer Data", 
+              print_plot = FALSE)
+
+# using patchwork
+p1 + p2
+```
+
+## Custom Threshold for RFM Scores
+
+Lots of users wanted to know the threshold used for generating the RFM scores. From version 0.2.1, `rfm_table_*` family of functions return the threshold.
+
+```{r threshold}
+analysis_date <- lubridate::as_date('2006-12-31')
+result <- rfm_table_order(rfm_data_orders, customer_id, order_date,
+                          revenue, analysis_date)
+
+# threshold
+result$threshold
+```
+
+Another request (see [here](https://github.com/rsquaredacademy/rfm/issues/58)) was to be able to use custom or user specific threshold for generating RFM score. `rfm` uses quantiles to generate the lower and upper thresholds used for generating the scores. Unfortunately, if the data is skewed, using quantiles is not effective. From version 0.2.1, users can specify custom threshold for generating the RFM score and we will learn how to do this using an example.
+
+```{r}
+analysis_date <- lubridate::as_date('2006-12-31')
+result <- rfm_table_order(rfm_data_orders, customer_id, order_date, revenue,
+                          analysis_date)
+result$threshold
+```
+
+If you look at the above output, we have 5 bins/scores and there are six different values. Let us focus on the `monetary_*` columns in the threshold table. The lower threshold of the first bin and the upper threshold of the last bin are the `min` and `max` values form the `revenue` column of `rfm_data_orders` and the rest of the values are returned by the `quantile()` function.
+
+```{r threshold_min_max}
+revenue <- 
+  rfm_data_orders %>% 
+  group_by(customer_id) %>% 
+  summarize(total = sum(revenue))
+
+# revenue at customer level
+revenue
+
+# min and max
+min(revenue$total)
+max(revenue$total)
+```
+
+Let us look at the quantiles used for generating the scores.
+
+```{r quantiles}
+quantile(revenue$total, probs = seq(0, 1, length.out = 6))
+```
+
+The intervals are created in the below style:
+
+`Left-closed, right-open: [ a , b ) = { x ∣ a ≤ x < b } `
+
+Since rfm uses left closed intervals to generate the scores, we add `1` to all values except the minimum value. Now, let us recreate the RFM scores using custom threshold instead of quantiles.
+
+```{r custom_score}
+rfm_table_order(rfm_data_orders, 
+                customer_id, 
+                order_date, 
+                revenue,
+                analysis_date, 
+                recency_bins = c(115, 181, 297, 482),
+                frequency_bins = c(4, 5, 6, 8), 
+                monetary_bins = c(256, 382, 506, 666))
+```
+
+We have used the values from the threshold table to reproduce the earlier result. If you observe carefully, we have specified `4` values while generating `5` bins/scores. Whenever using custom threshold, values supplied should be one less than the number of bins/scores generated as `rfm` internally computes the `min` and `max` values. In general, if you have `n` bins/scores, you only specify the upper threshold for `n - 1` bins/scores. 
+
+We have tried our best to explain how to use custom threshold but completely understand that it can be confusing to implement at beginning. If you have any questions about this method, feel free to write to us at **support@rsquaredacademy.com** and our team will be happy to help you.
+
+## Acknowledgements
+
+We are grateful to <a href="https://github.com/leungi" target="_blank">@leungi</a>, <a href="https://github.com/gfagherazzi" target="_blank">@gfagherazzi</a> and <a href="https://github.com/DavidGarciaEstaun" target="_blank">@DavidGarciaEstaun</a> for their inputs. 
+
+## Learning More
+
+- [Documentation](https://rfm.rsquaredacademy.com)
+- [GitHub](https://github.com/rsquaredacademy/rfm)
+
+## Feedback
+
+*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could 
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.
+
+We welcome your comments. You can email to let us know what you did or did not 
+like about our blog as well as what we can do to make our post better.*
+
+**Email: support@rsquaredacademy.com**
