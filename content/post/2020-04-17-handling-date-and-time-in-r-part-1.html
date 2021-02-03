@@ -1,0 +1,252 @@
+---
+title: "Date & Time in R - Introduction"
+author: Aravind Hebbali
+twitterImg: /img/handling-date-and-time-in-r.png
+description: "Learn to handle date & time in R"
+date: '2020-04-16'
+slug: handling-date-and-time-in-r-part-1
+categories:
+  - data-wrangling
+tags:
+  - lubridate
+  - datetime
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+
+
+<p><img src="/img/handling-date-and-time-in-r.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In this new series <a href="https://tutorials.rsquaredacademy.com/date-time/index.html">Handling Date &amp; Time in R</a>, we will learn to handle date &amp; time in R. We will start off by learning how
+to <strong>get current date &amp; time</strong> before moving on to understand <strong>how R handles date/time internally</strong>
+and the different classes such as <code>Date</code> &amp; <code>POSIXct/lt</code>. We will spend some time
+exploring <strong>time zones, daylight savings and ISO 8001 standard</strong> for representing date/time.
+We will look at all the <strong>weird formats in which date/time come in real world</strong> and learn to
+<strong>parse them using conversion specifications</strong>. After this, we will also <strong>learn how to handle date/time
+columns while reading external data into R</strong>. We will learn to <strong>extract and update different date/time
+components</strong> such as year, month, day, hour, minute etc., <strong>create sequence of dates</strong> in different ways
+and explore intervals, durations and period. We will end the tutorial by learning how to <strong>round/rollback
+dates</strong>. Throughout the series, we will also <strong>work through a case study</strong> to better understand the
+concepts we learn. Happy learning!</p>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all the resources related to this tutorial:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/handling-date-and-time-in-r.pdf" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/1072419" target="_blank">RStudio Cloud Project</a></li>
+<li><a href="https://wrangle-r.rsquaredacademy.com/lubridate.html" target="_blank">ebook</a></li>
+</ul>
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank"><img src="/img/lubirdate-blog-course-ad.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+{{% youtube "322IcnZiYx4" %}}
+<div id="date" class="section level3">
+<h3>Date</h3>
+<p>Let us begin by looking at the current date and time. <code>Sys.Date()</code> and <code>today()</code> will return the current date.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2021-02-03&quot;</code></pre>
+<pre class="r"><code>lubridate::today()</code></pre>
+<pre><code>## [1] &quot;2021-02-03&quot;</code></pre>
+</div>
+<div id="time" class="section level3">
+<h3>Time</h3>
+<p><code>Sys.time()</code> and <code>now()</code> return the date, time and the timezone. In <code>now()</code>, we can specify the timezone using the <code>tzone</code> argument.</p>
+<pre class="r"><code>Sys.time()</code></pre>
+<pre><code>## [1] &quot;2021-02-03 18:54:23 IST&quot;</code></pre>
+<pre class="r"><code>lubridate::now()</code></pre>
+<pre><code>## [1] &quot;2021-02-03 18:54:23 IST&quot;</code></pre>
+<pre class="r"><code>lubridate::now(tzone = &quot;UTC&quot;)</code></pre>
+<pre><code>## [1] &quot;2021-02-03 13:24:23 UTC&quot;</code></pre>
+</div>
+<div id="am-or-pm" class="section level3">
+<h3>AM or PM?</h3>
+<p><code>am()</code> and <code>pm()</code> allow us to check whether date/time occur in the <code>AM</code> or <code>PM</code>? They return a logical value i.e. <code>TRUE</code> or <code>FALSE</code></p>
+<pre class="r"><code>lubridate::am(now())</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>lubridate::pm(now())</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="leap-year" class="section level3">
+<h3>Leap Year</h3>
+<p>We can also check if the current year is a leap year using <code>leap_year()</code>.</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2021-02-03&quot;</code></pre>
+<pre class="r"><code>lubridate::leap_year(Sys.Date())</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>Sys.Date()</code>
+</td>
+<td style="text-align:left;">
+Current Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::today()</code>
+</td>
+<td style="text-align:left;">
+Current Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Sys.time()</code>
+</td>
+<td style="text-align:left;">
+Current Time
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::now()</code>
+</td>
+<td style="text-align:left;">
+Current Time
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::am()</code>
+</td>
+<td style="text-align:left;">
+Whether time occurs in am?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::pm()</code>
+</td>
+<td style="text-align:left;">
+Whether time occurs in pm?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>lubridate::leap_year()</code>
+</td>
+<td style="text-align:left;">
+Check if the year is a leap year?
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="your-turn" class="section level3">
+<h3>Your Turn</h3>
+<ul>
+<li>get current date</li>
+<li>get current time</li>
+<li>check whether the time occurs in am or pm?</li>
+<li>check whether the following years were leap years
+<ul>
+<li>2018</li>
+<li>2016</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="casestudy" class="section level2">
+<h2>Case Study</h2>
+<p>Throughout the tutorial, we will work on a case study related to transactions of an imaginary trading company. The data set includes information about invoice and payment dates.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<pre class="r"><code>transact &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv&#39;)</code></pre>
+<pre><code>## # A tibble: 2,466 x 3
+##    Invoice    Due        Payment   
+##    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    
+##  1 2013-01-02 2013-02-01 2013-01-15
+##  2 2013-01-26 2013-02-25 2013-03-03
+##  3 2013-07-03 2013-08-02 2013-07-08
+##  4 2013-02-10 2013-03-12 2013-03-17
+##  5 2012-10-25 2012-11-24 2012-11-28
+##  6 2012-01-27 2012-02-26 2012-02-22
+##  7 2013-08-13 2013-09-12 2013-09-09
+##  8 2012-12-16 2013-01-15 2013-01-12
+##  9 2012-05-14 2012-06-13 2012-07-01
+## 10 2013-07-01 2013-07-31 2013-07-26
+## # ... with 2,456 more rows</code></pre>
+<p>We will explore more about reading data sets with date/time columns after learning how to
+parse date/time. We have shared the code for reading the data sets used in the practice
+questions both in the Learning Management System as well as in our GitHub repo.</p>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<p>The data set has 3 columns. All the dates are in the format (yyyy-mm-dd).</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Column
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Invoice
+</td>
+<td style="text-align:left;">
+Invoice Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Due
+</td>
+<td style="text-align:left;">
+Due Date
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Payment
+</td>
+<td style="text-align:left;">
+Payment Date
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the case study, we will try to answer a few questions we have about the <code>transact</code> data.</p>
+<ul>
+<li>extract date, month and year from Due</li>
+<li>compute the number of days to settle invoice</li>
+<li>compute days over due</li>
+<li>check if due year is a leap year</li>
+<li>check when due day in february is 29, whether it is a leap year</li>
+<li>how many invoices were settled within due date</li>
+<li>how many invoices are due in each quarter</li>
+</ul>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>
+</div>

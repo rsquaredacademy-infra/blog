@@ -1,0 +1,178 @@
+---
+title: "Date & Time in R - Introduction"
+author: Aravind Hebbali
+twitterImg: /img/handling-date-and-time-in-r.png
+description: "Learn to handle date & time in R"
+date: '2020-04-16'
+slug: handling-date-and-time-in-r-part-1
+categories:
+  - data-wrangling
+tags:
+  - lubridate
+  - datetime
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pkg_load, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+library(lubridate)
+library(rversions)
+library(readr)
+library(dplyr)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/handling-date-and-time-in-r.png")
+```
+
+In this new series [Handling Date & Time in R](https://tutorials.rsquaredacademy.com/date-time/index.html), we will learn to handle date & time in R. We will start off by learning how
+to **get current date & time** before moving on to understand **how R handles date/time internally**
+and the different classes such as `Date` & `POSIXct/lt`. We will spend some time 
+exploring **time zones, daylight savings and ISO 8001 standard** for representing date/time.
+We will look at all the **weird formats in which date/time come in real world** and learn to
+**parse them using conversion specifications**. After this, we will also **learn how to handle date/time
+columns while reading external data into R**. We will learn to **extract and update different date/time 
+components** such as year, month, day, hour, minute etc., **create sequence of dates** in different ways 
+and explore intervals, durations and period. We will end the tutorial by learning how to **round/rollback 
+dates**. Throughout the series, we will also **work through a case study** to better understand the 
+concepts we learn. Happy learning!
+
+## Resources {#resources}
+
+Below are the links to all the resources related to this tutorial:
+
+- <a href="https://slides.rsquaredacademy.com/handling-date-and-time-in-r.pdf" target="_blank">Slides</a>
+- <a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code & Data</a>
+- <a href="https://rstudio.cloud/project/1072419" target="_blank">RStudio Cloud Project</a>
+- <a href="https://wrangle-r.rsquaredacademy.com/lubridate.html" target="_blank">ebook</a>
+
+<p align="center">
+<a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank"><img src="/img/lubirdate-blog-course-ad.png" width="100%" alt="new courses ad" style="text-decoration: none;"></a>
+</p>
+
+
+## Introduction {#intro}
+
+```{r cline_youtube_intro, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "322IcnZiYx4")
+```
+
+### Date
+
+Let us begin by looking at the current date and time.  `Sys.Date()` and `today()`  will return the current date.
+
+```{r sys_date}
+Sys.Date()
+lubridate::today()
+```
+
+### Time
+
+`Sys.time()` and `now()` return the date, time and the timezone. In `now()`, we can specify the timezone using the `tzone` argument.
+
+```{r sys_time}
+Sys.time()
+lubridate::now()
+lubridate::now(tzone = "UTC")
+```
+
+### AM or PM?
+
+`am()` and `pm()` allow us to check whether date/time occur in the `AM` or `PM`? They return a logical value i.e. `TRUE` or `FALSE`
+
+```{r lub_am}
+lubridate::am(now())
+lubridate::pm(now())
+```
+
+### Leap Year
+
+We can also check if the current year is a leap year using `leap_year()`. 
+
+```{r leap_year}
+Sys.Date()
+lubridate::leap_year(Sys.Date())
+```
+
+### Summary
+
+```{r table_current_date_time, echo=FALSE}
+cname   <- c("`Sys.Date()`", "`lubridate::today()`", "`Sys.time()`",
+             "`lubridate::now()`", "`lubridate::am()`", "`lubridate::pm()`",
+             "`lubridate::leap_year()`")
+descrip <- c("Current Date", "Current Date", "Current Time", "Current Time",
+             "Whether time occurs in am?", "Whether time occurs in pm?",
+             "Check if the year is a leap year?")
+data.frame(Function = cname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+### Your Turn
+
+- get current date
+- get current time
+- check whether the time occurs in am or pm?
+- check whether the following years were leap years
+    - 2018
+    - 2016
+
+## Case Study {#casestudy}
+
+Throughout the tutorial, we will work on a case study related to transactions of an imaginary trading company. The data set includes information about invoice and payment dates.
+
+### Data
+
+```{r import, eval=FALSE}
+transact <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv')
+```
+
+```{r show, echo=FALSE, eval=TRUE, message=FALSE}
+transact <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv')
+transact
+```
+
+We will explore more about reading data sets with date/time columns after learning how to 
+parse date/time. We have shared the code for reading the data sets used in the practice
+questions both in the Learning Management System as well as in our GitHub repo.
+
+### Data Dictionary
+
+The data set has 3 columns. All the dates are in the format (yyyy-mm-dd).
+
+```{r table_data_dict, echo=FALSE}
+cname   <- c("Invoice", "Due", "Payment")
+descrip <- c("Invoice Date", "Due Date", "Payment Date")
+data.frame(Column = cname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+In the case study, we will try to answer a few questions we have about the `transact` data.
+
+- extract date, month and year from Due
+- compute the number of days to settle invoice
+- compute days over due
+- check if due year is a leap year
+- check when due day in february is 29, whether it is a leap year
+- how many invoices were settled within due date
+- how many invoices are due in each quarter
+
+*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could 
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.
+
+We welcome your comments. You can email to let us know what you did or did not 
+like about our blog as well as what we can do to make our post better.*
+
+**Email: support@rsquaredacademy.com**
