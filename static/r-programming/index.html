@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Learn Data Science with R, Python, SQL, Git, Shell, Big Data & Cloud">
+    <meta name="author" content="Rsquared Academy">
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/" />
+    <title>Rsquared Academy Blog - Learn Data Science</title>
+    <meta property="og:url" content="https://blog.rsquaredacademy.com/"/>
+    <meta property="og:title" content="Rsquared Academy Blog - Learn Data Science"/>
+    <meta property="og:site_name" content="Rsquared Academy"/>
+    <meta property="og:description" content="Learn Data Science with R, Python, SQL, Git, Shell, Big Data & Cloud"/>
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/images/logo.jpeg"/>
+    <meta property="og:image:height" content="219"/>
+    <meta property="og:image:width" content="220"/>
+    <meta name="keywords" content="R, python, sql, git, shell, cloud computing, big data, spark, aws, docker, machine learning, data science, R tutorials, data science tutorials, Python tutorial, git tutorial, statistics, data wrangling tutorial, data visualization tutorial, import data in R, sql tutorials, dplyr tutorial, ggplot2 tutorial, stringr tutorial" />
+    <meta name="description" content="Learn Data Science with R, Python, SQL, Git, Shell, Big Data & Cloud" />
+    <meta name="referrer" content="no-referrer">
+    <meta name="twitter:title" content="Rsquared Academy Blog - Learn Data Science" />
+    <meta name="twitter:description" content="Learn Data Science with R, Python, SQL, Git, Shell, Big Data & Cloud" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@rsquaredacademy" />
+    <meta name="twitter:image" content="https://blog.rsquaredacademy.com/images/hex_trainr.png" />
+    <meta name="twitter:image:width" content="300" />
+    <meta name="twitter:image:height" content="300" />
+    <meta name="twitter:creator" content="@rsquaredacademy" />
+    <meta name="twitter:domain" content="blog.rsquaredacademy.com" />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/heroic-features.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-57270671-6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-57270671-6');
+  </script>
+
+
+</head>
+
+<body>
+
+  <!--navbar-->
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+    <a href="#" class="navbar-brand">Rsquared Academy</a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <div class="navbar-nav">
+            <a href="https://tutorials.rsquaredacademy.com/" class="nav-item nav-link active">Home</a>
+        </div>
+        <div class="navbar-nav">
+            <a href="https://rsquared-academy.thinkific.com/" target="_blank" class="nav-item nav-link active rounded" style="color: blue; background-color: white; font-weight: bold; margin-right: 30px;">Explore Online Courses</a>
+        </div>
+    </div>
+  </nav>
+
+  <br>
+
+    <div class="container">
+      <div class="row">
+        <h3><small>Recently Added Articles</small></h3>
+        <br>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2019/03/05/getting-help-in-r/" target="_blank"><img src="../images/r-programming/rprogramming-getting-help.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2019/03/05/getting-help-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Getting Help in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Mar 05, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/05/12/dataframes/" target="_blank"><img src="../images/r-programming/rprogramming-dataframes.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/05/12/dataframes/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Introduction to DataFrames</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">May 12, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/04/30/introduction-to-factors/" target="_blank"><img src="../images/r-programming/rprogramming-factors.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/04/30/introduction-to-factors/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Introduction to Factors</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Apr 30, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/04/18/introduction-to-lists/" target="_blank"><img src="../images/r-programming/rprogramming-lists.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/04/18/introduction-to-lists/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Introduction to Lists</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Apr 18, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <br>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/04/12/matrix-part-2/" target="_blank"><img src="../images/r-programming/rprogramming-matrices-2.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/04/12/matrix-part-2/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Matrices - Part 2</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Apr 12, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/04/06/matrix-part-1/" target="_blank"><img src="../images/r-programming/rprogramming-matrices-1.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/04/06/matrix-part-1/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Matrices - Part 1</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Apr 06, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/04/03/vectors-part-3/" target="_blank"><img src="../images/r-programming/rprogramming-vectors-3.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/04/03/vectors-part-3/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Vectors - Part 3</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Apr 03, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/03/29/vectors-part-2/" target="_blank"><img src="../images/r-programming/rprogramming-vectors-2.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/03/29/vectors-part-2/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Vectors - Part 2</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Mar 29, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <br>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/03/25/vectors-part-1/" target="_blank"><img src="../images/r-programming/rprogramming-vectors-1.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/03/25/vectors-part-1/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Vectors - Part 1</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Mar 25, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/03/13/beginners-guide-to-r-package-ecosystem/" target="_blank"><img src="../images/r-programming/rprogramming-r-packages.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/03/13/beginners-guide-to-r-package-ecosystem/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Introduction to R Packages</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Mar 13, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/02/17/data-types-in-r/" target="_blank"><img src="../images/r-programming/rprogramming-data-types.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/02/17/data-types-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Data Types in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Feb 17, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://learn.rsquaredacademy.com/2017/02/05/variables-in-r/" target="_blank"><img src="../images/r-programming/rprogramming-variables.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://learn.rsquaredacademy.com/2017/02/05/variables-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Variables in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank" style="text-decoration: none;">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Feb 05, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <h3><small>More Resources</small></h3>
+        <br>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="well none">
+            <a href="https://www.youtube.com/user/rsquaredin/videos" target="_blank">
+              <div class="shadow p-3 mb-5 bg-white rounded text-left">
+                <i class="fa fa-video-camera fa-4x fa-fw" aria-hidden="true"></i>
+                <div class="text" style="display: inline-block;">
+                   <h3>Videos</h3>
+                   <p>160+ Videos</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="well none">
+            <a href="https://ebooks.rsquaredacademy.com" target="_blank">
+              <div class="shadow p-3 mb-5 bg-white rounded text-left">
+                <i class="fa fa-book fa-4x fa-fw" aria-hidden="true"></i>
+                <div class="text" style="display: inline-block;">
+                   <h3>eBooks</h3>
+                   <p>6+ ebooks</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="well none">
+            <a href="https://pkgs.rsquaredacademy.com" target="_blank">
+              <div class="shadow p-3 mb-5 bg-white rounded text-left">
+                <i class="fa fa-code fa-4x fa-fw" aria-hidden="true"></i>
+                <div class="text" style="display: inline-block;">
+                   <h3>R Packages</h3>
+                   <p>10 Open Source Libraries</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <h3><small>Trending Courses</small></h3>
+        <br>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://rsquared-academy.thinkific.com/courses/working-with-databases-using-r" target="_blank"><img src="../images/course-card-databases.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://rsquared-academy.thinkific.com/courses/working-with-databases-using-r" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Query, Visualize & Model Data from Databases</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Aug 08, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank"><img src="../images/course-card-rfm.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Customer Segmentation using RFM Analysis in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Jul 22, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users" target="_blank"><img src="../images/course-card-command-line.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Beginners Guide to the Command Line</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Oct 26, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank"><img src="../images/course-card-template.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Practical Introduction to Handling Date & Time in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">April 17, 2020</strong></p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <h3><small>Popular Articles</small></h3>
+        <br>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card h-100" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/market-basket-analysis-in-r/" target="_blank"><img src="../images/cover-image-mba.png" class="card-img-top img-fluid" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/market-basket-analysis-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Introduction to Market Basket Analysis in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">May 02, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card h-100" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/handling-date-and-time-in-r/" target="_blank"><img src="../images/cover-image-date-time.png" class="card-img-top img-fluid" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/handling-date-and-time-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Practical Introduction to Handling Date & Time in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">April 17, 2020</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card h-100" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/working-with-databases-using-r/" target="_blank"><img src="../images/cover-image-dbi.png" class="card-img-top img-fluid" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/working-with-databases-using-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Query, Visualize & Model Data from Database</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Aug 08, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card h-100" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/command-line-basics-for-r-users/" target="_blank"><img src="../images/cover-image-cline.png" class="card-img-top img-fluid" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/command-line-basics-for-r-users/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Beginners Guide to the Command Line</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Oct 26, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <br>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/web-scraping/" target="_blank"><img src="../images/cover-image-web-scraping.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/web-scraping/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Learn the Basics of Web Scraping using R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">April 11, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/customer-segmentation-using-rfm-analysis/" target="_blank"><img src="../images/cover-image-rfm.png" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/customer-segmentation-using-rfm-analysis/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Customer Segmentation using RFM Analysis in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">July 22, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/regular-expression-in-r/" target="_blank"><img src="../images/cover-image-regex.jpg" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/regular-expression-in-r/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Demystifying Regular Expressions in R</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">May 27, 2019</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="card" style="width: 250px;">
+            <a href="https://blog.rsquaredacademy.com/data-visualization/" target="_blank"><img src="../images/cover-image-ggplot2.jpg" class="card-img-top" alt="nse2r R package"></a>
+            <div class="card-body text-center">
+                <a href="https://blog.rsquaredacademy.com/data-visualization/" target="_blank" style="text-decoration: none;"><p class="card-text text-left" style="color: black;">Learn to Visualise Data in R using ggplot2</p></a>
+                <br>
+                <p class="text-left"><a href="https://rsquared-academy.thinkific.com" target="_blank">By Rsquared Academy</a></p>
+                <p class="text-left"><small class="text-muted">Published on</small><br><strong class="text-muted">Oct 03, 2017</strong></p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+
+    <br>
+    <hr>
+    
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                  <div class="container">
+          <div class="row">
+            <div class="col-sm-3 myCols">
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;Get started</h5>
+              <ul>
+                <li><a href="https://www.rsquaredacademy.com/data-science-with-R.html" target="_blank">Online Training</a></li>
+                <li><a href="https://www.rsquaredacademy.com/data-science-with-R.html" target="_blank">Classroom Training</a></li>
+                <li><a href="https://www.rsquaredacademy.com/corporate-training.html" target="_blank">Corporate Training</a></li>
+                <li><a href="https://www.rsquaredacademy.com/university-training.html" target="_blank">University Training</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-3 myCols">
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;Resources</h5>
+              <ul>
+                <li><a href="https://blog.rsquaredacademy.com" target="_blank">Blog</a></li>
+                <li><a href="https://apps.rsquaredacademy.com" target="_blank">Apps</a></li>
+                <li><a href="https://ebooks.rsquaredacademy.com" target="_blank">ebooks</a></li>
+                <li><a href="https://pkgs.rsquaredacademy.com" target="_blank">R Packages</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-3 myCols">
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;About</h5>
+              <ul>
+                <li><a href="https://www.rsquaredacademy.com/about.html" target="_blank">Company</a></li>
+                <li><a href="https://www.rsquaredacademy.com/terms-and-conditions.html" target="_blank">Terms of Use</a></li>
+                <li><a href="https://www.rsquaredacademy.com/privacy-policy.html" target="_blank">Privacy Policy</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-3 myCols">
+              <h5>&nbsp;&nbsp;&nbsp;&nbsp;Support</h5>
+              <ul>
+                <li><a href="https://rsquaredacademy.freshdesk.com/support/home" target="_blank">Help</a></li>
+                <li><a href="https://rsquaredacademy.freshdesk.com/support/home" target="_blank">FAQ</a></li>
+                <li><a href="https://www.rsquaredacademy.com/contact.html" target="_blank">Contact Us</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-lg-3">
+          </div>
+          <div class="col-lg-6 text-center">
+            <a href="https://twitter.com/rsquaredacademy" target="_blank" class="twitter"><i class="fa fa-twitter fa-3x"></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://github.com/rsquaredacademy" target="_blank" class="google"><i class="fa fa-github fa-3x"></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://in.linkedin.com/company/rsquared-academy" target="_blank" class="google"><i class="fa fa-linkedin fa-3x"></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://www.youtube.com/user/rsquaredin" target="_blank" class="google"><i class="fa fa-youtube-play fa-3x"></i></a>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-lg-3">
+          </div>
+          <div class="col-lg-6 text-center">
+          <p>Sales and Support &nbsp; &nbsp; &nbsp; &nbsp;<i class="fa fa-phone"></i> +91-960-687-2504 &nbsp; &nbsp; &nbsp; &nbsp;<i class="fa fa-envelope"></i> support@rsquaredacademy.com</p>
+          <p>© 2020 Rsquared Education Services Pvt. Ltd. All rights reserved. </p>
+        </div>
+                    <!-- <p style="text-align:center;">Copyright &copy; <a href="https://www.rsquaredacademy.com/" target="_blank">Rsquared Academy</a> 2014-2020</p> -->
+                </div>
+            </div>
+        </footer>
+
+
+    </div>
+    <!-- /.container -->
+
+      <script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='1532616801bbf28732e65b6c1f493fd844564f4a721eec4bdeac34605965a99a';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script> 
+
+      <!-- hello bar -->
+      <script src="https://my.hellobar.com/468ffaa09337e2774339dc6a02f6de4e2bd78d3e.js" type="text/javascript" charset="utf-8" async="async"></script>
+
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

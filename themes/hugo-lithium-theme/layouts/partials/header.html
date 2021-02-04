@@ -5,6 +5,20 @@
   </head>
   <body>
     <div class="wrapper">
-      <header class="header">
-        {{ partial "nav.html" . }}
-      </header>
+      <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+    <a href="#" class="navbar-brand">Rsquared Academy</a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <div class="navbar-nav">
+            <a href="https://tutorials.rsquaredacademy.com/" class="nav-item nav-link active">Home</a>
+        </div>
+        <div class="navbar-nav">
+            <a href="https://rsquared-academy.thinkific.com/" target="_blank" class="nav-item nav-link active rounded" style="color: blue; background-color: white; font-weight: bold; margin-right: 30px;">Explore Online Courses</a>
+        </div>
+    </div>
+  </nav>
+
+  <br>
