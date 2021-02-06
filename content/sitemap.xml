@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://blog.rsquaredacademy.com/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/r-programming/index.html</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-wrangling/index.html</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization/index.html</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/command-line-basics-for-r-users/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/working-with-databases-using-r/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/regular-expression-in-r/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/handling-date-and-time-in-r/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/r-packages/index.html</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/web-scraping/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/customer-segmentation-using-rfm-analysis/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/market-basket-analysis-in-r/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/themes/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/faceting/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-6/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-5/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-4/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-3/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-2/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/legend-part-1/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/guides-axes/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-histogram/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-box-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-bar-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-line-graphs/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-scatter-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-text-annotations/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/axis-plot-labels/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-introduction-to-aesthetics/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-introduction-to-geoms/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/ggplot2-quick-tour/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-combining-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-text-annotations/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-legends/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-histogram/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-box-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-bar-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-line-graphs/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-scatter-plots/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-title-and-axis-labels/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/data-visualization-with-r-introduction/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/quick-guide-r-sqlite/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://blog.rsquaredacademy.com/introducing-rfm/</loc>
+  <lastmod>2021-02-06T08:26:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>
