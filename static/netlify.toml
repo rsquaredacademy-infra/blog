@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "/tags"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/categories"
+  to = "/"
+  status = 301
+  force = true  
