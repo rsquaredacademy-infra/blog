@@ -1,11 +1,17 @@
 [[redirects]]
-  from = "/tags"
+  from = "https://blog.rsquaredacademy.com/tags/ggplot2"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tags/"
   to = "/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/categories"
+  from = "/categories/"
   to = "/"
   status = 301
   force = true  
