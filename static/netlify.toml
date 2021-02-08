@@ -1,9 +1,459 @@
 [[redirects]]
-  from = "https://blog.rsquaredacademy.com/tags/ggplot2"
+  from = "https://blog.rsquaredacademy.com/tags/ggplot2/"
   to = "https://blog.rsquaredacademy.com/data-visualization/index.html"
   status = 301
   force = true
 
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/rfm/"
+  to = "https://blog.rsquaredacademy.com/customer-segmentation-using-rfm-analysis/"
+  status = 301
+  force = true 
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/lubridate/"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/datetime/"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true 
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/stock/"
+  to = "https://blog.rsquaredacademy.com/nse2r-fetch-data-from-nse/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/nse/"
+  to = "https://blog.rsquaredacademy.com/nse2r-fetch-data-from-nse/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/finance/"
+  to = "https://blog.rsquaredacademy.com/nse2r-fetch-data-from-nse/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/terminal/"
+  to = "https://blog.rsquaredacademy.com/command-line-basics-for-r-users/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/shell/"
+  to = "https://blog.rsquaredacademy.com/command-line-basics-for-r-users/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/cli/"
+  to = "https://blog.rsquaredacademy.com/command-line-basics-for-r-users/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/bash/"
+  to = "https://blog.rsquaredacademy.com/command-line-basics-for-r-users/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/tidypredict/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/modeldb/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/dbplot/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/dbi/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/config/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/pkginfo/"
+  to = "https://blog.rsquaredacademy.com/introducing-pkginfo/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/regex/"
+  to = "https://blog.rsquaredacademy.com/regular-expression-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/arules/"
+  to = "https://blog.rsquaredacademy.com/market-basket-analysis-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/shiny/"
+  to = "https://blog.rsquaredacademy.com/shiny-apps/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/vistributions/"
+  to = "https://blog.rsquaredacademy.com/introducting-vistributions/"
+  status = 301
+  force = true 
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/rbin/"
+  to = "https://blog.rsquaredacademy.com/binning-data-with-rbin/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/help/"
+  to = "https://blog.rsquaredacademy.com/getting-help-in-r-updated/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/logistic-regression/"
+  to = "https://blog.rsquaredacademy.com/introducing-blorr/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/descriptr/"
+  to = "https://blog.rsquaredacademy.com/introducing-descriptr/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/olsrr/"
+  to = "https://blog.rsquaredacademy.com/introducing-olsrr/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/sqlite/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/sql/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/dplyr/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/dbplyr/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/rsqlite/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/import/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/database/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/forcats/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/factor/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/categorical/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/time/"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/date/"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/strings/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/stringr/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/pipes/"
+  to = "https://blog.rsquaredacademy.com/readable-code-with-pipes/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/magrittr/"
+  to = "https://blog.rsquaredacademy.com/readable-code-with-pipes/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/tibbles/"
+  to = "https://blog.rsquaredacademy.com/introduction-to-tibbles/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/joins/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling-with-dplyr-part-2/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/readxl/"
+  to = "https://blog.rsquaredacademy.com/import-data-into-r-part-2/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/readr/"
+  to = "https://blog.rsquaredacademy.com/import-data-into-r-part-1/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/visualization/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/facets/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/base/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/text/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/annotations/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/legend/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/histogram/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/box-plot/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/bar-plot/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/dataframe/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/factors/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/lists/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/matrix/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/vectors/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/data/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/packages/"
+  to = "https://blog.rsquaredacademy.com/r-packages/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/intro/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/datetime/Monday is 1"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/tags/datetime/sunday is 0"
+  to = "https://blog.rsquaredacademy.com/handling-date-and-time-in-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/data-wrangling/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/packages/"
+  to = "https://blog.rsquaredacademy.com/r-packages/index.html"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/bash/"
+  to = "https://blog.rsquaredacademy.com/command-line-basics-for-r-users/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/shiny/"
+  to = "https://blog.rsquaredacademy.com/shiny-apps/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/distributions/"
+  to = "https://blog.rsquaredacademy.com/introducting-vistributions/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/binning/"
+  to = "https://blog.rsquaredacademy.com/binning-data-with-rbin/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/r-introduction/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/database/"
+  to = "https://blog.rsquaredacademy.com/working-with-databases-using-r/"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/stringr/"
+  to = "https://blog.rsquaredacademy.com/data-wrangling/index.html"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/data-visualization/"
+  to = "https://blog.rsquaredacademy.com/data-visualization/index.html"
+  status = 301
+  force = true  
+
+[[redirects]]
+  from = "https://blog.rsquaredacademy.com/categories/r-programming/"
+  to = "https://blog.rsquaredacademy.com/r-programming/index.html"
+  status = 301
+  force = true  
+                                                                                                                     
 [[redirects]]
   from = "/tags/"
   to = "/"
