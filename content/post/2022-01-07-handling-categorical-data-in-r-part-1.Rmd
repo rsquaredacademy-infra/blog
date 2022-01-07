@@ -1,0 +1,455 @@
+---
+title: "Handling Categorical Data in R - Part 1"
+author: Aravind Hebbali
+twitterImg: /img/forcats-part-1.png
+description: "Learn to work with categorical data in R"
+date: '2022-01-07'
+slug: handling-categorical-data-in-r-part-1
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pkg_loads, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+library(forcats)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+library(ggpubr)
+library(plotrix)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/forcats-part-1.png")
+```
+
+This is part 1 of a series on "Handling Categorical Data in R." Almost every data science project involves working with categorical data, and we should know how to **read**, **store**, **summarize**, **visualize** & **manipulate** such data. Working with categorical data is different from working with other data types such as numbers or text. In this article, we will understand what categorical data is, how R stores it using **factor**, and explore the rich set of functions (built-in & through packages) provided by R for working with such data. Throughout the series, we will also **work through a case study** to better understand the concepts we learn. Happy learning!
+
+## Table of Contents
+
+- [Resources](#resources)
+- [Introduction](#intro)
+- [Case Study](#casestudy)
+- [Factors](#factors) 
+
+## Resources {#resources}
+
+You can download all the data sets, R scripts, practice questions and their solutions from our [GitHub](https://github.com/rsquaredacademy-education/online-courses/) repository.
+
+## Introduction {#intro}
+
+Before we begin our deep dive on categorical data, let us get a quick overview of different data types. Feel free to skip this section if you know the difference between nominal and ordinal data. 
+
+### Data Types
+
+```{r data_types, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_data_types.png")
+```
+
+In the chart above, we can see that data can be primarily classified into **qualitative** or **quantitative**. (**The word categorical is used interchangeably with qualitative throughout the series**). Qualitative data consists of labels or names. Quantitative data, on the other hand, consists of numbers and indicate how much or how many. This brings us to the next level of classification:
+
+- discrete
+- continuous
+
+In the chart, we can observe that qualitative data is always **discrete** where as quantitative data may be **discrete** or **continuous**. Qualitative data is further classified into 
+
+- nominal
+- ordinal
+
+First, we will understand discrete and continuous data, and then proceed to explore nominal and ordinal data.
+
+**Discrete Data**
+
+```{r discrete_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_discrete.png")
+```
+
+Discrete data arises in situations where counting is involved. It can take on only a finite number of values and cannot be divided into smaller parts. For example, let us consider the number of students in a class. We can have 5 0r 10 students but not 5.5 students (we can't have half a student).
+
+**Continuous Data**
+
+```{r continuous_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_measure.png")
+```
+
+Continuous data arises in situations where measuring is involved. It can take any numeric value in a specified range and can be divided into smaller parts and still have meaning. Examples include money, temperature, length, volume etc.
+
+### Categorical Data
+
+Since our interest is in categorical data, we will spend more time understanding the different types of categorical data through various examples. Let us begin by formally defining categorical data:
+
+- it is always discrete
+- it may be divided into groups
+- consists of names or labels
+- takes on limited & fixed number of possible values
+- arises in situation when counting is involved
+- analysis generally involves the use of data tables
+
+### Dichotomous
+
+A categorical variable that can take on exactly two values is termed as **binary** or **dichotomous** variable.
+
+```{r dichotomous_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_yes_no.png")
+```
+
+### Polychotomous
+
+Categorical variables with more than two possible values are called **polychotomous** variables.
+
+```{r polychotomous_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_yes_no_maybe.png")
+```
+
+### Ordinal 
+
+```{r ordinal_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_satisfaction_rating.jpg")
+```
+
+In ordinal data, the categories can be ordered or ranked. Examples include
+
+- socio-economic status
+- education level
+- income level
+- satisfaction rating
+
+While we can rank the categories, we cannot assign a value to them. For example, in satisfaction ranking, we cannot say that like is twice as positive as dislike i.e. we are unable to say how much they differ from each other.
+While the order or rank of data is meaningful, the difference between two pieces of data cannot be measured/determined or are meaningless. Ordinal data provide information about relative comparisons, but not the magnitude of the differences.
+
+### Nominal 
+
+```{r nominal_data, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_transportation_mode.png")
+```
+
+Nominal data do not have an intrinsic order and cannot be ordered or measured. Examples include 
+
+- blood group
+- gender
+- religion
+- color
+
+Categorical data are sometimes coded with numbers, with those numbers replacing names. Although such numbers might appear to be quantitative, they are actually categorical data. When they do take numerical values, those numbers do not have any mathematical meaning. Examples include months expressed in numbers.
+
+## Case Study {#casestudy}
+
+As is the practice, throughout this series, we will work on a case study related to an e-commerce firm. As most of you would already be aware, a lot of data is captured when you go on the internet by the websites you browse as well as by third party cookies. Data collected is then used to display ads as well as to feed to recommendation algorithms.
+
+The data used in the case study represents the basic information that is captured when users visit any
+website. It closely resembles real world data for an e-commerce store. We will try to generate insights
+about the visitors to be used by an imaginary marketing team for better targeting and promotion. The case study data set can be imported using the RStudio IDE or R code. 
+
+```{r case_study, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/fct_web_analytics.png")
+```
+
+### Data
+
+The data set is available in both **CSV** & **RDS** formats.
+
+**CSV**
+
+If you want to specify the data types while reading the data, use the [readr](https://readr.tidyverse.org/) package. We have explored how to import data into R in a previous [article](https://blog.rsquaredacademy.com/import-data-into-r-part-1/). We will read a subset of columns from the data set (it has 20 columns) which will cover both nominal and ordinal data types. To import the data, we will use the `read_csv()` function. The first input is the name of the data set, `analytics.csv`. Ensure that the name is enclosed in single/double quotes.
+
+```{r read_data}
+read_csv("analytics_raw.csv", 
+         col_types = cols_only(device = col_factor(levels = c("Desktop", "Tablet", "Mobile")), 
+                               gender = col_factor(levels = c("female", "male", "NA")), 
+                               user_rating = col_factor(levels = c("1", "2", "3", "4", "5"),
+                                                        ordered = TRUE)))
+```
+
+Since we are specifying the column data types while importing the data, we will use the `col_types`
+argument to list out the data types. As we are reading in a subset of the columns and not all of them,
+we will use the `cols_only()` function indicating that only the columns specified must be read in and not
+all of them. 
+
+Categorical data and the levels/groups are specified using the `col_factor()` function. Use the
+`levels` argument to specify the levels/groups and the `ordered` argument to indicate if the data is ordinal. By default, it is set to `FALSE`, change this to `TRUE` if the column is ordinal.
+
+**RDS**
+
+The `.rds` file can be read using `readRDS()`.
+
+```{r imports}
+data <- readRDS('analytics.rds')
+head(data)
+```
+
+### Data Dictionary
+
+```{r data_dictionary, echo=FALSE}
+fname   <- c("device", "os", "browser", "user_type", "channel", "gender",
+             "frequency", "recency", "page_depth", "hour_of_day", "age",
+             "duration", "landing_page", "exit_page", "country", "city",
+             "quantity", "revenue", "purchase_flag", "user_rating")
+descrip <- c("Device used to browse the website",
+             "Operating system of the device", 
+             "Browser used to visit the website",
+             "New or returning visitor",
+             "Source of traffic",
+             "Gender of the visitor",
+             "Count of visits to the website",
+             "Number of days since last visit",
+             "Number of website pages browsed",
+             "Hour of day",
+             "Age of the visitor",
+             "Time spent on the website (in seconds)",
+             "Page on which visitor landed",
+             "Page on which visitor exited",
+             "Country of origin", 
+             "City of the visitor",
+             "Number of units purchased",
+             "Total revenue",
+             "Whether the visitor checked out?",
+             "Website UI rating given by visitor")
+data.frame(Column = fname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+Now that we have an overview of the case study, let us move on to the next section where we explore how R stores categorical data using factors.
+
+## Factors {#factors}
+
+In this very important section, we will learn how R
+
+- stores categorical data
+- checks if given data is categorical
+- converts other data types to factor
+- handles missing values in categorical data
+- specifies the orders of the categories/levels
+- stores ordinal data
+
+In R, categorical data is stored as `factor`. Before we explore the `factor` family of functions, let us generate the sample data we will use in this module. We will generate the `device` column from the case study data set using the `sample()` function. We provide the following inputs to generate the data:
+
+- values from which the data must be generated
+- the size of the sample
+- indicate if the values must be repeated (TRUE/FALSE)
+
+```{r factor_1}
+device <- sample(c("Desktop", "Mobile", "Tablet"), size = 25, replace = TRUE)
+device
+```
+
+### Membership Testing
+
+Great! We have successfully generated the sample data and along the way learnt a new R function for sampling. First, let us check if the sample is a `factor` using the membership function `is.factor()`.
+
+```{r factor_2}
+is.factor(device)
+```
+
+Membership testing functions always have the prefix `is_` and return only logical values. If the object is a member of the specified class, they return `TRUE` else `FALSE`. Since our sample data is not stored as a factor, R has returned `FALSE`.
+
+### Coercion
+
+Let us try to coerce it into `factor` using the coercion function `as.factor()`.
+
+```{r factor_3}
+as.factor(device)
+```
+
+Do you spot any difference in the output? In the last line, it displays the levels or categories of the variable. Don't worry if you didn't spot it. We are just getting started and you will pick it up by the end of this section. Another function that can be used to coerce data into factor is `as_factor()` from the [forcats](https://forcats.tidyverse.org/) package.
+
+```{r factor_4}
+as_factor(device)
+```
+
+Did you notice any difference between these two functions? Focus on the last line of the output where the
+levels are displayed. Now observe the order of the levels. `as.factor()` displays levels in the alphabetical order whereas `as_factor()` displays them in order of appearance in the data. **Mobile**, followed by **Tablet**, and then **Desktop**. If you look at the data, they appear in the same order.
+
+### Factor Function
+
+If you want finer control while creating factors, use the `factor()` function. `as.factor()` should suffice in most cases but use `factor()` when you want to:
+
+- specify levels
+- modify labels
+- include `NA` as a level/category
+- create ordered factors
+- specify order of levels
+
+The first input is a vector, usually a numeric or character vector with a small number of unique values. In our example, it is a character vector of length 25 (i.e. 25 values) but 3 unique values.
+
+```{r factor_5a}
+factor(device)
+```
+
+If you want to specify the levels or categories, use the `levels` argument. 
+
+```{r factor_6}
+factor(device, levels = c("Desktop", "Mobile", "Tablet"))
+```
+
+Levels not specified will be replaced by `NA`. Let us specify only **Desktop** and **Mobile** as the levels in the device column and see what happens.
+
+```{r factor_5}
+factor(device, levels = c("Desktop", "Mobile"))
+```
+
+As you can see, **Tablet** has been replaced by `NA`.
+
+### Modify Labels
+
+You can change the labels of the levels using the `labels` argument. The labels must be in the same order as the levels. We will modify the labels to **Desk**, **Mob** & **Tab** for **Desktop**, **Mobile** & **Tablet** respectively.
+
+```{r factor_6a}
+factor(device, 
+       levels = c("Desktop", "Mobile", "Tablet"),
+       labels = c("Desk", "Mob", "Tab"))
+```
+
+You can see that not only the values but the levels are also modified.
+
+### Missing Values
+
+Let us regenerate the device column but include some missing values (`NA`) deliberately to see how `factor()` handles them. 
+
+```{r sample}
+# sample with missing values
+device <- sample(c("Desktop", "Mobile", "Tablet", NA), size = 25, replace = TRUE)
+device
+
+# store as categorical data
+factor(device)
+```
+
+`NA` is not shown as one of the levels. Why does this happen? By default, it will ignore them. If you look
+at the arguments of the `factor()` function, the `exclude` argument is set to `NA` by default i.e. `NA` is excluded automatically. What should we do to ensure that `NA` is also treated as a level? In order to treat `NA` as a level, set the `exclude` argument to `NULL`.
+
+```{r factor_na_level}
+factor(device, exclude = NULL)
+```
+
+As you can see, `NA` is displayed as one of the levels in the data.
+
+### Ordered Factors
+
+So far, we have been looking at nominal data. Let us now explore how R handles ordered data. We will generate a new data set of satisfaction ratings to use in this section. Satisfaction ratings are
+widely used to measure a customer’s satisfaction with an organization, service or a product.
+
+```{r factor_8}
+rating <- sample(c("Dislike", "Neutral", "Like"), size = 25, replace = TRUE)
+rating
+```
+
+It consists of three values Dislike, Neutral & Like in that order. You can see that there is an intrinsic order here. Like is better than neutral which in turn is better than dislike. While we can order them, we can’t quantify the difference between them. We can’t say neutral is so many times better than dislike.
+
+**Membership Testing**
+
+As we did earlier, let us check if the data is ordered using the membership function `is.ordered()`. 
+
+```{r is_ordered}
+is.ordered(rating)
+```
+
+R returns `FALSE` as the variable `rating` is not ordered. Let us use `as.ordered()` to coerce it into an ordered factor. 
+
+```{r factor_9}
+as.ordered(rating)
+```
+
+Look at the last line where the levels are displayed. In case of ordered factors, you will see a `<` between the labels. This is used to indicate the order of the levels. Now `rating` is both an ordered but the order of the levels is not correct. It should be `Dislike < Neutral < Like` but is displayed in order of appearance in the data. Let us use the `factor()` function since we need more control over how the levels are ranked and set the `ordered` argument to `TRUE`.
+
+```{r factor_10}
+factor(rating, ordered = TRUE)
+```
+
+The ranking of the levels has not changed and is still the same. Why is this happening? If you observe carefully, the ranking follows the alphabetical order (**D**esktop, **M**obile, **T**able). The `factor()` function uses the same order for the levels. 
+
+### Modify Order of Levels
+
+To change the order/ranking of the levels, we need to specify it using the `levels` argument. Let us do that in the next example. 
+
+```{r factor_11}
+factor(rating, levels = c("Dislike", "Neutral", "Like"), ordered = TRUE)
+```
+
+Now, you can see that the levels are ranked correctly. The `ordered()` function can also be used to create ordered factors. Let us recreate the previous example using the `ordered()` function.
+
+```{r factor_12}
+ordered(rating, levels = c("Dislike", "Neutral", "Like"))
+```
+
+You can specify levels, modify labels and handle missing values using the `ordered()` function as well.
+
+### Key Functions
+
+```{r factor_functions, fig.align='center', echo=FALSE, out.width="70%"}
+knitr::include_graphics('/img/fct_module_3_functions.png')
+```
+
+### Summary
+
+- R uses **factor** to handle categorical data.
+- Use `as.factor()` or `as_factor()` to coerce other data types to **factor**.
+- Use `is.factor()` or `is.ordered()` to identify factor & ordered factor respectively.
+- Use `factor()` to
+    - specify labels
+    - modify labels
+    - handle missing data
+    - create ordered factors
+    - specify order of levels
+- Use `ordered()` to create ordered factors.
+
+### Your Turn...
+
+Use `analytics_raw.rds` data set to answer the below questions.
+
+1. Check whether the below variables are factor
+
+    - `device`
+    - `page_depth`
+    - `landing_page`
+
+2. Coerce the following variables to type factor
+    
+    - `device`
+    - `os`
+    - `browser`
+    - `user_type`
+    - `channel`
+    - `gender`
+    - `landing_page`
+    - `exit_page`
+    - `city`
+    - `country`
+    - `user_type`
+
+3. Use only the following levels in the `gender` column:
+
+    - `male`
+    - `female`
+
+4. Include `NA` as a level in the gender column.
+
+5. Change label of `NA` to `missing` in the `gender` column.
+
+6. Change the labels of the levels in `user_type` column to 
+
+    - `New`
+    - `Returning`
+
+7. Check if the `user_rating` column is ordered. If not, coerce it to type ordered factor.
+
+*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could 
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.
+
+We welcome your comments. You can email to let us know what you did or did not 
+like about our blog as well as what we can do to make our post better.*
+
+**Email: support@rsquaredacademy.com**

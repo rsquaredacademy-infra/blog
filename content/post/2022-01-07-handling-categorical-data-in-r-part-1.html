@@ -1,0 +1,566 @@
+---
+title: "Handling Categorical Data in R - Part 1"
+author: Aravind Hebbali
+twitterImg: /img/forcats-part-1.png
+description: "Learn to work with categorical data in R"
+date: '2022-01-07'
+slug: handling-categorical-data-in-r-part-1
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+
+
+<p><img src="/img/forcats-part-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>This is part 1 of a series on “Handling Categorical Data in R.” Almost every data science project involves working with categorical data, and we should know how to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>visualize</strong> &amp; <strong>manipulate</strong> such data. Working with categorical data is different from working with other data types such as numbers or text. In this article, we will understand what categorical data is, how R stores it using <strong>factor</strong>, and explore the rich set of functions (built-in &amp; through packages) provided by R for working with such data. Throughout the series, we will also <strong>work through a case study</strong> to better understand the concepts we learn. Happy learning!</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#casestudy">Case Study</a></li>
+<li><a href="#factors">Factors</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>You can download all the data sets, R scripts, practice questions and their solutions from our <a href="https://github.com/rsquaredacademy-education/online-courses/">GitHub</a> repository.</p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+<p>Before we begin our deep dive on categorical data, let us get a quick overview of different data types. Feel free to skip this section if you know the difference between nominal and ordinal data.</p>
+<div id="data-types" class="section level3">
+<h3>Data Types</h3>
+<p><img src="/img/fct_data_types.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In the chart above, we can see that data can be primarily classified into <strong>qualitative</strong> or <strong>quantitative</strong>. (<strong>The word categorical is used interchangeably with qualitative throughout the series</strong>). Qualitative data consists of labels or names. Quantitative data, on the other hand, consists of numbers and indicate how much or how many. This brings us to the next level of classification:</p>
+<ul>
+<li>discrete</li>
+<li>continuous</li>
+</ul>
+<p>In the chart, we can observe that qualitative data is always <strong>discrete</strong> where as quantitative data may be <strong>discrete</strong> or <strong>continuous</strong>. Qualitative data is further classified into</p>
+<ul>
+<li>nominal</li>
+<li>ordinal</li>
+</ul>
+<p>First, we will understand discrete and continuous data, and then proceed to explore nominal and ordinal data.</p>
+<p><strong>Discrete Data</strong></p>
+<p><img src="/img/fct_discrete.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Discrete data arises in situations where counting is involved. It can take on only a finite number of values and cannot be divided into smaller parts. For example, let us consider the number of students in a class. We can have 5 0r 10 students but not 5.5 students (we can’t have half a student).</p>
+<p><strong>Continuous Data</strong></p>
+<p><img src="/img/fct_measure.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Continuous data arises in situations where measuring is involved. It can take any numeric value in a specified range and can be divided into smaller parts and still have meaning. Examples include money, temperature, length, volume etc.</p>
+</div>
+<div id="categorical-data" class="section level3">
+<h3>Categorical Data</h3>
+<p>Since our interest is in categorical data, we will spend more time understanding the different types of categorical data through various examples. Let us begin by formally defining categorical data:</p>
+<ul>
+<li>it is always discrete</li>
+<li>it may be divided into groups</li>
+<li>consists of names or labels</li>
+<li>takes on limited &amp; fixed number of possible values</li>
+<li>arises in situation when counting is involved</li>
+<li>analysis generally involves the use of data tables</li>
+</ul>
+</div>
+<div id="dichotomous" class="section level3">
+<h3>Dichotomous</h3>
+<p>A categorical variable that can take on exactly two values is termed as <strong>binary</strong> or <strong>dichotomous</strong> variable.</p>
+<p><img src="/img/fct_yes_no.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="polychotomous" class="section level3">
+<h3>Polychotomous</h3>
+<p>Categorical variables with more than two possible values are called <strong>polychotomous</strong> variables.</p>
+<p><img src="/img/fct_yes_no_maybe.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ordinal" class="section level3">
+<h3>Ordinal</h3>
+<p><img src="/img/fct_satisfaction_rating.jpg" width="80%" style="display: block; margin: auto;" /></p>
+<p>In ordinal data, the categories can be ordered or ranked. Examples include</p>
+<ul>
+<li>socio-economic status</li>
+<li>education level</li>
+<li>income level</li>
+<li>satisfaction rating</li>
+</ul>
+<p>While we can rank the categories, we cannot assign a value to them. For example, in satisfaction ranking, we cannot say that like is twice as positive as dislike i.e. we are unable to say how much they differ from each other.
+While the order or rank of data is meaningful, the difference between two pieces of data cannot be measured/determined or are meaningless. Ordinal data provide information about relative comparisons, but not the magnitude of the differences.</p>
+</div>
+<div id="nominal" class="section level3">
+<h3>Nominal</h3>
+<p><img src="/img/fct_transportation_mode.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Nominal data do not have an intrinsic order and cannot be ordered or measured. Examples include</p>
+<ul>
+<li>blood group</li>
+<li>gender</li>
+<li>religion</li>
+<li>color</li>
+</ul>
+<p>Categorical data are sometimes coded with numbers, with those numbers replacing names. Although such numbers might appear to be quantitative, they are actually categorical data. When they do take numerical values, those numbers do not have any mathematical meaning. Examples include months expressed in numbers.</p>
+</div>
+</div>
+<div id="casestudy" class="section level2">
+<h2>Case Study</h2>
+<p>As is the practice, throughout this series, we will work on a case study related to an e-commerce firm. As most of you would already be aware, a lot of data is captured when you go on the internet by the websites you browse as well as by third party cookies. Data collected is then used to display ads as well as to feed to recommendation algorithms.</p>
+<p>The data used in the case study represents the basic information that is captured when users visit any
+website. It closely resembles real world data for an e-commerce store. We will try to generate insights
+about the visitors to be used by an imaginary marketing team for better targeting and promotion. The case study data set can be imported using the RStudio IDE or R code.</p>
+<p><img src="/img/fct_web_analytics.png" width="80%" style="display: block; margin: auto;" /></p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>The data set is available in both <strong>CSV</strong> &amp; <strong>RDS</strong> formats.</p>
+<p><strong>CSV</strong></p>
+<p>If you want to specify the data types while reading the data, use the <a href="https://readr.tidyverse.org/">readr</a> package. We have explored how to import data into R in a previous <a href="https://blog.rsquaredacademy.com/import-data-into-r-part-1/">article</a>. We will read a subset of columns from the data set (it has 20 columns) which will cover both nominal and ordinal data types. To import the data, we will use the <code>read_csv()</code> function. The first input is the name of the data set, <code>analytics.csv</code>. Ensure that the name is enclosed in single/double quotes.</p>
+<pre class="r"><code>read_csv(&quot;analytics_raw.csv&quot;, 
+         col_types = cols_only(device = col_factor(levels = c(&quot;Desktop&quot;, &quot;Tablet&quot;, &quot;Mobile&quot;)), 
+                               gender = col_factor(levels = c(&quot;female&quot;, &quot;male&quot;, &quot;NA&quot;)), 
+                               user_rating = col_factor(levels = c(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;),
+                                                        ordered = TRUE)))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...1</code></pre>
+<pre><code>## # A tibble: 244,398 x 3
+##    device  gender user_rating
+##    &lt;fct&gt;   &lt;fct&gt;  &lt;ord&gt;      
+##  1 Desktop female 4          
+##  2 Mobile  NA     5          
+##  3 Desktop NA     4          
+##  4 Desktop NA     5          
+##  5 Desktop NA     4          
+##  6 Mobile  NA     4          
+##  7 Desktop NA     4          
+##  8 Desktop NA     4          
+##  9 Desktop female 5          
+## 10 Desktop NA     4          
+## # ... with 244,388 more rows</code></pre>
+<p>Since we are specifying the column data types while importing the data, we will use the <code>col_types</code>
+argument to list out the data types. As we are reading in a subset of the columns and not all of them,
+we will use the <code>cols_only()</code> function indicating that only the columns specified must be read in and not
+all of them.</p>
+<p>Categorical data and the levels/groups are specified using the <code>col_factor()</code> function. Use the
+<code>levels</code> argument to specify the levels/groups and the <code>ordered</code> argument to indicate if the data is ordinal. By default, it is set to <code>FALSE</code>, change this to <code>TRUE</code> if the column is ordinal.</p>
+<p><strong>RDS</strong></p>
+<p>The <code>.rds</code> file can be read using <code>readRDS()</code>.</p>
+<pre class="r"><code>data &lt;- readRDS(&#39;analytics.rds&#39;)
+head(data)</code></pre>
+<pre><code>## # A tibble: 6 x 19
+##   device  os        browser user_type channel gender frequency recency page_depth
+##   &lt;fct&gt;   &lt;fct&gt;     &lt;fct&gt;   &lt;fct&gt;     &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+## 1 Desktop Windows   Chrome  New Visi~ Organi~ female         1       0          1
+## 2 Mobile  iOS       Safari  Returnin~ Organi~ &lt;NA&gt;           3       1          1
+## 3 Desktop Chrome OS Chrome  New Visi~ Direct  &lt;NA&gt;           1       0          5
+## 4 Desktop Macintosh Chrome  Returnin~ Organi~ &lt;NA&gt;           2       0          1
+## 5 Desktop Macintosh Chrome  Returnin~ Referr~ &lt;NA&gt;           5       8          1
+## 6 Mobile  Android   Chrome  New Visi~ Organi~ &lt;NA&gt;           1       0          5
+## # ... with 10 more variables: hour_of_day &lt;chr&gt;, age &lt;dbl&gt;, duration &lt;dbl&gt;,
+## #   landing_page &lt;fct&gt;, exit_page &lt;fct&gt;, country &lt;fct&gt;, quantity &lt;dbl&gt;,
+## #   revenue &lt;dbl&gt;, purchase_flag &lt;lgl&gt;, user_rating &lt;dbl&gt;</code></pre>
+</div>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Column
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+device
+</td>
+<td style="text-align:left;">
+Device used to browse the website
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+os
+</td>
+<td style="text-align:left;">
+Operating system of the device
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+browser
+</td>
+<td style="text-align:left;">
+Browser used to visit the website
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+user_type
+</td>
+<td style="text-align:left;">
+New or returning visitor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+channel
+</td>
+<td style="text-align:left;">
+Source of traffic
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+gender
+</td>
+<td style="text-align:left;">
+Gender of the visitor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+frequency
+</td>
+<td style="text-align:left;">
+Count of visits to the website
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+recency
+</td>
+<td style="text-align:left;">
+Number of days since last visit
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+page_depth
+</td>
+<td style="text-align:left;">
+Number of website pages browsed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hour_of_day
+</td>
+<td style="text-align:left;">
+Hour of day
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:left;">
+Age of the visitor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+duration
+</td>
+<td style="text-align:left;">
+Time spent on the website (in seconds)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+landing_page
+</td>
+<td style="text-align:left;">
+Page on which visitor landed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+exit_page
+</td>
+<td style="text-align:left;">
+Page on which visitor exited
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+country
+</td>
+<td style="text-align:left;">
+Country of origin
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+city
+</td>
+<td style="text-align:left;">
+City of the visitor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+quantity
+</td>
+<td style="text-align:left;">
+Number of units purchased
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+revenue
+</td>
+<td style="text-align:left;">
+Total revenue
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+purchase_flag
+</td>
+<td style="text-align:left;">
+Whether the visitor checked out?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+user_rating
+</td>
+<td style="text-align:left;">
+Website UI rating given by visitor
+</td>
+</tr>
+</tbody>
+</table>
+<p>Now that we have an overview of the case study, let us move on to the next section where we explore how R stores categorical data using factors.</p>
+</div>
+</div>
+<div id="factors" class="section level2">
+<h2>Factors</h2>
+<p>In this very important section, we will learn how R</p>
+<ul>
+<li>stores categorical data</li>
+<li>checks if given data is categorical</li>
+<li>converts other data types to factor</li>
+<li>handles missing values in categorical data</li>
+<li>specifies the orders of the categories/levels</li>
+<li>stores ordinal data</li>
+</ul>
+<p>In R, categorical data is stored as <code>factor</code>. Before we explore the <code>factor</code> family of functions, let us generate the sample data we will use in this module. We will generate the <code>device</code> column from the case study data set using the <code>sample()</code> function. We provide the following inputs to generate the data:</p>
+<ul>
+<li>values from which the data must be generated</li>
+<li>the size of the sample</li>
+<li>indicate if the values must be repeated (TRUE/FALSE)</li>
+</ul>
+<pre class="r"><code>device &lt;- sample(c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;), size = 25, replace = TRUE)
+device</code></pre>
+<pre><code>##  [1] &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Desktop&quot;
+##  [8] &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Desktop&quot; &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Mobile&quot; 
+## [15] &quot;Desktop&quot; &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot;
+## [22] &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Desktop&quot;</code></pre>
+<div id="membership-testing" class="section level3">
+<h3>Membership Testing</h3>
+<p>Great! We have successfully generated the sample data and along the way learnt a new R function for sampling. First, let us check if the sample is a <code>factor</code> using the membership function <code>is.factor()</code>.</p>
+<pre class="r"><code>is.factor(device)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Membership testing functions always have the prefix <code>is_</code> and return only logical values. If the object is a member of the specified class, they return <code>TRUE</code> else <code>FALSE</code>. Since our sample data is not stored as a factor, R has returned <code>FALSE</code>.</p>
+</div>
+<div id="coercion" class="section level3">
+<h3>Coercion</h3>
+<p>Let us try to coerce it into <code>factor</code> using the coercion function <code>as.factor()</code>.</p>
+<pre class="r"><code>as.factor(device)</code></pre>
+<pre><code>##  [1] Tablet  Desktop Desktop Mobile  Mobile  Tablet  Desktop Tablet  Mobile 
+## [10] Desktop Desktop Mobile  Mobile  Mobile  Desktop Desktop Mobile  Tablet 
+## [19] Desktop Desktop Desktop Tablet  Mobile  Mobile  Desktop
+## Levels: Desktop Mobile Tablet</code></pre>
+<p>Do you spot any difference in the output? In the last line, it displays the levels or categories of the variable. Don’t worry if you didn’t spot it. We are just getting started and you will pick it up by the end of this section. Another function that can be used to coerce data into factor is <code>as_factor()</code> from the <a href="https://forcats.tidyverse.org/">forcats</a> package.</p>
+<pre class="r"><code>as_factor(device)</code></pre>
+<pre><code>##  [1] Tablet  Desktop Desktop Mobile  Mobile  Tablet  Desktop Tablet  Mobile 
+## [10] Desktop Desktop Mobile  Mobile  Mobile  Desktop Desktop Mobile  Tablet 
+## [19] Desktop Desktop Desktop Tablet  Mobile  Mobile  Desktop
+## Levels: Tablet Desktop Mobile</code></pre>
+<p>Did you notice any difference between these two functions? Focus on the last line of the output where the
+levels are displayed. Now observe the order of the levels. <code>as.factor()</code> displays levels in the alphabetical order whereas <code>as_factor()</code> displays them in order of appearance in the data. <strong>Mobile</strong>, followed by <strong>Tablet</strong>, and then <strong>Desktop</strong>. If you look at the data, they appear in the same order.</p>
+</div>
+<div id="factor-function" class="section level3">
+<h3>Factor Function</h3>
+<p>If you want finer control while creating factors, use the <code>factor()</code> function. <code>as.factor()</code> should suffice in most cases but use <code>factor()</code> when you want to:</p>
+<ul>
+<li>specify levels</li>
+<li>modify labels</li>
+<li>include <code>NA</code> as a level/category</li>
+<li>create ordered factors</li>
+<li>specify order of levels</li>
+</ul>
+<p>The first input is a vector, usually a numeric or character vector with a small number of unique values. In our example, it is a character vector of length 25 (i.e. 25 values) but 3 unique values.</p>
+<pre class="r"><code>factor(device)</code></pre>
+<pre><code>##  [1] Tablet  Desktop Desktop Mobile  Mobile  Tablet  Desktop Tablet  Mobile 
+## [10] Desktop Desktop Mobile  Mobile  Mobile  Desktop Desktop Mobile  Tablet 
+## [19] Desktop Desktop Desktop Tablet  Mobile  Mobile  Desktop
+## Levels: Desktop Mobile Tablet</code></pre>
+<p>If you want to specify the levels or categories, use the <code>levels</code> argument.</p>
+<pre class="r"><code>factor(device, levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;))</code></pre>
+<pre><code>##  [1] Tablet  Desktop Desktop Mobile  Mobile  Tablet  Desktop Tablet  Mobile 
+## [10] Desktop Desktop Mobile  Mobile  Mobile  Desktop Desktop Mobile  Tablet 
+## [19] Desktop Desktop Desktop Tablet  Mobile  Mobile  Desktop
+## Levels: Desktop Mobile Tablet</code></pre>
+<p>Levels not specified will be replaced by <code>NA</code>. Let us specify only <strong>Desktop</strong> and <strong>Mobile</strong> as the levels in the device column and see what happens.</p>
+<pre class="r"><code>factor(device, levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;))</code></pre>
+<pre><code>##  [1] &lt;NA&gt;    Desktop Desktop Mobile  Mobile  &lt;NA&gt;    Desktop &lt;NA&gt;    Mobile 
+## [10] Desktop Desktop Mobile  Mobile  Mobile  Desktop Desktop Mobile  &lt;NA&gt;   
+## [19] Desktop Desktop Desktop &lt;NA&gt;    Mobile  Mobile  Desktop
+## Levels: Desktop Mobile</code></pre>
+<p>As you can see, <strong>Tablet</strong> has been replaced by <code>NA</code>.</p>
+</div>
+<div id="modify-labels" class="section level3">
+<h3>Modify Labels</h3>
+<p>You can change the labels of the levels using the <code>labels</code> argument. The labels must be in the same order as the levels. We will modify the labels to <strong>Desk</strong>, <strong>Mob</strong> &amp; <strong>Tab</strong> for <strong>Desktop</strong>, <strong>Mobile</strong> &amp; <strong>Tablet</strong> respectively.</p>
+<pre class="r"><code>factor(device, 
+       levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;),
+       labels = c(&quot;Desk&quot;, &quot;Mob&quot;, &quot;Tab&quot;))</code></pre>
+<pre><code>##  [1] Tab  Desk Desk Mob  Mob  Tab  Desk Tab  Mob  Desk Desk Mob  Mob  Mob  Desk
+## [16] Desk Mob  Tab  Desk Desk Desk Tab  Mob  Mob  Desk
+## Levels: Desk Mob Tab</code></pre>
+<p>You can see that not only the values but the levels are also modified.</p>
+</div>
+<div id="missing-values" class="section level3">
+<h3>Missing Values</h3>
+<p>Let us regenerate the device column but include some missing values (<code>NA</code>) deliberately to see how <code>factor()</code> handles them.</p>
+<pre class="r"><code># sample with missing values
+device &lt;- sample(c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;, NA), size = 25, replace = TRUE)
+device</code></pre>
+<pre><code>##  [1] NA        NA        &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot; 
+##  [8] &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Mobile&quot;  NA        NA        &quot;Tablet&quot; 
+## [15] &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot; NA       
+## [22] &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Desktop&quot; NA</code></pre>
+<pre class="r"><code># store as categorical data
+factor(device)</code></pre>
+<pre><code>##  [1] &lt;NA&gt;    &lt;NA&gt;    Tablet  Tablet  Desktop Mobile  Mobile  Tablet  Tablet 
+## [10] Tablet  Mobile  &lt;NA&gt;    &lt;NA&gt;    Tablet  Tablet  Desktop Tablet  Desktop
+## [19] Desktop Desktop &lt;NA&gt;    Desktop Tablet  Desktop &lt;NA&gt;   
+## Levels: Desktop Mobile Tablet</code></pre>
+<p><code>NA</code> is not shown as one of the levels. Why does this happen? By default, it will ignore them. If you look
+at the arguments of the <code>factor()</code> function, the <code>exclude</code> argument is set to <code>NA</code> by default i.e. <code>NA</code> is excluded automatically. What should we do to ensure that <code>NA</code> is also treated as a level? In order to treat <code>NA</code> as a level, set the <code>exclude</code> argument to <code>NULL</code>.</p>
+<pre class="r"><code>factor(device, exclude = NULL)</code></pre>
+<pre><code>##  [1] &lt;NA&gt;    &lt;NA&gt;    Tablet  Tablet  Desktop Mobile  Mobile  Tablet  Tablet 
+## [10] Tablet  Mobile  &lt;NA&gt;    &lt;NA&gt;    Tablet  Tablet  Desktop Tablet  Desktop
+## [19] Desktop Desktop &lt;NA&gt;    Desktop Tablet  Desktop &lt;NA&gt;   
+## Levels: Desktop Mobile Tablet &lt;NA&gt;</code></pre>
+<p>As you can see, <code>NA</code> is displayed as one of the levels in the data.</p>
+</div>
+<div id="ordered-factors" class="section level3">
+<h3>Ordered Factors</h3>
+<p>So far, we have been looking at nominal data. Let us now explore how R handles ordered data. We will generate a new data set of satisfaction ratings to use in this section. Satisfaction ratings are
+widely used to measure a customer’s satisfaction with an organization, service or a product.</p>
+<pre class="r"><code>rating &lt;- sample(c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;), size = 25, replace = TRUE)
+rating</code></pre>
+<pre><code>##  [1] &quot;Neutral&quot; &quot;Like&quot;    &quot;Like&quot;    &quot;Dislike&quot; &quot;Dislike&quot; &quot;Dislike&quot; &quot;Neutral&quot;
+##  [8] &quot;Neutral&quot; &quot;Neutral&quot; &quot;Dislike&quot; &quot;Like&quot;    &quot;Dislike&quot; &quot;Dislike&quot; &quot;Neutral&quot;
+## [15] &quot;Neutral&quot; &quot;Neutral&quot; &quot;Like&quot;    &quot;Dislike&quot; &quot;Like&quot;    &quot;Dislike&quot; &quot;Dislike&quot;
+## [22] &quot;Dislike&quot; &quot;Dislike&quot; &quot;Dislike&quot; &quot;Dislike&quot;</code></pre>
+<p>It consists of three values Dislike, Neutral &amp; Like in that order. You can see that there is an intrinsic order here. Like is better than neutral which in turn is better than dislike. While we can order them, we can’t quantify the difference between them. We can’t say neutral is so many times better than dislike.</p>
+<p><strong>Membership Testing</strong></p>
+<p>As we did earlier, let us check if the data is ordered using the membership function <code>is.ordered()</code>.</p>
+<pre class="r"><code>is.ordered(rating)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>R returns <code>FALSE</code> as the variable <code>rating</code> is not ordered. Let us use <code>as.ordered()</code> to coerce it into an ordered factor.</p>
+<pre class="r"><code>as.ordered(rating)</code></pre>
+<pre><code>##  [1] Neutral Like    Like    Dislike Dislike Dislike Neutral Neutral Neutral
+## [10] Dislike Like    Dislike Dislike Neutral Neutral Neutral Like    Dislike
+## [19] Like    Dislike Dislike Dislike Dislike Dislike Dislike
+## Levels: Dislike &lt; Like &lt; Neutral</code></pre>
+<p>Look at the last line where the levels are displayed. In case of ordered factors, you will see a <code>&lt;</code> between the labels. This is used to indicate the order of the levels. Now <code>rating</code> is both an ordered but the order of the levels is not correct. It should be <code>Dislike &lt; Neutral &lt; Like</code> but is displayed in order of appearance in the data. Let us use the <code>factor()</code> function since we need more control over how the levels are ranked and set the <code>ordered</code> argument to <code>TRUE</code>.</p>
+<pre class="r"><code>factor(rating, ordered = TRUE)</code></pre>
+<pre><code>##  [1] Neutral Like    Like    Dislike Dislike Dislike Neutral Neutral Neutral
+## [10] Dislike Like    Dislike Dislike Neutral Neutral Neutral Like    Dislike
+## [19] Like    Dislike Dislike Dislike Dislike Dislike Dislike
+## Levels: Dislike &lt; Like &lt; Neutral</code></pre>
+<p>The ranking of the levels has not changed and is still the same. Why is this happening? If you observe carefully, the ranking follows the alphabetical order (<strong>D</strong>esktop, <strong>M</strong>obile, <strong>T</strong>able). The <code>factor()</code> function uses the same order for the levels.</p>
+</div>
+<div id="modify-order-of-levels" class="section level3">
+<h3>Modify Order of Levels</h3>
+<p>To change the order/ranking of the levels, we need to specify it using the <code>levels</code> argument. Let us do that in the next example.</p>
+<pre class="r"><code>factor(rating, levels = c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;), ordered = TRUE)</code></pre>
+<pre><code>##  [1] Neutral Like    Like    Dislike Dislike Dislike Neutral Neutral Neutral
+## [10] Dislike Like    Dislike Dislike Neutral Neutral Neutral Like    Dislike
+## [19] Like    Dislike Dislike Dislike Dislike Dislike Dislike
+## Levels: Dislike &lt; Neutral &lt; Like</code></pre>
+<p>Now, you can see that the levels are ranked correctly. The <code>ordered()</code> function can also be used to create ordered factors. Let us recreate the previous example using the <code>ordered()</code> function.</p>
+<pre class="r"><code>ordered(rating, levels = c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;))</code></pre>
+<pre><code>##  [1] Neutral Like    Like    Dislike Dislike Dislike Neutral Neutral Neutral
+## [10] Dislike Like    Dislike Dislike Neutral Neutral Neutral Like    Dislike
+## [19] Like    Dislike Dislike Dislike Dislike Dislike Dislike
+## Levels: Dislike &lt; Neutral &lt; Like</code></pre>
+<p>You can specify levels, modify labels and handle missing values using the <code>ordered()</code> function as well.</p>
+</div>
+<div id="key-functions" class="section level3">
+<h3>Key Functions</h3>
+<p><img src="/img/fct_module_3_functions.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<ul>
+<li>R uses <strong>factor</strong> to handle categorical data.</li>
+<li>Use <code>as.factor()</code> or <code>as_factor()</code> to coerce other data types to <strong>factor</strong>.</li>
+<li>Use <code>is.factor()</code> or <code>is.ordered()</code> to identify factor &amp; ordered factor respectively.</li>
+<li>Use <code>factor()</code> to
+<ul>
+<li>specify labels</li>
+<li>modify labels</li>
+<li>handle missing data</li>
+<li>create ordered factors</li>
+<li>specify order of levels</li>
+</ul></li>
+<li>Use <code>ordered()</code> to create ordered factors.</li>
+</ul>
+</div>
+<div id="your-turn" class="section level3">
+<h3>Your Turn…</h3>
+<p>Use <code>analytics_raw.rds</code> data set to answer the below questions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Check whether the below variables are factor</p>
+<ul>
+<li><code>device</code></li>
+<li><code>page_depth</code></li>
+<li><code>landing_page</code></li>
+</ul></li>
+<li><p>Coerce the following variables to type factor</p>
+<ul>
+<li><code>device</code></li>
+<li><code>os</code></li>
+<li><code>browser</code></li>
+<li><code>user_type</code></li>
+<li><code>channel</code></li>
+<li><code>gender</code></li>
+<li><code>landing_page</code></li>
+<li><code>exit_page</code></li>
+<li><code>city</code></li>
+<li><code>country</code></li>
+<li><code>user_type</code></li>
+</ul></li>
+<li><p>Use only the following levels in the <code>gender</code> column:</p>
+<ul>
+<li><code>male</code></li>
+<li><code>female</code></li>
+</ul></li>
+<li><p>Include <code>NA</code> as a level in the gender column.</p></li>
+<li><p>Change label of <code>NA</code> to <code>missing</code> in the <code>gender</code> column.</p></li>
+<li><p>Change the labels of the levels in <code>user_type</code> column to</p>
+<ul>
+<li><code>New</code></li>
+<li><code>Returning</code></li>
+</ul></li>
+<li><p>Check if the <code>user_rating</code> column is ordered. If not, coerce it to type ordered factor.</p></li>
+</ol>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>
+</div>
