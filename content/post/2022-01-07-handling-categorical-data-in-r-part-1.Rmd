@@ -2,7 +2,7 @@
 title: "Handling Categorical Data in R - Part 1"
 author: Aravind Hebbali
 twitterImg: img/forcats-part-1.png
-description: "Learn to work with categorical data in R"
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
 date: '2022-01-07'
 slug: handling-categorical-data-in-r-part-1
 categories:
