@@ -1,0 +1,548 @@
+---
+title: "Handling Categorical Data in R - Part 2"
+author: Aravind Hebbali
+twitterImg: img/forcats-part-2.png
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
+date: '2022-01-12'
+slug: handling-categorical-data-in-r-part-2
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><img src="/img/forcats-part-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>This is part 2 of a series on “Handling Categorical Data in R where we are learning to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>visualize</strong> &amp; <strong>manipulate</strong> categorical data..”</p>
+<p>In <a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/">part 1</a> of this series, we understood what categorical data is, how R stores it using <strong>factor</strong> and got an overview of the case study we will be working on throughout this series.</p>
+<p>In this article, we will learn to summarize categorical data. In the process, we will do a deep dive on working with tables in R and explore a diverse set of packages.</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#tables">Tables in R</a></li>
+<li><a href="#practice">Practice Questions</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>You can download all the data sets, R scripts, practice questions and their solutions from our <a href="https://github.com/rsquaredacademy-education/online-courses/">GitHub</a> repository.</p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+<p>Categorical data cannot be summarized in the same way as numeric data. It does not make sense to look at range, standard deviation etc. since data consists of a few distinct values only. So how do we summarize such data? We can look at</p>
+<ul>
+<li>count/frequency</li>
+<li>proportion</li>
+<li>cumulative frequency</li>
+<li>cross table</li>
+<li>contingency table etc.</li>
+</ul>
+<p>In this section, we will explore the above ways of summarizing categorical data. We will also spend some time
+learning about tables as you will be using them extensively while working with categorical data. R has many packages for tabulating data and we list and explore all of them in the R scripts shared in the GitHub repository.</p>
+<div id="number-of-categories" class="section level3">
+<h3>Number of Categories</h3>
+<p>From our case study, we want to know the number of devices used to browse the website, the name of the
+devices and the proportion of traffic they drive to our website. Let us read the case study data set before we analyze the website traffic.</p>
+<pre class="r"><code># read data
+data &lt;- readRDS(&#39;analytics.rds&#39;)</code></pre>
+<p>Let us begin with the number of devices. To view the number of groups/categories in a categorical variable, use <code>nlevels()</code>.</p>
+<pre class="r"><code>nlevels(data$device)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>There are 3 categories of devices used by the visitors to browse the website. This can also be used for data
+sanitization i.e. as an analyst you know that there are only 3 valid categories of device into which any visitor can be classified into. If you see more than 3 categories, you might want to check if there are any issues in data collection or processing. Now that we know there are 3 categories of devices, let us check if they are valid. The <code>levels()</code> function will return the labels of the groups.</p>
+</div>
+<div id="category-names" class="section level3">
+<h3>Category Names</h3>
+<p>Knowing the number of levels is useful but not sufficient. <code>levels()</code> is one of the most useful functions when it comes to dealing with categorical data.</p>
+<pre class="r"><code>levels(data$device)</code></pre>
+<pre><code>## [1] &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Tablet&quot;</code></pre>
+<p>Other functions that you can use include <code>unique()</code> and <code>fct_unique()</code>. Both these functions will return the unique names/labels along with the levels while <code>levels()</code> returns the labels of the levels.</p>
+<pre class="r"><code>unique(data$device)</code></pre>
+<pre><code>## [1] Desktop Mobile  Tablet 
+## Levels: Desktop Mobile Tablet</code></pre>
+<pre class="r"><code>fct_unique(data$device)</code></pre>
+<pre><code>## [1] Desktop Mobile  Tablet 
+## Levels: Desktop Mobile Tablet</code></pre>
+</div>
+<div id="names-counts" class="section level3">
+<h3>Names &amp; Counts</h3>
+<p>So we have checked the number of devices and their names. Let us now examine their distribution
+i.e. count/frequency. <code>table()</code> and <code>summary()</code> will display the levels and their counts while <code>fct_count()</code>
+will return a tibble with 2 columns (level &amp; count). It is extremely useful for further data processing or
+visualization (using ggplot2).</p>
+<pre class="r"><code>table(data$device)</code></pre>
+<pre><code>## 
+## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+<pre class="r"><code>fct_count(data$device)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f            n
+##   &lt;fct&gt;    &lt;int&gt;
+## 1 Desktop 177282
+## 2 Mobile   63482
+## 3 Tablet    3634</code></pre>
+<pre class="r"><code>summary(data$device)</code></pre>
+<pre><code>## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+</div>
+</div>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<p>In the previous section, we used the <code>table()</code> function to tabulate categorical data. We will
+recreate the tabulation for device and store it in a new variable tab.</p>
+<pre class="r"><code>tab &lt;- table(data$device)
+tab</code></pre>
+<pre><code>## 
+## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+<p>What does this function return? It is not a <code>vector</code>, <code>list</code>, <code>data.frame</code> or <code>matrix</code>. Let us use the <code>class()</code> function to check the class of the object returned by <code>table()</code>. It returns an object of the class <strong>table</strong>. This is a new type of object. Let us spend some time understanding tables as they are useful for organizing and summarizing categorical data. <strong>table</strong> is also the most used object when it comes to dealing with categorical data.</p>
+<p>The <code>table()</code> function returns the counts of the categories but let us say we want to view the proportion or
+percentage instead of counts i.e. the proportion or percentage of traffic driven to our website by the different devices. The <code>proportions()</code> or <code>prop.table()</code> function comes in handy in such cases. It takes a table object as input (tab in our case).</p>
+<pre class="r"><code>prop.table(tab)</code></pre>
+<pre><code>## 
+##    Desktop     Mobile     Tablet 
+## 0.72538237 0.25974844 0.01486919</code></pre>
+<pre class="r"><code>proportions(tab)</code></pre>
+<pre><code>## 
+##    Desktop     Mobile     Tablet 
+## 0.72538237 0.25974844 0.01486919</code></pre>
+<p>To get the percentages, multiply the output by 100. Use the <code>round()</code> function to round the decimal places
+according to your requirements.</p>
+<pre class="r"><code>proportions(tab) * 100</code></pre>
+<pre><code>## 
+##   Desktop    Mobile    Tablet 
+## 72.538237 25.974844  1.486919</code></pre>
+<pre class="r"><code>round(proportions(tab) * 100, 2)</code></pre>
+<pre><code>## 
+## Desktop  Mobile  Tablet 
+##   72.54   25.97    1.49</code></pre>
+<p>So far, we have used <code>table()</code> to tabulate a single categorical variable. It can be used for a lot
+more than just tabulating data. We can examine the relationship between two categorical variables as well
+as create multidimensional tables. Let us look at the relationship between <strong>gender</strong> and <strong>device</strong> in our case study. Does gender affect the type of device used? To answer this, we will create a two way or cross table. In the <code>table()</code> function, we can specify multiple variables by separating them with a comma.</p>
+<pre class="r"><code>tab2 &lt;- table(data$gender, data$device)
+tab2</code></pre>
+<pre><code>##         
+##          Desktop Mobile Tablet
+##   female   32803   7268    494
+##   male     46418  14503    696
+##   &lt;NA&gt;     98061  41711   2444</code></pre>
+<p>Keep in mind that the order of the variables matter. Rows represent the first variable while column represents the second.</p>
+<pre class="r"><code>table(data$device, data$gender)</code></pre>
+<pre><code>##          
+##           female  male  &lt;NA&gt;
+##   Desktop  32803 46418 98061
+##   Mobile    7268 14503 41711
+##   Tablet     494   696  2444</code></pre>
+<p>The <code>proportions()</code> function works with two way tables as well.</p>
+<pre class="r"><code>proportions(tab2)</code></pre>
+<pre><code>##         
+##              Desktop      Mobile      Tablet
+##   female 0.134219593 0.029738378 0.002021293
+##   male   0.189927904 0.059341729 0.002847814
+##   &lt;NA&gt;   0.401234871 0.170668336 0.010000082</code></pre>
+<pre class="r"><code>proportions(tab2) * 100</code></pre>
+<pre><code>##         
+##             Desktop     Mobile     Tablet
+##   female 13.4219593  2.9738378  0.2021293
+##   male   18.9927904  5.9341729  0.2847814
+##   &lt;NA&gt;   40.1234871 17.0668336  1.0000082</code></pre>
+<p>We would like to introduce another function at this point of time, <code>margin.table()</code>. What does this function do? It computes the marginal frequencies i.e. the sum of the rows or columns. It takes a <strong>table</strong> object as input. The <code>margin</code> argument allows us to specify whether we want the sum of rows or columns. <code>1</code> indicates rows and <code>2</code> indicates columns.</p>
+<pre class="r"><code>margin.table(tab2, 1) # sum of rows</code></pre>
+<pre><code>## 
+## female   male   &lt;NA&gt; 
+##  40565  61617 142216</code></pre>
+<pre class="r"><code>margin.table(tab2, 2) # sum of columns</code></pre>
+<pre><code>## 
+## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+<p>If the margin argument is NULL (which it is by default), the function returns the sum of all cells of the table.</p>
+<pre class="r"><code>margin.table(tab2)</code></pre>
+<pre><code>## [1] 244398</code></pre>
+<p><code>table()</code> does not display row or column labels. It does display the group labels though. Let us revisit the output from <code>tab2</code>. You can observe that while it includes the group labels, the row and column labels are missing. The output from the <code>dimnames()</code> function shows the group labels of the variables but the row &amp; column labels are absent.</p>
+<pre class="r"><code>dimnames(tab2)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;female&quot; &quot;male&quot;   NA      
+## 
+## [[2]]
+## [1] &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Tablet&quot;</code></pre>
+<pre class="r"><code>names(tab2)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>names(dimnames(tab2)) </code></pre>
+<pre><code>## [1] &quot;&quot; &quot;&quot;</code></pre>
+<p>The output from <code>names(dimnames(tab2))</code> is also empty. Let us add the variable names as the row &amp; column
+labels to <code>tab2</code>.</p>
+<pre class="r"><code>names(dimnames(tab2)) &lt;- c(&quot;Gender&quot;, &quot;Device&quot;)
+tab2</code></pre>
+<pre><code>##         Device
+## Gender   Desktop Mobile Tablet
+##   female   32803   7268    494
+##   male     46418  14503    696
+##   &lt;NA&gt;     98061  41711   2444</code></pre>
+<p>Now look at the output from <code>tab2</code> and you can observe the difference. The same is also visible when we run
+<code>dimnames(tab2)</code>.</p>
+<pre class="r"><code>dimnames(tab2)</code></pre>
+<pre><code>## $Gender
+## [1] &quot;female&quot; &quot;male&quot;   NA      
+## 
+## $Device
+## [1] &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Tablet&quot;</code></pre>
+<p>To add margin totals to the table, use <code>addmargins()</code>. Like <code>proportions()</code> and <code>margin.table()</code>, it also takes a <code>table</code> object as the input.</p>
+<pre class="r"><code>addmargins(tab2)</code></pre>
+<pre><code>##         Device
+## Gender   Desktop Mobile Tablet    Sum
+##   female   32803   7268    494  40565
+##   male     46418  14503    696  61617
+##   &lt;NA&gt;     98061  41711   2444 142216
+##   Sum     177282  63482   3634 244398</code></pre>
+<p><code>rowSums()</code> returns the row total while <code>colSums()</code> returns the column total. They are similar to <code>margin.table()</code>.</p>
+<pre class="r"><code>rowSums(tab2)</code></pre>
+<pre><code>## female   male   &lt;NA&gt; 
+##  40565  61617 142216</code></pre>
+<pre class="r"><code>colSums(tab2)</code></pre>
+<pre><code>## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+<p><code>xtabs()</code> is another way of creating multidimensional tables in R. In comparison to <code>table()</code>, it</p>
+<ul>
+<li>uses <code>formula</code> notation for input</li>
+<li>the data argument ensures variable names are referenced instead of using $ i.e. <code>data$variable</code></li>
+<li>displays row &amp; column labels by default</li>
+</ul>
+<pre class="r"><code>tabx &lt;- xtabs(~gender+device, data = data)
+tabx</code></pre>
+<pre><code>##         device
+## gender   Desktop Mobile Tablet
+##   female   32803   7268    494
+##   male     46418  14503    696
+##   &lt;NA&gt;     98061  41711   2444</code></pre>
+<p>The following functions work with <code>xtabs()</code> as well</p>
+<ul>
+<li><code>proportions()</code></li>
+<li><code>margin.table()</code></li>
+<li><code>addmargins()</code></li>
+</ul>
+<pre class="r"><code>proportions(tabx)</code></pre>
+<pre><code>##         device
+## gender       Desktop      Mobile      Tablet
+##   female 0.134219593 0.029738378 0.002021293
+##   male   0.189927904 0.059341729 0.002847814
+##   &lt;NA&gt;   0.401234871 0.170668336 0.010000082</code></pre>
+<pre class="r"><code>margin.table(tabx, 1)</code></pre>
+<pre><code>## gender
+## female   male   &lt;NA&gt; 
+##  40565  61617 142216</code></pre>
+<pre class="r"><code>margin.table(tabx, 2)</code></pre>
+<pre><code>## device
+## Desktop  Mobile  Tablet 
+##  177282   63482    3634</code></pre>
+<pre class="r"><code>addmargins(tabx)</code></pre>
+<pre><code>##         device
+## gender   Desktop Mobile Tablet    Sum
+##   female   32803   7268    494  40565
+##   male     46418  14503    696  61617
+##   &lt;NA&gt;     98061  41711   2444 142216
+##   Sum     177282  63482   3634 244398</code></pre>
+<p>So far, we have been working with one or two dimensional tables. Both the <code>table()</code> and <code>xtabs()</code> functions are capable of creating multidimensional tables. Keep in mind that multidimensional tables are complex and it becomes increasingly difficult to understand or interpret them.</p>
+<pre class="r"><code>tab3 &lt;- xtabs(~gender+device+channel, data = data)
+tab3</code></pre>
+<pre><code>## , , channel = (Other)
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female     786    258      0
+##   male      1063    507     19
+##   &lt;NA&gt;      2173   1186     81
+## 
+## , , channel = Affiliates
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female    1314     60      0
+##   male      1714    169      0
+##   &lt;NA&gt;      3518    548     65
+## 
+## , , channel = Direct
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female    4785    977     59
+##   male      7010   2381     95
+##   &lt;NA&gt;     15824   8292    430
+## 
+## , , channel = Display
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female     123    753    104
+##   male       210    491     73
+##   &lt;NA&gt;       554    911    156
+## 
+## , , channel = Organic Search
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female   17109   4480    282
+##   male     25016   9563    448
+##   &lt;NA&gt;     54071  27223   1476
+## 
+## , , channel = Paid Search
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female     645    230     22
+##   male       887    478     26
+##   &lt;NA&gt;      1274    782     51
+## 
+## , , channel = Referral
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female    7387     74      0
+##   male      9251    185      0
+##   &lt;NA&gt;     18052    615     51
+## 
+## , , channel = Social
+## 
+##         device
+## gender   Desktop Mobile Tablet
+##   female     654    436     27
+##   male      1267    729     35
+##   &lt;NA&gt;      2595   2154    134</code></pre>
+<p><strong>ftable</strong> stands for flat tables and is useful for printing attractive tables. It makes it easy to read and interpret multidimensional tables. In the next example, we will use <code>ftable()</code> to print the tables we have created in the previous examples and compare the outputs.</p>
+<pre class="r"><code>ftable(tabx)</code></pre>
+<pre><code>##        device Desktop Mobile Tablet
+## gender                             
+## female          32803   7268    494
+## male            46418  14503    696
+## NA              98061  41711   2444</code></pre>
+<pre class="r"><code>ftable(tab2)</code></pre>
+<pre><code>##        Device Desktop Mobile Tablet
+## Gender                             
+## female          32803   7268    494
+## male            46418  14503    696
+## NA              98061  41711   2444</code></pre>
+<pre class="r"><code>ftable(tab3)</code></pre>
+<pre><code>##                channel (Other) Affiliates Direct Display Organic Search Paid Search Referral Social
+## gender device                                                                                      
+## female Desktop             786       1314   4785     123          17109         645     7387    654
+##        Mobile              258         60    977     753           4480         230       74    436
+##        Tablet                0          0     59     104            282          22        0     27
+## male   Desktop            1063       1714   7010     210          25016         887     9251   1267
+##        Mobile              507        169   2381     491           9563         478      185    729
+##        Tablet               19          0     95      73            448          26        0     35
+## NA     Desktop            2173       3518  15824     554          54071        1274    18052   2595
+##        Mobile             1186        548   8292     911          27223         782      615   2154
+##        Tablet               81         65    430     156           1476          51       51    134</code></pre>
+<p>By default, missing values (NAs) are excluded from tables. Let us modify the gender data from our case study a bit and see how the <code>table()</code> function deals with missing values. We won’t explicitly specify <code>NA</code> as a level while recreating the gender data.</p>
+<pre class="r"><code>gen &lt;- as.factor(as.character(data$gender))
+table(gen)</code></pre>
+<pre><code>## gen
+## female   male 
+##  40565  61617</code></pre>
+<p>As you can see, <code>table()</code> excludes missing values while tabulating the data. In order to ensure that missing
+values are also counted, we can use the <code>useNA</code> argument. It can take two values:</p>
+<ul>
+<li>ifany</li>
+<li>always</li>
+</ul>
+<p>In the first case, it will show <code>NA</code> as a level and the count only if there are missing values in the data. In the second case, it will always show <code>NA</code> as a level irrespective of whether there are missing values in the data or not.</p>
+<pre class="r"><code>table(gen, useNA = &quot;ifany&quot;)</code></pre>
+<pre><code>## gen
+## female   male   &lt;NA&gt; 
+##  40565  61617 142216</code></pre>
+<pre class="r"><code>table(data$device, useNA = &quot;always&quot;)</code></pre>
+<pre><code>## 
+## Desktop  Mobile  Tablet    &lt;NA&gt; 
+##  177282   63482    3634       0</code></pre>
+<p>In this final section on tables, we will learn how to select/access the different parts of a <code>table</code>. We will use <code>[</code> operator to select rows and columns of a table (it is similar to selecting data from a
+<code>data.frame</code>). Below are a few examples:</p>
+<ul>
+<li>select first row</li>
+</ul>
+<pre class="r"><code>tab2[1, ]           </code></pre>
+<pre><code>## Desktop  Mobile  Tablet 
+##   32803    7268     494</code></pre>
+<ul>
+<li>select first column</li>
+</ul>
+<pre class="r"><code>tab2[, 1]           </code></pre>
+<pre><code>## female   male   &lt;NA&gt; 
+##  32803  46418  98061</code></pre>
+<ul>
+<li>select first two rows</li>
+</ul>
+<pre class="r"><code>tab2[1:2, ]         </code></pre>
+<pre><code>##         Device
+## Gender   Desktop Mobile Tablet
+##   female   32803   7268    494
+##   male     46418  14503    696</code></pre>
+<ul>
+<li>select first two columns</li>
+</ul>
+<pre class="r"><code>tab2[, 1:2]        </code></pre>
+<pre><code>##         Device
+## Gender   Desktop Mobile
+##   female   32803   7268
+##   male     46418  14503
+##   &lt;NA&gt;     98061  41711</code></pre>
+<ul>
+<li>select nth row</li>
+</ul>
+<pre class="r"><code>tab2[2, ]          </code></pre>
+<pre><code>## Desktop  Mobile  Tablet 
+##   46418   14503     696</code></pre>
+<ul>
+<li>select nth column</li>
+</ul>
+<pre class="r"><code>tab2[, 2]          </code></pre>
+<pre><code>## female   male   &lt;NA&gt; 
+##   7268  14503  41711</code></pre>
+<ul>
+<li>select row by group label</li>
+</ul>
+<pre class="r"><code>tab2[&quot;female&quot;, ]   </code></pre>
+<pre><code>## Desktop  Mobile  Tablet 
+##   32803    7268     494</code></pre>
+<ul>
+<li>select column by group label</li>
+</ul>
+<pre class="r"><code>tab2[, &quot;Mobile&quot;]   </code></pre>
+<pre><code>## female   male   &lt;NA&gt; 
+##   7268  14503  41711</code></pre>
+<p>Before we end this section, let us learn how to test if an object is of class table using <code>is.table()</code>.</p>
+<pre class="r"><code>is.table(tab2)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Next, we will look at different R packages for two way/contingency tables.</p>
+<div id="contingency-table" class="section level3">
+<h3>Contingency Table</h3>
+<p>For cross tables with output similar to SAS or SPSS, use any of the below:</p>
+<ul>
+<li><code>CrossTable()</code> from the <a href="cran.r-project.org/package=gmodels">gmodels</a> package</li>
+<li><code>ds_cross_table()</code> from the <a href="https://descriptr.rsquaredacademy.com">descriptr</a> package</li>
+</ul>
+<pre class="r"><code>gmodels::CrossTable(data$device, data$gender)</code></pre>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## | Chi-square contribution |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  102182 
+## 
+##  
+##              | data$gender 
+##  data$device |    female |      male | Row Total | 
+## -------------|-----------|-----------|-----------|
+##      Desktop |     32803 |     46418 |     79221 | 
+##              |    58.228 |    38.334 |           | 
+##              |     0.414 |     0.586 |     0.775 | 
+##              |     0.809 |     0.753 |           | 
+##              |     0.321 |     0.454 |           | 
+## -------------|-----------|-----------|-----------|
+##       Mobile |      7268 |     14503 |     21771 | 
+##              |   218.694 |   143.975 |           | 
+##              |     0.334 |     0.666 |     0.213 | 
+##              |     0.179 |     0.235 |           | 
+##              |     0.071 |     0.142 |           | 
+## -------------|-----------|-----------|-----------|
+##       Tablet |       494 |       696 |      1190 | 
+##              |     0.986 |     0.649 |           | 
+##              |     0.415 |     0.585 |     0.012 | 
+##              |     0.012 |     0.011 |           | 
+##              |     0.005 |     0.007 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |     40565 |     61617 |    102182 | 
+##              |     0.397 |     0.603 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+## </code></pre>
+<pre class="r"><code>descriptr::ds_cross_table(data, device, gender)</code></pre>
+<pre><code>##     Cell Contents
+##  |---------------|
+##  |     Frequency |
+##  |       Percent |
+##  |       Row Pct |
+##  |       Col Pct |
+##  |---------------|
+## 
+##  Total Observations:  244398 
+## 
+## ----------------------------------------------------------------------------
+## |              |                          gender                           |
+## ----------------------------------------------------------------------------
+## |       device |       female |         male |           NA |    Row Total |
+## ----------------------------------------------------------------------------
+## |      Desktop |        32803 |        46418 |        98061 |       177282 |
+## |              |        0.134 |         0.19 |        0.401 |              |
+## |              |         0.19 |         0.26 |         0.55 |         0.73 |
+## |              |         0.81 |         0.75 |         0.69 |              |
+## ----------------------------------------------------------------------------
+## |       Mobile |         7268 |        14503 |        41711 |        63482 |
+## |              |         0.03 |        0.059 |        0.171 |              |
+## |              |         0.11 |         0.23 |         0.66 |         0.26 |
+## |              |         0.18 |         0.24 |         0.29 |              |
+## ----------------------------------------------------------------------------
+## |       Tablet |          494 |          696 |         2444 |         3634 |
+## |              |        0.002 |        0.003 |         0.01 |              |
+## |              |         0.14 |         0.19 |         0.67 |         0.01 |
+## |              |         0.01 |         0.01 |         0.02 |              |
+## ----------------------------------------------------------------------------
+## | Column Total |        40565 |        61617 |       142216 |       244398 |
+## |              |        0.166 |        0.252 |        0.582 |              |
+## ----------------------------------------------------------------------------</code></pre>
+<p>We list and explore different R packages for summarizing categorical data in our GitHub repository.</p>
+</div>
+<div id="key-functions" class="section level3">
+<h3>Key Functions</h3>
+<p><img src="/img/fct_module_4_functions.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="practice" class="section level2">
+<h2>Your Turn…</h2>
+<ol style="list-style-type: decimal">
+<li><p>Display the number of levels in</p>
+<ul>
+<li><code>browser</code></li>
+<li><code>channel</code></li>
+<li><code>landing_page</code></li>
+<li><code>exit_page</code></li>
+</ul></li>
+<li><p>Display the categories in</p>
+<ul>
+<li><code>os</code></li>
+<li><code>channel</code></li>
+<li><code>browser</code></li>
+<li><code>gender</code></li>
+<li><code>user_type</code></li>
+</ul></li>
+<li><p>Display the count/frequency of</p>
+<ul>
+<li><code>channel</code></li>
+<li><code>user_type</code></li>
+</ul></li>
+<li><p>Examine the distribution of the following and summarize your observations:</p>
+<ul>
+<li><code>channel</code> by <code>user_type</code></li>
+<li><code>device</code> by <code>purchase_flag</code></li>
+<li><code>channel</code> by <code>device</code></li>
+<li><code>channel</code> by <code>purchase_flag</code></li>
+<li><code>user_type</code> by <code>purchase_flag</code></li>
+</ul></li>
+</ol>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>

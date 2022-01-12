@@ -1,0 +1,393 @@
+---
+title: "Handling Categorical Data in R - Part 2"
+author: Aravind Hebbali
+twitterImg: img/forcats-part-2.png
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
+date: '2022-01-12'
+slug: handling-categorical-data-in-r-part-2
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pkg_loads, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+library(forcats)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+library(ggpubr)
+library(plotrix)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/forcats-part-2.png")
+```
+
+This is part 2 of a series on "Handling Categorical Data in R where we are learning to **read**, **store**, **summarize**, **visualize** & **manipulate** categorical data.." 
+
+In [part 1](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/) of this series, we understood what categorical data is, how R stores it using **factor** and got an overview of the case study we will be working on throughout this series.
+
+In this article, we will learn to summarize categorical data. In the process, we will do a deep dive on working with tables in R and explore a diverse set of packages.  
+
+## Table of Contents
+
+- [Resources](#resources)
+- [Introduction](#intro)
+- [Tables in R](#tables)
+- [Practice Questions](#practice)
+
+
+## Resources {#resources}
+
+You can download all the data sets, R scripts, practice questions and their solutions from our [GitHub](https://github.com/rsquaredacademy-education/online-courses/) repository.
+
+## Introduction {#intro}
+
+Categorical data cannot be summarized in the same way as numeric data. It does not make sense to look at range, standard deviation etc. since data consists of a few distinct values only.  So how do we summarize such data? We can look at 
+
+- count/frequency
+- proportion
+- cumulative frequency
+- cross table
+- contingency table etc.
+
+In this section, we will explore the above ways of summarizing categorical data. We will also spend some time
+learning about tables as you will be using them extensively while working with categorical data. R has many packages for tabulating data and we list and explore all of them in the R scripts shared in the GitHub repository. 
+
+### Number of Categories
+
+From our case study, we want to know the number of devices used to browse the website, the name of the
+devices and the proportion of traffic they drive to our website. Let us read the case study data set before we analyze the website traffic.
+
+```{r read_data}
+# read data
+data <- readRDS('analytics.rds')
+```
+
+Let us begin with the number of devices. To view the number of groups/categories in a categorical variable, use `nlevels()`.
+
+```{r summarize_0}
+nlevels(data$device)
+```
+
+There are 3 categories of devices used by the visitors to browse the website. This can also be used for data
+sanitization i.e. as an analyst you know that there are only 3 valid categories of device into which any visitor can be classified into. If you see more than 3 categories, you might want to check if there are any issues in data collection or processing. Now that we know there are 3 categories of devices, let us check if they are valid. The `levels()` function will return the labels of the groups.
+
+### Category Names
+
+Knowing the number of levels is useful but not sufficient. `levels()` is one of the most useful functions when it comes to dealing with categorical data.
+
+```{r summarize_1}
+levels(data$device)
+```
+
+Other functions that you can use include `unique()` and `fct_unique()`. Both these functions will return the unique names/labels along with the levels while `levels()` returns the labels of the levels.
+
+```{r summarize_1a}
+unique(data$device)
+fct_unique(data$device)
+``` 
+
+### Names & Counts
+
+So we have checked the number of devices and their names. Let us now examine their distribution
+i.e. count/frequency. `table()` and `summary()` will display the levels and their counts while `fct_count()`
+will return a tibble with 2 columns (level & count). It is extremely useful for further data processing or
+visualization (using ggplot2).
+
+```{r summarize_2}
+table(data$device)
+fct_count(data$device)
+summary(data$device)
+```
+
+## Tables {#tables}
+
+In the previous section, we used the `table()` function to tabulate categorical data. We will
+recreate the tabulation for device and store it in a new variable tab.
+
+```{r summarize_3}
+tab <- table(data$device)
+tab
+```
+
+What does this function return? It is not a `vector`, `list`, `data.frame` or `matrix`. Let us use the `class()` function to check the class of the object returned by `table()`. It returns an object of the class **table**. This is a new type of object. Let us spend some time understanding tables as they are useful for organizing and summarizing categorical data. **table** is also the most used object when it comes to dealing with categorical data.
+
+The `table()` function returns the counts of the categories but let us say we want to view the proportion or
+percentage instead of counts i.e. the proportion or percentage of traffic driven to our website by the different devices. The `proportions()` or `prop.table()` function comes in handy in such cases. It takes a table object as input (tab in our case).
+
+```{r summarize_4}
+prop.table(tab)
+proportions(tab)
+```
+
+To get the percentages, multiply the output by 100. Use the `round()` function to round the decimal places
+according to your requirements.
+
+```{r summarize_4a}
+proportions(tab) * 100
+round(proportions(tab) * 100, 2)
+```
+
+So far, we have used `table()` to tabulate a single categorical variable. It can be used for a lot
+more than just tabulating data. We can examine the relationship between two categorical variables as well
+as create multidimensional tables. Let us look at the relationship between **gender** and **device** in our case study. Does gender affect the type of device used? To answer this, we will create a two way or cross table. In the `table()` function, we can specify multiple variables by separating them with a comma.
+
+```{r summarize_5}
+tab2 <- table(data$gender, data$device)
+tab2
+```
+
+Keep in mind that the order of the variables matter. Rows represent the first variable while column represents the second.
+
+```{r summarize_5a}
+table(data$device, data$gender)
+```
+
+The `proportions()` function works with two way tables as well.
+
+```{r summarize_6}
+proportions(tab2)
+proportions(tab2) * 100
+```
+
+We would like to introduce another function at this point of time, `margin.table()`. What does this function do? It computes the marginal frequencies i.e. the sum of the rows or columns. It takes a **table** object as input. The `margin` argument allows us to specify whether we want the sum of rows or columns. `1` indicates rows and `2` indicates columns. 
+
+```{r summarize_7a}
+margin.table(tab2, 1) # sum of rows
+margin.table(tab2, 2) # sum of columns
+```
+
+If the margin argument is NULL (which it is by default), the function returns the sum of all cells of the table.
+
+```{r summarize_7}
+margin.table(tab2)
+```
+
+`table()` does not display row or column labels. It does display the group labels though. Let us revisit the output from `tab2`. You can observe that while it includes the group labels, the row and column labels are missing. The output from the `dimnames()` function shows the group labels of the variables but the row & column labels are absent.
+
+```{r summarize_8}
+dimnames(tab2)
+names(tab2)
+names(dimnames(tab2)) 
+```
+
+The output from `names(dimnames(tab2))` is also empty. Let us add the variable names as the row & column
+labels to `tab2`.
+
+```{r summarize_8a}
+names(dimnames(tab2)) <- c("Gender", "Device")
+tab2
+```
+
+Now look at the output from `tab2` and you can observe the difference. The same is also visible when we run
+`dimnames(tab2)`.
+
+```{r summarize_8b}
+dimnames(tab2)
+```
+
+To add margin totals to the table, use `addmargins()`. Like `proportions()` and `margin.table()`, it also takes a `table` object as the input. 
+
+```{r summarize_9} 
+addmargins(tab2)
+```
+
+`rowSums()` returns the row total while `colSums()` returns the column total. They are similar to `margin.table()`.
+
+```{r summarize_9a} 
+rowSums(tab2)
+colSums(tab2)
+```
+
+`xtabs()` is another way of creating multidimensional tables in R. In comparison to `table()`, it
+
+- uses `formula` notation for input
+- the data argument ensures variable names are referenced instead of using $ i.e. `data$variable`
+- displays row & column labels by default
+
+```{r summarize_10}
+tabx <- xtabs(~gender+device, data = data)
+tabx
+```
+
+The following functions work with `xtabs()` as well
+
+- `proportions()`
+- `margin.table()`
+- `addmargins()`
+
+```{r summarize_10a}
+proportions(tabx)
+margin.table(tabx, 1)
+margin.table(tabx, 2)
+addmargins(tabx)
+```
+
+So far, we have been working with one or two dimensional tables. Both the `table()` and `xtabs()` functions are capable of creating multidimensional tables. Keep in mind that multidimensional tables are complex and it becomes increasingly difficult to understand or interpret them.
+
+```{r summarize_12}
+tab3 <- xtabs(~gender+device+channel, data = data)
+tab3
+```
+
+**ftable** stands for flat tables and is useful for printing attractive tables. It makes it easy to read and interpret multidimensional tables. In the next example, we will use `ftable()` to print the tables we have created in the previous examples and compare the outputs.
+
+```{r summarize_11}
+ftable(tabx)
+ftable(tab2)
+ftable(tab3)
+```
+
+By default, missing values (NAs) are excluded from tables. Let us modify the gender data from our case study a bit and see how the `table()` function deals with missing values. We won’t explicitly specify `NA` as a level while recreating the gender data.
+
+```{r summarize_13} 
+gen <- as.factor(as.character(data$gender))
+table(gen)
+```
+
+As you can see, `table()` excludes missing values while tabulating the data. In order to ensure that missing
+values are also counted, we can use the `useNA` argument. It can take two values:
+
+- ifany
+- always
+
+In the first case, it will show `NA` as a level and the count only if there are missing values in the data. In the second case, it will always show `NA` as a level irrespective of whether there are missing values in the data or not. 
+
+```{r summarize_13a} 
+table(gen, useNA = "ifany")
+table(data$device, useNA = "always")
+```
+
+In this final section on tables, we will learn how to select/access the different parts of a `table`. We will use `[` operator to select rows and columns of a table (it is similar to selecting data from a
+`data.frame`). Below are a few examples:
+
+- select first row
+
+```{r summarize_14}
+tab2[1, ]           
+```
+
+- select first column
+
+```{r summarize_14a}
+tab2[, 1]           
+```
+
+- select first two rows
+
+```{r summarize_14b}
+tab2[1:2, ]         
+```
+
+- select first two columns
+
+```{r summarize_14c}
+tab2[, 1:2]        
+```
+
+- select nth row
+
+```{r summarize_14d}
+tab2[2, ]          
+```
+
+- select nth column
+
+```{r summarize_14e}
+tab2[, 2]          
+```
+
+- select row by group label
+
+```{r summarize_14f}  
+tab2["female", ]   
+```
+
+- select column by group label
+
+```{r summarize_14g}
+tab2[, "Mobile"]   
+```
+
+Before we end this section, let us learn how to test if an object is of class table using `is.table()`.
+
+```{r summarize_15}
+is.table(tab2)
+```
+
+Next, we will look at different R packages for two way/contingency tables. 
+
+### Contingency Table
+
+For cross tables with output similar to SAS or SPSS, use any of the below:
+
+- `CrossTable()` from the [gmodels](cran.r-project.org/package=gmodels) package
+- `ds_cross_table()` from the [descriptr](https://descriptr.rsquaredacademy.com) package
+
+```{r summarize_16}
+gmodels::CrossTable(data$device, data$gender)
+```
+
+```{r summarize_17}
+descriptr::ds_cross_table(data, device, gender)
+```
+
+We list and explore different R packages for summarizing categorical data in our GitHub repository.
+
+### Key Functions
+
+```{r summarize_functions, fig.align='center', echo=FALSE, out.width="70%"}
+knitr::include_graphics('/img/fct_module_4_functions.png')
+```
+
+## Your Turn... {#practice}
+
+1. Display the number of levels in 
+
+    - `browser`
+    - `channel`
+    - `landing_page`
+    - `exit_page`
+
+2. Display the categories in
+
+    - `os`
+    - `channel`
+    - `browser`
+    - `gender`
+    - `user_type`
+
+3. Display the count/frequency of
+
+    - `channel`
+    - `user_type`
+
+4. Examine the distribution of the following and summarize your observations:
+
+    - `channel` by `user_type`
+    - `device` by `purchase_flag`
+    - `channel` by `device`
+    - `channel` by `purchase_flag`
+    - `user_type` by `purchase_flag`
+    
+    
+
+*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could 
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.
+
+We welcome your comments. You can email to let us know what you did or did not 
+like about our blog as well as what we can do to make our post better.*
+
+**Email: support@rsquaredacademy.com**
