@@ -1,0 +1,542 @@
+---
+title: "Handling Categorical Data in R - Part 3"
+author: Aravind Hebbali
+twitterImg: img/forcats-part-3.png
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
+date: '2022-01-13'
+slug: handling-categorical-data-in-r-part-3
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pkg_loads, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+library(forcats)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+library(ggpubr)
+library(plotrix)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="80%"}
+knitr::include_graphics("/img/forcats-part-3.png")
+```
+
+This is part 3 of a series on "Handling Categorical Data in R where we are learning to **read**, **store**, **summarize**, **visualize** & **manipulate** categorical data.." 
+
+In [part 1](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/) and [part 2](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/) of this series, we understood how R stores categorical data using **factor** and got an overview of tables in R while learning to summarize data.
+
+In this article, we will learn to manipulate/reshape categorical data by changing the value and order of levels/categories. 
+
+## Table of Contents
+
+- [Resources](#resources)
+- [Introduction](#intro)
+- [How to change value of levels?](#changevalue)
+- [How to add or remove levels?](#addremove)
+- [How to change order of levels?](#changeorder)
+- [Practice Questions](#practice)
+
+## Resources {#resources}
+
+You can download all the data sets, R scripts, practice questions and their solutions from our [GitHub](https://github.com/rsquaredacademy-education/online-courses/) repository.
+
+## Introduction {#intro}
+
+In this section, our focus will be on handling the levels of a categorical variable, and exploring the [forcats](https://forcats.tidyverse.org/) package for the same. We will basically look at 3 key operations or transformations we would like to do when it comes to factors which are:
+
+- change value of levels
+- add or remove levels
+- change order of levels
+
+Before we start working with the value of the levels, let us read the case study data and take a quick look at some of the functions we used in the previous articles. 
+
+```{r read_data}
+# read data
+data <- readRDS('analytics.rds')
+```
+
+We will store the source of traffic as `channel` instead of referring to the column in the `data.frame` every time.
+
+```{r channel}
+channel <- data$channel
+```
+
+Let us go back to the function we used for tabulating data, `fct_count()`. If you observe the result, it is in the same order as displayed by `levels()`.
+
+```{r fct_helpers}
+fct_count(channel)
+```
+
+If you want to sort the results by the count i.e. most common level comes at the top, use the `sort` argument.
+
+```{r fct_sort, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_sort.png")
+```
+
+```{r fct_helpers_2}
+fct_count(channel, sort = TRUE)
+```
+
+If you want to view the proportion along with the count, set the `prop` argument to `TRUE`.
+
+```{r fct_count_prop}
+fct_count(channel, prop = TRUE)
+```
+
+One of the important steps in data preparation/sanitization is to check if the levels are valid i.e. only levels which should be present in the data are actually present. `fct_match()` can be used to check validity of levels. It returns a logical vector if the level is present and an error if not.
+
+```{r fct_match}
+table(fct_match(channel, "Social"))
+```
+
+## Change Value of Levels {#changevalue}
+
+In this section, we will learn how to change the value of the levels. In order to keep it interesting, we will state an objective from our case study and then map it into a function from the [forcats](https://forcats.tidyverse.org/) package.
+
+### Combine both Paid & Organic Search into a single level, Search
+
+```{r fct_collapse_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_collapse.png")
+```
+
+In this case, we want to change the value of two levels, *Paid Search* & *Organic Search* and give them the common value *Search*. You can also look at it as collapsing two levels into one. There are two functions we can use here:
+
+- `fct_collapse()`
+- `fct_recode()`
+
+Let us look at `fct_collapse()` first. After specifying the categorical variable, we specify the new value followed by a character vector of the existing values. Remember, the new value is not enclosed in quotes (single or double) but the existing values must be a `character` vector.
+
+```{r fct_collapse}
+fct_count(
+  fct_collapse(
+    channel,
+    Search = c("Paid Search", "Organic Search")
+  )
+)
+```
+
+In the case of `fct_recode()`, each value being changed must be specified in a new line. Similar to
+`fct_collapse()`, the new value is not enclosed in quotes but the existing values must be.
+
+```{r fct_recode_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_recode.png")
+```
+
+```{r fct_recode}
+fct_count(
+  fct_recode(
+    channel,
+    Search = "Paid Search",
+    Search = "Organic Search"
+  )
+)
+```
+
+The [dplyr](https://dplyr.tidyverse.org/) and [car](https://cran.r-project.org/package=car) packages also have recode functions.
+
+### Retain only those channels which have driven a minimum traffic of 5000 to the website
+
+```{r fct_lump_1_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_lump_1.png")
+```
+
+Instead of having all the channels, we desire to retain only those channels which have driven at least *5000* visits to the website. What about the rest of the channels which have driven less than *5000*? We will recategorize them as **Other**. Keep in mind that we already have a **(Other)** level in our data. `fct_lump_min()` will lump together all levels which do not have a minimum count specified. In our case study, only **Display** drives less than *5000* visits and it will be categorized into **Other**.
+
+```{r fct_lump_1}
+fct_count(fct_lump_min(channel, 5000))
+```
+
+### Retain only top 3 referring channels and categorize rest into Other
+
+```{r fct_lump_2_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_lump_2.png")
+```
+
+Suppose you decide to retain only the top 3 channels in terms of the traffic driven to the website. In our
+case study, these are **Direct**, **Organic Search** and **Referral**. We want to retain these 3 levels and categorize the rest as **Other**. `fct_lump_n()` will retain top `n` levels by count/frequency and lump the rest into **Other**.
+
+```{r fct_lump_2}
+fct_count(fct_lump_n(channel, 3))
+```
+
+In our case, `n` is 3 and hence the top 3 channels in terms of traffic driven are retained while the rest are
+lumped into **Other**.
+
+### Retain only those channels which have driven at least 2% of the overall traffic
+
+```{r fct_lump_3_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_lump_3.png")
+```
+
+In the second scenario above, we retained channels based on minimum traffic driven by them to the website.
+The criteria was count of visits. If you want to specify the criteria as a percentage or proportion instead of count, use `fct_lump_prop()`. The criteria is a value between **0** and **1**. In our case study, we want to retain channels that have driven at least **2%** of the overall traffic. Hence, we have specified the criteria as `0.02`.
+
+```{r fct_lump_3}
+fct_count(fct_lump_prop(channel, 0.02))
+```
+
+As you can see, only **Display** drives less than **2%** of overall traffic and has been lumped into **Other**.
+
+### Retain the following channels and merge the rest into Other
+
+- Organic Search
+- Direct
+- Referral
+
+In the previous scenarios, we have been retaining or lumping channels based on some criteria like count or
+percentage of traffic driven to the website. In this scenario, we want to retain certain levels by specifying
+their labels and combine the rest into **Other**. While we can use `fct_collapse()` or `fct_recode()`, a more
+appropriate function would be `fct_other()`. We will do a comparison of the three functions in a short while.
+
+```{r fct_other_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_others.png")
+```
+
+`fct_other()` has two arguments, `keep` and `drop`. `keep` is used when we know the levels we want to retain
+and `drop` is used when we know the levels we want to drop. In this scenario, we know the levels we want to
+retain and hence we will use the `keep` argument and specify them. **Organic Search**, **Direct** and **Referral** will be retained while the rest of the channels will be lumped into **Other**.
+
+```{r fct_other_keep}
+fct_count(
+  fct_other(
+    channel, 
+    keep = c("Organic Search", "Direct", "Referral"))
+)
+```
+
+### Merge the following channels into Other and retain rest of them:
+
+- Display
+- Paid Search
+
+```{r fct_others_drop_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_others_drop.png")
+```
+
+In this scenario, we know the levels we want to drop and hence we will use the `drop` argument and specify
+them. **Display** and **Paid Search** will be lumped into **Other** while the rest of the channels will be retained.
+
+```{r fct_other_drop}
+fct_count(
+  fct_other(
+    channel, 
+    drop = c("Display", "Paid Search")
+  )
+)
+```
+
+In the previous scenario, we said we will compare `fct_other()` with `fct_collapse()` and `fct_recode()`. Let us use the other two functions as well and see the difference. 
+
+```{r fct_other_compare}
+# collapse
+fct_count(
+  fct_collapse(
+  channel,
+  Other = c("(Other)", "Affiliate", "Display", "Paid Search", "Social")
+  )
+)
+
+# recode
+fct_count(
+  fct_recode(
+  channel,
+  Other = "(Other)", 
+  Other = "Affiliate", 
+  Other = "Display", 
+  Other = "Paid Search", 
+  Other = "Social"
+  )
+)
+```
+
+As you can observe, `fct_other()` requires less typing and is easier to specify.
+
+### Anonymize the data set before sharing it with your colleagues
+
+```{r fct_anonymize_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_anonymize.png")
+```
+
+Anonymizing data is extremely important when you are sharing sensitive data with others. Here, we want
+to anonymize the channels which drive traffic to the website so that we can share it with others without
+divulging the names of the channels. `fct_anon()` allows us to anonymize the levels in the data. Using the
+`prefix` argument, we can specify the prefix to be used while anonymizing the data.
+
+```{r fct_anon}
+fct_count(fct_anon(channel, prefix = "ch_"))
+```
+
+### Key Functions
+
+```{r key_functions_1, echo=FALSE}
+fname   <- c("`fct_collapse()`", "`fct_recode()`", "`fct_lump_min()`",
+             "`fct_lump_n()`", "`fct_lump_prop()`", "`fct_lump_lowfreq()`",
+             "`fct_other()`", "`fct_anon()`")
+descrip <- c("Collapse factor levels", "Recode factor levels", 
+             "Lump factor levels with count lesser than specified value", 
+             "Lump all levels except the top n levels",
+             "Lump factor levels with count lesser than specified proportion", 
+             "Lump together least frequent levels",
+             "Replace levels with Other level",
+             "Anonymize factor levels")
+data.frame(Function = fname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+## Add / Remove Levels {#addremove}
+
+In this small section, we will learn to:
+
+- add new levels
+- drop levels
+- make missing values explicit
+
+### Add a new level, Blog
+
+```{r fct_expand_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_expand.png")
+```
+
+`fct_expand()` allows us to add new levels to the data. The label of the new level must be specified after the variable name and must be enclosed in quotes. If the level already exists, it will be ignored. Let us add a new level, `Blog`.
+
+```{r fct_expand}
+levels(fct_expand(channel, "Blog"))
+```
+
+### Drop existing level
+
+```{r fct_drop_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_drop.png")
+```
+
+On the other hand, `fct_drop()` will drop levels which have no values i.e. unused levels. If you want
+to drop only specific levels, use the `only` argument and specify the name of the level in quotes. Let us drop the new level we added in the previous example.
+
+```{r fct_drop}
+levels(fct_drop(fct_expand(channel, "Blog")))
+```
+
+### Make missing values explicit 
+
+```{r fct_na_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_explicit_na.png")
+```
+
+In our data set, the gender column has many missing values, and in R, missing values are represented by `NA`. Suppose you are sharing the data or analysis with someone who is not an R user, and does not know what `NA` represents. In such a scenario, we can use the `fct_explicit_na()` function to make the missing values in the gender column explicit i.e. it will appear as `(Missing)` instead of `NA`. This will help non R users to understand that there are missing values in the data.
+
+```{r fct_explicit_na}
+fct_count(fct_explicit_na(data$gender))
+```
+
+### Key Functions
+
+```{r key_functions_2, echo=FALSE}
+fname   <- c("`fct_expand()`", "`fct_drop()`", "`fct_explicit_na()`")
+descrip <- c("Add additional levels to a factor", 
+             "Drop unused factor levels", 
+             "Make missing values explicit")
+data.frame(Function = fname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+## Change Order of Levels {#changeorder}
+
+In this last section, we will learn how to change the order of the levels. We will look at the following scenarios from our case study:
+
+We want to make
+
+- Organic Search the first level
+- Referral the third level
+- Display the last level
+
+### Make Organic Search the first level 
+
+```{r fct_relevel_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_relevel_1.png")
+```
+
+In this scenario, we want the levels to appear in a certain order. In the first case, we want **Organic Search** to be the first level. `fct_relevel()` allows us to manually reorder the levels. To move a level to the beginning, specify the label (it must be enclosed in quotes).
+
+```{r fct_relevel_1}
+levels(channel)
+levels(fct_relevel(channel, "Organic Search"))
+```
+
+### Make Referral the third level 
+
+```{r fct_relevel_2_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_relevel_2.png")
+```
+
+The `after` argument is useful when we want to move the level to the end or anywhere between the beginning and end. In the second case, we want **Referral** to be the third level. After specifying the label, use the `after` argument and specify the level after which **Referral** should appear. Since we want to move it to the third position, we will set the value of `after` to `2` i.e. **Referral** should come after the second position.
+
+```{r fct_relevel_2}
+levels(channel)
+levels(fct_relevel(channel, "Referral", after = 2))
+```
+
+### Make Display the last level 
+
+```{r fct_relevel_3_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_relevel_3.png")
+```
+
+In this last case, we want to move **Display** to the end. If you know the number of levels, you can specify a value here. In our data, there are eight channels i.e. eight levels, so we can set the value of `after` to `7`. What happens when we do not know the number of levels or if they tend to vary? In such cases, to move a level to the end, set the value of `after` to `Inf`.
+
+```{r fct_relevel_3}
+levels(channel)
+levels(fct_relevel(channel, "Display", after = Inf))
+```
+
+Let us now look at a scenario where we want to order the levels by
+
+-  frequency (largest to smallest)
+-  order of appearance (in data)
+
+### Order levels by frequency 
+
+```{r fct_infreq_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_infreq.png")
+```
+
+In the first case, the levels with the most frequency should appear at the top. `fct_infreq()` will order the
+levels by their frequency.
+
+```{r fct_infreq}
+# reorder levels
+levels(channel)
+levels(fct_infreq(channel))
+```
+
+### Order levels by appearance 
+
+```{r fct_inorder_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_inorder.png")
+```
+
+In the second case, the order of the levels should be the same as the order of their appearance in the data. `fct_inorder()` will order the levels according to the order in which they appear in the data.
+
+```{r fct_inorder}
+# reorder levels
+levels(channel)
+levels(fct_inorder(channel))
+```
+
+### Reverse the order of the levels 
+
+```{r fct_rev_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_rev.png")
+```
+
+The order of the levels can be reversed using `fct_rev()`.
+
+```{r fct_rev}
+# reorder levels
+levels(channel)
+levels(fct_rev(channel))
+```
+
+### Randomly shuffle the order of the levels 
+
+```{r fct_shuffle_img, echo=FALSE, fig.align="center", out.width="90%"}
+knitr::include_graphics("/img/fct_shuffle.png")
+```
+
+The order of the levels can be randomly shuffled using `fct_shuffle()`.
+
+```{r fct_shuffle}
+# reorder levels
+levels(channel)
+levels(fct_shuffle(channel))
+```
+
+### Key Functions
+
+```{r key_functions_3, echo=FALSE}
+fname   <- c("`fct_relevel()`", "`fct_shift()`", "`fct_infreq()`",
+             "`fct_rev()`", "`fct_inorder()`", "`fct_shuffle()`")
+descrip <- c("Reorder factor levels", 
+             "Shift factor levels", 
+             "Reorder factor levels by frequency",
+             "Reverse order of factor levels", 
+             "Reorder factor levels by first appearance",
+             "Randomly shuffle factor levels")
+data.frame(Function = fname, Description = descrip) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive")
+  )
+```
+
+## Your Turn... {#practice}
+
+1. Display the count/frequency of the following variables in the descending order
+
+    - `device`
+    - `landing_page`
+    - `exit_page`
+
+2. Check if `laptop` is a level in the `device` column.
+
+3. Combine the following levels in `landing_page` into `Account`
+
+    - `My Account`
+    - `Register`
+    - `Sign In`
+    - `Your Info`
+
+4. Combine levels in `landing_page` that drive less than 1000 visits.
+
+5. Get top 10 landing and exit pages.
+
+6. Get landing pages that drive at least 5% of the total traffic to the website.
+
+7. Retain only the following levels in the `browser` column:
+
+    - `Chrome`
+    - `Firefox`
+    - `Safari`
+    - `Edge`
+    
+8. Anonymize landing and exit page levels.
+
+9. Make `Home` first level in the `landing_page` column.
+ 
+10. Make `Apparel` second level in the `landing_page` column. 
+
+11. Make `Specials` last level in the `landing_page` column. 
+
+12. Order the levels in the browser by frequency:
+    
+13. Order the levels in landing page by appearance:
+    
+14. Shuffle the levels in os
+
+15. Reverse the levels in browser
+    
+*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could 
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.
+
+We welcome your comments. You can email to let us know what you did or did not 
+like about our blog as well as what we can do to make our post better.*
+
+**Email: support@rsquaredacademy.com**

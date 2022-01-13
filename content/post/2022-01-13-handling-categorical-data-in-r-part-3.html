@@ -1,0 +1,676 @@
+---
+title: "Handling Categorical Data in R - Part 3"
+author: Aravind Hebbali
+twitterImg: img/forcats-part-3.png
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
+date: '2022-01-13'
+slug: handling-categorical-data-in-r-part-3
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+
+
+<p><img src="/img/forcats-part-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>This is part 3 of a series on “Handling Categorical Data in R where we are learning to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>visualize</strong> &amp; <strong>manipulate</strong> categorical data..”</p>
+<p>In <a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/">part 1</a> and <a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/">part 2</a> of this series, we understood how R stores categorical data using <strong>factor</strong> and got an overview of tables in R while learning to summarize data.</p>
+<p>In this article, we will learn to manipulate/reshape categorical data by changing the value and order of levels/categories.</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#changevalue">How to change value of levels?</a></li>
+<li><a href="#addremove">How to add or remove levels?</a></li>
+<li><a href="#changeorder">How to change order of levels?</a></li>
+<li><a href="#practice">Practice Questions</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>You can download all the data sets, R scripts, practice questions and their solutions from our <a href="https://github.com/rsquaredacademy-education/online-courses/">GitHub</a> repository.</p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+<p>In this section, our focus will be on handling the levels of a categorical variable, and exploring the <a href="https://forcats.tidyverse.org/">forcats</a> package for the same. We will basically look at 3 key operations or transformations we would like to do when it comes to factors which are:</p>
+<ul>
+<li>change value of levels</li>
+<li>add or remove levels</li>
+<li>change order of levels</li>
+</ul>
+<p>Before we start working with the value of the levels, let us read the case study data and take a quick look at some of the functions we used in the previous articles.</p>
+<pre class="r"><code># read data
+data &lt;- readRDS(&#39;analytics.rds&#39;)</code></pre>
+<p>We will store the source of traffic as <code>channel</code> instead of referring to the column in the <code>data.frame</code> every time.</p>
+<pre class="r"><code>channel &lt;- data$channel</code></pre>
+<p>Let us go back to the function we used for tabulating data, <code>fct_count()</code>. If you observe the result, it is in the same order as displayed by <code>levels()</code>.</p>
+<pre class="r"><code>fct_count(channel)</code></pre>
+<pre><code>## # A tibble: 8 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 (Other)          6073
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Display          3375
+## 5 Organic Search 139668
+## 6 Paid Search      4395
+## 7 Referral        35615
+## 8 Social           8031</code></pre>
+<p>If you want to sort the results by the count i.e. most common level comes at the top, use the <code>sort</code> argument.</p>
+<p><img src="/img/fct_sort.png" width="90%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>fct_count(channel, sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 8 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Organic Search 139668
+## 2 Direct          39853
+## 3 Referral        35615
+## 4 Social           8031
+## 5 Affiliates       7388
+## 6 (Other)          6073
+## 7 Paid Search      4395
+## 8 Display          3375</code></pre>
+<p>If you want to view the proportion along with the count, set the <code>prop</code> argument to <code>TRUE</code>.</p>
+<pre class="r"><code>fct_count(channel, prop = TRUE)</code></pre>
+<pre><code>## # A tibble: 8 x 3
+##   f                   n      p
+##   &lt;fct&gt;           &lt;int&gt;  &lt;dbl&gt;
+## 1 (Other)          6073 0.0248
+## 2 Affiliates       7388 0.0302
+## 3 Direct          39853 0.163 
+## 4 Display          3375 0.0138
+## 5 Organic Search 139668 0.571 
+## 6 Paid Search      4395 0.0180
+## 7 Referral        35615 0.146 
+## 8 Social           8031 0.0329</code></pre>
+<p>One of the important steps in data preparation/sanitization is to check if the levels are valid i.e. only levels which should be present in the data are actually present. <code>fct_match()</code> can be used to check validity of levels. It returns a logical vector if the level is present and an error if not.</p>
+<pre class="r"><code>table(fct_match(channel, &quot;Social&quot;))</code></pre>
+<pre><code>## 
+##  FALSE   TRUE 
+## 236367   8031</code></pre>
+</div>
+<div id="changevalue" class="section level2">
+<h2>Change Value of Levels</h2>
+<p>In this section, we will learn how to change the value of the levels. In order to keep it interesting, we will state an objective from our case study and then map it into a function from the <a href="https://forcats.tidyverse.org/">forcats</a> package.</p>
+<div id="combine-both-paid-organic-search-into-a-single-level-search" class="section level3">
+<h3>Combine both Paid &amp; Organic Search into a single level, Search</h3>
+<p><img src="/img/fct_collapse.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In this case, we want to change the value of two levels, <em>Paid Search</em> &amp; <em>Organic Search</em> and give them the common value <em>Search</em>. You can also look at it as collapsing two levels into one. There are two functions we can use here:</p>
+<ul>
+<li><code>fct_collapse()</code></li>
+<li><code>fct_recode()</code></li>
+</ul>
+<p>Let us look at <code>fct_collapse()</code> first. After specifying the categorical variable, we specify the new value followed by a character vector of the existing values. Remember, the new value is not enclosed in quotes (single or double) but the existing values must be a <code>character</code> vector.</p>
+<pre class="r"><code>fct_count(
+  fct_collapse(
+    channel,
+    Search = c(&quot;Paid Search&quot;, &quot;Organic Search&quot;)
+  )
+)</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   f               n
+##   &lt;fct&gt;       &lt;int&gt;
+## 1 (Other)      6073
+## 2 Affiliates   7388
+## 3 Direct      39853
+## 4 Display      3375
+## 5 Search     144063
+## 6 Referral    35615
+## 7 Social       8031</code></pre>
+<p>In the case of <code>fct_recode()</code>, each value being changed must be specified in a new line. Similar to
+<code>fct_collapse()</code>, the new value is not enclosed in quotes but the existing values must be.</p>
+<p><img src="/img/fct_recode.png" width="90%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>fct_count(
+  fct_recode(
+    channel,
+    Search = &quot;Paid Search&quot;,
+    Search = &quot;Organic Search&quot;
+  )
+)</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   f               n
+##   &lt;fct&gt;       &lt;int&gt;
+## 1 (Other)      6073
+## 2 Affiliates   7388
+## 3 Direct      39853
+## 4 Display      3375
+## 5 Search     144063
+## 6 Referral    35615
+## 7 Social       8031</code></pre>
+<p>The <a href="https://dplyr.tidyverse.org/">dplyr</a> and <a href="https://cran.r-project.org/package=car">car</a> packages also have recode functions.</p>
+</div>
+<div id="retain-only-those-channels-which-have-driven-a-minimum-traffic-of-5000-to-the-website" class="section level3">
+<h3>Retain only those channels which have driven a minimum traffic of 5000 to the website</h3>
+<p><img src="/img/fct_lump_1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Instead of having all the channels, we desire to retain only those channels which have driven at least <em>5000</em> visits to the website. What about the rest of the channels which have driven less than <em>5000</em>? We will recategorize them as <strong>Other</strong>. Keep in mind that we already have a <strong>(Other)</strong> level in our data. <code>fct_lump_min()</code> will lump together all levels which do not have a minimum count specified. In our case study, only <strong>Display</strong> drives less than <em>5000</em> visits and it will be categorized into <strong>Other</strong>.</p>
+<pre class="r"><code>fct_count(fct_lump_min(channel, 5000))</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 (Other)          6073
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Organic Search 139668
+## 5 Referral        35615
+## 6 Social           8031
+## 7 Other            7770</code></pre>
+</div>
+<div id="retain-only-top-3-referring-channels-and-categorize-rest-into-other" class="section level3">
+<h3>Retain only top 3 referring channels and categorize rest into Other</h3>
+<p><img src="/img/fct_lump_2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Suppose you decide to retain only the top 3 channels in terms of the traffic driven to the website. In our
+case study, these are <strong>Direct</strong>, <strong>Organic Search</strong> and <strong>Referral</strong>. We want to retain these 3 levels and categorize the rest as <strong>Other</strong>. <code>fct_lump_n()</code> will retain top <code>n</code> levels by count/frequency and lump the rest into <strong>Other</strong>.</p>
+<pre class="r"><code>fct_count(fct_lump_n(channel, 3))</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Direct          39853
+## 2 Organic Search 139668
+## 3 Referral        35615
+## 4 Other           29262</code></pre>
+<p>In our case, <code>n</code> is 3 and hence the top 3 channels in terms of traffic driven are retained while the rest are
+lumped into <strong>Other</strong>.</p>
+</div>
+<div id="retain-only-those-channels-which-have-driven-at-least-2-of-the-overall-traffic" class="section level3">
+<h3>Retain only those channels which have driven at least 2% of the overall traffic</h3>
+<p><img src="/img/fct_lump_3.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In the second scenario above, we retained channels based on minimum traffic driven by them to the website.
+The criteria was count of visits. If you want to specify the criteria as a percentage or proportion instead of count, use <code>fct_lump_prop()</code>. The criteria is a value between <strong>0</strong> and <strong>1</strong>. In our case study, we want to retain channels that have driven at least <strong>2%</strong> of the overall traffic. Hence, we have specified the criteria as <code>0.02</code>.</p>
+<pre class="r"><code>fct_count(fct_lump_prop(channel, 0.02))</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 (Other)          6073
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Organic Search 139668
+## 5 Referral        35615
+## 6 Social           8031
+## 7 Other            7770</code></pre>
+<p>As you can see, only <strong>Display</strong> drives less than <strong>2%</strong> of overall traffic and has been lumped into <strong>Other</strong>.</p>
+</div>
+<div id="retain-the-following-channels-and-merge-the-rest-into-other" class="section level3">
+<h3>Retain the following channels and merge the rest into Other</h3>
+<ul>
+<li>Organic Search</li>
+<li>Direct</li>
+<li>Referral</li>
+</ul>
+<p>In the previous scenarios, we have been retaining or lumping channels based on some criteria like count or
+percentage of traffic driven to the website. In this scenario, we want to retain certain levels by specifying
+their labels and combine the rest into <strong>Other</strong>. While we can use <code>fct_collapse()</code> or <code>fct_recode()</code>, a more
+appropriate function would be <code>fct_other()</code>. We will do a comparison of the three functions in a short while.</p>
+<p><img src="/img/fct_others.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><code>fct_other()</code> has two arguments, <code>keep</code> and <code>drop</code>. <code>keep</code> is used when we know the levels we want to retain
+and <code>drop</code> is used when we know the levels we want to drop. In this scenario, we know the levels we want to
+retain and hence we will use the <code>keep</code> argument and specify them. <strong>Organic Search</strong>, <strong>Direct</strong> and <strong>Referral</strong> will be retained while the rest of the channels will be lumped into <strong>Other</strong>.</p>
+<pre class="r"><code>fct_count(
+  fct_other(
+    channel, 
+    keep = c(&quot;Organic Search&quot;, &quot;Direct&quot;, &quot;Referral&quot;))
+)</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Direct          39853
+## 2 Organic Search 139668
+## 3 Referral        35615
+## 4 Other           29262</code></pre>
+</div>
+<div id="merge-the-following-channels-into-other-and-retain-rest-of-them" class="section level3">
+<h3>Merge the following channels into Other and retain rest of them:</h3>
+<ul>
+<li>Display</li>
+<li>Paid Search</li>
+</ul>
+<p><img src="/img/fct_others_drop.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In this scenario, we know the levels we want to drop and hence we will use the <code>drop</code> argument and specify
+them. <strong>Display</strong> and <strong>Paid Search</strong> will be lumped into <strong>Other</strong> while the rest of the channels will be retained.</p>
+<pre class="r"><code>fct_count(
+  fct_other(
+    channel, 
+    drop = c(&quot;Display&quot;, &quot;Paid Search&quot;)
+  )
+)</code></pre>
+<pre><code>## # A tibble: 7 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 (Other)          6073
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Organic Search 139668
+## 5 Referral        35615
+## 6 Social           8031
+## 7 Other            7770</code></pre>
+<p>In the previous scenario, we said we will compare <code>fct_other()</code> with <code>fct_collapse()</code> and <code>fct_recode()</code>. Let us use the other two functions as well and see the difference.</p>
+<pre class="r"><code># collapse
+fct_count(
+  fct_collapse(
+  channel,
+  Other = c(&quot;(Other)&quot;, &quot;Affiliate&quot;, &quot;Display&quot;, &quot;Paid Search&quot;, &quot;Social&quot;)
+  )
+)</code></pre>
+<pre><code>## Warning: Unknown levels in `f`: Affiliate</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Other           21874
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Organic Search 139668
+## 5 Referral        35615</code></pre>
+<pre class="r"><code># recode
+fct_count(
+  fct_recode(
+  channel,
+  Other = &quot;(Other)&quot;, 
+  Other = &quot;Affiliate&quot;, 
+  Other = &quot;Display&quot;, 
+  Other = &quot;Paid Search&quot;, 
+  Other = &quot;Social&quot;
+  )
+)</code></pre>
+<pre><code>## Warning: Unknown levels in `f`: Affiliate</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   f                   n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Other           21874
+## 2 Affiliates       7388
+## 3 Direct          39853
+## 4 Organic Search 139668
+## 5 Referral        35615</code></pre>
+<p>As you can observe, <code>fct_other()</code> requires less typing and is easier to specify.</p>
+</div>
+<div id="anonymize-the-data-set-before-sharing-it-with-your-colleagues" class="section level3">
+<h3>Anonymize the data set before sharing it with your colleagues</h3>
+<p><img src="/img/fct_anonymize.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Anonymizing data is extremely important when you are sharing sensitive data with others. Here, we want
+to anonymize the channels which drive traffic to the website so that we can share it with others without
+divulging the names of the channels. <code>fct_anon()</code> allows us to anonymize the levels in the data. Using the
+<code>prefix</code> argument, we can specify the prefix to be used while anonymizing the data.</p>
+<pre class="r"><code>fct_count(fct_anon(channel, prefix = &quot;ch_&quot;))</code></pre>
+<pre><code>## # A tibble: 8 x 2
+##   f          n
+##   &lt;fct&gt;  &lt;int&gt;
+## 1 ch_1    6073
+## 2 ch_2   39853
+## 3 ch_3   35615
+## 4 ch_4    3375
+## 5 ch_5    8031
+## 6 ch_6    7388
+## 7 ch_7  139668
+## 8 ch_8    4395</code></pre>
+</div>
+<div id="key-functions" class="section level3">
+<h3>Key Functions</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>fct_collapse()</code>
+</td>
+<td style="text-align:left;">
+Collapse factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_recode()</code>
+</td>
+<td style="text-align:left;">
+Recode factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_lump_min()</code>
+</td>
+<td style="text-align:left;">
+Lump factor levels with count lesser than specified value
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_lump_n()</code>
+</td>
+<td style="text-align:left;">
+Lump all levels except the top n levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_lump_prop()</code>
+</td>
+<td style="text-align:left;">
+Lump factor levels with count lesser than specified proportion
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_lump_lowfreq()</code>
+</td>
+<td style="text-align:left;">
+Lump together least frequent levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_other()</code>
+</td>
+<td style="text-align:left;">
+Replace levels with Other level
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_anon()</code>
+</td>
+<td style="text-align:left;">
+Anonymize factor levels
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="addremove" class="section level2">
+<h2>Add / Remove Levels</h2>
+<p>In this small section, we will learn to:</p>
+<ul>
+<li>add new levels</li>
+<li>drop levels</li>
+<li>make missing values explicit</li>
+</ul>
+<div id="add-a-new-level-blog" class="section level3">
+<h3>Add a new level, Blog</h3>
+<p><img src="/img/fct_expand.png" width="90%" style="display: block; margin: auto;" /></p>
+<p><code>fct_expand()</code> allows us to add new levels to the data. The label of the new level must be specified after the variable name and must be enclosed in quotes. If the level already exists, it will be ignored. Let us add a new level, <code>Blog</code>.</p>
+<pre class="r"><code>levels(fct_expand(channel, &quot;Blog&quot;))</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;        
+## [9] &quot;Blog&quot;</code></pre>
+</div>
+<div id="drop-existing-level" class="section level3">
+<h3>Drop existing level</h3>
+<p><img src="/img/fct_drop.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>On the other hand, <code>fct_drop()</code> will drop levels which have no values i.e. unused levels. If you want
+to drop only specific levels, use the <code>only</code> argument and specify the name of the level in quotes. Let us drop the new level we added in the previous example.</p>
+<pre class="r"><code>levels(fct_drop(fct_expand(channel, &quot;Blog&quot;)))</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+</div>
+<div id="make-missing-values-explicit" class="section level3">
+<h3>Make missing values explicit</h3>
+<p><img src="/img/fct_explicit_na.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In our data set, the gender column has many missing values, and in R, missing values are represented by <code>NA</code>. Suppose you are sharing the data or analysis with someone who is not an R user, and does not know what <code>NA</code> represents. In such a scenario, we can use the <code>fct_explicit_na()</code> function to make the missing values in the gender column explicit i.e. it will appear as <code>(Missing)</code> instead of <code>NA</code>. This will help non R users to understand that there are missing values in the data.</p>
+<pre class="r"><code>fct_count(fct_explicit_na(data$gender))</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f              n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 female     40565
+## 2 male       61617
+## 3 (Missing) 142216</code></pre>
+</div>
+<div id="key-functions-1" class="section level3">
+<h3>Key Functions</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>fct_expand()</code>
+</td>
+<td style="text-align:left;">
+Add additional levels to a factor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_drop()</code>
+</td>
+<td style="text-align:left;">
+Drop unused factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_explicit_na()</code>
+</td>
+<td style="text-align:left;">
+Make missing values explicit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="changeorder" class="section level2">
+<h2>Change Order of Levels</h2>
+<p>In this last section, we will learn how to change the order of the levels. We will look at the following scenarios from our case study:</p>
+<p>We want to make</p>
+<ul>
+<li>Organic Search the first level</li>
+<li>Referral the third level</li>
+<li>Display the last level</li>
+</ul>
+<div id="make-organic-search-the-first-level" class="section level3">
+<h3>Make Organic Search the first level</h3>
+<p><img src="/img/fct_relevel_1.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In this scenario, we want the levels to appear in a certain order. In the first case, we want <strong>Organic Search</strong> to be the first level. <code>fct_relevel()</code> allows us to manually reorder the levels. To move a level to the beginning, specify the label (it must be enclosed in quotes).</p>
+<pre class="r"><code>levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_relevel(channel, &quot;Organic Search&quot;))</code></pre>
+<pre><code>## [1] &quot;Organic Search&quot; &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;        
+## [5] &quot;Display&quot;        &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+</div>
+<div id="make-referral-the-third-level" class="section level3">
+<h3>Make Referral the third level</h3>
+<p><img src="/img/fct_relevel_2.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The <code>after</code> argument is useful when we want to move the level to the end or anywhere between the beginning and end. In the second case, we want <strong>Referral</strong> to be the third level. After specifying the label, use the <code>after</code> argument and specify the level after which <strong>Referral</strong> should appear. Since we want to move it to the third position, we will set the value of <code>after</code> to <code>2</code> i.e. <strong>Referral</strong> should come after the second position.</p>
+<pre class="r"><code>levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_relevel(channel, &quot;Referral&quot;, after = 2))</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Referral&quot;       &quot;Direct&quot;        
+## [5] &quot;Display&quot;        &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Social&quot;</code></pre>
+</div>
+<div id="make-display-the-last-level" class="section level3">
+<h3>Make Display the last level</h3>
+<p><img src="/img/fct_relevel_3.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In this last case, we want to move <strong>Display</strong> to the end. If you know the number of levels, you can specify a value here. In our data, there are eight channels i.e. eight levels, so we can set the value of <code>after</code> to <code>7</code>. What happens when we do not know the number of levels or if they tend to vary? In such cases, to move a level to the end, set the value of <code>after</code> to <code>Inf</code>.</p>
+<pre class="r"><code>levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_relevel(channel, &quot;Display&quot;, after = Inf))</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Organic Search&quot;
+## [5] &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;         &quot;Display&quot;</code></pre>
+<p>Let us now look at a scenario where we want to order the levels by</p>
+<ul>
+<li>frequency (largest to smallest)</li>
+<li>order of appearance (in data)</li>
+</ul>
+</div>
+<div id="order-levels-by-frequency" class="section level3">
+<h3>Order levels by frequency</h3>
+<p><img src="/img/fct_infreq.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In the first case, the levels with the most frequency should appear at the top. <code>fct_infreq()</code> will order the
+levels by their frequency.</p>
+<pre class="r"><code># reorder levels
+levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_infreq(channel))</code></pre>
+<pre><code>## [1] &quot;Organic Search&quot; &quot;Direct&quot;         &quot;Referral&quot;       &quot;Social&quot;        
+## [5] &quot;Affiliates&quot;     &quot;(Other)&quot;        &quot;Paid Search&quot;    &quot;Display&quot;</code></pre>
+</div>
+<div id="order-levels-by-appearance" class="section level3">
+<h3>Order levels by appearance</h3>
+<p><img src="/img/fct_inorder.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>In the second case, the order of the levels should be the same as the order of their appearance in the data. <code>fct_inorder()</code> will order the levels according to the order in which they appear in the data.</p>
+<pre class="r"><code># reorder levels
+levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_inorder(channel))</code></pre>
+<pre><code>## [1] &quot;Organic Search&quot; &quot;Direct&quot;         &quot;Referral&quot;       &quot;Affiliates&quot;    
+## [5] &quot;(Other)&quot;        &quot;Social&quot;         &quot;Display&quot;        &quot;Paid Search&quot;</code></pre>
+</div>
+<div id="reverse-the-order-of-the-levels" class="section level3">
+<h3>Reverse the order of the levels</h3>
+<p><img src="/img/fct_rev.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The order of the levels can be reversed using <code>fct_rev()</code>.</p>
+<pre class="r"><code># reorder levels
+levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_rev(channel))</code></pre>
+<pre><code>## [1] &quot;Social&quot;         &quot;Referral&quot;       &quot;Paid Search&quot;    &quot;Organic Search&quot;
+## [5] &quot;Display&quot;        &quot;Direct&quot;         &quot;Affiliates&quot;     &quot;(Other)&quot;</code></pre>
+</div>
+<div id="randomly-shuffle-the-order-of-the-levels" class="section level3">
+<h3>Randomly shuffle the order of the levels</h3>
+<p><img src="/img/fct_shuffle.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>The order of the levels can be randomly shuffled using <code>fct_shuffle()</code>.</p>
+<pre class="r"><code># reorder levels
+levels(channel)</code></pre>
+<pre><code>## [1] &quot;(Other)&quot;        &quot;Affiliates&quot;     &quot;Direct&quot;         &quot;Display&quot;       
+## [5] &quot;Organic Search&quot; &quot;Paid Search&quot;    &quot;Referral&quot;       &quot;Social&quot;</code></pre>
+<pre class="r"><code>levels(fct_shuffle(channel))</code></pre>
+<pre><code>## [1] &quot;Paid Search&quot;    &quot;Direct&quot;         &quot;Social&quot;         &quot;Affiliates&quot;    
+## [5] &quot;Referral&quot;       &quot;(Other)&quot;        &quot;Display&quot;        &quot;Organic Search&quot;</code></pre>
+</div>
+<div id="key-functions-2" class="section level3">
+<h3>Key Functions</h3>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>fct_relevel()</code>
+</td>
+<td style="text-align:left;">
+Reorder factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_shift()</code>
+</td>
+<td style="text-align:left;">
+Shift factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_infreq()</code>
+</td>
+<td style="text-align:left;">
+Reorder factor levels by frequency
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_rev()</code>
+</td>
+<td style="text-align:left;">
+Reverse order of factor levels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_inorder()</code>
+</td>
+<td style="text-align:left;">
+Reorder factor levels by first appearance
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>fct_shuffle()</code>
+</td>
+<td style="text-align:left;">
+Randomly shuffle factor levels
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="practice" class="section level2">
+<h2>Your Turn…</h2>
+<ol style="list-style-type: decimal">
+<li><p>Display the count/frequency of the following variables in the descending order</p>
+<ul>
+<li><code>device</code></li>
+<li><code>landing_page</code></li>
+<li><code>exit_page</code></li>
+</ul></li>
+<li><p>Check if <code>laptop</code> is a level in the <code>device</code> column.</p></li>
+<li><p>Combine the following levels in <code>landing_page</code> into <code>Account</code></p>
+<ul>
+<li><code>My Account</code></li>
+<li><code>Register</code></li>
+<li><code>Sign In</code></li>
+<li><code>Your Info</code></li>
+</ul></li>
+<li><p>Combine levels in <code>landing_page</code> that drive less than 1000 visits.</p></li>
+<li><p>Get top 10 landing and exit pages.</p></li>
+<li><p>Get landing pages that drive at least 5% of the total traffic to the website.</p></li>
+<li><p>Retain only the following levels in the <code>browser</code> column:</p>
+<ul>
+<li><code>Chrome</code></li>
+<li><code>Firefox</code></li>
+<li><code>Safari</code></li>
+<li><code>Edge</code></li>
+</ul></li>
+<li><p>Anonymize landing and exit page levels.</p></li>
+<li><p>Make <code>Home</code> first level in the <code>landing_page</code> column.</p></li>
+<li><p>Make <code>Apparel</code> second level in the <code>landing_page</code> column.</p></li>
+<li><p>Make <code>Specials</code> last level in the <code>landing_page</code> column.</p></li>
+<li><p>Order the levels in the browser by frequency:</p></li>
+<li><p>Order the levels in landing page by appearance:</p></li>
+<li><p>Shuffle the levels in os</p></li>
+<li><p>Reverse the levels in browser</p></li>
+</ol>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>
