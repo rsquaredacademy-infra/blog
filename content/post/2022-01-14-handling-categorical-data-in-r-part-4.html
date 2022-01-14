@@ -1,0 +1,196 @@
+---
+title: "Handling Categorical Data in R - Part 4"
+author: Aravind Hebbali
+twitterImg: img/forcats-part-4.png
+description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
+date: '2022-01-14'
+slug: handling-categorical-data-in-r-part-4
+categories:
+  - data-wrangling
+tags:
+  - forcats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><img src="/img/forcats-part-4.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>This is part 4 of a series on “Handling Categorical Data in R” where we are learning to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>reshape</strong> &amp; <strong>visualize</strong> categorical data.</p>
+<p>Below are the links to the other articles of this series:</p>
+<ul>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/">Part 1 - Introduction to Factor</a></li>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/">Part 2 - Summarize Categorical Data</a></li>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-3/">Part 3 - Reshape Categorical Data</a></li>
+</ul>
+<p>In this article, we will explore the different ways of visualizing categorical data using <a href="https://ggplot2.tidyverse.org/">ggplot2</a>.</p>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>You can download all the data sets, R scripts, practice questions and their solutions from our <a href="https://github.com/rsquaredacademy-education/online-courses/">GitHub</a> repository.</p>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this section, we will learn to visualize categorical data. We will look at the following type of plots:</p>
+<ul>
+<li>univariate bar plot</li>
+<li>bivariate bar plot
+<ul>
+<li>grouped</li>
+<li>stacked</li>
+<li>proportional</li>
+</ul></li>
+<li>mosaic plot</li>
+<li>pie chart</li>
+<li>donut chart</li>
+</ul>
+<p>We will be using <a href="https://ggplot2.tidyverse.org">ggplot2</a> package throughout this article. So you should know the basics of data visualization with ggplot2. If you are new to or have never used ggplot2, do not worry. We have several <a href="https://blog.rsquaredacademy.com/data-visualization/index.html">tutorials</a> and an <a href="https://viz-ggplot2.rsquaredacademy.com/">ebook</a> on ggplot2, you can go through them first and then come back to this article. Let us read the case study data before we start our visualization journey.</p>
+<pre class="r"><code># read data
+data &lt;- readRDS(&#39;analytics.rds&#39;)</code></pre>
+</div>
+<div id="bar-plot" class="section level2">
+<h2>Bar Plot</h2>
+<p>Bar charts provide a visual representation of categorical data. The bars can be plotted either vertically or horizontally. The categories/groups appear along the horizontal X axis and the height of the bar represents a measured value.</p>
+<pre class="r"><code>ggplot(data) +
+  geom_bar(aes(x = device), fill = &quot;blue&quot;) +
+  xlab(&quot;Device&quot;) + ylab(&quot;Count&quot;)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/bar_plot-1.png" width="672" /></p>
+<p>In the above example, the bars represent the count/frequency of the categories. If the bars represent continuous data, the value could be <em>mean</em> or <em>sum</em> of the variable being represented.</p>
+<div id="grouped-bar-plot" class="section level3">
+<h3>Grouped Bar Plot</h3>
+<p>A grouped bar chart plots values for two levels of a categorical variable instead of one. You should use grouped bar chart when making comparisons across different categories of data. Use it when you want to look at how the second category variable changes within each level of the first and vice versa.</p>
+<pre class="r"><code>ggplot(data) +
+  geom_bar(aes(x = device, fill = gender), position = &quot;dodge&quot;) +
+  xlab(&quot;Device&quot;) + ylab(&quot;Count&quot;)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/grouped_bar_plot-1.png" width="672" /></p>
+</div>
+<div id="stacked-bar-plot" class="section level3">
+<h3>Stacked Bar Plot</h3>
+<p>In stacked bar plots, the bars are stacked on top of each other instead of placing them next to each other. Use stacked bar plots while looking at cumulative value.</p>
+<pre class="r"><code>ggplot(data) +
+  geom_bar(aes(x = device, fill = gender)) +
+  xlab(&quot;Device&quot;) + ylab(&quot;Count&quot;)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/stacked_bar_plot-1.png" width="672" /></p>
+</div>
+<div id="proportional-bar-plot" class="section level3">
+<h3>Proportional Bar Plot</h3>
+<p>Also known as percent stacked plot, the height of all bars in this plot are the same. The distribution of the second categorical variable is scaled to 1 or 100. The length of each bar is determined by its share in the category. Use this when you want to concurrently observe each of several variables as they fluctuate and as their percentage ratio’s change.</p>
+<pre class="r"><code>data %&gt;% 
+  select(device, gender) %&gt;% 
+  table() %&gt;% 
+  tibble::as_tibble() %&gt;% 
+  ggplot(aes(x = device, y = n, fill = gender)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;fill&quot;) +
+  xlab(&quot;Device&quot;) + ylab(&quot;Gender&quot;)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/prop_bar_plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="mosaic-plot" class="section level2">
+<h2>Mosaic Plot</h2>
+<p>A mosaic plot is a graphical representation of a two way table or contingency table. It was introduced by Hartigan &amp; Kleiner and is divided into rectangles. Proportions on horizontal axis represents the number of observations for each level of the X variable. The vertical length of each rectangle is proportional to the proportion of Y variable in each level of X variable.</p>
+<pre class="r"><code>ggplot(data = data) +
+  geom_mosaic(aes(x = product(channel, device), fill = channel)) +
+  xlab(&quot;Device&quot;) + ylab(&quot;Channel&quot;)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/mosaic_plot-1.png" width="672" /></p>
+</div>
+<div id="pie-chart" class="section level2">
+<h2>Pie Chart</h2>
+<p>Pie chart is a circular chart, divided into slices to show relevant sizes of data. It shows the distribution of the different levels of a categorical variable as a circle is divided into radial slices. Each level corresponds with a single slice of the circle and size indicates the proportion of the level. Use it when comparing each group’s contribution to the whole as opposed to comparing groups to each other.</p>
+<div id="base-r" class="section level3">
+<h3>Base R</h3>
+<pre class="r"><code>data %&gt;% 
+  pull(device) %&gt;%
+  table() %&gt;%
+  pie()</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/pie_chart-1.png" width="672" /></p>
+</div>
+<div id="d-pie-chart" class="section level3">
+<h3>3D Pie Chart</h3>
+<pre class="r"><code>data %&gt;% 
+  pull(device) %&gt;% 
+  table() %&gt;% 
+  pie3D(explode = 0.1)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/pie_chart_3d-1.png" width="672" /></p>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>ggplot2</h3>
+<pre class="r"><code>data %&gt;% 
+  pull(device) %&gt;% 
+  fct_count() %&gt;% 
+  rename(device = f, count = n) %&gt;% 
+  ggplot() +
+  geom_bar(aes(x = &quot;&quot;, y = count, fill = device), width = 1, stat = &quot;identity&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/gg_pie_chart-1.png" width="672" /></p>
+</div>
+</div>
+<div id="donut-chart" class="section level2">
+<h2>Donut Chart</h2>
+<p>Donut chart is a variation of the pie chart. It has a round hole in the middle which makes it look like a donut. The focus is on the length of the arcs and not the proportions of the slices. Blank spaces inside donut chart can be used to display information inside it.</p>
+<pre class="r"><code>data %&gt;% 
+  pull(device) %&gt;% 
+  fct_count() %&gt;% 
+  rename(device = f, count = n) %&gt;% 
+  ggdonutchart(&quot;count&quot;, label = &quot;device&quot;, fill = &quot;device&quot;, color = &quot;white&quot;,
+               palette = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;))</code></pre>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/gg_donut_chart-1.png" width="672" /></p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<ul>
+<li>Bar charts provide a visual representation of categorical data.</li>
+<li>Use grouped bar chart to make comparison against different categories of data.</li>
+<li>Use stacked bar chart while looking at cumulative data.</li>
+<li>Use proportional bar chart when you want to concurrently observe each of the several variables as they fluctuate.</li>
+<li>Use mosaic plot to discover associations between two variables.</li>
+<li>Use pie chart and donut chart when comparing each group’s contribution to the whole.</li>
+</ul>
+</div>
+<div id="your-turn" class="section level2">
+<h2>Your Turn…</h2>
+<p>Generate all the below plots:</p>
+<ol style="list-style-type: decimal">
+<li>Bar plot of <code>channel</code></li>
+</ol>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Display grouped bar plot of <code>user_type</code> by <code>channel</code></li>
+</ol>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Display stacked bar plot of <code>channel</code> by <code>gender</code></li>
+</ol>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Display proportional bar plot of <code>channel</code> by <code>device</code></li>
+</ol>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Display mosaic plot of <code>device</code> by <code>channel</code></li>
+</ol>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Display pie or donut chart of <code>channel</code></li>
+</ol>
+<div id="pie-chart-1" class="section level5">
+<h5>6.1 Pie Chart</h5>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="d-pie-chart-1" class="section level5">
+<h5>6.2 3D Pie Chart</h5>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="pie-chart-ggplot2" class="section level5">
+<h5>6.3 Pie Chart (ggplot2)</h5>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_8-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="donut-chart-1" class="section level5">
+<h5>6.4 Donut Chart</h5>
+<p><img src="/post/2022-01-14-handling-categorical-data-in-r-part-4_files/figure-html/plot_9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>*As the reader of this blog, you are our most important critic and commentator.
+We value your opinion and want to know what we are doing right, what we could
+do better, what areas you would like to see us publish in, and any other words
+of wisdom you are willing to pass our way.</p>
+<p>We welcome your comments. You can email to let us know what you did or did not
+like about our blog as well as what we can do to make our post better.*</p>
+<p><strong>Email: <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a></strong></p>
+</div>
+</div>

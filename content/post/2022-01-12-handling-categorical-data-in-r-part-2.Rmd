@@ -32,9 +32,13 @@ library(plotrix)
 knitr::include_graphics("/img/forcats-part-2.png")
 ```
 
-This is part 2 of a series on "Handling Categorical Data in R where we are learning to **read**, **store**, **summarize**, **visualize** & **manipulate** categorical data.." 
+This is part 2 of a series on "Handling Categorical Data in R" where we are learning to **read**, **store**, **summarize**, **reshape** & **visualize** categorical data. 
 
-In [part 1](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/) of this series, we understood what categorical data is, how R stores it using **factor** and got an overview of the case study we will be working on throughout this series.
+Below are the links to the other articles of this series:
+
+- [Part 1 - Introduction to Factor](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/)
+- [Part 3 - Reshape Categorical Data](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-3/) 
+- [Part 4 - Visualize Categorical Data](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-4/)
 
 In this article, we will learn to summarize categorical data. In the process, we will do a deep dive on working with tables in R and explore a diverse set of packages.  
 

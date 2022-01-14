@@ -17,7 +17,13 @@ tags:
 
 
 <p><img src="/img/forcats-part-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>This is part 1 of a series on “Handling Categorical Data in R.” Almost every data science project involves working with categorical data, and we should know how to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>visualize</strong> &amp; <strong>manipulate</strong> such data. Working with categorical data is different from working with other data types such as numbers or text. In this article, we will understand what categorical data is, how R stores it using <strong>factor</strong>, and explore the rich set of functions (built-in &amp; through packages) provided by R for working with such data. Throughout the series, we will also <strong>work through a case study</strong> to better understand the concepts we learn. Happy learning!</p>
+<p>This is part 1 of a series on “Handling Categorical Data in R.” Almost every data science project involves working with categorical data, and we should know how to <strong>read</strong>, <strong>store</strong>, <strong>summarize</strong>, <strong>reshape</strong> &amp; <strong>visualize</strong> such data. Working with categorical data is different from working with other data types such as numbers or text. In this article, we will understand what categorical data is, how R stores it using <strong>factor</strong>, and explore the rich set of functions (built-in &amp; through packages) provided by R for working with such data. Throughout the series, we will also <strong>work through a case study</strong> to better understand the concepts we learn. Happy learning!</p>
+<p>Below are the links to the other articles of this series:</p>
+<ul>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/">Part 2 - Summarize Categorical Data</a></li>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-3/">Part 3 - Reshape Categorical Data</a></li>
+<li><a href="https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-4/">Part 4 - Visualize Categorical Data</a></li>
+</ul>
 <div id="table-of-contents" class="section level2">
 <h2>Table of Contents</h2>
 <ul>
@@ -357,10 +363,10 @@ Website UI rating given by visitor
 </ul>
 <pre class="r"><code>device &lt;- sample(c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;), size = 25, replace = TRUE)
 device</code></pre>
-<pre><code>##  [1] &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Desktop&quot;
-##  [8] &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Desktop&quot;
-## [15] &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Mobile&quot; 
-## [22] &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Desktop&quot;</code></pre>
+<pre><code>##  [1] &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot; 
+##  [8] &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Mobile&quot; 
+## [15] &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Desktop&quot;
+## [22] &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;</code></pre>
 <div id="membership-testing" class="section level3">
 <h3>Membership Testing</h3>
 <p>Great! We have successfully generated the sample data and along the way learnt a new R function for sampling. First, let us check if the sample is a <code>factor</code> using the membership function <code>is.factor()</code>.</p>
@@ -372,16 +378,16 @@ device</code></pre>
 <h3>Coercion</h3>
 <p>Let us try to coerce it into <code>factor</code> using the coercion function <code>as.factor()</code>.</p>
 <pre class="r"><code>as.factor(device)</code></pre>
-<pre><code>##  [1] Desktop Desktop Desktop Desktop Mobile  Mobile  Desktop Tablet  Mobile 
-## [10] Tablet  Tablet  Desktop Tablet  Desktop Mobile  Tablet  Tablet  Desktop
-## [19] Mobile  Mobile  Mobile  Tablet  Mobile  Tablet  Desktop
+<pre><code>##  [1] Mobile  Mobile  Tablet  Mobile  Mobile  Mobile  Tablet  Tablet  Desktop
+## [10] Mobile  Mobile  Mobile  Tablet  Mobile  Desktop Tablet  Desktop Mobile 
+## [19] Mobile  Tablet  Desktop Mobile  Tablet  Mobile  Mobile 
 ## Levels: Desktop Mobile Tablet</code></pre>
 <p>Do you spot any difference in the output? In the last line, it displays the levels or categories of the variable. Don’t worry if you didn’t spot it. We are just getting started and you will pick it up by the end of this section. Another function that can be used to coerce data into factor is <code>as_factor()</code> from the <a href="https://forcats.tidyverse.org/">forcats</a> package.</p>
 <pre class="r"><code>as_factor(device)</code></pre>
-<pre><code>##  [1] Desktop Desktop Desktop Desktop Mobile  Mobile  Desktop Tablet  Mobile 
-## [10] Tablet  Tablet  Desktop Tablet  Desktop Mobile  Tablet  Tablet  Desktop
-## [19] Mobile  Mobile  Mobile  Tablet  Mobile  Tablet  Desktop
-## Levels: Desktop Mobile Tablet</code></pre>
+<pre><code>##  [1] Mobile  Mobile  Tablet  Mobile  Mobile  Mobile  Tablet  Tablet  Desktop
+## [10] Mobile  Mobile  Mobile  Tablet  Mobile  Desktop Tablet  Desktop Mobile 
+## [19] Mobile  Tablet  Desktop Mobile  Tablet  Mobile  Mobile 
+## Levels: Mobile Tablet Desktop</code></pre>
 <p>Did you notice any difference between these two functions? Focus on the last line of the output where the
 levels are displayed. Now observe the order of the levels. <code>as.factor()</code> displays levels in the alphabetical order whereas <code>as_factor()</code> displays them in order of appearance in the data. <strong>Mobile</strong>, followed by <strong>Tablet</strong>, and then <strong>Desktop</strong>. If you look at the data, they appear in the same order.</p>
 </div>
@@ -397,21 +403,21 @@ levels are displayed. Now observe the order of the levels. <code>as.factor()</co
 </ul>
 <p>The first input is a vector, usually a numeric or character vector with a small number of unique values. In our example, it is a character vector of length 25 (i.e. 25 values) but 3 unique values.</p>
 <pre class="r"><code>factor(device)</code></pre>
-<pre><code>##  [1] Desktop Desktop Desktop Desktop Mobile  Mobile  Desktop Tablet  Mobile 
-## [10] Tablet  Tablet  Desktop Tablet  Desktop Mobile  Tablet  Tablet  Desktop
-## [19] Mobile  Mobile  Mobile  Tablet  Mobile  Tablet  Desktop
+<pre><code>##  [1] Mobile  Mobile  Tablet  Mobile  Mobile  Mobile  Tablet  Tablet  Desktop
+## [10] Mobile  Mobile  Mobile  Tablet  Mobile  Desktop Tablet  Desktop Mobile 
+## [19] Mobile  Tablet  Desktop Mobile  Tablet  Mobile  Mobile 
 ## Levels: Desktop Mobile Tablet</code></pre>
 <p>If you want to specify the levels or categories, use the <code>levels</code> argument.</p>
 <pre class="r"><code>factor(device, levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;))</code></pre>
-<pre><code>##  [1] Desktop Desktop Desktop Desktop Mobile  Mobile  Desktop Tablet  Mobile 
-## [10] Tablet  Tablet  Desktop Tablet  Desktop Mobile  Tablet  Tablet  Desktop
-## [19] Mobile  Mobile  Mobile  Tablet  Mobile  Tablet  Desktop
+<pre><code>##  [1] Mobile  Mobile  Tablet  Mobile  Mobile  Mobile  Tablet  Tablet  Desktop
+## [10] Mobile  Mobile  Mobile  Tablet  Mobile  Desktop Tablet  Desktop Mobile 
+## [19] Mobile  Tablet  Desktop Mobile  Tablet  Mobile  Mobile 
 ## Levels: Desktop Mobile Tablet</code></pre>
 <p>Levels not specified will be replaced by <code>NA</code>. Let us specify only <strong>Desktop</strong> and <strong>Mobile</strong> as the levels in the device column and see what happens.</p>
 <pre class="r"><code>factor(device, levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;))</code></pre>
-<pre><code>##  [1] Desktop Desktop Desktop Desktop Mobile  Mobile  Desktop &lt;NA&gt;    Mobile 
-## [10] &lt;NA&gt;    &lt;NA&gt;    Desktop &lt;NA&gt;    Desktop Mobile  &lt;NA&gt;    &lt;NA&gt;    Desktop
-## [19] Mobile  Mobile  Mobile  &lt;NA&gt;    Mobile  &lt;NA&gt;    Desktop
+<pre><code>##  [1] Mobile  Mobile  &lt;NA&gt;    Mobile  Mobile  Mobile  &lt;NA&gt;    &lt;NA&gt;    Desktop
+## [10] Mobile  Mobile  Mobile  &lt;NA&gt;    Mobile  Desktop &lt;NA&gt;    Desktop Mobile 
+## [19] Mobile  &lt;NA&gt;    Desktop Mobile  &lt;NA&gt;    Mobile  Mobile 
 ## Levels: Desktop Mobile</code></pre>
 <p>As you can see, <strong>Tablet</strong> has been replaced by <code>NA</code>.</p>
 </div>
@@ -421,8 +427,8 @@ levels are displayed. Now observe the order of the levels. <code>as.factor()</co
 <pre class="r"><code>factor(device, 
        levels = c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;),
        labels = c(&quot;Desk&quot;, &quot;Mob&quot;, &quot;Tab&quot;))</code></pre>
-<pre><code>##  [1] Desk Desk Desk Desk Mob  Mob  Desk Tab  Mob  Tab  Tab  Desk Tab  Desk Mob 
-## [16] Tab  Tab  Desk Mob  Mob  Mob  Tab  Mob  Tab  Desk
+<pre><code>##  [1] Mob  Mob  Tab  Mob  Mob  Mob  Tab  Tab  Desk Mob  Mob  Mob  Tab  Mob  Desk
+## [16] Tab  Desk Mob  Mob  Tab  Desk Mob  Tab  Mob  Mob 
 ## Levels: Desk Mob Tab</code></pre>
 <p>You can see that not only the values but the levels are also modified.</p>
 </div>
@@ -432,22 +438,22 @@ levels are displayed. Now observe the order of the levels. <code>as.factor()</co
 <pre class="r"><code># sample with missing values
 device &lt;- sample(c(&quot;Desktop&quot;, &quot;Mobile&quot;, &quot;Tablet&quot;, NA), size = 25, replace = TRUE)
 device</code></pre>
-<pre><code>##  [1] &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Desktop&quot; NA       
-##  [8] &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Desktop&quot; &quot;Mobile&quot;  NA       
-## [15] &quot;Desktop&quot; NA        NA        NA        &quot;Desktop&quot; &quot;Mobile&quot;  NA       
-## [22] &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot; &quot;Desktop&quot;</code></pre>
+<pre><code>##  [1] &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Tablet&quot;  NA        &quot;Mobile&quot;  NA        &quot;Desktop&quot;
+##  [8] &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Desktop&quot; &quot;Desktop&quot; &quot;Mobile&quot; 
+## [15] NA        &quot;Desktop&quot; &quot;Mobile&quot;  &quot;Tablet&quot;  &quot;Mobile&quot;  &quot;Mobile&quot;  &quot;Tablet&quot; 
+## [22] NA        &quot;Desktop&quot; &quot;Tablet&quot;  &quot;Mobile&quot;</code></pre>
 <pre class="r"><code># store as categorical data
 factor(device)</code></pre>
-<pre><code>##  [1] Mobile  Tablet  Tablet  Mobile  Mobile  Desktop &lt;NA&gt;    Desktop Mobile 
-## [10] Desktop Mobile  Desktop Mobile  &lt;NA&gt;    Desktop &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
-## [19] Desktop Mobile  &lt;NA&gt;    Desktop Desktop Desktop Desktop
+<pre><code>##  [1] Desktop Tablet  Tablet  &lt;NA&gt;    Mobile  &lt;NA&gt;    Desktop Desktop Tablet 
+## [10] Mobile  Tablet  Desktop Desktop Mobile  &lt;NA&gt;    Desktop Mobile  Tablet 
+## [19] Mobile  Mobile  Tablet  &lt;NA&gt;    Desktop Tablet  Mobile 
 ## Levels: Desktop Mobile Tablet</code></pre>
 <p><code>NA</code> is not shown as one of the levels. Why does this happen? By default, it will ignore them. If you look
 at the arguments of the <code>factor()</code> function, the <code>exclude</code> argument is set to <code>NA</code> by default i.e. <code>NA</code> is excluded automatically. What should we do to ensure that <code>NA</code> is also treated as a level? In order to treat <code>NA</code> as a level, set the <code>exclude</code> argument to <code>NULL</code>.</p>
 <pre class="r"><code>factor(device, exclude = NULL)</code></pre>
-<pre><code>##  [1] Mobile  Tablet  Tablet  Mobile  Mobile  Desktop &lt;NA&gt;    Desktop Mobile 
-## [10] Desktop Mobile  Desktop Mobile  &lt;NA&gt;    Desktop &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
-## [19] Desktop Mobile  &lt;NA&gt;    Desktop Desktop Desktop Desktop
+<pre><code>##  [1] Desktop Tablet  Tablet  &lt;NA&gt;    Mobile  &lt;NA&gt;    Desktop Desktop Tablet 
+## [10] Mobile  Tablet  Desktop Desktop Mobile  &lt;NA&gt;    Desktop Mobile  Tablet 
+## [19] Mobile  Mobile  Tablet  &lt;NA&gt;    Desktop Tablet  Mobile 
 ## Levels: Desktop Mobile Tablet &lt;NA&gt;</code></pre>
 <p>As you can see, <code>NA</code> is displayed as one of the levels in the data.</p>
 </div>
@@ -457,10 +463,10 @@ at the arguments of the <code>factor()</code> function, the <code>exclude</code>
 widely used to measure a customer’s satisfaction with an organization, service or a product.</p>
 <pre class="r"><code>rating &lt;- sample(c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;), size = 25, replace = TRUE)
 rating</code></pre>
-<pre><code>##  [1] &quot;Like&quot;    &quot;Dislike&quot; &quot;Like&quot;    &quot;Like&quot;    &quot;Like&quot;    &quot;Neutral&quot; &quot;Dislike&quot;
-##  [8] &quot;Dislike&quot; &quot;Like&quot;    &quot;Neutral&quot; &quot;Neutral&quot; &quot;Dislike&quot; &quot;Neutral&quot; &quot;Neutral&quot;
-## [15] &quot;Like&quot;    &quot;Dislike&quot; &quot;Neutral&quot; &quot;Neutral&quot; &quot;Dislike&quot; &quot;Like&quot;    &quot;Neutral&quot;
-## [22] &quot;Dislike&quot; &quot;Neutral&quot; &quot;Like&quot;    &quot;Like&quot;</code></pre>
+<pre><code>##  [1] &quot;Like&quot;    &quot;Dislike&quot; &quot;Neutral&quot; &quot;Dislike&quot; &quot;Neutral&quot; &quot;Like&quot;    &quot;Neutral&quot;
+##  [8] &quot;Dislike&quot; &quot;Dislike&quot; &quot;Dislike&quot; &quot;Dislike&quot; &quot;Neutral&quot; &quot;Dislike&quot; &quot;Neutral&quot;
+## [15] &quot;Dislike&quot; &quot;Dislike&quot; &quot;Like&quot;    &quot;Neutral&quot; &quot;Dislike&quot; &quot;Neutral&quot; &quot;Like&quot;   
+## [22] &quot;Neutral&quot; &quot;Dislike&quot; &quot;Like&quot;    &quot;Dislike&quot;</code></pre>
 <p>It consists of three values Dislike, Neutral &amp; Like in that order. You can see that there is an intrinsic order here. Like is better than neutral which in turn is better than dislike. While we can order them, we can’t quantify the difference between them. We can’t say neutral is so many times better than dislike.</p>
 <p><strong>Membership Testing</strong></p>
 <p>As we did earlier, let us check if the data is ordered using the membership function <code>is.ordered()</code>.</p>
@@ -468,15 +474,15 @@ rating</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>R returns <code>FALSE</code> as the variable <code>rating</code> is not ordered. Let us use <code>as.ordered()</code> to coerce it into an ordered factor.</p>
 <pre class="r"><code>as.ordered(rating)</code></pre>
-<pre><code>##  [1] Like    Dislike Like    Like    Like    Neutral Dislike Dislike Like   
-## [10] Neutral Neutral Dislike Neutral Neutral Like    Dislike Neutral Neutral
-## [19] Dislike Like    Neutral Dislike Neutral Like    Like   
+<pre><code>##  [1] Like    Dislike Neutral Dislike Neutral Like    Neutral Dislike Dislike
+## [10] Dislike Dislike Neutral Dislike Neutral Dislike Dislike Like    Neutral
+## [19] Dislike Neutral Like    Neutral Dislike Like    Dislike
 ## Levels: Dislike &lt; Like &lt; Neutral</code></pre>
 <p>Look at the last line where the levels are displayed. In case of ordered factors, you will see a <code>&lt;</code> between the labels. This is used to indicate the order of the levels. Now <code>rating</code> is both an ordered but the order of the levels is not correct. It should be <code>Dislike &lt; Neutral &lt; Like</code> but is displayed in order of appearance in the data. Let us use the <code>factor()</code> function since we need more control over how the levels are ranked and set the <code>ordered</code> argument to <code>TRUE</code>.</p>
 <pre class="r"><code>factor(rating, ordered = TRUE)</code></pre>
-<pre><code>##  [1] Like    Dislike Like    Like    Like    Neutral Dislike Dislike Like   
-## [10] Neutral Neutral Dislike Neutral Neutral Like    Dislike Neutral Neutral
-## [19] Dislike Like    Neutral Dislike Neutral Like    Like   
+<pre><code>##  [1] Like    Dislike Neutral Dislike Neutral Like    Neutral Dislike Dislike
+## [10] Dislike Dislike Neutral Dislike Neutral Dislike Dislike Like    Neutral
+## [19] Dislike Neutral Like    Neutral Dislike Like    Dislike
 ## Levels: Dislike &lt; Like &lt; Neutral</code></pre>
 <p>The ranking of the levels has not changed and is still the same. Why is this happening? If you observe carefully, the ranking follows the alphabetical order (<strong>D</strong>esktop, <strong>M</strong>obile, <strong>T</strong>able). The <code>factor()</code> function uses the same order for the levels.</p>
 </div>
@@ -484,15 +490,15 @@ rating</code></pre>
 <h3>Modify Order of Levels</h3>
 <p>To change the order/ranking of the levels, we need to specify it using the <code>levels</code> argument. Let us do that in the next example.</p>
 <pre class="r"><code>factor(rating, levels = c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;), ordered = TRUE)</code></pre>
-<pre><code>##  [1] Like    Dislike Like    Like    Like    Neutral Dislike Dislike Like   
-## [10] Neutral Neutral Dislike Neutral Neutral Like    Dislike Neutral Neutral
-## [19] Dislike Like    Neutral Dislike Neutral Like    Like   
+<pre><code>##  [1] Like    Dislike Neutral Dislike Neutral Like    Neutral Dislike Dislike
+## [10] Dislike Dislike Neutral Dislike Neutral Dislike Dislike Like    Neutral
+## [19] Dislike Neutral Like    Neutral Dislike Like    Dislike
 ## Levels: Dislike &lt; Neutral &lt; Like</code></pre>
 <p>Now, you can see that the levels are ranked correctly. The <code>ordered()</code> function can also be used to create ordered factors. Let us recreate the previous example using the <code>ordered()</code> function.</p>
 <pre class="r"><code>ordered(rating, levels = c(&quot;Dislike&quot;, &quot;Neutral&quot;, &quot;Like&quot;))</code></pre>
-<pre><code>##  [1] Like    Dislike Like    Like    Like    Neutral Dislike Dislike Like   
-## [10] Neutral Neutral Dislike Neutral Neutral Like    Dislike Neutral Neutral
-## [19] Dislike Like    Neutral Dislike Neutral Like    Like   
+<pre><code>##  [1] Like    Dislike Neutral Dislike Neutral Like    Neutral Dislike Dislike
+## [10] Dislike Dislike Neutral Dislike Neutral Dislike Dislike Like    Neutral
+## [19] Dislike Neutral Like    Neutral Dislike Like    Dislike
 ## Levels: Dislike &lt; Neutral &lt; Like</code></pre>
 <p>You can specify levels, modify labels and handle missing values using the <code>ordered()</code> function as well.</p>
 </div>

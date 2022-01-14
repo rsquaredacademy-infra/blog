@@ -32,9 +32,13 @@ library(plotrix)
 knitr::include_graphics("/img/forcats-part-3.png")
 ```
 
-This is part 3 of a series on "Handling Categorical Data in R where we are learning to **read**, **store**, **summarize**, **visualize** & **manipulate** categorical data.." 
+This is part 3 of a series on "Handling Categorical Data in R" where we are learning to **read**, **store**, **summarize**, **reshape** & **visualize** categorical data. 
 
-In [part 1](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/) and [part 2](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/) of this series, we understood how R stores categorical data using **factor** and got an overview of tables in R while learning to summarize data.
+Below are the links to the other articles of this series:
+
+- [Part 1 - Introduction to Factor](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-1/)
+- [Part 2 - Summarize Categorical Data](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-2/)
+- [Part 4 - Visualize Categorical Data](https://blog.rsquaredacademy.com/handling-categorical-data-in-r-part-4/) 
 
 In this article, we will learn to manipulate/reshape categorical data by changing the value and order of levels/categories. 
 
