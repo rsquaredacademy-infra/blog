@@ -1,0 +1,384 @@
+---
+title: "Introducing yahoofinancer"
+author: Aravind Hebbali
+twitterImg: /img/github-yfr.png
+description: "Fetch data from Yahoo Finance API"
+date: '2022-11-04'
+slug: introducing-yahoofinancer-fetch-data-from-yahoo-finance-api
+categories:
+  - packages
+tags:
+  - yahoo
+  - finance
+  - stock
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libs, echo=FALSE, message=FALSE, warning=FALSE}
+options(kableExtra.html.bsTable = TRUE)
+library(knitr)
+library(yahoofinancer)
+library(purrr)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="70%"}
+knitr::include_graphics("/img/github-yfr.png")
+```
+
+We are excited to announce the [yahoofinancer](https://yahoofinancer.rsquaredacademy.com) package. The yahoofinancer R package allows the retrieval of nearly all data visible via the Yahoo Finance front-end and aims to reduce the pre-processing steps needed in analyzing such data.
+
+yahoofinancer is inspired by and a port of the Python package [yahooquery](https://yahooquery.dpguthrie.com/). yahoofinancer is **not** affiliated, endorsed, or vetted by Yahoo, Inc. It’s an open-source tool that uses Yahoo’s publicly available APIs, and is intended for research and educational purposes.
+
+With yahoofinancer, you can fetch the following data related to:
+
+- company
+    - quote
+    - summary
+    - statistics
+    - historical data
+    - profile
+    - financials
+    - analysis
+    - options
+- index
+    - summary
+    - historical data
+- currency
+- market summary
+
+## Installation
+
+```{r cran-install, eval=FALSE}
+# Install release version from CRAN
+install.packages("yahoofinancer")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/yahoofinancer")
+```
+
+## Usage
+
+```{r load_yfr, echo=FALSE, message=FALSE, warning=FALSE}
+library(yahoofinancer)
+library(purrr)
+```
+
+## Ticker
+
+The `Ticker` class is the main workhorse of the package and through it we can 
+obtain most of the data related to a company.
+
+#### Instantiate Ticker Class
+
+We can instantiate the `Ticker` class by passing the company's ticker symbol. 
+For instance, to get data for [Apple Inc.](https://finance.yahoo.com/quote/AAPL/), 
+pass `aapl` as the first argument to the `Ticker` class.
+
+```{r ticker}
+aapl <- Ticker$new('aapl')
+```
+
+We can use the `validate()` function to validate a symbol.
+
+#### Regular Market Price
+
+Let us begin by getting the real time price of [Apple Inc.](https://finance.yahoo.com/quote/AAPL/).
+
+```{r quote}
+aapl$quote$regularMarketPrice
+```
+
+#### Summary 
+
+To retrieve data from the [Summary](https://finance.yahoo.com/quote/AAPL/) tab, use the `summary_detail` property on the `Ticker` class.
+
+```{r summary_tab}
+aapl$summary_detail
+```
+
+#### Statistics 
+
+If you are looking to retrieve data from the [Statistics](https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL) tab, use the following properties:
+
+##### Key Statistics
+
+The `key_stats` property returns KPIs for a given symbol. It is available raw 
+
+```{r statistics_2}
+head(map(aapl$key_stats, 'raw'))
+```
+
+or formatted
+
+```{r statistics_3}
+head(map(aapl$key_stats, 'fmt'))
+```
+
+The `valuation_measures` property retrieves valuation measures for most recent 
+four quarters.
+
+```{r statistics_4}
+aapl$valuation_measures
+```
+
+#### Historical Data
+
+Use the `get_history()` method to retrieve historical pricing data for a given 
+symbol. By default, it returns YTD data. 
+
+```{r historical_1}
+head(aapl$get_history())
+```
+
+To get data from a specific date upto the current date, use the `start` 
+argument to supply the initial date. The time between data points can be 
+specified using the `interval` argument. 
+
+```{r historical_2}
+aapl$get_history(start = '2022-10-20', interval = '1d')
+```
+
+To retrieve data between two specific dates, use both the `start` and `end` 
+argument. The dates should be either `String` or `Date` object in `yyyy-mm-dd` 
+format.
+
+```{r historical_3}
+aapl$get_history(start = '2022-10-01', end = '2022-10-14', interval = '1d')
+```
+
+The `period` arguments allows the user to retrieve data for specific length of time.
+
+```{r historical_4}
+aapl$get_history(period = '1mo', interval = '1d')
+```
+
+Please view the [documentation](https://yahoofinancer.rsquaredacademy.com/reference/ticker-class#arguments-5) to see the valid values for `interval` and `period`.
+
+#### Profile 
+
+Retrieve data from the [Profile](https://finance.yahoo.com/quote/AAPL/profile?p=AAPL) 
+tab. The `summary_profile` property returns the business summary for a given
+symbol.
+
+```{r profile_1}
+aapl$summary_profile
+```
+
+The `company_officers` property retrieves top executives for given symbol and 
+their total pay package.
+
+```{r profile_2}
+aapl$company_officers
+```
+
+#### Financials 
+
+The `get_balance_sheet()` method retrieves balance sheet data for most recent 
+four quarters or most recent four years.
+
+```{r financial_1}
+aapl$get_balance_sheet('annual')
+```
+
+The `get_income_statement()` method retrieves income statement data for most 
+recent four quarters or most recent four years.
+
+```{r financial_2}
+aapl$get_income_statement('annual')
+```
+
+The `get_cash_flow()` method retrieves cash flow data for most recent four 
+quarters or most recent four years.
+
+```{r financial_3}
+aapl$get_cash_flow('annual')
+```
+
+#### Analysis 
+
+##### Earnings Estimate
+
+```{r analysis_1}
+aapl$earnings_trend$earnings_estimate
+```
+
+##### Revenue Estimate
+
+```{r analysis_2}
+aapl$earnings_trend$revenue_estimate
+```
+
+##### Earnings History
+
+```{r analysis_3}
+aapl$earnings_history
+```
+
+##### EPS Trend
+
+```{r analysis_4}
+aapl$earnings_trend$eps_trend
+```
+
+##### EPS Revision
+
+```{r analysis_5}
+aapl$earnings_trend$eps_revision
+```
+
+##### Growth Estimates
+
+```{r analysis_6}
+aapl$earnings_trend$growth
+```
+
+#### Options 
+
+##### Option Chain
+
+```{r options_1}
+head(aapl$option_chain)
+```
+
+##### Option Expiration Dates
+
+```{r options_2}
+aapl$option_expiration_dates
+```
+
+##### Option Strikes
+
+```{r options_3}
+aapl$option_strikes
+```
+
+#### Holding Pattern
+
+Data showing breakdown of owners of given symbol(s), insiders, institutions, etc.
+
+```{r holders_1}
+aapl$major_holders
+```
+
+Top 10 owners of a given symbol.
+
+```{r holders_2}
+aapl$institution_ownership
+```
+
+#### Others
+
+Data related to historical recommendations (buy, hold, sell) for a given symbol.
+
+```{r others_1}
+aapl$recommendation_trend
+```
+
+Technical indicators for given symbol.
+
+```{r others_2}
+aapl$technical_insights$secReports[[1]]
+```
+
+Symbols displayed in the **People Also Watch** sidebar.
+
+```{r others_3}
+aapl$recommendations
+```
+
+## Indices
+
+Use the `Index` class for getting all data related to indices from Yahoo Finance API.
+
+#### Instantiate Index Class
+
+We can instantiate the `Index` class by passing the index symbol. For instance, 
+to get data for [Nifty 50](https://finance.yahoo.com/quote/%5ENSEI?p=^NSEI), 
+pass `^NSEI` as the first argument to the `Index` class.
+
+```{r index}
+nifty <- Index$new('^NSEI')
+```
+
+#### Summary 
+
+Use the `summary_detail` property to retrieve data from the [Summary](https://finance.yahoo.com/quote/%5ENSEI?p=^NSEI) tab.
+
+```{r index_summary}
+nifty$summary_detail
+```
+
+#### Historical Data 
+
+Use the `get_history()` method to retrieve historical data for a given 
+index. By default, it returns YTD data. 
+
+```{r index_history_1}
+nifty$get_history(start = '2022-10-20', interval = '1d')
+```
+
+To get data from a specific date upto the current date, use the `start` 
+argument to supply the initial date. The time between data points can be 
+specified using the `interval` argument. 
+
+To retrieve data between two specific dates, use both the `start` and `end` 
+argument. The dates should be either `String` or `Date` object in `yyyy-mm-dd` 
+format.
+
+```{r index_history_2}
+nifty$get_history(start = '2022-10-01', end = '2022-10-14', interval = '1d')
+```
+
+The `period` arguments allows the user to retrieve data for specific length of time.
+
+```{r index_history_3}
+nifty$get_history(period = '1mo', interval = '1d')
+```
+
+Please view the [documentation](https://yahoofinancer.rsquaredacademy.com/reference/index-class#arguments-2) to see the valid values for `interval` and `period`.
+
+## Currency
+
+#### Summary
+
+`currency_summary()` retrieve information available via the Summary tab in 
+Yahoo Finance.. View the [documentation](https://yahoofinancer.rsquaredacademy.com/reference/currency_summary.html) to learn more.
+
+```{r currency_summary}
+currency_summary(from = "USD", to = "INR")
+```
+
+#### Converter 
+
+`currency_converter()` retrieve current conversion rate between two currencies as 
+well as historical rates. 
+
+```{r currency_convert_1}
+currency_converter('GBP', 'USD', '2022-07-01', '2022-07-10')
+```
+
+The time between data points can be specified using the `interval` argument. 
+The `period` arguments allows the user to retrieve data for specific length of time.
+
+```{r currency_convert_2}
+currency_converter('GBP', 'USD', period = '1mo', interval = '1d')
+```
+
+View the [documentation](https://yahoofinancer.rsquaredacademy.com/reference/currency_converter.html) to learn more.
+
+
+## Learning More
+
+- [Documentation](https://yahoofinancer.rsquaredacademy.com)
+- [GitHub](https://github.com/rsquaredacademy/yahoofinancer)
+
+## Feedback
+
+All feedback is welcome. Issues (bugs and feature requests) can be posted to 
+[github tracker](https://github.com/rsquaredacademy/yahoofinancer/issues).
+For help with code or other related questions, feel free to reach out to us
+at pkgs@rsquaredacademy.com.

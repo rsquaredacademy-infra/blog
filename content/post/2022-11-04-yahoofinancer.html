@@ -1,0 +1,1128 @@
+---
+title: "Introducing yahoofinancer"
+author: Aravind Hebbali
+twitterImg: /img/github-yfr.png
+description: "Fetch data from Yahoo Finance API"
+date: '2022-11-04'
+slug: introducing-yahoofinancer-fetch-data-from-yahoo-finance-api
+categories:
+  - packages
+tags:
+  - yahoo
+  - finance
+  - stock
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><img src="/img/github-yfr.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>We are excited to announce the <a href="https://yahoofinancer.rsquaredacademy.com">yahoofinancer</a> package. The yahoofinancer R package allows the retrieval of nearly all data visible via the Yahoo Finance front-end and aims to reduce the pre-processing steps needed in analyzing such data.</p>
+<p>yahoofinancer is inspired by and a port of the Python package <a href="https://yahooquery.dpguthrie.com/">yahooquery</a>. yahoofinancer is <strong>not</strong> affiliated, endorsed, or vetted by Yahoo, Inc. It’s an open-source tool that uses Yahoo’s publicly available APIs, and is intended for research and educational purposes.</p>
+<p>With yahoofinancer, you can fetch the following data related to:</p>
+<ul>
+<li>company
+<ul>
+<li>quote</li>
+<li>summary</li>
+<li>statistics</li>
+<li>historical data</li>
+<li>profile</li>
+<li>financials</li>
+<li>analysis</li>
+<li>options</li>
+</ul></li>
+<li>index
+<ul>
+<li>summary</li>
+<li>historical data</li>
+</ul></li>
+<li>currency</li>
+<li>market summary</li>
+</ul>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;yahoofinancer&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/yahoofinancer&quot;)</code></pre>
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+</div>
+<div id="ticker" class="section level2">
+<h2>Ticker</h2>
+<p>The <code>Ticker</code> class is the main workhorse of the package and through it we can
+obtain most of the data related to a company.</p>
+<div id="instantiate-ticker-class" class="section level4">
+<h4>Instantiate Ticker Class</h4>
+<p>We can instantiate the <code>Ticker</code> class by passing the company’s ticker symbol.
+For instance, to get data for <a href="https://finance.yahoo.com/quote/AAPL/">Apple Inc.</a>,
+pass <code>aapl</code> as the first argument to the <code>Ticker</code> class.</p>
+<pre class="r"><code>aapl &lt;- Ticker$new(&#39;aapl&#39;)</code></pre>
+<p>We can use the <code>validate()</code> function to validate a symbol.</p>
+</div>
+<div id="regular-market-price" class="section level4">
+<h4>Regular Market Price</h4>
+<p>Let us begin by getting the real time price of <a href="https://finance.yahoo.com/quote/AAPL/">Apple Inc.</a>.</p>
+<pre class="r"><code>aapl$quote$regularMarketPrice</code></pre>
+<pre><code>## [1] 138.88</code></pre>
+</div>
+<div id="summary" class="section level4">
+<h4>Summary</h4>
+<p>To retrieve data from the <a href="https://finance.yahoo.com/quote/AAPL/">Summary</a> tab, use the <code>summary_detail</code> property on the <code>Ticker</code> class.</p>
+<pre class="r"><code>aapl$summary_detail</code></pre>
+<pre><code>## $maxAge
+## [1] 1
+## 
+## $priceHint
+## [1] 2
+## 
+## $previousClose
+## [1] 145.03
+## 
+## $open
+## [1] 142.06
+## 
+## $dayLow
+## [1] 138.76
+## 
+## $dayHigh
+## [1] 142.795
+## 
+## $regularMarketPreviousClose
+## [1] 145.03
+## 
+## $regularMarketOpen
+## [1] 142.06
+## 
+## $regularMarketDayLow
+## [1] 138.76
+## 
+## $regularMarketDayHigh
+## [1] 142.795
+## 
+## $dividendRate
+## [1] 0.92
+## 
+## $dividendYield
+## [1] 0.0063
+## 
+## $exDividendDate
+## [1] 1667520000
+## 
+## $payoutRatio
+## [1] 0.1473
+## 
+## $fiveYearAvgDividendYield
+## [1] 1
+## 
+## $beta
+## [1] 1.246644
+## 
+## $trailingPE
+## [1] 23.74017
+## 
+## $forwardPE
+## [1] 20.36364
+## 
+## $volume
+## [1] 97918516
+## 
+## $regularMarketVolume
+## [1] 97918516
+## 
+## $averageVolume
+## [1] 85440921
+## 
+## $averageVolume10days
+## [1] 96881500
+## 
+## $averageDailyVolume10Day
+## [1] 96881500
+## 
+## $bid
+## [1] 0
+## 
+## $ask
+## [1] 138.63
+## 
+## $bidSize
+## [1] 800
+## 
+## $askSize
+## [1] 1300
+## 
+## $marketCap
+## [1] 2.307158e+12
+## 
+## $fiftyTwoWeekLow
+## [1] 129.04
+## 
+## $fiftyTwoWeekHigh
+## [1] 182.94
+## 
+## $priceToSalesTrailing12Months
+## [1] 5.85086
+## 
+## $fiftyDayAverage
+## [1] 150.0812
+## 
+## $twoHundredDayAverage
+## [1] 156.2758
+## 
+## $trailingAnnualDividendRate
+## [1] 0.9
+## 
+## $trailingAnnualDividendYield
+## [1] 0.006205612
+## 
+## $currency
+## [1] &quot;USD&quot;
+## 
+## $tradeable
+## [1] FALSE</code></pre>
+</div>
+<div id="statistics" class="section level4">
+<h4>Statistics</h4>
+<p>If you are looking to retrieve data from the <a href="https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL">Statistics</a> tab, use the following properties:</p>
+<div id="key-statistics" class="section level5">
+<h5>Key Statistics</h5>
+<p>The <code>key_stats</code> property returns KPIs for a given symbol. It is available raw</p>
+<pre class="r"><code>head(map(aapl$key_stats, &#39;raw&#39;))</code></pre>
+<pre><code>## $maxAge
+## NULL
+## 
+## $priceHint
+## [1] 2
+## 
+## $enterpriseValue
+## [1] 2.293495e+12
+## 
+## $forwardPE
+## [1] 20.36364
+## 
+## $profitMargins
+## [1] 0.2531
+## 
+## $floatShares
+## [1] 15891255395</code></pre>
+<p>or formatted</p>
+<pre class="r"><code>head(map(aapl$key_stats, &#39;fmt&#39;))</code></pre>
+<pre><code>## $maxAge
+## NULL
+## 
+## $priceHint
+## [1] &quot;2&quot;
+## 
+## $enterpriseValue
+## [1] &quot;2.29T&quot;
+## 
+## $forwardPE
+## [1] &quot;20.36&quot;
+## 
+## $profitMargins
+## [1] &quot;25.31%&quot;
+## 
+## $floatShares
+## [1] &quot;15.89B&quot;</code></pre>
+<p>The <code>valuation_measures</code> property retrieves valuation measures for most recent
+four quarters.</p>
+<pre class="r"><code>aapl$valuation_measures</code></pre>
+<pre><code>##         date enterprise_value enterprise_value_ebitda_ratio
+## 1 2021-09-30     2.384485e+12                  2.384485e+12
+## 2 2021-12-31     2.963725e+12                  2.963725e+12
+## 3 2022-03-31     2.888888e+12                  2.888888e+12
+## 4 2022-06-30     2.269030e+12                  2.269030e+12
+## 5 2022-09-30     2.274841e+12                  2.274841e+12
+##   enterprise_value_revenue_ratio forward_pe_ratio   market_cap     pb_ratio
+## 1                   2.384485e+12     2.384485e+12 2.384485e+12 2.384485e+12
+## 2                   2.963725e+12     2.963725e+12 2.963725e+12 2.963725e+12
+## 3                   2.888888e+12     2.888888e+12 2.888888e+12 2.888888e+12
+## 4                   2.269030e+12     2.269030e+12 2.269030e+12 2.269030e+12
+## 5                   2.274841e+12     2.274841e+12 2.274841e+12 2.274841e+12
+##       pe_ratio    peg_ratio     ps_ratio
+## 1 2.384485e+12 2.384485e+12 2.384485e+12
+## 2 2.963725e+12 2.963725e+12 2.963725e+12
+## 3 2.888888e+12 2.888888e+12 2.888888e+12
+## 4 2.269030e+12 2.269030e+12 2.269030e+12
+## 5 2.274841e+12 2.274841e+12 2.274841e+12</code></pre>
+</div>
+</div>
+<div id="historical-data" class="section level4">
+<h4>Historical Data</h4>
+<p>Use the <code>get_history()</code> method to retrieve historical pricing data for a given
+symbol. By default, it returns YTD data.</p>
+<pre class="r"><code>head(aapl$get_history())</code></pre>
+<pre><code>##                  date    volume   high    low   open  close adj_close
+## 1 2022-01-03 14:30:00 104487900 182.88 177.71 177.83 182.01  181.2599
+## 2 2022-01-04 14:30:00  99310400 182.94 179.12 182.63 179.70  178.9594
+## 3 2022-01-05 14:30:00  94537600 180.17 174.64 179.61 174.92  174.1992
+## 4 2022-01-06 14:30:00  96904000 175.30 171.64 172.70 172.00  171.2912
+## 5 2022-01-07 14:30:00  86709100 174.14 171.03 172.89 172.17  171.4605
+## 6 2022-01-10 14:30:00 106765600 172.50 168.17 169.08 172.19  171.4804</code></pre>
+<p>To get data from a specific date upto the current date, use the <code>start</code>
+argument to supply the initial date. The time between data points can be
+specified using the <code>interval</code> argument.</p>
+<pre class="r"><code>aapl$get_history(start = &#39;2022-10-20&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                   date    volume   high    low   open  close adj_close
+## 1  2022-10-20 13:30:00  64522000 145.89 142.65 143.02 143.39    143.39
+## 2  2022-10-21 13:30:00  86464700 147.85 142.65 142.87 147.27    147.27
+## 3  2022-10-24 13:30:00  75981900 150.23 146.00 147.19 149.45    149.45
+## 4  2022-10-25 13:30:00  74732300 152.49 149.36 150.09 152.34    152.34
+## 5  2022-10-26 13:30:00  88194300 151.99 148.04 150.96 149.35    149.35
+## 6  2022-10-27 13:30:00 109180200 149.05 144.13 148.07 144.80    144.80
+## 7  2022-10-28 13:30:00 164762400 157.50 147.82 148.20 155.74    155.74
+## 8  2022-10-31 13:30:00  97943200 154.24 151.92 153.16 153.34    153.34
+## 9  2022-11-01 13:30:00  80379300 155.45 149.13 155.08 150.65    150.65
+## 10 2022-11-02 13:30:00  93604600 152.17 145.00 148.95 145.03    145.03
+## 11 2022-11-03 13:30:00  97572100 142.80 138.75 142.06 138.88    138.88</code></pre>
+<p>To retrieve data between two specific dates, use both the <code>start</code> and <code>end</code>
+argument. The dates should be either <code>String</code> or <code>Date</code> object in <code>yyyy-mm-dd</code>
+format.</p>
+<pre class="r"><code>aapl$get_history(start = &#39;2022-10-01&#39;, end = &#39;2022-10-14&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                  date    volume   high    low   open  close adj_close
+## 1 2022-10-03 13:30:00 114311700 143.07 137.69 138.21 142.45    142.45
+## 2 2022-10-04 13:30:00  87830100 146.22 144.26 145.03 146.10    146.10
+## 3 2022-10-05 13:30:00  79471000 147.38 143.01 144.07 146.40    146.40
+## 4 2022-10-06 13:30:00  68402200 147.54 145.22 145.81 145.43    145.43
+## 5 2022-10-07 13:30:00  85859100 143.10 139.45 142.54 140.09    140.09
+## 6 2022-10-10 13:30:00  74899000 141.89 138.57 140.42 140.42    140.42
+## 7 2022-10-11 13:30:00  77033700 141.35 138.22 139.90 138.98    138.98
+## 8 2022-10-12 13:30:00  70433700 140.36 138.16 139.13 138.34    138.34
+## 9 2022-10-13 13:30:00 113224000 143.59 134.37 134.99 142.99    142.99</code></pre>
+<p>The <code>period</code> arguments allows the user to retrieve data for specific length of time.</p>
+<pre class="r"><code>aapl$get_history(period = &#39;1mo&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                   date    volume   high    low   open  close adj_close
+## 1  2022-10-04 13:30:00  87830100 146.22 144.26 145.03 146.10    146.10
+## 2  2022-10-05 13:30:00  79471000 147.38 143.01 144.07 146.40    146.40
+## 3  2022-10-06 13:30:00  68402200 147.54 145.22 145.81 145.43    145.43
+## 4  2022-10-07 13:30:00  85859100 143.10 139.45 142.54 140.09    140.09
+## 5  2022-10-10 13:30:00  74899000 141.89 138.57 140.42 140.42    140.42
+## 6  2022-10-11 13:30:00  77033700 141.35 138.22 139.90 138.98    138.98
+## 7  2022-10-12 13:30:00  70433700 140.36 138.16 139.13 138.34    138.34
+## 8  2022-10-13 13:30:00 113224000 143.59 134.37 134.99 142.99    142.99
+## 9  2022-10-14 13:30:00  88512300 144.52 138.19 144.31 138.38    138.38
+## 10 2022-10-17 13:30:00  85250900 142.90 140.27 141.07 142.41    142.41
+## 11 2022-10-18 13:30:00  99136600 146.70 140.61 145.49 143.75    143.75
+## 12 2022-10-19 13:30:00  61758300 144.95 141.50 141.69 143.86    143.86
+## 13 2022-10-20 13:30:00  64522000 145.89 142.65 143.02 143.39    143.39
+## 14 2022-10-21 13:30:00  86464700 147.85 142.65 142.87 147.27    147.27
+## 15 2022-10-24 13:30:00  75981900 150.23 146.00 147.19 149.45    149.45
+## 16 2022-10-25 13:30:00  74732300 152.49 149.36 150.09 152.34    152.34
+## 17 2022-10-26 13:30:00  88194300 151.99 148.04 150.96 149.35    149.35
+## 18 2022-10-27 13:30:00 109180200 149.05 144.13 148.07 144.80    144.80
+## 19 2022-10-28 13:30:00 164762400 157.50 147.82 148.20 155.74    155.74
+## 20 2022-10-31 13:30:00  97943200 154.24 151.92 153.16 153.34    153.34
+## 21 2022-11-01 13:30:00  80379300 155.45 149.13 155.08 150.65    150.65
+## 22 2022-11-02 13:30:00  93604600 152.17 145.00 148.95 145.03    145.03
+## 23 2022-11-03 13:30:00  97572100 142.80 138.75 142.06 138.88    138.88</code></pre>
+<p>Please view the <a href="https://yahoofinancer.rsquaredacademy.com/reference/ticker-class#arguments-5">documentation</a> to see the valid values for <code>interval</code> and <code>period</code>.</p>
+</div>
+<div id="profile" class="section level4">
+<h4>Profile</h4>
+<p>Retrieve data from the <a href="https://finance.yahoo.com/quote/AAPL/profile?p=AAPL">Profile</a>
+tab. The <code>summary_profile</code> property returns the business summary for a given
+symbol.</p>
+<pre class="r"><code>aapl$summary_profile</code></pre>
+<pre><code>## $address1
+## [1] &quot;One Apple Park Way&quot;
+## 
+## $city
+## [1] &quot;Cupertino&quot;
+## 
+## $state
+## [1] &quot;CA&quot;
+## 
+## $zip
+## [1] &quot;95014&quot;
+## 
+## $country
+## [1] &quot;United States&quot;
+## 
+## $phone
+## [1] &quot;408 996 1010&quot;
+## 
+## $website
+## [1] &quot;https://www.apple.com&quot;
+## 
+## $industry
+## [1] &quot;Consumer Electronics&quot;
+## 
+## $sector
+## [1] &quot;Technology&quot;
+## 
+## $longBusinessSummary
+## [1] &quot;Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services. In addition, the company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, and HomePod. Further, it provides AppleCare support and cloud services store services; and operates various platforms, including the App Store that allow customers to discover and download applications and digital content, such as books, music, video, games, and podcasts. Additionally, the company offers various services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV+, which offers exclusive original content; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers, wholesalers, retailers, and resellers. Apple Inc. was incorporated in 1977 and is headquartered in Cupertino, California.&quot;
+## 
+## $fullTimeEmployees
+## [1] 164000
+## 
+## $companyOfficers
+## list()
+## 
+## $maxAge
+## [1] 86400</code></pre>
+<p>The <code>company_officers</code> property retrieves top executives for given symbol and
+their total pay package.</p>
+<pre class="r"><code>aapl$company_officers</code></pre>
+<pre><code>##                       name age                                         title
+## 1      Mr. Timothy D. Cook  60                                CEO &amp; Director
+## 2        Mr. Luca  Maestri  57                                  CFO &amp; Sr. VP
+## 3  Mr. Jeffrey E. Williams  57                       Chief Operating Officer
+## 4   Ms. Katherine L. Adams  57                   Sr. VP, Gen. Counsel &amp; Sec.
+## 5     Ms. Deirdre  O&#39;Brien  54                     Sr. VP of People &amp; Retail
+## 6         Mr. Chris  Kondo  NA              Sr. Director of Corp. Accounting
+## 7        Mr. James  Wilson  NA                      Chief Technology Officer
+## 8          Ms. Mary  Demby  NA                     Chief Information Officer
+## 9        Ms. Nancy  Paxton  NA Sr. Director of Investor Relations &amp; Treasury
+## 10       Mr. Greg  Joswiak  NA                 Sr. VP of Worldwide Marketing
+##    year_born fiscal_year total_pay exercised_value unexercised_value
+## 1       1961        2021  16386559               0                 0
+## 2       1964        2021   5018883               0                 0
+## 3       1964        2021   5017437               0                 0
+## 4       1964        2021   5014533               0                 0
+## 5       1967        2021   5061191               0                 0
+## 6         NA          NA        NA               0                 0
+## 7         NA          NA        NA               0                 0
+## 8         NA          NA        NA               0                 0
+## 9         NA          NA        NA               0                 0
+## 10        NA          NA        NA               0                 0</code></pre>
+</div>
+<div id="financials" class="section level4">
+<h4>Financials</h4>
+<p>The <code>get_balance_sheet()</code> method retrieves balance sheet data for most recent
+four quarters or most recent four years.</p>
+<pre class="r"><code>aapl$get_balance_sheet(&#39;annual&#39;)</code></pre>
+<pre><code>## # A tibble: 4 x 24
+##   end_date          cash short~1 net_r~2 inven~3 other~4 total~5 long_~6 prope~7
+##   &lt;date&gt;           &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 2022-09-24 23646000000 2.47e10 6.09e10  4.95e9 2.12e10 1.35e11 1.21e11 8.42e10
+## 2 2021-09-25 34940000000 2.77e10 5.15e10  6.58e9 1.41e10 1.35e11 1.28e11 4.95e10
+## 3 2020-09-26 38016000000 5.29e10 3.74e10  4.06e9 1.13e10 1.44e11 1.01e11 4.53e10
+## 4 2019-09-28 48844000000 5.17e10 4.58e10  4.11e9 1.24e10 1.63e11 1.05e11 3.74e10
+## # ... with 15 more variables: other_assets &lt;dbl&gt;, total_assets &lt;dbl&gt;,
+## #   accounts_payable &lt;dbl&gt;, short_long_term_debt &lt;dbl&gt;,
+## #   other_current_liab &lt;dbl&gt;, long_term_debt &lt;dbl&gt;, other_liab &lt;dbl&gt;,
+## #   total_current_liabilities &lt;dbl&gt;, total_liab &lt;dbl&gt;, common_stock &lt;dbl&gt;,
+## #   retained_earnings &lt;dbl&gt;, treasury_stock &lt;dbl&gt;,
+## #   other_stockholder_equity &lt;dbl&gt;, total_stockholder_equity &lt;dbl&gt;,
+## #   net_tangible_assets &lt;dbl&gt;, and abbreviated variable names ...</code></pre>
+<p>The <code>get_income_statement()</code> method retrieves income statement data for most
+recent four quarters or most recent four years.</p>
+<pre class="r"><code>aapl$get_income_statement(&#39;annual&#39;)</code></pre>
+<pre><code>## # A tibble: 4 x 16
+##   end_date   total_rev~1 cost_~2 gross~3 resea~4 selli~5 total~6 opera~7 total~8
+##   &lt;date&gt;           &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;
+## 1 2022-09-24     3.94e11 2.24e11 1.71e11 2.63e10 2.51e10 2.75e11 1.19e11 -3.34e8
+## 2 2021-09-25     3.66e11 2.13e11 1.53e11 2.19e10 2.20e10 2.57e11 1.09e11  2.58e8
+## 3 2020-09-26     2.75e11 1.70e11 1.05e11 1.88e10 1.99e10 2.08e11 6.63e10  8.03e8
+## 4 2019-09-28     2.60e11 1.62e11 9.84e10 1.62e10 1.82e10 1.96e11 6.39e10  1.81e9
+## # ... with 7 more variables: ebit &lt;dbl&gt;, interest_expense &lt;dbl&gt;,
+## #   income_before_tax &lt;dbl&gt;, income_tax_expense &lt;dbl&gt;,
+## #   net_income_from_continuing_ops &lt;dbl&gt;, net_income &lt;dbl&gt;,
+## #   net_income_applicable_to_common_shares &lt;dbl&gt;, and abbreviated variable
+## #   names 1: total_revenue, 2: cost_of_revenue, 3: gross_profit,
+## #   4: research_development, 5: selling_general_administrative,
+## #   6: total_operating_expenses, 7: operating_income, ...</code></pre>
+<p>The <code>get_cash_flow()</code> method retrieves cash flow data for most recent four
+quarters or most recent four years.</p>
+<pre class="r"><code>aapl$get_cash_flow(&#39;annual&#39;)</code></pre>
+<pre><code>## # A tibble: 4 x 20
+##   end_date   net_inc~1 depre~2 chang~3 change~4 change~5 chang~6 chang~7 total~8
+##   &lt;date&gt;         &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 2022-09-24   9.98e10 1.11e10 1.00e10 -1.82e 9  9.93e 9  1.48e9 -8.39e9 1.22e11
+## 2 2021-09-25   9.47e10 1.13e10 2.98e 9 -1.01e10  1.40e10 -2.64e9 -6.15e9 1.04e11
+## 3 2020-09-26   5.74e10 1.11e10 6.52e 9  6.92e 9 -1.98e 9 -1.27e8  8.81e8 8.07e10
+## 4 2019-09-28   5.53e10 1.25e10 5.08e 9  2.45e 8 -2.55e 9 -2.89e8 -8.96e8 6.94e10
+## # ... with 11 more variables: capital_expenditures &lt;dbl&gt;, investments &lt;dbl&gt;,
+## #   other_cashflows_from_investing_activities &lt;int&gt;,
+## #   total_cashflows_from_investing_activities &lt;dbl&gt;, dividends_paid &lt;dbl&gt;,
+## #   net_borrowings &lt;dbl&gt;, other_cashflows_from_financing_activities &lt;int&gt;,
+## #   total_cash_from_financing_activities &lt;dbl&gt;, change_in_cash &lt;dbl&gt;,
+## #   repurchase_of_stock &lt;dbl&gt;, issuance_of_stock &lt;int&gt;, and abbreviated
+## #   variable names 1: net_income, 2: depreciation, 3: change_to_netincome, ...</code></pre>
+</div>
+<div id="analysis" class="section level4">
+<h4>Analysis</h4>
+<div id="earnings-estimate" class="section level5">
+<h5>Earnings Estimate</h5>
+<pre class="r"><code>aapl$earnings_trend$earnings_estimate</code></pre>
+<pre><code>##         date period analyst avg_estimate low_estimate high_estimate
+## 1 2022-12-31     0q      27         2.08         1.93          2.20
+## 2 2023-03-31    +1q      26         1.47         1.34          1.61
+## 3 2023-09-30     0y      33         6.26         5.40          6.87
+## 4 2024-09-30    +1y      28         6.82         6.01          7.36
+## 5       &lt;NA&gt;    +5y      NA           NA           NA            NA
+## 6       &lt;NA&gt;    -5y      NA           NA           NA            NA
+##   year_ago_eps
+## 1         2.10
+## 2         1.52
+## 3         6.11
+## 4         6.26
+## 5           NA
+## 6           NA</code></pre>
+</div>
+<div id="revenue-estimate" class="section level5">
+<h5>Revenue Estimate</h5>
+<pre class="r"><code>aapl$earnings_trend$revenue_estimate</code></pre>
+<pre><code>##         date period analyst avg_estimate low_estimate high_estimate
+## 1 2022-12-31     0q      23  1.27082e+11  1.21204e+11   1.32365e+11
+## 2 2023-03-31    +1q      23  9.73035e+10  8.96080e+10   1.02950e+11
+## 3 2023-09-30     0y      32  4.07153e+11  3.86805e+11   4.19743e+11
+## 4 2024-09-30    +1y      26  4.28651e+11  4.05730e+11   4.48983e+11
+## 5       &lt;NA&gt;    +5y      NA           NA           NA            NA
+## 6       &lt;NA&gt;    -5y      NA           NA           NA            NA
+##   year_ago_revenue
+## 1               NA
+## 2               NA
+## 3      3.94328e+11
+## 4      4.07153e+11
+## 5               NA
+## 6               NA</code></pre>
+</div>
+<div id="earnings-history" class="section level5">
+<h5>Earnings History</h5>
+<pre class="r"><code>aapl$earnings_history</code></pre>
+<pre><code>##      quarter period eps_estimate eps_actual eps_difference surprise_percent
+## 1 2021-12-31    -4q         1.89       2.10           0.21            0.111
+## 2 2022-03-31    -3q         1.43       1.52           0.09            0.063
+## 3 2022-06-30    -2q         1.16       1.20           0.04            0.034
+## 4 2022-09-30    -1q         1.27       1.29           0.02            0.016</code></pre>
+</div>
+<div id="eps-trend" class="section level5">
+<h5>EPS Trend</h5>
+<pre class="r"><code>aapl$earnings_trend$eps_trend</code></pre>
+<pre><code>##         date period current seven_days_ago thirty_days_ago sixty_days_ago
+## 1 2022-12-31     0q    2.08           2.13            2.13           2.12
+## 2 2023-03-31    +1q    1.47           1.52            1.53           1.52
+## 3 2023-09-30     0y    6.26           6.43            6.46           6.45
+## 4 2024-09-30    +1y    6.82           6.90            6.88           6.88
+## 5       &lt;NA&gt;    +5y      NA             NA              NA             NA
+## 6       &lt;NA&gt;    -5y      NA             NA              NA             NA
+##   ninety_days_ago
+## 1            2.11
+## 2            1.52
+## 3            6.43
+## 4            6.79
+## 5              NA
+## 6              NA</code></pre>
+</div>
+<div id="eps-revision" class="section level5">
+<h5>EPS Revision</h5>
+<pre class="r"><code>aapl$earnings_trend$eps_revision</code></pre>
+<pre><code>##         date period up_last_7_days up_last_30_days down_last_30_days
+## 1 2022-12-31     0q              4               6                15
+## 2 2023-03-31    +1q              4               5                13
+## 3 2023-09-30     0y              3               5                24
+## 4 2024-09-30    +1y              2               4                 9
+## 5       &lt;NA&gt;    +5y             NA              NA                NA
+## 6       &lt;NA&gt;    -5y             NA              NA                NA
+##   down_last_90_days
+## 1                NA
+## 2                NA
+## 3                NA
+## 4                NA
+## 5                NA
+## 6                NA</code></pre>
+</div>
+<div id="growth-estimates" class="section level5">
+<h5>Growth Estimates</h5>
+<pre class="r"><code>aapl$earnings_trend$growth</code></pre>
+<pre><code>##         date period      growth
+## 1 2022-12-31     0q -0.01000000
+## 2 2023-03-31    +1q -0.03300000
+## 3 2023-09-30     0y  0.02500000
+## 4 2024-09-30    +1y  0.08899999
+## 5       &lt;NA&gt;    +5y  0.08890000
+## 6       &lt;NA&gt;    -5y  0.22590000</code></pre>
+</div>
+</div>
+<div id="options" class="section level4">
+<h4>Options</h4>
+<div id="option-chain" class="section level5">
+<h5>Option Chain</h5>
+<pre class="r"><code>head(aapl$option_chain)</code></pre>
+<pre><code>## # A tibble: 6 x 16
+##   expiration          option_type contra~1 strike curre~2 last_~3 change perce~4
+##   &lt;dttm&gt;              &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 2022-11-04 00:00:00 call        AAPL221~     70 USD        69.8      0       0
+## 2 2022-11-04 00:00:00 call        AAPL221~     75 USD        64.6      0       0
+## 3 2022-11-04 00:00:00 call        AAPL221~     80 USD        59.7      0       0
+## 4 2022-11-04 00:00:00 call        AAPL221~     85 USD        59.6      0       0
+## 5 2022-11-04 00:00:00 call        AAPL221~     90 USD        50.0      0       0
+## 6 2022-11-04 00:00:00 call        AAPL221~     95 USD        44.9      0       0
+## # ... with 8 more variables: open_interest &lt;int&gt;, bid &lt;dbl&gt;, ask &lt;dbl&gt;,
+## #   contract_size &lt;chr&gt;, last_trade_date &lt;dttm&gt;, implied_volatility &lt;dbl&gt;,
+## #   in_the_money &lt;lgl&gt;, volume &lt;int&gt;, and abbreviated variable names
+## #   1: contract_symbol, 2: currency, 3: last_price, 4: percent_change</code></pre>
+</div>
+<div id="option-expiration-dates" class="section level5">
+<h5>Option Expiration Dates</h5>
+<pre class="r"><code>aapl$option_expiration_dates</code></pre>
+<pre><code>##  [1] &quot;2022-11-04&quot; &quot;2022-11-11&quot; &quot;2022-11-18&quot; &quot;2022-11-25&quot; &quot;2022-12-02&quot;
+##  [6] &quot;2022-12-09&quot; &quot;2022-12-16&quot; &quot;2023-01-20&quot; &quot;2023-02-17&quot; &quot;2023-03-17&quot;
+## [11] &quot;2023-04-21&quot; &quot;2023-05-19&quot; &quot;2023-06-16&quot; &quot;2023-07-21&quot; &quot;2023-09-15&quot;
+## [16] &quot;2024-01-19&quot; &quot;2024-03-15&quot; &quot;2024-06-21&quot; &quot;2025-01-17&quot;</code></pre>
+</div>
+<div id="option-strikes" class="section level5">
+<h5>Option Strikes</h5>
+<pre class="r"><code>aapl$option_strikes</code></pre>
+<pre><code>##  [1]  30.0  35.0  40.0  45.0  50.0  55.0  60.0  65.0  70.0  75.0  80.0  85.0
+## [13]  90.0  95.0 100.0 105.0 110.0 115.0 120.0 125.0 126.0 127.0 128.0 129.0
+## [25] 130.0 131.0 132.0 133.0 134.0 135.0 136.0 137.0 138.0 139.0 140.0 141.0
+## [37] 142.0 143.0 144.0 145.0 146.0 147.0 148.0 149.0 150.0 152.5 155.0 157.5
+## [49] 160.0 162.5 165.0 167.5 170.0 172.5 175.0 177.5 180.0 185.0 190.0 195.0
+## [61] 200.0 205.0 210.0 215.0 220.0 225.0 230.0 235.0 240.0 245.0 250.0 255.0
+## [73] 260.0 265.0 270.0 275.0 280.0 285.0 290.0 295.0 300.0 310.0 320.0</code></pre>
+</div>
+</div>
+<div id="holding-pattern" class="section level4">
+<h4>Holding Pattern</h4>
+<p>Data showing breakdown of owners of given symbol(s), insiders, institutions, etc.</p>
+<pre class="r"><code>aapl$major_holders</code></pre>
+<pre><code>## $maxAge
+## [1] 1
+## 
+## $insidersPercentHeld
+## [1] 0.00072
+## 
+## $institutionsPercentHeld
+## [1] 0.60186
+## 
+## $institutionsFloatPercentHeld
+## [1] 0.60229
+## 
+## $institutionsCount
+## [1] 5463</code></pre>
+<p>Top 10 owners of a given symbol.</p>
+<pre class="r"><code>aapl$institution_ownership</code></pre>
+<pre><code>##          date                  organization percent_held   position
+## 1  2022-06-30    Vanguard Group, Inc. (The)           NA 1277319054
+## 2  2022-06-30                Blackrock Inc.           NA 1028688317
+## 3  2022-06-30       Berkshire Hathaway, Inc           NA  894802319
+## 4  2022-06-30      State Street Corporation           NA  598178524
+## 5  2022-06-30                      FMR, LLC           NA  344317974
+## 6  2022-06-30 Geode Capital Management, LLC           NA  278256192
+## 7  2022-06-30 Price (T.Rowe) Associates Inc           NA  237910783
+## 8  2022-06-30                Morgan Stanley           NA  182450565
+## 9  2022-06-30    Northern Trust Corporation           NA  179828922
+## 10 2022-06-30   Bank of America Corporation           NA  149133915
+##           value percent_change
+## 1  177394076456         0.0058
+## 2  142864238487         0.0010
+## 3  124270150431         0.0044
+## 4   83075036333        -0.0255
+## 5   47818881910        -0.0207
+## 6   38644221303         0.0227
+## 7   33041050704         0.0207
+## 8   25338735358         0.4585
+## 9   24974641565        -0.0333
+## 10  20711718843         0.0328</code></pre>
+</div>
+<div id="others" class="section level4">
+<h4>Others</h4>
+<p>Data related to historical recommendations (buy, hold, sell) for a given symbol.</p>
+<pre class="r"><code>aapl$recommendation_trend</code></pre>
+<pre><code>##   period strong_buy buy hold sell strong_sell
+## 1     0m         11  21    6    0           0
+## 2    -1m         13  25    6    1           0
+## 3    -2m         14  25    7    1           0
+## 4    -3m         13  20    8    0           0</code></pre>
+<p>Technical indicators for given symbol.</p>
+<pre class="r"><code>aapl$technical_insights$secReports[[1]]</code></pre>
+<pre><code>## $id
+## [1] &quot;0000320193-22-000108_320193&quot;
+## 
+## $type
+## [1] &quot;Periodic Financial Reports&quot;
+## 
+## $title
+## [1] &quot;10-K : Periodic Financial Reports&quot;
+## 
+## $description
+## [1] &quot;Annual report pursuant to Section 13 and 15(d)&quot;
+## 
+## $filingDate
+## [1] 1.666915e+12
+## 
+## $snapshotUrl
+## [1] &quot;https://cdn.yahoofinance.com/prod/sec-reports-thumbnails/0000320193/000032019322000108/thumbnail.png&quot;
+## 
+## $formType
+## [1] &quot;10-K&quot;</code></pre>
+<p>Symbols displayed in the <strong>People Also Watch</strong> sidebar.</p>
+<pre class="r"><code>aapl$recommendations</code></pre>
+<pre><code>##   symbol    score
+## 1   AMZN 0.323217
+## 2   TSLA 0.303238
+## 3   META 0.288718
+## 4   GOOG 0.286876
+## 5   NFLX 0.218178</code></pre>
+</div>
+</div>
+<div id="indices" class="section level2">
+<h2>Indices</h2>
+<p>Use the <code>Index</code> class for getting all data related to indices from Yahoo Finance API.</p>
+<div id="instantiate-index-class" class="section level4">
+<h4>Instantiate Index Class</h4>
+<p>We can instantiate the <code>Index</code> class by passing the index symbol. For instance,
+to get data for <a href="https://finance.yahoo.com/quote/%5ENSEI?p=%5ENSEI">Nifty 50</a>,
+pass <code>^NSEI</code> as the first argument to the <code>Index</code> class.</p>
+<pre class="r"><code>nifty &lt;- Index$new(&#39;^NSEI&#39;)</code></pre>
+</div>
+<div id="summary-1" class="section level4">
+<h4>Summary</h4>
+<p>Use the <code>summary_detail</code> property to retrieve data from the <a href="https://finance.yahoo.com/quote/%5ENSEI?p=%5ENSEI">Summary</a> tab.</p>
+<pre class="r"><code>nifty$summary_detail</code></pre>
+<pre><code>## $language
+## [1] &quot;en-US&quot;
+## 
+## $region
+## [1] &quot;US&quot;
+## 
+## $quoteType
+## [1] &quot;INDEX&quot;
+## 
+## $typeDisp
+## [1] &quot;Index&quot;
+## 
+## $quoteSourceName
+## [1] &quot;Free Realtime Quote&quot;
+## 
+## $triggerable
+## [1] TRUE
+## 
+## $customPriceAlertConfidence
+## [1] &quot;HIGH&quot;
+## 
+## $currency
+## [1] &quot;INR&quot;
+## 
+## $tradeable
+## [1] FALSE
+## 
+## $cryptoTradeable
+## [1] FALSE
+## 
+## $messageBoardId
+## [1] &quot;finmb_INDEXNSEI&quot;
+## 
+## $exchangeTimezoneName
+## [1] &quot;Asia/Kolkata&quot;
+## 
+## $exchangeTimezoneShortName
+## [1] &quot;IST&quot;
+## 
+## $gmtOffSetMilliseconds
+## [1] 19800000
+## 
+## $market
+## [1] &quot;in_market&quot;
+## 
+## $esgPopulated
+## [1] FALSE
+## 
+## $regularMarketChangePercent
+## [1] 0.1238129
+## 
+## $regularMarketPrice
+## [1] 18075.05
+## 
+## $marketState
+## [1] &quot;REGULAR&quot;
+## 
+## $exchange
+## [1] &quot;NSI&quot;
+## 
+## $shortName
+## [1] &quot;NIFTY 50&quot;
+## 
+## $firstTradeDateMilliseconds
+## [1] 1.190001e+12
+## 
+## $priceHint
+## [1] 2
+## 
+## $regularMarketChange
+## [1] 22.35156
+## 
+## $regularMarketTime
+## [1] 1667552435
+## 
+## $regularMarketDayHigh
+## [1] 18108
+## 
+## $regularMarketDayRange
+## [1] &quot;18017.15 - 18108.0&quot;
+## 
+## $regularMarketDayLow
+## [1] 18017.15
+## 
+## $regularMarketVolume
+## [1] 0
+## 
+## $regularMarketPreviousClose
+## [1] 18052.7
+## 
+## $bid
+## [1] 0
+## 
+## $ask
+## [1] 0
+## 
+## $bidSize
+## [1] 0
+## 
+## $askSize
+## [1] 0
+## 
+## $fullExchangeName
+## [1] &quot;NSE&quot;
+## 
+## $regularMarketOpen
+## [1] 18053.4
+## 
+## $averageDailyVolume3Month
+## [1] 275566
+## 
+## $averageDailyVolume10Day
+## [1] 245930
+## 
+## $fiftyTwoWeekLowChange
+## [1] 2891.65
+## 
+## $fiftyTwoWeekLowChangePercent
+## [1] 0.1904481
+## 
+## $fiftyTwoWeekRange
+## [1] &quot;15183.4 - 18350.95&quot;
+## 
+## $fiftyTwoWeekHighChange
+## [1] -275.8984
+## 
+## $fiftyTwoWeekHighChangePercent
+## [1] -0.01503456
+## 
+## $fiftyTwoWeekLow
+## [1] 15183.4
+## 
+## $fiftyTwoWeekHigh
+## [1] 18350.95
+## 
+## $fiftyDayAverage
+## [1] 17526.7
+## 
+## $fiftyDayAverageChange
+## [1] 548.3535
+## 
+## $fiftyDayAverageChangePercent
+## [1] 0.03128676
+## 
+## $twoHundredDayAverage
+## [1] 16994.76
+## 
+## $twoHundredDayAverageChange
+## [1] 1080.293
+## 
+## $twoHundredDayAverageChangePercent
+## [1] 0.06356624
+## 
+## $sourceInterval
+## [1] 15
+## 
+## $exchangeDataDelayedBy
+## [1] 15
+## 
+## $symbol
+## [1] &quot;^NSEI&quot;</code></pre>
+</div>
+<div id="historical-data-1" class="section level4">
+<h4>Historical Data</h4>
+<p>Use the <code>get_history()</code> method to retrieve historical data for a given
+index. By default, it returns YTD data.</p>
+<pre class="r"><code>nifty$get_history(start = &#39;2022-10-20&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                   date volume     high      low     open    close adj_close
+## 1  2022-10-20 03:45:00 249600 17584.15 17421.00 17423.10 17563.95  17563.95
+## 2  2022-10-21 03:45:00 277700 17670.15 17520.75 17622.85 17576.30  17576.30
+## 3  2022-10-24 03:45:00  45000 17777.55 17707.40 17736.35 17730.75  17730.75
+## 4  2022-10-25 03:45:00 251400 17811.50 17637.00 17808.30 17656.35  17656.35
+## 5  2022-10-27 03:45:00 324600 17783.90 17654.50 17771.40 17736.95  17736.95
+## 6  2022-10-28 03:45:00 250000 17838.90 17723.70 17756.40 17786.80  17786.80
+## 7  2022-10-31 03:45:00 227200 18022.80 17899.90 17910.20 18012.20  18012.20
+## 8  2022-11-01 03:45:00 349900 18175.80 18060.15 18130.70 18145.40  18145.40
+## 9  2022-11-02 03:45:00 270900 18178.75 18048.65 18177.90 18082.85  18082.85
+## 10 2022-11-03 03:45:00 213000 18106.30 17959.20 17968.35 18052.70  18052.70
+## 11 2022-11-04 09:00:35      0 18108.00 18017.15 18053.40 18075.05  18075.05</code></pre>
+<p>To get data from a specific date upto the current date, use the <code>start</code>
+argument to supply the initial date. The time between data points can be
+specified using the <code>interval</code> argument.</p>
+<p>To retrieve data between two specific dates, use both the <code>start</code> and <code>end</code>
+argument. The dates should be either <code>String</code> or <code>Date</code> object in <code>yyyy-mm-dd</code>
+format.</p>
+<pre class="r"><code>nifty$get_history(start = &#39;2022-10-01&#39;, end = &#39;2022-10-14&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                  date volume     high      low     open    close adj_close
+## 1 2022-10-03 03:45:00 278400 17114.65 16855.55 17102.10 16887.35  16887.35
+## 2 2022-10-04 03:45:00 226000 17287.30 17117.30 17147.45 17274.30  17274.30
+## 3 2022-10-06 03:45:00 265500 17428.80 17315.65 17379.25 17331.80  17331.80
+## 4 2022-10-07 03:45:00 216300 17337.35 17216.95 17287.20 17314.65  17314.65
+## 5 2022-10-10 03:45:00 234000 17280.15 17064.70 17094.35 17241.00  17241.00
+## 6 2022-10-11 03:45:00 282600 17261.80 16950.30 17256.05 16983.55  16983.55
+## 7 2022-10-12 03:45:00 256000 17142.35 16960.05 17025.55 17123.60  17123.60
+## 8 2022-10-13 03:45:00 266400 17112.35 16956.95 17087.35 17014.35  17014.35</code></pre>
+<p>The <code>period</code> arguments allows the user to retrieve data for specific length of time.</p>
+<pre class="r"><code>nifty$get_history(period = &#39;1mo&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                   date volume     high      low     open    close adj_close
+## 1  2022-10-04 03:45:00 226000 17287.30 17117.30 17147.45 17274.30  17274.30
+## 2  2022-10-06 03:45:00 265500 17428.80 17315.65 17379.25 17331.80  17331.80
+## 3  2022-10-07 03:45:00 216300 17337.35 17216.95 17287.20 17314.65  17314.65
+## 4  2022-10-10 03:45:00 234000 17280.15 17064.70 17094.35 17241.00  17241.00
+## 5  2022-10-11 03:45:00 282600 17261.80 16950.30 17256.05 16983.55  16983.55
+## 6  2022-10-12 03:45:00 256000 17142.35 16960.05 17025.55 17123.60  17123.60
+## 7  2022-10-13 03:45:00 266400 17112.35 16956.95 17087.35 17014.35  17014.35
+## 8  2022-10-14 03:45:00 227000 17348.55 17169.75 17322.30 17185.70  17185.70
+## 9  2022-10-17 03:45:00 212200 17328.55 17098.55 17144.80 17311.80  17311.80
+## 10 2022-10-18 03:45:00 239500 17527.80 17434.05 17438.75 17486.95  17486.95
+## 11 2022-10-19 03:45:00 210500 17607.60 17472.85 17568.15 17512.25  17512.25
+## 12 2022-10-20 03:45:00 249600 17584.15 17421.00 17423.10 17563.95  17563.95
+## 13 2022-10-21 03:45:00 277700 17670.15 17520.75 17622.85 17576.30  17576.30
+## 14 2022-10-24 03:45:00  45000 17777.55 17707.40 17736.35 17730.75  17730.75
+## 15 2022-10-25 03:45:00 251400 17811.50 17637.00 17808.30 17656.35  17656.35
+## 16 2022-10-27 03:45:00 324600 17783.90 17654.50 17771.40 17736.95  17736.95
+## 17 2022-10-28 03:45:00 250000 17838.90 17723.70 17756.40 17786.80  17786.80
+## 18 2022-10-31 03:45:00 227200 18022.80 17899.90 17910.20 18012.20  18012.20
+## 19 2022-11-01 03:45:00 349900 18175.80 18060.15 18130.70 18145.40  18145.40
+## 20 2022-11-02 03:45:00 270900 18178.75 18048.65 18177.90 18082.85  18082.85
+## 21 2022-11-03 03:45:00 213000 18106.30 17959.20 17968.35 18052.70  18052.70
+## 22 2022-11-04 09:00:36      0 18108.00 18017.15 18053.40 18074.30  18074.30</code></pre>
+<p>Please view the <a href="https://yahoofinancer.rsquaredacademy.com/reference/index-class#arguments-2">documentation</a> to see the valid values for <code>interval</code> and <code>period</code>.</p>
+</div>
+</div>
+<div id="currency" class="section level2">
+<h2>Currency</h2>
+<div id="summary-2" class="section level4">
+<h4>Summary</h4>
+<p><code>currency_summary()</code> retrieve information available via the Summary tab in
+Yahoo Finance.. View the <a href="https://yahoofinancer.rsquaredacademy.com/reference/currency_summary.html">documentation</a> to learn more.</p>
+<pre class="r"><code>currency_summary(from = &quot;USD&quot;, to = &quot;INR&quot;)</code></pre>
+<pre><code>## $language
+## [1] &quot;en-US&quot;
+## 
+## $region
+## [1] &quot;US&quot;
+## 
+## $quoteType
+## [1] &quot;CURRENCY&quot;
+## 
+## $typeDisp
+## [1] &quot;Currency&quot;
+## 
+## $quoteSourceName
+## [1] &quot;Delayed Quote&quot;
+## 
+## $triggerable
+## [1] TRUE
+## 
+## $customPriceAlertConfidence
+## [1] &quot;HIGH&quot;
+## 
+## $currency
+## [1] &quot;INR&quot;
+## 
+## $shortName
+## [1] &quot;USD/INR&quot;
+## 
+## $regularMarketChangePercent
+## [1] -0.2913199
+## 
+## $regularMarketPrice
+## [1] 82.485
+## 
+## $regularMarketChange
+## [1] -0.2409973
+## 
+## $regularMarketDayHigh
+## [1] 82.731
+## 
+## $regularMarketDayLow
+## [1] 82.45
+## 
+## $regularMarketPreviousClose
+## [1] 82.726
+## 
+## $bid
+## [1] 82.48
+## 
+## $ask
+## [1] 82.53
+## 
+## $regularMarketOpen
+## [1] 82.731
+## 
+## $fiftyTwoWeekLow
+## [1] 73.6975
+## 
+## $fiftyTwoWeekHigh
+## [1] 83.386
+## 
+## $fiftyDayAverage
+## [1] 81.12029
+## 
+## $twoHundredDayAverage
+## [1] 78.23625
+## 
+## $exchange
+## [1] &quot;CCY&quot;
+## 
+## $messageBoardId
+## [1] &quot;finmb_INR_X&quot;
+## 
+## $exchangeTimezoneName
+## [1] &quot;Europe/London&quot;
+## 
+## $exchangeTimezoneShortName
+## [1] &quot;GMT&quot;
+## 
+## $gmtOffSetMilliseconds
+## [1] 0
+## 
+## $market
+## [1] &quot;ccy_market&quot;
+## 
+## $esgPopulated
+## [1] FALSE
+## 
+## $marketState
+## [1] &quot;REGULAR&quot;
+## 
+## $regularMarketTime
+## [1] 1667552433
+## 
+## $regularMarketDayRange
+## [1] &quot;82.45 - 82.731&quot;
+## 
+## $regularMarketVolume
+## [1] 0
+## 
+## $bidSize
+## [1] 0
+## 
+## $askSize
+## [1] 0
+## 
+## $fullExchangeName
+## [1] &quot;CCY&quot;
+## 
+## $averageDailyVolume3Month
+## [1] 0
+## 
+## $averageDailyVolume10Day
+## [1] 0
+## 
+## $fiftyTwoWeekLowChange
+## [1] 8.787498
+## 
+## $fiftyTwoWeekLowChangePercent
+## [1] 0.1192374
+## 
+## $fiftyTwoWeekRange
+## [1] &quot;73.6975 - 83.386&quot;
+## 
+## $fiftyTwoWeekHighChange
+## [1] -0.901001
+## 
+## $tradeable
+## [1] FALSE
+## 
+## $cryptoTradeable
+## [1] FALSE
+## 
+## $fiftyTwoWeekHighChangePercent
+## [1] -0.01080518
+## 
+## $firstTradeDateMilliseconds
+## [1] 1.070237e+12
+## 
+## $priceHint
+## [1] 4
+## 
+## $fiftyDayAverageChange
+## [1] 1.364708
+## 
+## $fiftyDayAverageChangePercent
+## [1] 0.01682326
+## 
+## $twoHundredDayAverageChange
+## [1] 4.248749
+## 
+## $twoHundredDayAverageChangePercent
+## [1] 0.05430665
+## 
+## $sourceInterval
+## [1] 15
+## 
+## $exchangeDataDelayedBy
+## [1] 0
+## 
+## $symbol
+## [1] &quot;USDINR=X&quot;</code></pre>
+</div>
+<div id="converter" class="section level4">
+<h4>Converter</h4>
+<p><code>currency_converter()</code> retrieve current conversion rate between two currencies as
+well as historical rates.</p>
+<pre class="r"><code>currency_converter(&#39;GBP&#39;, &#39;USD&#39;, &#39;2022-07-01&#39;, &#39;2022-07-10&#39;)</code></pre>
+<pre><code>##                  date     high      low     open    close volume adj_close
+## 1 2022-06-30 23:00:00 1.216205 1.198064 1.215998 1.216086      0  1.216086
+## 2 2022-07-03 23:00:00 1.216515 1.208634 1.210580 1.210273      0  1.210273
+## 3 2022-07-04 23:00:00 1.212606 1.190051 1.211402 1.211446      0  1.211446
+## 4 2022-07-05 23:00:00 1.198638 1.187761 1.194957 1.194914      0  1.194914
+## 5 2022-07-06 23:00:00 1.202183 1.191001 1.191895 1.192321      0  1.192321
+## 6 2022-07-07 23:00:00 1.205531 1.192194 1.203196 1.202805      0  1.202805</code></pre>
+<p>The time between data points can be specified using the <code>interval</code> argument.
+The <code>period</code> arguments allows the user to retrieve data for specific length of time.</p>
+<pre class="r"><code>currency_converter(&#39;GBP&#39;, &#39;USD&#39;, period = &#39;1mo&#39;, interval = &#39;1d&#39;)</code></pre>
+<pre><code>##                   date     high      low     open    close volume adj_close
+## 1  2022-10-03 23:00:00 1.144597 1.128222 1.133967 1.133414      0  1.133414
+## 2  2022-10-04 23:00:00 1.149491 1.122776 1.145056 1.145134      0  1.145134
+## 3  2022-10-05 23:00:00 1.138343 1.112038 1.135589 1.135538      0  1.135538
+## 4  2022-10-06 23:00:00 1.122372 1.109201 1.116520 1.116208      0  1.116208
+## 5  2022-10-09 23:00:00 1.111086 1.102354 1.107444 1.107273      0  1.107273
+## 6  2022-10-10 23:00:00 1.117131 1.100183 1.107849 1.107641      0  1.107641
+## 7  2022-10-11 23:00:00 1.109866 1.092645 1.096780 1.096780      0  1.096780
+## 8  2022-10-12 23:00:00 1.136196 1.105828 1.109927 1.110556      0  1.110556
+## 9  2022-10-13 23:00:00 1.135873 1.116196 1.130148 1.130391      0  1.130391
+## 10 2022-10-16 23:00:00 1.143864 1.121705 1.123873 1.124417      0  1.124417
+## 11 2022-10-17 23:00:00 1.141201 1.125809 1.135525 1.135396      0  1.135396
+## 12 2022-10-18 23:00:00 1.134984 1.122246 1.133954 1.134430      0  1.134430
+## 13 2022-10-19 23:00:00 1.133324 1.117368 1.120951 1.121101      0  1.121101
+## 14 2022-10-20 23:00:00 1.129318 1.106378 1.122536 1.122146      0  1.122146
+## 15 2022-10-23 23:00:00 1.137980 1.127485 1.133645 1.134469      0  1.134469
+## 16 2022-10-24 23:00:00 1.149954 1.127370 1.130544 1.130774      0  1.130774
+## 17 2022-10-25 23:00:00 1.162358 1.143419 1.146066 1.146224      0  1.146224
+## 18 2022-10-26 23:00:00 1.164415 1.155095 1.163345 1.163819      0  1.163819
+## 19 2022-10-27 23:00:00 1.160012 1.150616 1.156738 1.156604      0  1.156604
+## 20 2022-10-31 00:00:00 1.161332 1.147987 1.160079 1.159595      0  1.159595
+## 21 2022-11-01 00:00:00 1.156524 1.144675 1.147184 1.146815      0  1.146815
+## 22 2022-11-02 00:00:00 1.152738 1.145856 1.149214 1.148950      0  1.148950
+## 23 2022-11-03 00:00:00 1.142178 1.116258 1.138226 1.138433      0  1.138433
+## 24 2022-11-04 08:59:42 1.124088 1.115101 1.115922 1.122322      0  1.122322</code></pre>
+<p>View the <a href="https://yahoofinancer.rsquaredacademy.com/reference/currency_converter.html">documentation</a> to learn more.</p>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<ul>
+<li><a href="https://yahoofinancer.rsquaredacademy.com">Documentation</a></li>
+<li><a href="https://github.com/rsquaredacademy/yahoofinancer">GitHub</a></li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>All feedback is welcome. Issues (bugs and feature requests) can be posted to
+<a href="https://github.com/rsquaredacademy/yahoofinancer/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach out to us
+at <a href="mailto:pkgs@rsquaredacademy.com" class="email">pkgs@rsquaredacademy.com</a>.</p>
+</div>
