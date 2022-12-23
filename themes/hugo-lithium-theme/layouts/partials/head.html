@@ -54,16 +54,6 @@
 <script src="{{ "js/highlight.pack.js" | absURL }}"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-57270671-6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-57270671-6');
-</script>
-
 {{ if .RSSLink }}
 <link href="{{ .RSSLink | relURL }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
 {{ end }}
