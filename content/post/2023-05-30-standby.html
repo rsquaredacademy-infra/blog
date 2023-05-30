@@ -55,7 +55,7 @@ server &lt;- function(input, output, session) {
     output$plot1 &lt;- renderPlot({
       input$render
       Sys.sleep(3)
-      plot(cars)
+      hist(mtcars$mpg)
     })
 
 }
