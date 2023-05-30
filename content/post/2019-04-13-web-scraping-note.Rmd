@@ -11,10 +11,6 @@ a couple of days back and it had received a good response from the #rstats commu
 we thank you for that, we made a mistake in choosing one of the case study as 
 pointed out by <a href="https://twitter.com/hrbrmstr" target="_blank">@hrbrmstr</a> in this tweet:
 
-```{r tweet, echo=FALSE}
-blogdown::shortcode('tweet', '1116466373495074822')
-```
-
 We choose the case study to appeal to a wide audience but in doing so we set 
 a bad example. We have removed the case study from our post and apologize
 to the #rstats community for our oversight and promise to be more responsible in the
