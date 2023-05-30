@@ -1,0 +1,163 @@
+---
+title: "Introducing standby"
+author: Aravind Hebbali
+twitterImg: /img/github-standby.png
+description: "Easily create alerts, notifications, tooltips and loading screens in Shiny"
+date: '2023-05-30'
+slug: introducing-standby-alerts-notifications-tooltips-loading-screens-shiny
+categories:
+  - packages
+tags:
+  - shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libs, echo=FALSE, message=FALSE, warning=FALSE}
+options(kableExtra.html.bsTable = TRUE)
+library(knitr)
+```
+
+```{r cover_image, echo=FALSE, fig.align="center", out.width="70%"}
+knitr::include_graphics("/img/github-standby.png")
+```
+
+We are excited to announce the [standby](https://standby.rsquaredacademy.com) package. It allows you to easily create alerts, notifications, tooltips and loading screens in Shiny. The package was developed as part of our internal tools for developing shiny apps and we are glad to share it with the rest of the community. 
+
+## Installation
+
+```{r cran-installation, eval = FALSE}
+# Install release version from CRAN
+install.packages("standby")
+
+# Install development version from GitHub
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/standby")
+```
+
+## Loading Screens
+
+To use spinners/loaders from **standby** in your Shiny application, include the 
+following in the **UI** part of the app:
+
+- Include the dependencies using the appropriate `use*` functions 
+(`useSpinkit()` in the below example).
+- Wrap the target output using corresponding rendering function 
+(`spinkit()` in the below example).
+
+### Example
+
+```{r standby, eval=FALSE}
+library(shiny)
+library(standby)
+
+ui <- fluidPage(
+
+  standby::useSpinkit(), # include dependencies
+  fluidRow(
+    standby::spinkit(plotOutput("plot1")), # wrap output inside loader
+    actionButton("render", "Render")
+  )
+
+)
+
+server <- function(input, output, session) {
+
+    output$plot1 <- renderPlot({
+      input$render
+      Sys.sleep(3)
+      plot(cars)
+    })
+
+}
+
+shinyApp(ui, server)
+```
+
+### Details
+
+The below table displays the dependency and rendering functions along with references:
+
+| Index 	|    Dependency    	|     Render    	|                                 Reference                                	|
+|:-----:	|:----------------:	|:-------------:	|:------------------------------------------------------------------------:	|
+|   1   	| `useThreeDots()` 	| `threeDots()` 	|             [Three Dots](https://github.com/nzbin/three-dots)            	|
+|   2   	|  `useSpinkit()`  	|  `spinkit()`  	|             [SpinKit](https://github.com/tobiasahlin/SpinKit)            	|
+|   3   	|  `useVizLoad()`  	|  `vizLoad()`  	| [Loading Visualization](https://github.com/RIDICS/Loading-Visualization) 	|
+|   4   	|  `useSpinners()` 	|  `spinners()` 	|            [Spinners](https://github.com/lukehaas/css-loaders)           	|
+|   5   	|  `useLoaders()`  	|  `loaders()`  	|          [Loaders](https://github.com/raphaelfabeni/css-loader)          	|
+
+
+## Alerts and Notifications
+
+To use alerts or notifications from **buzz** in your Shiny application, follow the below steps:
+
+- Include the dependencies in the **UI** part of the app using the appropriate
+`use*` functions (`useToast()` in the below example).
+- Include the corresponding rendering function in the **Server** part of the 
+app (`toast()` in the below example).
+
+### Example
+
+```{r buzz, eval=FALSE}
+library(shiny)
+library(standby)
+ui <- fluidPage(
+  useBootBox(), # include dependencies
+  actionButton(inputId = "notify",
+               label   = "Show Notification")
+)
+server <- function(input, output, session) {
+  observeEvent(input$pnotify, {
+    bootBox(class = "rubberBand") # display the alert
+  })
+}
+shinyApp(ui, server)
+```
+
+### Details
+
+The below table displays the dependency and rendering functions along with references:
+
+| Index 	|    Dependency   	|        Render       	|                                  Reference                                  	|
+|:-----:	|:---------------:	|:-------------------:	|:---------------------------------------------------------------------------:	|
+|   1   	| `useAlertify()` 	|  `alertify_alert()` 	| [Alertify](https://github.com/MohammadYounes/AlertifyJS)                    	|
+|   2   	| `useAlertify()` 	| `alertify_notify()` 	| [Alertify](https://github.com/MohammadYounes/AlertifyJS)                    	|
+|   3   	|  `useBootBox()` 	|     `bootBox()`     	| [BootBox](https://github.com/bootboxjs/bootbox)                             	|
+|   4   	| `useMicroTip()` 	|     `microTip()`    	| [MicroTip](https://github.com/ghosh/microtip)                               	|
+|   5   	|    `useNS()`    	|      `notice()`     	| [Notification Styles](https://tympanus.net/Development/NotificationStyles/) 	|
+|   6   	|  `useNotify()`  	|      `notify()`     	| [PNotify](https://github.com/sciactive/pnotify)                             	|
+|   7   	|  `useTingle()`  	|      `tingle()`     	| [Tingle](https://github.com/robinparisi/tingle)                             	|
+|   8   	|   `useToast()`  	|      `toast()`      	| [iziToast](https://github.com/marcelodolza/iziToast)                        	|
+
+
+## Learning More
+
+- [Documentation](https://standby.rsquaredacademy.com)
+- [GitHub](https://github.com/rsquaredacademy/standby)
+
+## Inspiration & Acknowledgement
+
+[standby](https://standby.rsquaredacademy.com) takes inspiration from the following wonderful packages:
+
+- [shinycssloaders](https://github.com/daattali/shinycssloaders) by [Dean Attali](https://github.com/daattali)
+- [waiter](https://github.com/JohnCoene/waiter) by [John Coene](https://john-coene.com/)
+
+We found the following books extremely helpful while working on the package and in general for developing Shiny apps. We would like to express out heartful gratitude to the respective authors for making them available for free to the community.
+
+- [Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/index.html) by[David Granjon](https://github.com/DivadNojnarg)
+- [JavaScript for R](https://book.javascript-for-r.com/) by [John Coene](https://john-coene.com/)
+
+## Getting Help
+
+If you encounter a bug, please file a minimal reproducible example using 
+[reprex](https://reprex.tidyverse.org/index.html) on github. For questions and clarifications, 
+use [StackOverflow](https://stackoverflow.com/).
+
+## Feedback
+
+All feedback is welcome. Issues (bugs and feature requests) can be posted to 
+[github tracker](https://github.com/rsquaredacademy/standby/issues).
+For help with code or other related questions, feel free to reach out to us
+at pkgs@rsquaredacademy.com.

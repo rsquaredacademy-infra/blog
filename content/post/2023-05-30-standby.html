@@ -1,0 +1,246 @@
+---
+title: "Introducing standby"
+author: Aravind Hebbali
+twitterImg: /img/github-standby.png
+description: "Easily create alerts, notifications, tooltips and loading screens in Shiny"
+date: '2023-05-30'
+slug: introducing-standby-alerts-notifications-tooltips-loading-screens-shiny
+categories:
+  - packages
+tags:
+  - shiny
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><img src="/img/github-standby.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>We are excited to announce the <a href="https://standby.rsquaredacademy.com">standby</a> package. It allows you to easily create alerts, notifications, tooltips and loading screens in Shiny. The package was developed as part of our internal tools for developing shiny apps and we are glad to share it with the rest of the community.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<pre class="r"><code># Install release version from CRAN
+install.packages(&quot;standby&quot;)
+
+# Install development version from GitHub
+# install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rsquaredacademy/standby&quot;)</code></pre>
+</div>
+<div id="loading-screens" class="section level2">
+<h2>Loading Screens</h2>
+<p>To use spinners/loaders from <strong>standby</strong> in your Shiny application, include the
+following in the <strong>UI</strong> part of the app:</p>
+<ul>
+<li>Include the dependencies using the appropriate <code>use*</code> functions
+(<code>useSpinkit()</code> in the below example).</li>
+<li>Wrap the target output using corresponding rendering function
+(<code>spinkit()</code> in the below example).</li>
+</ul>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<pre class="r"><code>library(shiny)
+library(standby)
+
+ui &lt;- fluidPage(
+
+  standby::useSpinkit(), # include dependencies
+  fluidRow(
+    standby::spinkit(plotOutput(&quot;plot1&quot;)), # wrap output inside loader
+    actionButton(&quot;render&quot;, &quot;Render&quot;)
+  )
+
+)
+
+server &lt;- function(input, output, session) {
+
+    output$plot1 &lt;- renderPlot({
+      input$render
+      Sys.sleep(3)
+      plot(cars)
+    })
+
+}
+
+shinyApp(ui, server)</code></pre>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>The below table displays the dependency and rendering functions along with references:</p>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="15%" />
+<col width="13%" />
+<col width="64%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Index</th>
+<th align="center">Dependency</th>
+<th align="center">Render</th>
+<th align="center">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><code>useThreeDots()</code></td>
+<td align="center"><code>threeDots()</code></td>
+<td align="center"><a href="https://github.com/nzbin/three-dots">Three Dots</a></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><code>useSpinkit()</code></td>
+<td align="center"><code>spinkit()</code></td>
+<td align="center"><a href="https://github.com/tobiasahlin/SpinKit">SpinKit</a></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><code>useVizLoad()</code></td>
+<td align="center"><code>vizLoad()</code></td>
+<td align="center"><a href="https://github.com/RIDICS/Loading-Visualization">Loading Visualization</a></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><code>useSpinners()</code></td>
+<td align="center"><code>spinners()</code></td>
+<td align="center"><a href="https://github.com/lukehaas/css-loaders">Spinners</a></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><code>useLoaders()</code></td>
+<td align="center"><code>loaders()</code></td>
+<td align="center"><a href="https://github.com/raphaelfabeni/css-loader">Loaders</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="alerts-and-notifications" class="section level2">
+<h2>Alerts and Notifications</h2>
+<p>To use alerts or notifications from <strong>buzz</strong> in your Shiny application, follow the below steps:</p>
+<ul>
+<li>Include the dependencies in the <strong>UI</strong> part of the app using the appropriate
+<code>use*</code> functions (<code>useToast()</code> in the below example).</li>
+<li>Include the corresponding rendering function in the <strong>Server</strong> part of the
+app (<code>toast()</code> in the below example).</li>
+</ul>
+<div id="example-1" class="section level3">
+<h3>Example</h3>
+<pre class="r"><code>library(shiny)
+library(standby)
+ui &lt;- fluidPage(
+  useBootBox(), # include dependencies
+  actionButton(inputId = &quot;notify&quot;,
+               label   = &quot;Show Notification&quot;)
+)
+server &lt;- function(input, output, session) {
+  observeEvent(input$pnotify, {
+    bootBox(class = &quot;rubberBand&quot;) # display the alert
+  })
+}
+shinyApp(ui, server)</code></pre>
+</div>
+<div id="details-1" class="section level3">
+<h3>Details</h3>
+<p>The below table displays the dependency and rendering functions along with references:</p>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="13%" />
+<col width="17%" />
+<col width="63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Index</th>
+<th align="center">Dependency</th>
+<th align="center">Render</th>
+<th align="center">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><code>useAlertify()</code></td>
+<td align="center"><code>alertify_alert()</code></td>
+<td align="center"><a href="https://github.com/MohammadYounes/AlertifyJS">Alertify</a></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><code>useAlertify()</code></td>
+<td align="center"><code>alertify_notify()</code></td>
+<td align="center"><a href="https://github.com/MohammadYounes/AlertifyJS">Alertify</a></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><code>useBootBox()</code></td>
+<td align="center"><code>bootBox()</code></td>
+<td align="center"><a href="https://github.com/bootboxjs/bootbox">BootBox</a></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><code>useMicroTip()</code></td>
+<td align="center"><code>microTip()</code></td>
+<td align="center"><a href="https://github.com/ghosh/microtip">MicroTip</a></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><code>useNS()</code></td>
+<td align="center"><code>notice()</code></td>
+<td align="center"><a href="https://tympanus.net/Development/NotificationStyles/">Notification Styles</a></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center"><code>useNotify()</code></td>
+<td align="center"><code>notify()</code></td>
+<td align="center"><a href="https://github.com/sciactive/pnotify">PNotify</a></td>
+</tr>
+<tr class="odd">
+<td align="center">7</td>
+<td align="center"><code>useTingle()</code></td>
+<td align="center"><code>tingle()</code></td>
+<td align="center"><a href="https://github.com/robinparisi/tingle">Tingle</a></td>
+</tr>
+<tr class="even">
+<td align="center">8</td>
+<td align="center"><code>useToast()</code></td>
+<td align="center"><code>toast()</code></td>
+<td align="center"><a href="https://github.com/marcelodolza/iziToast">iziToast</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<ul>
+<li><a href="https://standby.rsquaredacademy.com">Documentation</a></li>
+<li><a href="https://github.com/rsquaredacademy/standby">GitHub</a></li>
+</ul>
+</div>
+<div id="inspiration-acknowledgement" class="section level2">
+<h2>Inspiration &amp; Acknowledgement</h2>
+<p><a href="https://standby.rsquaredacademy.com">standby</a> takes inspiration from the following wonderful packages:</p>
+<ul>
+<li><a href="https://github.com/daattali/shinycssloaders">shinycssloaders</a> by <a href="https://github.com/daattali">Dean Attali</a></li>
+<li><a href="https://github.com/JohnCoene/waiter">waiter</a> by <a href="https://john-coene.com/">John Coene</a></li>
+</ul>
+<p>We found the following books extremely helpful while working on the package and in general for developing Shiny apps. We would like to express out heartful gratitude to the respective authors for making them available for free to the community.</p>
+<ul>
+<li><a href="https://unleash-shiny.rinterface.com/index.html">Outstanding User Interfaces with Shiny</a> by<a href="https://github.com/DivadNojnarg">David Granjon</a></li>
+<li><a href="https://book.javascript-for-r.com/">JavaScript for R</a> by <a href="https://john-coene.com/">John Coene</a></li>
+</ul>
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<p>If you encounter a bug, please file a minimal reproducible example using
+<a href="https://reprex.tidyverse.org/index.html">reprex</a> on github. For questions and clarifications,
+use <a href="https://stackoverflow.com/">StackOverflow</a>.</p>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>All feedback is welcome. Issues (bugs and feature requests) can be posted to
+<a href="https://github.com/rsquaredacademy/standby/issues">github tracker</a>.
+For help with code or other related questions, feel free to reach out to us
+at <a href="mailto:pkgs@rsquaredacademy.com" class="email">pkgs@rsquaredacademy.com</a>.</p>
+</div>
