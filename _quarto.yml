@@ -72,7 +72,7 @@ website:
     <a href="https://www.youtube.com/user/rsquaredin" target="_blank" aria-label="YouTube"><i class="bi bi-youtube fs-3"></i></a>
     </div></div>
     <p class="text-center">Sales and Support&nbsp;&nbsp;&nbsp;&nbsp;+91-960-687-2504&nbsp;&nbsp;&nbsp;&nbsp;support@rsquaredacademy.com</p>
-    <p class="text-center">&copy; 2014–<script>document.write(new Date().getFullYear())</script> Rsquared Education Services Pvt. Ltd. All rights reserved.</p>
+    <p class="text-center">Copyright 2014–<script>document.write(new Date().getFullYear())</script> Rsquared Education Services Pvt. Ltd. All rights reserved.</p>
     </div>
   # Analytics (stubbed — fill at launch, Phase 4):
   # google-analytics: "G-XXXXXXXXXX"
