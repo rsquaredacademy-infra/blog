@@ -17,3 +17,10 @@ options.R.bak
 content/post/config.yml.bak
 content/post/options.R.bak
 roadmap/
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
