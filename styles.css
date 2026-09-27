@@ -45,16 +45,22 @@ div[data-layout-ncol="4"] > .quarto-layout-row > .quarto-layout-cell > .card {
   height: 100% !important;
 }
 @media (max-width: 991.98px) {
+  div[data-layout-ncol="4"] > .quarto-layout-row,
+  div[data-layout-ncol="3"] > .quarto-layout-row {
+    flex-wrap: wrap !important;
+  }
   div[data-layout-ncol="4"] > .quarto-layout-row > .quarto-layout-cell,
   div[data-layout-ncol="3"] > .quarto-layout-row > .quarto-layout-cell {
-    flex-basis: 50% !important;
+    flex: 0 0 50% !important;
+    width: 50% !important;
     max-width: 50% !important;
   }
 }
 @media (max-width: 575.98px) {
   div[data-layout-ncol="4"] > .quarto-layout-row > .quarto-layout-cell,
   div[data-layout-ncol="3"] > .quarto-layout-row > .quarto-layout-cell {
-    flex-basis: 100% !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
     max-width: 100% !important;
   }
 }
