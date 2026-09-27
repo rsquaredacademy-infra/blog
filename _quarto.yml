@@ -1,5 +1,6 @@
 project:
-  type: blog
+  type: website  # NB: standalone `blog` type was removed in Quarto 1.10;
+                 # a blog is now a website with a listing page + RSS feed.
   output-dir: _site
   resources:
     - _redirects
