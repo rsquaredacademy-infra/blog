@@ -48,9 +48,13 @@
 .rqa-grid .card {
   height: 100%;
 }
-/* Compact topic cards: kill pandoc paragraph margins, tighten padding. */
+/* Compact topic cards: kill pandoc paragraph margins, tighten padding,
+   vertically center icon + label. */
 .topic-cards > div {
   padding: 0.75rem !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .topic-cards p {
   margin-bottom: 0 !important;
