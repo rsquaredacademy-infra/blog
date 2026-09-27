@@ -24,12 +24,20 @@ website:
   site-url: https://blog.rsquaredacademy.com
   search: true
   navbar:
+    title: "Rsquared Academy"
+    logo: images/Rlogonew.png
     left:
       - href: index.qmd
         text: Home
+      - href: https://www.r-bloggers.com/
+        text: R Bloggers
+      - href: https://rweekly.org/
+        text: R Weekly
       - href: about.qmd
         text: About
     right:
+      - href: https://rsquared-academy.thinkific.com/
+        text: Explore Online Courses
       - icon: rss
         href: index.xml
   page-footer:
@@ -44,7 +52,8 @@ execute:
 
 format:
   html:
-    theme: [flatly, darkly]
+    theme: flatly
+    css: styles.css
     toc: true
     toc-depth: 3
     code-copy: true
