@@ -1,0 +1,40 @@
+# Phase 1: render the Quarto blog and deploy _site to Netlify as a DRAFT.
+# Draft deploys get Netlify's automatic X-Robots-Tag: noindex — flip
+# production-deploy to true only at DNS cutover (Phase 2+).
+# Required repo secrets: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID.
+# NOTE: no R/renv toolchain yet — all legacy posts are static (eval: false).
+# R 4.5 + renv restore land with the first executable refresh (Phase 3).
+
+name: quarto-publish
+
+on:
+  push:
+    branches: [quarto-migration]
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "1.10.18"
+
+      - name: Render site
+        run: quarto render
+
+      - name: Deploy to Netlify (draft)
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ./_site
+          production-deploy: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: ${{ github.event.head_commit.message }}
+          enable-commit-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
