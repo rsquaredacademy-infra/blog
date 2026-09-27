@@ -32,6 +32,10 @@ website:
     right:
       - icon: rss
         href: index.xml
+  page-footer:
+    left: "© 2014–<script>document.write(new Date().getFullYear())</script> [Rsquared Academy](https://www.rsquaredacademy.com/)"
+    center: "[R courses](https://www.rsquaredacademy.com/data-science-with-r)"
+    right: "[About](https://www.rsquaredacademy.com/about.html) · [Corporate Training](https://www.rsquaredacademy.com/data-science-corporate-training.html/) · [University Training](https://www.rsquaredacademy.com/data-science-university-training.html/) · [Terms](https://www.rsquaredacademy.com/terms-and-conditions.html) · [Privacy](https://www.rsquaredacademy.com/privacy-policy.html) · [Contact](https://www.rsquaredacademy.com/contact.html)"
   # Analytics (stubbed — fill at launch, Phase 4):
   # google-analytics: "G-XXXXXXXXXX"
 
