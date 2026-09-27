@@ -25,7 +25,6 @@ website:
   search: true
   navbar:
     title: "Rsquared Academy"
-    logo: images/Rlogonew.png
     left:
       - href: index.qmd
         text: Home

@@ -1,5 +1,10 @@
 /* Rsquared Academy blog chrome: light page, old-style courses CTA in navbar. */
 
+/* Match the legacy bright-blue navbar (Bootstrap bg-primary). */
+.navbar {
+  background-color: #007bff !important;
+}
+
 /* "Explore Online Courses" nav link rendered as the old white button. */
 .navbar a.nav-link[href*="thinkific"] {
   color: #2c3e50 !important;
