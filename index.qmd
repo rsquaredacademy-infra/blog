@@ -16,47 +16,47 @@ toc: false
 
 <div class="rqa-grid rqa-grid-4">
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="r-programming/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-code"></i> <br> R Programming <br> &nbsp;</a>
+<a href="r-programming/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-code"></i> <br> R Programming </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="data-wrangling/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-tools"></i> <br> Data Wrangling <br> &nbsp;</a>
+<a href="data-wrangling/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-tools"></i> <br> Data Wrangling </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="data-visualization/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-bar-chart"></i> <br> Data Visualization <br> &nbsp;</a>
+<a href="data-visualization/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-bar-chart"></i> <br> Data Visualization </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/command-line-basics-for-r-users/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-terminal"></i> <br> Command Line <br> &nbsp;</a>
+<a href="posts/command-line-basics-for-r-users/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-terminal"></i> <br> Command Line </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/working-with-databases-using-r/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-database"></i> <br> Databases <br> &nbsp;</a>
+<a href="posts/working-with-databases-using-r/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-database"></i> <br> Databases </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/regular-expression-in-r/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-percent"></i> <br> Regular Expressions <br> &nbsp;</a>
+<a href="posts/regular-expression-in-r/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-percent"></i> <br> Regular Expressions </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/handling-date-and-time-in-r/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-clock"></i> <br> Date &amp; Time <br> &nbsp;</a>
+<a href="posts/handling-date-and-time-in-r/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-clock"></i> <br> Date &amp; Time </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="r-packages/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-gift"></i> <br> R Packages <br> &nbsp;</a>
+<a href="r-packages/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-gift"></i> <br> R Packages </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/web-scraping/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-globe"></i> <br> Web Scraping <br> &nbsp;</a>
+<a href="posts/web-scraping/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-globe"></i> <br> Web Scraping </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/customer-segmentation-using-rfm-analysis/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-people"></i> <br> Customer Segmentation <br> &nbsp;</a>
+<a href="posts/customer-segmentation-using-rfm-analysis/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-people"></i> <br> Customer Segmentation </a>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
-<a href="posts/market-basket-analysis-in-r/" style="display: block; color: black; text-decoration: none;"><br> <i class="bi bi-basket"></i> <br> Association Rule Mining <br> &nbsp;</a>
+<a href="posts/market-basket-analysis-in-r/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-basket"></i> <br> Association Rule Mining </a>
 </div>
 </div>
 
