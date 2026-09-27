@@ -40,10 +40,40 @@ website:
         text: Explore Online Courses
       - icon: rss
         href: index.xml
-  page-footer:
-    left: "&copy; 2014–<script>document.write(new Date().getFullYear())</script> <a href=\"https://www.rsquaredacademy.com/\">Rsquared Academy</a>"
-    center: "<a href=\"https://www.rsquaredacademy.com/data-science-with-r\">R courses</a>"
-    right: "<a href=\"https://www.rsquaredacademy.com/about.html\">About</a> · <a href=\"https://www.rsquaredacademy.com/data-science-corporate-training.html/\">Corporate Training</a> · <a href=\"https://www.rsquaredacademy.com/data-science-university-training.html/\">University Training</a> · <a href=\"https://www.rsquaredacademy.com/terms-and-conditions.html\">Terms</a> · <a href=\"https://www.rsquaredacademy.com/privacy-policy.html\">Privacy</a> · <a href=\"https://www.rsquaredacademy.com/contact.html\">Contact</a>"
+  page-footer: |
+    <div class="container">
+    <div class="row">
+    <div class="col-sm-3"><h5>Get started</h5><ul class="list-unstyled">
+    <li><a href="https://www.rsquaredacademy.com/data-science-with-r">Online Training</a></li>
+    <li><a href="https://www.rsquaredacademy.com/data-science-with-r">Classroom Training</a></li>
+    <li><a href="https://www.rsquaredacademy.com/data-science-corporate-training.html/">Corporate Training</a></li>
+    <li><a href="https://www.rsquaredacademy.com/data-science-university-training.html/">University Training</a></li>
+    </ul></div>
+    <div class="col-sm-3"><h5>Resources</h5><ul class="list-unstyled">
+    <li><a href="https://blog.rsquaredacademy.com">Blog</a></li>
+    <li><a href="https://apps.rsquaredacademy.com">Apps</a></li>
+    <li><a href="https://ebooks.rsquaredacademy.com">ebooks</a></li>
+    <li><a href="https://pkgs.rsquaredacademy.com">R Packages</a></li>
+    </ul></div>
+    <div class="col-sm-3"><h5>About</h5><ul class="list-unstyled">
+    <li><a href="https://www.rsquaredacademy.com/about.html">Company</a></li>
+    <li><a href="https://www.rsquaredacademy.com/terms-and-conditions.html">Terms of Use</a></li>
+    <li><a href="https://www.rsquaredacademy.com/privacy-policy.html">Privacy Policy</a></li>
+    </ul></div>
+    <div class="col-sm-3"><h5>Support</h5><ul class="list-unstyled">
+    <li><a href="https://www.rsquaredacademy.com/contact.html">Contact Us</a></li>
+    <li><a href="index.xml">Subscribe via RSS</a></li>
+    </ul></div>
+    </div>
+    <div class="row"><div class="col-lg-12 text-center">
+    <a href="https://twitter.com/rsquaredacademy" target="_blank" aria-label="X/Twitter"><i class="bi bi-twitter fs-3"></i></a>&nbsp;&nbsp;&nbsp;
+    <a href="https://github.com/rsquaredacademy" target="_blank" aria-label="GitHub"><i class="bi bi-github fs-3"></i></a>&nbsp;&nbsp;&nbsp;
+    <a href="https://in.linkedin.com/company/rsquared-academy" target="_blank" aria-label="LinkedIn"><i class="bi bi-linkedin fs-3"></i></a>&nbsp;&nbsp;&nbsp;
+    <a href="https://www.youtube.com/user/rsquaredin" target="_blank" aria-label="YouTube"><i class="bi bi-youtube fs-3"></i></a>
+    </div></div>
+    <p class="text-center">Sales and Support&nbsp;&nbsp;&nbsp;&nbsp;+91-960-687-2504&nbsp;&nbsp;&nbsp;&nbsp;support@rsquaredacademy.com</p>
+    <p class="text-center">&copy; 2014–<script>document.write(new Date().getFullYear())</script> Rsquared Education Services Pvt. Ltd. All rights reserved.</p>
+    </div>
   # Analytics (stubbed — fill at launch, Phase 4):
   # google-analytics: "G-XXXXXXXXXX"
 
