@@ -27,6 +27,23 @@
   margin-right: 1.5rem;
 }
 
+/* Card grids: 4/3 across on desktop, 2 across on tablet, stacked on phone.
+   (Quarto layout-ncol alone never collapses — this restores the old
+   Bootstrap col-lg-3/col-md-6 behavior.) */
+@media (max-width: 991.98px) {
+  .cards-4 > .quarto-layout-row > .quarto-layout-cell,
+  .cards-3 > .quarto-layout-row > .quarto-layout-cell {
+    flex-basis: 50% !important;
+    max-width: 50% !important;
+  }
+}
+@media (max-width: 575.98px) {
+  .cards-4 > .quarto-layout-row > .quarto-layout-cell,
+  .cards-3 > .quarto-layout-row > .quarto-layout-cell {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+}
 /* Single-string page-footer lands in the narrow center zone; the side zones
    carry nothing, so hide them and let the footer span full width. */
 .nav-footer-left,
