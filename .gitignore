@@ -10,4 +10,8 @@ options.R
 content/post/config.yml
 content/post/mydatabase.db
 content/post/options.R
+config.yml.bak
+options.R.bak
+content/post/config.yml.bak
+content/post/options.R.bak
 roadmap/
