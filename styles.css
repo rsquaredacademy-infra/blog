@@ -15,3 +15,14 @@
   padding-right: 0.75rem !important;
   margin-right: 1.5rem;
 }
+
+/* Single-string page-footer lands in the narrow center zone; the side zones
+   carry nothing, so hide them and let the footer span full width. */
+.nav-footer-left,
+.nav-footer-right {
+  display: none !important;
+}
+.nav-footer-center {
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+}
