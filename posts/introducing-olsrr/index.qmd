@@ -9,6 +9,12 @@ tags: ["olsrr"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/introducing-olsrr/">
+  <meta property="article:published_time" content="2019-02-08">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/og_olsrr.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Introducing olsrr", "datePublished": "2019-02-08", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/og_olsrr.png"}</script>
 ---
 
 <!-- Migrated from content/post/2019-02-08-introducing-olsrr.Rmd. -->

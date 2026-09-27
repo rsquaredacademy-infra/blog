@@ -8,6 +8,11 @@ tags: ["vectors"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/vectors-part-1/">
+  <meta property="article:published_time" content="2017-03-25">
+  <meta property="article:author" content="Aravind Hebbali">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Vectors - Part 1", "datePublished": "2017-03-25", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}}</script>
 ---
 
 <!-- Migrated from content/post/2017-03-25-vectors.Rmd. -->

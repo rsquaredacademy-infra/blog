@@ -9,6 +9,12 @@ tags: ["help"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/getting-help-in-r-updated/">
+  <meta property="article:published_time" content="2019-03-05">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/help_banner.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Getting Help in R", "datePublished": "2019-03-05", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/help_banner.png"}</script>
 ---
 
 <!-- Migrated from content/post/2019-03-05-getting-help-in-r.Rmd. -->

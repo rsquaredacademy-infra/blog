@@ -9,6 +9,12 @@ tags: ["packages", "help"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/beginners-guide-to-r-package-ecosystem/">
+  <meta property="article:published_time" content="2017-03-13">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/package_banner.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Beginners Guide to R Package Ecosystem", "datePublished": "2017-03-13", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/package_banner.png"}</script>
 ---
 
 <!-- Migrated from content/post/2017-03-13-beginners-guide-to-r-package-ecosystem.Rmd. -->

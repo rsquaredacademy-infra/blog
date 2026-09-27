@@ -9,6 +9,12 @@ tags: ["ggplot2"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/themes/">
+  <meta property="article:published_time" content="2018-05-07">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_themes.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2: Themes", "datePublished": "2018-05-07", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_themes.png"}</script>
 ---
 
 <!-- Migrated from content/post/2018-05-07-ggplot2-themes.Rmd. -->

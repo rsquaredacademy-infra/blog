@@ -8,6 +8,11 @@ tags: ["matrix"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/matrix-part-2/">
+  <meta property="article:published_time" content="2017-04-12">
+  <meta property="article:author" content="Aravind Hebbali">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Matrices - Part 2", "datePublished": "2017-04-12", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}}</script>
 ---
 
 <!-- Migrated from content/post/2017-04-12-matrix-part-2.Rmd. -->

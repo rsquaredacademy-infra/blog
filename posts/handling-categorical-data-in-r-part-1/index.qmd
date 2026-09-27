@@ -9,6 +9,12 @@ tags: ["forcats"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/handling-categorical-data-in-r-part-1/">
+  <meta property="article:published_time" content="2022-01-07">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/forcats-part-1.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Handling Categorical Data in R - Part 1", "datePublished": "2022-01-07", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/forcats-part-1.png"}</script>
 ---
 
 <!-- Migrated from content/post/2022-01-07-handling-categorical-data-in-r-part-1.Rmd. -->

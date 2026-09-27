@@ -9,6 +9,12 @@ tags: ["ggplot2", "visualization"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/ggplot2-quick-tour/">
+  <meta property="article:published_time" content="2017-10-03">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_quick_tour.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2: Quick Tour", "datePublished": "2017-10-03", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_quick_tour.png"}</script>
 ---
 
 <!-- Migrated from content/post/2017-10-03-ggplot2-quick-tour.Rmd. -->

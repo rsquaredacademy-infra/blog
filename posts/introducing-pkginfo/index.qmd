@@ -9,6 +9,12 @@ tags: ["pkginfo"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/introducing-pkginfo/">
+  <meta property="article:published_time" content="2019-07-05">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/github_pkginfo.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "pkginfo: Tools for Retrieving R Package Information", "datePublished": "2019-07-05", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/github_pkginfo.png"}</script>
 ---
 
 <!-- Migrated from content/post/2019-07-05-pkginfo.Rmd. -->

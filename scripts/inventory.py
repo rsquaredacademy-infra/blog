@@ -397,7 +397,10 @@ def migrate_bundles(rows: list[dict]) -> int:
     the bundle and /post/<stem>_files/ refs rewritten bundle-relative.
     /img/..., /images/..., /rmarkdown-libs/... stay absolute (moved to root).
     """
+    import json as _json
     import shutil
+
+    SITE = "https://blog.rsquaredacademy.com"
 
     posts_dir = ROOT / "posts"
     count = 0
@@ -433,6 +436,19 @@ def migrate_bundles(rows: list[dict]) -> int:
                     print(f"  dropped dead img in {r['slug']} ({n} tag(s))")
         else:
             body = "<!-- WARNING: no pre-rendered .html pair — body pending refresh. -->\n"
+        canonical = f"{SITE}/posts/{r['slug']}/"
+        image_abs = f"{SITE}{r['image']}" if r["image"].startswith("/") else ""
+        ld = {"@context": "https://schema.org", "@type": "BlogPosting",
+              "headline": r["title"], "datePublished": r["date"],
+              "author": {"@type": "Person", "name": "Aravind Hebbali",
+                         "url": "https://www.aravindhebbali.com/"}}
+        if image_abs:
+            ld["image"] = image_abs
+        head = ([f'<link rel="canonical" href="{canonical}">']
+                + [f'<meta property="article:published_time" content="{r["date"]}">']
+                + [f'<meta property="article:author" content="Aravind Hebbali">']
+                + ([f'<meta property="og:image" content="{image_abs}">'] if image_abs else [])
+                + [f"<script type=\"application/ld+json\">{_json.dumps(ld)}</script>"])
         dest.write_text(
             "---\n"
             f"title: {_yaml_str(r['title'])}\n"
@@ -443,6 +459,8 @@ def migrate_bundles(rows: list[dict]) -> int:
             + (f"categories: {_yaml_list(r['categories'])}\n" if r["categories"] else "")
             + (f"tags: {_yaml_list(r['tags'])}\n" if r["tags"] else "")
             + "execute:\n  eval: false\n  freeze: true\n"
+            + "header-includes: |\n"
+            + "".join(f"  {line}\n" for line in head)
             + "---\n\n"
             f"<!-- Migrated from content/post/{r['file']}. -->\n"
             "<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->\n\n"

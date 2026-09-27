@@ -9,6 +9,12 @@ tags: ["regex"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/regular-expression-in-r/">
+  <meta property="article:published_time" content="2019-05-27">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/regex_cover_image.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Demystifying Regular Expressions in R", "datePublished": "2019-05-27", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/regex_cover_image.png"}</script>
 ---
 
 <!-- Migrated from content/post/2019-05-27-regex.Rmd. -->

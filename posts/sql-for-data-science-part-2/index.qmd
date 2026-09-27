@@ -9,6 +9,12 @@ tags: ["sql", "sqlite"]
 execute:
   eval: false
   freeze: true
+header-includes: |
+  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/sql-for-data-science-part-2/">
+  <meta property="article:published_time" content="2019-01-02">
+  <meta property="article:author" content="Aravind Hebbali">
+  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/sql_banner.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "SQL for Data Science - Part 2", "datePublished": "2019-01-02", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/sql_banner.png"}</script>
 ---
 
 <!-- Migrated from content/post/2019-01-02-sql-for-data-science-part-2.Rmd. -->

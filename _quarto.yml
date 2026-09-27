@@ -44,3 +44,10 @@ format:
     toc-depth: 3
     code-copy: true
     code-fold: show
+    open-graph:
+      site-name: "Rsquared Academy Blog"
+      locale: "en_US"
+    twitter-card:
+      card-style: summary_large_image
+      site: "@rsquaredacademy"
+      creator: "@rsquaredacademy"
