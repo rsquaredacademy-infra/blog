@@ -32,8 +32,6 @@ website:
         text: R Bloggers
       - href: https://rweekly.org/
         text: R Weekly
-      - href: about.qmd
-        text: About
     right:
       - href: https://rsquared-academy.thinkific.com/
         text: Explore Online Courses
