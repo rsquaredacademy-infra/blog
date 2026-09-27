@@ -13,6 +13,7 @@ project:
   resources:
     - _redirects
     - _headers
+    - robots.txt
     - img
     - images
     - rmarkdown-libs
