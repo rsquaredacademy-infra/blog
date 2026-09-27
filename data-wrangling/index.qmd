@@ -2,7 +2,7 @@
 title: "Data Wrangling"
 description: "Import, tidy, and reshape data with dplyr, tidyr, stringr, and friends."
 listing:
-  contents: "../posts/*.qmd"
+  contents: "posts/*.qmd"
   sort: "date desc"
   type: default
   categories: true

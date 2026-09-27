@@ -2,7 +2,7 @@
 title: "R Programming"
 description: "Core R: syntax, data structures, dates, strings, and getting help."
 listing:
-  contents: "../posts/*.qmd"
+  contents: "posts/*.qmd"
   sort: "date desc"
   type: default
   categories: true

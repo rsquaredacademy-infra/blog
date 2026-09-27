@@ -2,6 +2,14 @@ project:
   type: website  # NB: standalone `blog` type was removed in Quarto 1.10;
                  # a blog is now a website with a listing page + RSS feed.
   output-dir: _site
+  render:
+    - "index.qmd"
+    - "about.qmd"
+    - "posts/**/*.qmd"
+    - "r-programming/*.qmd"
+    - "data-wrangling/*.qmd"
+    - "data-visualization/*.qmd"
+    - "r-packages/*.qmd"
   resources:
     - _redirects
     - _headers
