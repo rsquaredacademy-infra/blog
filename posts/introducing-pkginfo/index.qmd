@@ -1,0 +1,238 @@
+---
+title: "pkginfo: Tools for Retrieving R Package Information"
+author: "Aravind Hebbali"
+date: "2019-07-05"
+description: "An experimental R package for retrieving R pacakge informatiom."
+image: "img/github_pkginfo.png"
+categories: ["packages"]
+tags: ["pkginfo"]
+execute:
+  eval: false
+  freeze: true
+---
+
+<!-- Migrated from content/post/2019-07-05-pkginfo.Rmd. -->
+<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->
+
+<p><img src="/img/github_pkginfo.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>There are several wonderful tools for retrieving information about R packages, some of which are listed below:</p>
+<ul>
+<li><strong><a href="https://github.com/r-hub/cranlogs">cranlogs</a></strong>, <strong><a href="https://github.com/GuangchuangYu/dlstats">dlstats</a></strong> and <strong><a href="https://github.com/lindbrook/packageRank">packageRank</a></strong> for R package download stats</li>
+<li><strong><a href="https://github.com/r-hub/pkgsearch">pkgsearch</a></strong> and <strong><a href="https://github.com/jsugarelli/packagefinder/">packagefinder</a></strong> for searching CRAN R packages</li>
+<li><strong><a href="https://github.com/r-hub/crandb">crandb</a></strong> provides API for programatically accessing meta-data</li>
+<li><strong><a href="https://github.com/ropenscilabs/cchecks">cchecks</a></strong> for CRAN check results</li>
+</ul>
+<p>We have used some or all of these to track/monitor our own <a href="https://pkgs.rsquaredacademy.com">R packages</a> available on CRAN. Over time, we wanted to have a single interface which would retrieve information from different places including:</p>
+<ul>
+<li>check results from <a href="https://cran.r-project.org/">CRAN</a></li>
+<li>issues &amp; pull requests from <a href="https://github.com/">GitHub</a></li>
+<li>build status from <a href="https://travis-ci.org/">Travis</a> and <a href="https://ci.appveyor.com/">Appveyor</a></li>
+<li>code coverage from <a href="https://codecov.io/">Codecov</a></li>
+<li>questions tagged with the package name in <a href="https://stackoverflow.com/">Stack Overflow</a></li>
+</ul>
+<p>And below is a demo of what we came up with…</p>
+{{% youtube "g7Lcmgiyzmo" %}}
+<p>The above shiny app can be launched with:</p>
+<pre class="r"><code>pkginfo::pkginfo_dashboard()</code></pre>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><a href="https://github.com/rsquaredacademy/pkginfo">pkginfo</a> will allow you to retrieve information from multiple places. The shiny app is especially useful if you are looking for information about multiple R packages. <a href="https://github.com/rsquaredacademy/pkginfo">pkginfo</a> provides two APIs, one is object oriented, the other one is procedural, and in this post, we will show you how to use them.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>You can install the development version from <a href="https://github.com/rsquaredacademy/pkginfo">GitHub</a> with:</p>
+<pre class="r"><code>devtools::install_github(&quot;rsquaredacademy/pkginfo&quot;)</code></pre>
+<hr>
+<p><a href="https://www.rsquaredacademy.com/" target="_blank"><img src="/img/ad.png" width="100%" alt="course ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+<div id="object-oriented-api" class="section level2">
+<h2>Object Oriented API</h2>
+<p>The object oriented API uses <a href="https://github.com/r-lib/R6">R6</a> classes.</p>
+<pre class="r"><code>library(pkginfo)</code></pre>
+<div id="github" class="section level3">
+<h3>GitHub</h3>
+<div id="creating-a-new-githubrepo-object" class="section level4">
+<h4>Creating a new GitHubRepo object</h4>
+<pre class="r"><code>myRepo &lt;- GitHubRepo$new(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+</div>
+<div id="stars-forks-issues" class="section level4">
+<h4>Stars, Forks &amp; Issues</h4>
+<p><code>get_stats()</code> will report the number of stars, forks and open issues.</p>
+<pre class="r"><code>myRepo$get_stats()</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   stars issues forks
+##   &lt;int&gt;  &lt;int&gt; &lt;int&gt;
+## 1    84     13    14</code></pre>
+</div>
+<div id="issues" class="section level4">
+<h4>Issues</h4>
+<p><code>get_issues()</code> will report the date, number, author and title of all the open issues.</p>
+<pre class="r"><code>myRepo$get_issues()</code></pre>
+<pre><code>## # A tibble: 13 x 4
+##    date       number author      title                                          
+##    &lt;date&gt;      &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                                          
+##  1 2020-06-06    163 AminHP      &quot;Stepwise selection based on Adjusted R-Square~
+##  2 2020-05-05    162 Fernal73    &quot;User must be able to specify different best s~
+##  3 2020-05-04    161 Fernal73    &quot;ggplot (or grob) object must be printed when ~
+##  4 2020-05-04    160 Fernal73    &quot;Methods returning data.frame of decision crit~
+##  5 2020-04-28    159 aravindheb~ &quot;Extracting model data&quot;                        
+##  6 2020-04-28    158 Fernal73    &quot;Cannot coerce class ‘\&quot;function\&quot;’ to a data.~
+##  7 2020-04-17    157 aravindheb~ &quot;Best subset regression options&quot;               
+##  8 2019-12-10    146 sblanco74   &quot;Hi @aravindhebbali&quot;                           
+##  9 2019-11-18    138 vasili111   &quot;Linear mixed model support?&quot;                  
+## 10 2019-10-04    137 aravindheb~ &quot;Automated report&quot;                             
+## 11 2019-10-04    136 aravindheb~ &quot;Import shiny app from xplorerr &quot;              
+## 12 2019-06-20    133 aravindheb~ &quot;Cook&#39;s distance chart threshold&quot;              
+## 13 2018-09-21     92 cccfran     &quot;categorical variable&quot;</code></pre>
+</div>
+<div id="branches" class="section level4">
+<h4>Branches</h4>
+<p><code>get_branches()</code> will report the name of the branches.</p>
+<pre class="r"><code>myRepo$get_branches()</code></pre>
+<pre><code>## # A tibble: 2 x 1
+##   branches
+##   &lt;chr&gt;   
+## 1 develop 
+## 2 master</code></pre>
+</div>
+<div id="build-status-code-coverage" class="section level4">
+<h4>Build Status &amp; Code Coverage</h4>
+<p>The build status is reported from <a href="https://travis-ci.org/">Travis CI</a> and <a href="https://ci.appveyor.com/">Appveyor</a> while code coverage is reported from <a href="https://codecov.io/">Codecov</a></p>
+<div id="travis-ci" class="section level5">
+<h5>Travis CI</h5>
+<pre class="r"><code>myRepo$get_travis_status()</code></pre>
+<pre><code>## [1] &quot;Error&quot;</code></pre>
+</div>
+<div id="codecov" class="section level5">
+<h5>Codecov</h5>
+<pre class="r"><code>myRepo$get_coverage()</code></pre>
+<pre><code>## [1] &quot;92.81957&quot;</code></pre>
+<hr>
+<p>
+<a href="https://www.youtube.com/user/rsquaredin/" target="_blank"><img src="/img/ad_youtube.png" width="100%" alt="youtube ad" style="text-decoration: none;"></a>
+</p>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div id="procedural-api" class="section level2">
+<h2>Procedural API</h2>
+<div id="github-1" class="section level3">
+<h3>GitHub</h3>
+<p>To use the procedural API for retrieving GitHub information, you need to provide the following inputs:</p>
+<ul>
+<li>package/repo name</li>
+<li>GitHUb user/organization name (optional)</li>
+</ul>
+<p>If you do not know the GitHub user/org name, leave it empty. <a href="https://github.com/rsquaredacademy/pkginfo">pkginfo</a> will look for the user/org name in the <strong>URLS</strong> available on the CRAN page of the package.</p>
+<div id="stars-forks-issues-1" class="section level4">
+<h4>Stars, Forks &amp; Issues</h4>
+<pre class="r"><code>get_gh_stats(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   stars issues forks
+##   &lt;int&gt;  &lt;int&gt; &lt;int&gt;
+## 1    84     13    14</code></pre>
+</div>
+<div id="issues-1" class="section level4">
+<h4>Issues</h4>
+<pre class="r"><code>get_gh_issues(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+<pre><code>## # A tibble: 13 x 4
+##    date       number author      title                                          
+##    &lt;date&gt;      &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                                          
+##  1 2020-06-06    163 AminHP      &quot;Stepwise selection based on Adjusted R-Square~
+##  2 2020-05-05    162 Fernal73    &quot;User must be able to specify different best s~
+##  3 2020-05-04    161 Fernal73    &quot;ggplot (or grob) object must be printed when ~
+##  4 2020-05-04    160 Fernal73    &quot;Methods returning data.frame of decision crit~
+##  5 2020-04-28    159 aravindheb~ &quot;Extracting model data&quot;                        
+##  6 2020-04-28    158 Fernal73    &quot;Cannot coerce class ‘\&quot;function\&quot;’ to a data.~
+##  7 2020-04-17    157 aravindheb~ &quot;Best subset regression options&quot;               
+##  8 2019-12-10    146 sblanco74   &quot;Hi @aravindhebbali&quot;                           
+##  9 2019-11-18    138 vasili111   &quot;Linear mixed model support?&quot;                  
+## 10 2019-10-04    137 aravindheb~ &quot;Automated report&quot;                             
+## 11 2019-10-04    136 aravindheb~ &quot;Import shiny app from xplorerr &quot;              
+## 12 2019-06-20    133 aravindheb~ &quot;Cook&#39;s distance chart threshold&quot;              
+## 13 2018-09-21     92 cccfran     &quot;categorical variable&quot;</code></pre>
+<hr>
+<p><a href="https://pkgs.rsquaredacademy.com/" target="_blank"><img src="/img/ad_packages.png" width="100%" alt="packages ad" style="text-decoration: none;"></a></p>
+<hr>
+</div>
+</div>
+<div id="cran-check-results" class="section level3">
+<h3>CRAN Check Results</h3>
+<p>The CRAN check results is reported using the <a href="https://github.com/ropenscilabs/cchecksapi">cchecksapi</a> API.</p>
+<pre class="r"><code>get_pkg_cran_check_results(&quot;olsrr&quot;)</code></pre>
+<pre><code>## # A tibble: 12 x 4
+##    os                r      status url                                          
+##    &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;                                        
+##  1 linux-x86_64-deb~ devel  OK     https://www.R-project.org/nosvn/R.check/r-de~
+##  2 linux-x86_64-deb~ devel  OK     https://www.R-project.org/nosvn/R.check/r-de~
+##  3 linux-x86_64-fed~ devel  OK     https://www.R-project.org/nosvn/R.check/r-de~
+##  4 linux-x86_64-fed~ devel  OK     https://www.R-project.org/nosvn/R.check/r-de~
+##  5 windows-ix86+x86~ devel  OK     https://www.R-project.org/nosvn/R.check/r-de~
+##  6 linux-x86_64      patch~ OK     https://www.R-project.org/nosvn/R.check/r-pa~
+##  7 solaris-x86       patch~ OK     https://www.R-project.org/nosvn/R.check/r-pa~
+##  8 linux-x86_64      relea~ OK     https://www.R-project.org/nosvn/R.check/r-re~
+##  9 osx-x86_64        relea~ OK     https://www.R-project.org/nosvn/R.check/r-re~
+## 10 windows-ix86+x86~ relea~ OK     https://www.R-project.org/nosvn/R.check/r-re~
+## 11 osx-x86_64        oldrel OK     https://www.R-project.org/nosvn/R.check/r-ol~
+## 12 windows-ix86+x86~ oldrel OK     https://www.R-project.org/nosvn/R.check/r-ol~</code></pre>
+</div>
+<div id="build-status" class="section level3">
+<h3>Build Status</h3>
+<p>You can check the build status of a package from both <a href="https://travis-ci.org/">Travis CI</a> and <a href="https://ci.appveyor.com/">Appveyor</a>.</p>
+<div id="travis-ci-1" class="section level4">
+<h4>Travis CI</h4>
+<pre class="r"><code>get_status_travis(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+<pre><code>## [1] &quot;Error&quot;</code></pre>
+</div>
+<div id="appveyor" class="section level4">
+<h4>Appveyor</h4>
+<pre class="r"><code>get_status_appveyor(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+<pre><code>## [1] &quot;failed&quot;</code></pre>
+</div>
+</div>
+<div id="code-coverage" class="section level3">
+<h3>Code Coverage</h3>
+<p>Report code coverage for the package from the coverage service <a href="https://codecov.io/">Codecov</a>. We hope to add coverage from <a href="https://coveralls.io/">Coveralls</a> in the near future.</p>
+<pre class="r"><code>get_code_coverage(&quot;olsrr&quot;, &quot;rsquaredacademy&quot;)</code></pre>
+<pre><code>## [1] &quot;92.81957&quot;</code></pre>
+</div>
+<div id="stack-overflow" class="section level3">
+<h3>Stack Overflow</h3>
+<p>Questions tagged with the package name will be displayed from <a href="https://stackoverflow.com/">Stack Overflow</a>.</p>
+<pre class="r"><code>get_so_questions(&quot;dplyr&quot;)</code></pre>
+<pre><code>## # A tibble: 30 x 6
+##    date       title                 owner    answered views link                
+##    &lt;date&gt;     &lt;chr&gt;                 &lt;chr&gt;    &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;               
+##  1 2020-06-09 Combining 2 data fra~ Les      FALSE       22 https://stackoverfl~
+##  2 2020-06-10 Summarizing one way,~ David T  FALSE       11 https://stackoverfl~
+##  3 2020-06-10 Identifying and modi~ Parselt~ TRUE        17 https://stackoverfl~
+##  4 2020-06-10 R: How do I append d~ Gordon ~ FALSE       14 https://stackoverfl~
+##  5 2020-06-10 customising title of~ smicaela FALSE       10 https://stackoverfl~
+##  6 2020-06-10 Aggregate rows withi~ Christo~ FALSE       10 https://stackoverfl~
+##  7 2020-06-10 %within% in case_whe~ Rasmus   FALSE       22 https://stackoverfl~
+##  8 2020-06-10 R/dplyr: How do I in~ questio~ FALSE       20 https://stackoverfl~
+##  9 2020-06-10 Filter rows of one c~ mvanaman FALSE       12 https://stackoverfl~
+## 10 2020-06-10 Groupby and keep onl~ chippyc~ FALSE       24 https://stackoverfl~
+## # ... with 20 more rows</code></pre>
+</div>
+</div>
+<div id="to-do.." class="section level2">
+<h2>To Do..</h2>
+<p>In the near future, <a href="https://github.com/rsquaredacademy/pkginfo">pkginfo</a> will retrieve information:</p>
+<ul>
+<li>about packages that are available on GitHub/GitLab but not on CRAN</li>
+<li>packages that are available on <a href="https://about.gitlab.com/">GitLab</a></li>
+<li>about code coverage from <a href="https://coveralls.io/">Coveralls</a></li>
+<li>about Twitter mentions</li>
+</ul>
+<p>We did not have any specific end user in mind while developing but believe it will be more useful to package developers/maintainers. Suggestions/feedbacks and pull requests are always welcome.</p>
+<p>If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source repository</a>
+or reach out to us at <a href="mailto:feedback@rsquaredacademy.com" class="email">feedback@rsquaredacademy.com</a>.</p>
+</div>

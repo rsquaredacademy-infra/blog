@@ -6,6 +6,7 @@ project:
     - _headers
     - img
     - images
+    - rmarkdown-libs
 
 website:
   title: "Rsquared Academy Blog"

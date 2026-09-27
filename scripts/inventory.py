@@ -245,32 +245,69 @@ def write_redirect_audit(rows: list[dict]) -> None:
         w.writerows(out)
 
 
+def _yaml_str(value: str) -> str:
+    """Quote a scalar for YAML frontmatter (handles embedded quotes)."""
+    if '"' not in value:
+        return f'"{value}"'
+    return "'" + value.replace("'", "''") + "'"
+
+
+def _yaml_list(piped: str) -> str:
+    return "[" + ", ".join(_yaml_str(v) for v in piped.split("|") if v) + "]"
+
+
 def migrate_bundles(rows: list[dict]) -> int:
-    """Phase 1 only: emit posts/<slug>/index.qmd static bundles (eval: false)."""
+    """Phase 1 only: emit posts/<slug>/index.qmd static bundles (eval: false).
+
+    Body reuses the pre-rendered content/post/*.html fragment (frontmatter
+    stripped). Blogdown figure dirs (static/post/<stem>_files/) are copied into
+    the bundle and /post/<stem>_files/ refs rewritten bundle-relative.
+    /img/..., /images/..., /rmarkdown-libs/... stay absolute (moved to root).
+    """
+    import shutil
+
     posts_dir = ROOT / "posts"
     count = 0
+    # Duplicate slugs (flat Hugo permalinks kept only one): newest file wins.
+    deduped: dict[str, dict] = {}
     for r in rows:
         if not r["slug"] or r["title"] == "ORPHAN-HTML-NO-RMD":
             continue
+        prev = deduped.get(r["slug"])
+        if prev is None or r["file"] > prev["file"]:
+            deduped[r["slug"]] = r
+    for r in deduped.values():
         dest = posts_dir / r["slug"] / "index.qmd"
         if dest.exists():
             continue
         dest.parent.mkdir(parents=True, exist_ok=True)
-        cats = r["categories"].replace("|", ", ") if r["categories"] else ""
-        tags = r["tags"].replace("|", ", ") if r["tags"] else ""
+        body = ""
+        stem = Path(r["file"]).stem if r["file"] else ""
+        frag = POST_DIR / f"{stem}.html" if stem else None
+        if frag is not None and frag.exists():
+            body = FRONTMATTER_RE.sub("", frag.read_text(encoding="utf-8",
+                                                          errors="replace"), count=1)
+            files_dir = ROOT / "static" / "post" / f"{stem}_files"
+            if files_dir.is_dir():
+                shutil.copytree(files_dir, dest.parent / f"{stem}_files",
+                                dirs_exist_ok=True)
+                body = body.replace(f"/post/{stem}_files/", f"{stem}_files/")
+        else:
+            body = "<!-- WARNING: no pre-rendered .html pair — body pending refresh. -->\n"
         dest.write_text(
             "---\n"
-            f"title: \"{r['title']}\"\n"
+            f"title: {_yaml_str(r['title'])}\n"
             "author: \"Aravind Hebbali\"\n"
-            f"date: \"{r['date']}\"\n"
-            f"description: \"{r['description']}\"\n"
-            + (f"image: \"{r['image']}\"\n" if r["image"] else "")
-            + (f"categories: [{cats}]\n" if cats else "")
-            + (f"tags: [{tags}]\n" if tags else "")
+            f"date: {_yaml_str(r['date'])}\n"
+            f"description: {_yaml_str(r['description'])}\n"
+            + (f"image: {_yaml_str(r['image'])}\n" if r["image"] else "")
+            + (f"categories: {_yaml_list(r['categories'])}\n" if r["categories"] else "")
+            + (f"tags: {_yaml_list(r['tags'])}\n" if r["tags"] else "")
             + "execute:\n  eval: false\n  freeze: true\n"
             + "---\n\n"
             f"<!-- Migrated from content/post/{r['file']}. -->\n"
-            "<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->\n",
+            "<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->\n\n"
+            + body.lstrip("\n"),
             encoding="utf-8",
         )
         count += 1

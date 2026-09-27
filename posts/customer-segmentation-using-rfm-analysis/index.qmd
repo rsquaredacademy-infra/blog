@@ -1,0 +1,1115 @@
+---
+title: "Customer Segmentation using RFM Analysis"
+author: "Aravind Hebbali"
+date: "2019-07-22"
+description: "Learn to use RFM analysis for customer segmentation."
+image: "img/rfm_cover_image.png"
+categories: ["rfm"]
+tags: ["rfm"]
+execute:
+  eval: false
+  freeze: true
+---
+
+<!-- Migrated from content/post/2019-07-22-customer-segmentation-using-rfm-analysis.Rmd. -->
+<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
+
+
+<p><img src="/img/rfm_cover_image.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In a previous <a href="https://blog.rsquaredacademy.com/introducing-rfm/" target="_blank">post</a>,
+we had introduced our R package <a href="https://rfm.rsquaredacademy.com" target="_blank">rfm</a>
+but did not go into the conceptual details of RFM analysis. In this post, we
+will explore RFM in much more depth and work through a case study as well.
+<strong>RFM</strong> (Recency, Frequency &amp; Monetary) analysis is a behavior based technique
+used to segment customers by examining their transaction history such as:</p>
+<ul>
+<li>how recently a customer has purchased?</li>
+<li>how often do they purchase?</li>
+<li>how much the customer spends?</li>
+</ul>
+<p>It is based on the marketing axiom that <strong>80% of your business comes from 20%
+of your customers</strong>. RFM helps to identify customers who are more likely to
+respond to promotions by segmenting them into various categories.</p>
+{{% youtube "275X7yaSsoQ" %}}
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Below are the links to all resources related to this post:</p>
+<ul>
+<li><a href="https://slides.rsquaredacademy.com/rfm/rfm.html" target="_blank">Slides</a></li>
+<li><a href="https://github.com/rsquaredacademy-education/online-courses/" target="_blank">Code &amp; Data</a></li>
+<li><a href="https://rstudio.cloud/project/416146" target="_blank">RStudio Cloud</a></li>
+</ul>
+<p>You can try our free online course
+<a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank">Customer Segmentation using RFM Analysis</a>
+if you like to learn through self paced online courses.</p>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case Study</h2>
+<p>We will work through a case study to better understand the underlying concepts
+of RFM analysis. To pique your curiosity, we will start with the results or
+the final outcome of the case study as shown below:</p>
+<p><img src="/img/rfm_segments.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The table has the following details:</p>
+<ul>
+<li>name or id of the customer</li>
+<li>number of days since the last transaction of the customer</li>
+<li>number of transactions of the customer</li>
+<li>total value of the all the transactions of the customer</li>
+<li>RFM score</li>
+<li>customer segment</li>
+</ul>
+<p>The rest of this post will focus on generating a similar result for our case
+study and along the way we will learn to:</p>
+<ul>
+<li>structure data for RFM analysis</li>
+<li>generate RFM score</li>
+<li>and segment customers using RFM score</li>
+</ul>
+</div>
+<div id="applications" class="section level2">
+<h2>Applications</h2>
+<p><img src="/img/rfm_applications.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us talk about applications. Though largely identified with retail or
+ecommerce, RFM analysis can be applied in a lot of other domains or industry as
+well. In social media and apps, RFM can be used to segment users as well. The
+only difference is instead of using monetary value as the third metric, we will
+use the amount of time spent (or some other metric based on it) on the site/app.
+The more time we spend on the platform and consume the content, the more ads
+can be displayed by the platform. So in those cases, the amount of time we
+spend will be the third metric.</p>
+</div>
+<div id="rfm-workflow" class="section level2">
+<h2>RFM Workflow</h2>
+<p><img src="/img/rfm_work_flow.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The typical workflow for RFM analysis is shown above. It can be broadly divided
+into the following:</p>
+<ul>
+<li><p>In the first step of the workflow, we <strong>collect transaction data</strong>. This
+should include a unique customer id, transaction date and transaction amount. In
+case of ecommerce, we need to decide how to treat visits that did not result in
+a transaction. If data is aggregated and made available at the customer level,
+it must include a unique customer id, last transaction date and total revenue
+from the customer. The last transaction date may be replaced by days since last
+visit as well. The details available in data supplied depends on the data
+pipeline and the <code>rfm</code> package can handle any of the above 3 scenarios.</p></li>
+<li><p>In the second step, we <strong>generate RFM table</strong> from the raw data available. The
+RFM table aggregates data at the customer level. It includes the unique customer
+id, days since last transaction/visit, frequency of transactions/visits and the
+total revenue from all the transactions of the customer.</p></li>
+<li><p>In the third step, we <strong>generate scores</strong> for recency, frequency and monetary
+value, and use them to create the RFM score for each customer.</p></li>
+<li><p>In the final step, we use the recency, frequency and monetary scores to
+<strong>define customer segments</strong> and design customised campaigns, promotions,
+offers &amp; discounts to retain and reactivate customers.</p></li>
+</ul>
+</div>
+<div id="rfm-table" class="section level2">
+<h2>RFM Table</h2>
+<p>Let us assume we have completed the first step in RFM analysis by collecting
+transaction data. Now, we have to generate the RFM table from the transaction
+data. In the transaction data, each row represents a transaction and we may get
+the transaction details in any of the following ways:</p>
+<ul>
+<li>according to transaction date</li>
+<li>sorted by customer id</li>
+<li>or in a random order</li>
+</ul>
+<p>The first two cases are more likely but if we get the transaction data in a
+random order, the first order of business is to sort them by customer id. In
+the below example, we have transaction details for 3 customers Lionel, Jaineel
+and Taj but they are not sorted by transaction date or customer id. Since we
+want to create the RFM table from this data, we sort it by customer id.</p>
+<p><img src="/img/rfm_raw_sorted.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>From the sorted data, we aggregate the transaction details at the customer level
+as shown below.</p>
+<p><img src="/img/rfm_raw_sorted_aggregate.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>From the above step, we have created the RFM table which contains recency (days
+since last visit), frequency (frequency of visits) and monetary (total revenue
+from the customer) data for each customer.</p>
+<p><img src="/img/rfm_table.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="metrics" class="section level2">
+<h2>Metrics</h2>
+<p>Time to talk about the key metrics <strong>R</strong>ecency, <strong>F</strong>requency and <strong>M</strong>onetary
+in more detail. In this section, we will understand how they are calculated,
+and in the next section, we will learn how they are used for generating the
+RFM score.</p>
+<p><img src="/img/rfm_segment_4.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="recency" class="section level3">
+<h3>Recency</h3>
+<p>Let us begin with recency. Earlier, we defined it as the number of days since
+the last transaction of the customer. How do we calculate this metric? Apart
+from the date of the last transaction of the customer, what other information
+do we need? In all the discussions till now, we have missed out on a key point
+i.e. the time frame of the analysis.</p>
+<p>The most crucial step in RFM analysis is to select a time frame from which
+we use the transaction data. How do we decide on this time frame? It depends
+on the domain to which we are applying this analysis. Customers visit a grocery
+store more often than they visit a consumer durables store. Similarly, people
+consume content from news &amp; blogs more frequently while they may visit an
+e-commerce website only when they have to purchase something. Keeping in mind
+the domain to which the analysis is being applied, select an appropriate time
+frame. To calculate recency, compute the difference between the last transaction
+date and the analysis date i.e. the last date of the selected time frame.</p>
+<p><img src="/img/rfm_recency_computation.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the above example, the analysis date is <code>2016-12-31</code>. To compute recency,
+we first extract all the transaction date of customer Taj and then select the
+last transaction date, <code>2015-04-21</code>, and subtract if from the analysis
+date to get the number of days since the last transaction date, <code>620</code>.</p>
+</div>
+<div id="frequency" class="section level3">
+<h3>Frequency</h3>
+<p>Frequency is the count of transactions. In the online/digital world, we need to
+decide whether we will consider all the visits to a website or app as the
+frequency or only those which resulted in a transaction/conversion. In the
+below example, we count the transactions for each customer and use it as
+frequency. Lionel has 6 transactions, Jaineel has 9 transactions and Taj has
+4 transactions.</p>
+<p><img src="/img/rfm_frequency_computation.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="monetary-value" class="section level3">
+<h3>Monetary Value</h3>
+<p>Monetary value is the total revenue from each customer in the selected time
+frame. It is computed by summing up the transaction amount. In our case study,
+Jaineel has spent the highest amount of <code>$843</code>, followed by Lionel who has
+spent <code>$472</code> and Taj has spent the lowest, <code>$196</code>. As you can observe, we have
+arrived at these figures by summing the values in the third column of the
+second table, <code>Order Amount</code>.</p>
+<p>If we are applying this analysis to the digital world, we may think of using
+a metric such as time spent on the website/app instead of transaction/order
+amount.</p>
+<p><img src="/img/rfm_monetary_computation.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="rfm-score" class="section level2">
+<h2>RFM Score</h2>
+<p>As shown in the workflow, the third step in RFM analysis is to generate the
+individual score for each metric and then use them to generate the RFM score. In
+this section, we will explain in detail how the scores are computed for recency,
+frequency and monetary. This section is slightly complex (we received a lot of
+mails from readers after we published the previous post) and we have tried our
+best to break down the complexity as much as possible. Still, if you have any
+questions feel free to write to us at <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a>.</p>
+<p>We follow the below steps to create the score:</p>
+<ul>
+<li>use quantiles to generate cut off points</li>
+<li>create intervals based on the cut off points</li>
+<li>use the intervals to assign score</li>
+</ul>
+<div id="monetary-score" class="section level3">
+<h3>Monetary Score</h3>
+<p><img src="/img/rfm_monetary_score_interval.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us generate the monetary score in our case study. The first step is to
+compute the quantiles using the <code>quantile()</code> function. We use the revenue
+column from the RFM table to compute the quantiles. If you look at the example,
+it gives us the cut off below which a certain percentage of customers are
+present.</p>
+<ul>
+<li>the bottom 20% of customers spend below <code>$254.8</code>.</li>
+<li>the next 20% of customers spend between <code>$254.8</code> and <code>$381.0</code>.</li>
+<li>the top 20% of customers spend above <code>$665.0</code>.</li>
+</ul>
+<p>Using these cut off points we have created intervals which can then be converted
+to <code>if else</code> statements. The intervals are then used to assign scores. For
+example, Lionel falls in the interval <code>&gt; 381.0 &amp; &lt;= 505.4</code> and hence is assigned
+the score <code>3</code>. Similarly, Jaineel and Taj are assigned the scores <code>5</code> and <code>1</code>.
+How do we interpret the scores? The score is more like a rank. A customer with
+a score of 3 is ranked higher than a customer with score of 1 as his transaction
+amount is higher. In the <code>rfm</code> package, we use the above method to assign the
+scores.</p>
+<p>Some users reverse the order of the score i.e. top 20% customers by transaction
+amountare assigned the score 1 and the bottom 20% are assigned the score 5.</p>
+</div>
+<div id="frequency-score" class="section level3">
+<h3>Frequency Score</h3>
+<p><img src="/img/rfm_frequency_score_interval.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The frequency score is computed in the same way as the monetary score. Instead
+of using the revenue column from the RFM table, we use the frequency column.
+Using quantiles, we arrive at the cut off points below which a certain
+percentage of customer are present. If you observe the example, the first table
+shows the quantiles and the associated cut off points.</p>
+<ul>
+<li>the bottom 20% of customers visit/transact less than 3 times.</li>
+<li>the next 20% of customers visit/transact around 4 times.</li>
+<li>the top 20% of customers visit/transact more than 7 times.</li>
+</ul>
+<p>The cut off points are then used to create the intervals and assign the scores
+as shown in the second table. We assign a higher score to those who visit more
+frequently and a lower score to those who visit less frequently.</p>
+<p>In our case study, Jaineel has visited 9 times and hence assigned the score 5
+where as Taj has visited only 4 times and hence the score 2.</p>
+</div>
+<div id="recency-score" class="section level3">
+<h3>Recency Score</h3>
+<p>The recency score follows the same methodology but uses a slightly different
+concept while assigning the score. If you look at the metrics, the higher the
+values of frequency and monetary, the better as we want customers to transact
+frequently and spend higher amount but it is not the case with recency. Since
+recency represents the number of days since the last transaction, the lower its
+value the better i.e. customers who visited in the recent past are more likely
+to visit again whereas customers who visited long back may be as good as lost.
+Hence in the case of recency, higher score is assigned to those with lower
+recency value and vice versa.</p>
+<p><img src="/img/rfm_recency_score_interval.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>In the above example, we have used quantiles to compute the cut off point for
+recency. The first table shows the quantiles and the associated cut off points:</p>
+<ul>
+<li>the bottom 20% of customers visited more than <code>481</code> days back.</li>
+<li>the next 20% of customers visited between <code>296.4</code> and <code>481</code> days back.</li>
+<li>the top 20% of customers visited less than 114 days back.</li>
+</ul>
+<p>The above statements will become clear if you study the second table which
+includes the interval and the score. We have assigned a higher score to those
+who visited in the recent past (&lt; 114 days) compared to those who visited way
+back (&gt; 481 days). In our case study, Jaineel visited in the past 3 months and
+hence the score of 5 where as Taj visited almost 20 months back and has been
+assigned the score 1.</p>
+</div>
+<div id="rfm-score-1" class="section level3">
+<h3>RFM Score</h3>
+<p>Now that we have calculated the individual scores, let us compute the RFM score
+using the below formula:</p>
+<p><code>RFM Score = Recency Score * 100 + Frequency Score * 10 + Monetary Score</code></p>
+<p>The below table shows the individal scores of recency, frequency and monetary as
+well as the RFM score. All of them are computed from the RFM table which in
+itself is based on the transaction data.</p>
+<p><img src="/img/rfm_score_table.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="segments" class="section level2">
+<h2>Segments</h2>
+<p>Great! We have finally computed the RFM score. Now what? How do we define the
+segments using this score? In this section, we will learn how to define customer
+segments using the RFM score. The below table is an example of how segments are
+defined. It has the following details:</p>
+<ul>
+<li>the name of the segment</li>
+<li>the definition of the segment</li>
+<li>the intervals for the recency, frequency &amp; monetary scores</li>
+</ul>
+<p>We should be careful while creating the intervals for the scores in the
+segments table. Look at <a href="https://en.wikipedia.org/wiki/Interval_(mathematics)#Classification_of_intervals" target="_blank">this</a> Wkipedia article to understand how intervals work.</p>
+<p><img src="/img/rfm_segments_table.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let us apply the above rules to our case study.</p>
+<p><img src="/img/rfm_segments.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Defining segments is another crucial step in RFM analysis. We need to ensure
+that there is no duplication or large number of customers get classified into
+<code>Others</code> segment. In the case study, we will show you some of the mistakes
+that can happen while defining the segments.</p>
+</div>
+<div id="case-study-1" class="section level2">
+<h2>Case Study</h2>
+<p>It is time to work through the case study. Let us first load all the libraries we
+will use as shown below:</p>
+<pre class="r"><code>library(rfm)
+library(dplyr)
+library(magrittr)
+library(lubridate)</code></pre>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>To calculate the RFM score for each customer we need transaction data which should include the following:</p>
+<ul>
+<li>a unique customer id</li>
+<li>date of transaction/order</li>
+<li>transaction/order amount</li>
+</ul>
+<p><code>rfm</code> includes a sample data set <code>rfm_data_orders</code> which includes the above
+details:</p>
+<pre class="r"><code>rfm_data_orders</code></pre>
+<pre><code>## # A tibble: 4,906 x 3
+##    customer_id         order_date revenue
+##    &lt;chr&gt;               &lt;date&gt;       &lt;dbl&gt;
+##  1 Mr. Brion Stark Sr. 2004-12-20      32
+##  2 Ethyl Botsford      2005-05-02      36
+##  3 Hosteen Jacobi      2004-03-06     116
+##  4 Mr. Edw Frami       2006-03-15      99
+##  5 Josef Lemke         2006-08-14      76
+##  6 Julisa Halvorson    2005-05-28      56
+##  7 Judyth Lueilwitz    2005-03-09     108
+##  8 Mr. Mekhi Goyette   2005-09-23     183
+##  9 Hansford Moen PhD   2005-09-07      30
+## 10 Fount Flatley       2006-04-12      13
+## # ... with 4,896 more rows</code></pre>
+</div>
+<div id="rfm-score-2" class="section level3">
+<h3>RFM Score</h3>
+<p>Use <code>rfm_table_order()</code> to generate the score for each customer from the sample
+data set <code>rfm_data_orders</code>.</p>
+<p><code>rfm_table_order()</code> takes 8 inputs:</p>
+<ul>
+<li><code>data</code>: a data set with
+<ul>
+<li>unique customer id</li>
+<li>date of transaction</li>
+<li>and amount</li>
+</ul></li>
+<li><code>customer_id</code>: name of the customer id column</li>
+<li><code>order_date</code>: name of the transaction date column</li>
+<li><code>revenue</code>: name of the transaction amount column</li>
+<li><code>analysis_date</code>: date of analysis</li>
+<li><code>recency_bins</code>: number of rankings for recency score (default is 5)</li>
+<li><code>frequency_bins</code>: number of rankings for frequency score (default is 5)</li>
+<li><code>monetary_bins</code>: number of rankings for monetary score (default is 5)</li>
+</ul>
+</div>
+<div id="rfm-table-1" class="section level3">
+<h3>RFM Table</h3>
+<pre class="r"><code>analysis_date &lt;- lubridate::as_date(&quot;2006-12-31&quot;, tz = &quot;UTC&quot;)
+rfm_result &lt;- rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date)
+rfm_result</code></pre>
+<pre><code>## Warning: `tz` argument is ignored by `as_date()`</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+customer_id
+</th>
+<th style="text-align:left;">
+date_most_recent
+</th>
+<th style="text-align:right;">
+recency_days
+</th>
+<th style="text-align:right;">
+transaction_count
+</th>
+<th style="text-align:right;">
+amount
+</th>
+<th style="text-align:right;">
+recency_score
+</th>
+<th style="text-align:right;">
+frequency_score
+</th>
+<th style="text-align:right;">
+monetary_score
+</th>
+<th style="text-align:right;">
+rfm_score
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Abbey O’Reilly DVM
+</td>
+<td style="text-align:left;">
+2006-06-09
+</td>
+<td style="text-align:right;">
+205
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+472
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+343
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Add Senger
+</td>
+<td style="text-align:left;">
+2006-08-13
+</td>
+<td style="text-align:right;">
+140
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+340
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+412
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aden Lesch Sr. 
+</td>
+<td style="text-align:left;">
+2006-06-20
+</td>
+<td style="text-align:right;">
+194
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+405
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+323
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Admiral Senger
+</td>
+<td style="text-align:left;">
+2006-08-21
+</td>
+<td style="text-align:right;">
+132
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+448
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+433
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Agness O’Keefe
+</td>
+<td style="text-align:left;">
+2006-10-02
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+843
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aileen Barton
+</td>
+<td style="text-align:left;">
+2006-10-08
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+763
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ailene Hermann
+</td>
+<td style="text-align:left;">
+2006-03-25
+</td>
+<td style="text-align:right;">
+281
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+699
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+355
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aiyanna Bruen PhD
+</td>
+<td style="text-align:left;">
+2006-04-29
+</td>
+<td style="text-align:right;">
+246
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+157
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+321
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ala Schmidt DDS
+</td>
+<td style="text-align:left;">
+2006-01-16
+</td>
+<td style="text-align:right;">
+349
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+363
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+212
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alannah Borer
+</td>
+<td style="text-align:left;">
+2005-04-21
+</td>
+<td style="text-align:right;">
+619
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+196
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+121
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>rfm_table_order()</code> will return the following columns as seen in the above table:</p>
+<ul>
+<li><code>customer_id</code>: unique customer id</li>
+<li><code>date_most_recent</code>: date of most recent visit</li>
+<li><code>recency_days</code>: days since the most recent visit</li>
+<li><code>transaction_count</code>: number of transactions of the customer</li>
+<li><code>amount</code>: total revenue generated by the customer</li>
+<li><code>recency_score</code>: recency score of the customer</li>
+<li><code>frequency_score</code>: frequency score of the customer</li>
+<li><code>monetary_score</code>: monetary score of the customer</li>
+<li><code>rfm_score</code>: RFM score of the customer</li>
+</ul>
+</div>
+<div id="segments-1" class="section level3">
+<h3>Segments</h3>
+<p>Let us classify our customers based on the individual recency, frequency and
+monetary scores.</p>
+<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Segment
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+R
+</th>
+<th style="text-align:left;">
+F
+</th>
+<th style="text-align:left;">
+M
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Champions
+</td>
+<td style="text-align:left;">
+Bought recently, buy often and spend the most
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Loyal Customers
+</td>
+<td style="text-align:left;">
+Spend good money. Responsive to promotions
+</td>
+<td style="text-align:left;">
+2 - 4
+</td>
+<td style="text-align:left;">
+3 - 4
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Potential Loyalist
+</td>
+<td style="text-align:left;">
+Recent customers, spent good amount, bought more than once
+</td>
+<td style="text-align:left;">
+3 - 5
+</td>
+<td style="text-align:left;">
+1 - 3
+</td>
+<td style="text-align:left;">
+1 - 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Customers
+</td>
+<td style="text-align:left;">
+Bought more recently, but not often
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Promising
+</td>
+<td style="text-align:left;">
+Recent shoppers, but haven’t spent much
+</td>
+<td style="text-align:left;">
+3 - 4
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Need Attention
+</td>
+<td style="text-align:left;">
+Above average recency, frequency &amp; monetary values
+</td>
+<td style="text-align:left;">
+3 - 4
+</td>
+<td style="text-align:left;">
+3 - 4
+</td>
+<td style="text-align:left;">
+3 - 4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+About To Sleep
+</td>
+<td style="text-align:left;">
+Below average recency, frequency &amp; monetary values
+</td>
+<td style="text-align:left;">
+2 - 3
+</td>
+<td style="text-align:left;">
+&lt; 3
+</td>
+<td style="text-align:left;">
+&lt; 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+At Risk
+</td>
+<td style="text-align:left;">
+Spent big money, purchased often but long time ago
+</td>
+<td style="text-align:left;">
+&lt; 3
+</td>
+<td style="text-align:left;">
+2 - 5
+</td>
+<td style="text-align:left;">
+2 - 5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Can’t Lose Them
+</td>
+<td style="text-align:left;">
+Made big purchases and often, but long time ago
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+<td style="text-align:left;">
+4 - 5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hibernating
+</td>
+<td style="text-align:left;">
+Low spenders, low frequency, purchased long time ago
+</td>
+<td style="text-align:left;">
+2 - 3
+</td>
+<td style="text-align:left;">
+2 - 3
+</td>
+<td style="text-align:left;">
+2 - 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lost
+</td>
+<td style="text-align:left;">
+Lowest recency, frequency &amp; monetary scores
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+<td style="text-align:left;">
+&lt; 2
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="segmented-customer-data" class="section level3">
+<h3>Segmented Customer Data</h3>
+<p>We can use the segmented data to identify</p>
+<ul>
+<li>champion customers</li>
+<li>loyal customers</li>
+<li>at risk customers</li>
+<li>and lost customers</li>
+</ul>
+<p>Once we have classified a customer into a particular segment, we can take
+appropriate action to increase his/her lifetime value.</p>
+<pre class="r"><code>segment_names &lt;- 
+  c(&quot;Champions&quot;, &quot;Loyal Customers&quot;, &quot;Potential Loyalist&quot;,
+    &quot;New Customers&quot;, &quot;Promising&quot;, &quot;Need Attention&quot;, 
+    &quot;About To Sleep&quot;, &quot;At Risk&quot;, &quot;Can&#39;t Lose Them&quot;, 
+    &quot;Hibernating&quot;, &quot;Lost&quot;)
+
+recency_lower   &lt;- c(4, 2, 3, 4, 3, 3, 2, 1, 1, 2, 1)
+recency_upper   &lt;- c(5, 4, 5, 5, 4, 4, 3, 2, 1, 3, 1)
+frequency_lower &lt;- c(4, 3, 1, 1, 1, 3, 1, 2, 4, 2, 1)
+frequency_upper &lt;- c(5, 4, 3, 1, 1, 4, 2, 5, 5, 3, 1)
+monetary_lower  &lt;- c(4, 4, 1, 1, 1, 3, 1, 2, 4, 2, 1)
+monetary_upper  &lt;- c(5, 5, 3, 1, 1, 4, 2, 5, 5, 3, 1)
+
+segments &lt;- 
+  rfm_segment(rfm_result, segment_names, recency_lower, 
+              recency_upper, frequency_lower, frequency_upper, 
+              monetary_lower, monetary_upper)
+
+segments %&gt;% 
+  select(customer_id, segment, rfm_score)</code></pre>
+<pre><code>## # A tibble: 995 x 3
+##    customer_id        segment            rfm_score
+##    &lt;chr&gt;              &lt;chr&gt;                  &lt;dbl&gt;
+##  1 Abbey O&#39;Reilly DVM Need Attention           343
+##  2 Add Senger         Potential Loyalist       412
+##  3 Aden Lesch Sr.     Hibernating              323
+##  4 Admiral Senger     Need Attention           433
+##  5 Agness O&#39;Keefe     Champions                555
+##  6 Aileen Barton      Champions                555
+##  7 Ailene Hermann     Others                   355
+##  8 Aiyanna Bruen PhD  About To Sleep           321
+##  9 Ala Schmidt DDS    About To Sleep           212
+## 10 Alannah Borer      Others                   121
+## # ... with 985 more rows</code></pre>
+</div>
+<div id="segment-size" class="section level3">
+<h3>Segment Size</h3>
+<p>Now that we have defined and segmented our customers, let us examine the
+distribution of customers across the segments. If our segmentation logic is
+good, few or no customer should be categorized as <code>Others</code>.</p>
+<pre class="r"><code>segments %&gt;%
+  count(segment) %&gt;%
+  arrange(desc(n)) %&gt;%
+  rename(Segment = segment, Count = n)</code></pre>
+<pre><code>## # A tibble: 12 x 2
+##    Segment            Count
+##    &lt;chr&gt;              &lt;int&gt;
+##  1 At Risk              157
+##  2 Potential Loyalist   132
+##  3 Others               128
+##  4 Champions            116
+##  5 Need Attention       100
+##  6 Hibernating           97
+##  7 About To Sleep        92
+##  8 Lost                  75
+##  9 Loyal Customers       43
+## 10 Promising             21
+## 11 Can&#39;t Lose Them       17
+## 12 New Customers         17</code></pre>
+<p>We can also examine the median recency, frequency and monetary value across
+segments to ensure that the logic used for customer classification is sound and
+practical.</p>
+<div id="median-recency" class="section level4">
+<h4>Median Recency</h4>
+<pre class="r"><code>rfm_plot_median_recency(segments)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/avg_recency-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="median-frequency" class="section level4">
+<h4>Median Frequency</h4>
+<pre class="r"><code>rfm_plot_median_frequency(segments)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/avg_frequency-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="median-monetary-value" class="section level4">
+<h4>Median Monetary Value</h4>
+<pre class="r"><code>rfm_plot_median_monetary(segments)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/avg_monetary-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="heat-map" class="section level3">
+<h3>Heat Map</h3>
+<p>The heat map shows the average monetary value for different categories of
+recency and frequency scores. Higher scores of frequency and recency are
+characterized by higher average monetary value as indicated by the darker areas
+in the heatmap.</p>
+<pre class="r"><code>rfm_heatmap(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/heatmap-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="bar-chart" class="section level3">
+<h3>Bar Chart</h3>
+<p>Use <code>rfm_bar_chart()</code> to generate the distribution of monetary scores for the
+different combinations of frequency and recency scores.</p>
+<pre class="r"><code>rfm_bar_chart(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/barchart-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="histogram" class="section level3">
+<h3>Histogram</h3>
+<p>Use <code>rfm_histograms()</code> to examine the relative distribution of</p>
+<ul>
+<li>monetary value (total revenue generated by each customer)</li>
+<li>recency days (days since the most recent visit for each customer)</li>
+<li>frequency (transaction count for each customer)</li>
+</ul>
+<pre class="r"><code>rfm_histograms(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/rfmhist-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="customers-by-orders" class="section level3">
+<h3>Customers by Orders</h3>
+<p>Visualize the distribution of customers across orders.</p>
+<pre class="r"><code>rfm_order_dist(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/rfmorders-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="scatter-plots" class="section level3">
+<h3>Scatter Plots</h3>
+<p>The best customers are those who:</p>
+<ul>
+<li>bought most recently</li>
+<li>most often</li>
+<li>and spend the most</li>
+</ul>
+<p>Now let us examine the relationship between the above.</p>
+<div id="recency-vs-monetary-value" class="section level4">
+<h4>Recency vs Monetary Value</h4>
+<p>Customers who visited more recently generated more revenue compared to those
+who visited in the distant past. The customers who visited in the recent past
+are more likely to return compared to those who visited long time ago as most
+of those would be lost customers. As such, higher revenue would be associated
+with most recent visits.</p>
+<pre class="r"><code>rfm_rm_plot(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/mr-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="frequency-vs-monetary-value" class="section level4">
+<h4>Frequency vs Monetary Value</h4>
+<p>As the frequency of visits increases, the revenue generated also increases.
+Customers who visit more frquently are your champion customers, loyal customers
+or potential loyalists and they drive higher revenue.</p>
+<pre class="r"><code>rfm_fm_plot(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/fm-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="recency-vs-frequency" class="section level4">
+<h4>Recency vs Frequency</h4>
+<p>Customers with low frequency visited in the distant past while those with high
+frequency have visited in the recent past. Again, the customers who visited in
+the recent past are more likely to return compared to those who visited long
+time ago. As such, higher frequency would be associated with the most recent
+visits.</p>
+<pre class="r"><code>rfm_rf_plot(rfm_result)</code></pre>
+<p><img src="2019-07-22-customer-segmentation-using-rfm-analysis_files/figure-html/fr-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="your-turn" class="section level3">
+<h3>Your Turn…</h3>
+<ul>
+<li><p>if you look at the distribution of segments, around 13% of the customers
+are in the <code>Others</code> segment For segmentation to be effective and optimal, the
+<code>Others</code> segment should be eliminated or should have few customers only.
+Redefine the segments and try to reduce the number of customers in the <code>Others</code>
+segment.</p></li>
+<li><p>we have defined 11 segments. Try to combine some of the existing segments
+and bring down the total segments to around 6 or 8.</p></li>
+<li><p>the RFM score we generated uses score between 1 and 5. Try to create segments
+by using a score between 1 and 3 i.e. the lowest RFM should be 111 and the
+highest should be 333 instead of 555.</p></li>
+<li><p>reverse the scores i.e. so far we have assigned a score of 5 to customers who
+visited recently, frequently and had higher transaction amount and 1 to
+customers who visited way back, rarely and have low transaction amount. Reverse
+this score pattern and create the segments.</p></li>
+</ul>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<p>The <a href="https://rfm.rsquaredacademy.com/index.html" target="_blank">rfm website</a>
+includes comprehensive documentation on using the package, including the following
+articles that cover various aspects of using rfm:</p>
+<ul>
+<li><p><a href="https://rfm.rsquaredacademy.com/articles/rfm-customer-level-data.html" target="_blank">RFM Customer Level Data</a> - shows you how to handle customer level data.</p></li>
+<li><p><a href="https://rfm.rsquaredacademy.com/articles/rfm-transaction-level-data.html" target="_blank">RFM Transaction Level Data</a> - shows you how to handle transaction level data.</p></li>
+</ul>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>If you see mistakes or want to suggest changes, please create an issue on the
+<a href="https://github.com/rsquaredacademy-infra/blog" target="_blank">source
+repository</a> or reach out to us at <a href="mailto:support@rsquaredacademy.com" class="email">support@rsquaredacademy.com</a>.</p>
+</div>

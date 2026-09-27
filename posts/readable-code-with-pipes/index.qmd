@@ -1,0 +1,546 @@
+---
+title: "Readable Code with Pipes"
+author: "Aravind Hebbali"
+date: "2018-10-10"
+description: "Readable Code with Pipes"
+image: "img/pipes.png"
+categories: ["pipes"]
+tags: ["pipes", "magrittr"]
+execute:
+  eval: false
+  freeze: true
+---
+
+<!-- Migrated from content/post/2018-10-10-readable-code-with-pipes.Rmd. -->
+<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>R code contain a lot of parentheses in case of a sequence of multiple operations. When you are dealing with
+complex code, it results in nested function calls which are hard to read and maintain. The <a href="https://CRAN.R-project.org/package=magrittr">magrittr</a> package by <a href="http://stefanbache.dk/">Stefan Milton Bache</a> provides pipes enabling us to write R code that is readable.</p>
+<p>Pipes allow us to clearly express a sequence of multiple operations by:</p>
+<ul>
+<li>structuring operations from left to right</li>
+<li>avoiding
+<ul>
+<li>nested function calls</li>
+<li>intermediate steps</li>
+<li>overwriting of original data</li>
+</ul></li>
+<li>minimizing creation of local variables</li>
+</ul>
+</div>
+<div id="pipes" class="section level2">
+<h2>Pipes</h2>
+<p>If you are using <a href="https://www.tidyverse.org/">tidyverse</a>, magrittr will be automatically loaded. We will look at 3 different types of pipes:</p>
+<ul>
+<li><code>%&gt;%</code> : pipe a value forward into an expression or function call</li>
+<li><code>%&lt;&gt;%</code>: result assigned to left hand side object instead of returning it</li>
+<li><code>%$%</code> : expose names within left hand side objects to right hand side expressions</li>
+</ul>
+</div>
+<div id="libraries-code-data" class="section level2">
+<h2>Libraries, Code &amp; Data</h2>
+<p>We will use the following packages in this post:</p>
+<ul>
+<li><a href="http://magrittr.tidyverse.org/">magrittr</a></li>
+<li><a href="http://readr.tidyverse.org/">readr</a></li>
+<li><a href="http://dplyr.tidyverse.org/">dplyr</a></li>
+<li><a href="http://stringr.tidyverse.org/">stringr</a></li>
+<li>and <a href="http://readr.tidyverse.org/">purrr</a></li>
+</ul>
+<p>You can find the data sets <a href="https://github.com/rsquaredacademy/datasets">here</a> and the codes
+<a href="https://gist.github.com/aravindhebbali/26d85ab4a4dadd2fe7c1f58d854cc950">here</a>.</p>
+<pre class="r"><code>library(magrittr)
+library(readr)
+library(dplyr)
+library(stringr)
+library(purrr)</code></pre>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<pre class="r"><code>ecom &lt;- 
+  read_csv(&#39;https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv&#39;,
+    col_types = cols_only(
+      referrer = col_factor(levels = c(&quot;bing&quot;, &quot;direct&quot;, &quot;social&quot;, &quot;yahoo&quot;, &quot;google&quot;)),
+      n_pages = col_double(), duration = col_double(), purchase = col_logical()
+    )
+  )
+
+ecom</code></pre>
+<pre><code>## # A tibble: 1,000 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE   
+## # ... with 990 more rows</code></pre>
+<p>We will create a smaller data set from the above data to be used in some examples:</p>
+<pre class="r"><code>ecom_mini &lt;- sample_n(ecom, size = 10)
+ecom_mini</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 direct         1      136 FALSE   
+##  2 direct         1      314 FALSE   
+##  3 direct        18      324 TRUE    
+##  4 social        10      290 TRUE    
+##  5 yahoo          7      140 FALSE   
+##  6 direct         1      658 FALSE   
+##  7 bing          17      493 FALSE   
+##  8 bing           1      406 FALSE   
+##  9 social        15      405 FALSE   
+## 10 google        15      210 FALSE</code></pre>
+<div id="data-dictionary" class="section level4">
+<h4>Data Dictionary</h4>
+<ul>
+<li>referrer: referrer website/search engine</li>
+<li>n_pages: number of pages visited</li>
+<li>duration: time spent on the website (in seconds)</li>
+<li>purchase: whether visitor purchased</li>
+</ul>
+</div>
+</div>
+<div id="first-example" class="section level2">
+<h2>First Example</h2>
+<p>Let us start with a simple example. You must be aware of <code>head()</code>. If not,
+do not worry. It returns the first few observations/rows of data. We can
+specify the number of observations it should return as well. Let us use
+it to view the first 10 rows of our data set.</p>
+<pre class="r"><code>head(ecom, 10)</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE</code></pre>
+<div id="using-pipe" class="section level4">
+<h4>Using Pipe</h4>
+<p>Now let us do the same but with <code>%&gt;%</code>.</p>
+<pre class="r"><code>ecom %&gt;% head(10)</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##    referrer n_pages duration purchase
+##    &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;   
+##  1 google         1      693 FALSE   
+##  2 yahoo          1      459 FALSE   
+##  3 direct         1      996 FALSE   
+##  4 bing          18      468 TRUE    
+##  5 yahoo          1      955 FALSE   
+##  6 yahoo          5      135 FALSE   
+##  7 yahoo          1       75 FALSE   
+##  8 direct         1      908 FALSE   
+##  9 bing          19      209 FALSE   
+## 10 google         1      208 FALSE</code></pre>
+</div>
+</div>
+<div id="square-root" class="section level2">
+<h2>Square Root</h2>
+<p>Time to try a slightly more challenging example. We want the square root of
+<code>n_pages</code> column from the data set.</p>
+<pre class="r"><code>y &lt;- sqrt(ecom_mini$n_pages)</code></pre>
+<p>Let us break down the above computation into small steps:</p>
+<ul>
+<li>select/expose the <code>n_pages</code> column from <code>ecom</code> data</li>
+<li>compute the square root</li>
+<li>assign the first few observations to <code>y</code></li>
+</ul>
+<p><br></p>
+<p><img src="/img/pipes_square_root.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>Let us reproduce <code>y</code> using pipes.</p>
+<pre class="r"><code># select n_pages variable and assign it to y
+y &lt;-
+    ecom_mini %$%
+    n_pages
+
+# compute square root of y and assign it to y 
+y %&lt;&gt;% sqrt</code></pre>
+<p>Another way to compute the square root of y is shown below.</p>
+<pre class="r"><code>y &lt;-
+  ecom_mini %$% 
+  n_pages %&gt;% 
+  sqrt()</code></pre>
+</div>
+<div id="visualization" class="section level2">
+<h2>Visualization</h2>
+<p>Let us look at a data visualization example. We will create a bar plot to
+visualize the frequency of different referrer types that drove purchasers
+to the website. Let us look at the steps involved in creating the bar plot:</p>
+<ul>
+<li>extract rows where purchase is TRUE</li>
+<li>select/expose <code>referrer</code> column</li>
+<li>tabulate referrer data using <code>table()</code></li>
+<li>use the tabulated data to create bar plot using <code>barplot()</code></li>
+</ul>
+<pre class="r"><code>barplot(table(subset(ecom, purchase)$referrer))</code></pre>
+<p><img src="2018-10-10-readable-code-with-pipes_files/figure-html/mag21-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div id="using-pipe-1" class="section level4">
+<h4>Using pipe</h4>
+<p><br></p>
+<p><img src="/img/pipes_data_visualization.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>ecom %&gt;%
+  subset(purchase) %&gt;%
+  extract(&#39;referrer&#39;) %&gt;%
+  table() %&gt;%
+  barplot()</code></pre>
+<p><img src="2018-10-10-readable-code-with-pipes_files/figure-html/mag7-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="correlation" class="section level2">
+<h2>Correlation</h2>
+<p>Correlation is a statistical measure that indicates the extent to which two or more variables
+fluctuate together. In R, correlation is computed using <code>cor()</code>. Let us look at the
+correlation between the number of pages browsed and time spent on the site for
+visitors who purchased some product. Below are the steps for computing correlation:</p>
+<ul>
+<li>extract rows where purchase is TRUE</li>
+<li>select/expose <code>n_pages</code> and <code>duration</code> columns</li>
+<li>use <code>cor()</code> to compute the correlation</li>
+</ul>
+<p><br></p>
+<p><img src="/img/pipes_correlation.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code># without pipe
+ecom1 &lt;- subset(ecom, purchase)
+cor(ecom1$n_pages, ecom1$duration)</code></pre>
+<pre><code>## [1] 0.4290905</code></pre>
+<pre class="r"><code># with pipe
+ecom %&gt;%
+  subset(purchase) %$% 
+  cor(n_pages, duration)</code></pre>
+<pre><code>## [1] 0.4290905</code></pre>
+<pre class="r"><code># with pipe
+ecom %&gt;%
+  filter(purchase) %$% 
+  cor(n_pages, duration)</code></pre>
+<pre><code>## [1] 0.4290905</code></pre>
+</div>
+<div id="regression" class="section level2">
+<h2>Regression</h2>
+<p>Let us look at a regression example. We regress time spent on the site on
+number of pages visited. Below are the steps involved in running the regression:</p>
+<ul>
+<li>use <code>duration</code> and <code>n_pages</code> columns from ecom data</li>
+<li>pass the above data to <code>lm()</code></li>
+<li>pass the output from <code>lm()</code> to <code>summary()</code></li>
+</ul>
+<pre class="r"><code>summary(lm(duration ~ n_pages, data = ecom))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = duration ~ n_pages, data = ecom)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -386.45 -213.03  -38.93  179.31  602.55 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  404.803     11.323  35.750  &lt; 2e-16 ***
+## n_pages       -8.355      1.296  -6.449 1.76e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 263.3 on 998 degrees of freedom
+## Multiple R-squared:   0.04,  Adjusted R-squared:  0.03904 
+## F-statistic: 41.58 on 1 and 998 DF,  p-value: 1.756e-10</code></pre>
+<div id="using-pipe-2" class="section level4">
+<h4>Using pipe</h4>
+<pre class="r"><code>ecom %$%
+  lm(duration ~ n_pages) %&gt;%
+  summary()</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = duration ~ n_pages)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -386.45 -213.03  -38.93  179.31  602.55 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  404.803     11.323  35.750  &lt; 2e-16 ***
+## n_pages       -8.355      1.296  -6.449 1.76e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 263.3 on 998 degrees of freedom
+## Multiple R-squared:   0.04,  Adjusted R-squared:  0.03904 
+## F-statistic: 41.58 on 1 and 998 DF,  p-value: 1.756e-10</code></pre>
+</div>
+</div>
+<div id="string-manipulation" class="section level2">
+<h2>String Manipulation</h2>
+<p>We want to extract the first name (jovial) from the below email id and
+convert it to upper case. Below are the steps to achieve this:</p>
+<ul>
+<li>split the email id using the pattern <code>@</code> using <code>str_split()</code></li>
+<li>extract the first element from the resulting list using <code>extract2()</code></li>
+<li>extract the first element from the character vector using <code>extract()</code></li>
+<li>extract the first six characters using <code>str_sub()</code></li>
+<li>convert to upper case using <code>str_to_upper()</code></li>
+</ul>
+<p><br></p>
+<p><img src="/img/pipes_string.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<pre class="r"><code>email &lt;- &#39;jovialcann@anymail.com&#39;
+
+# without pipe
+str_to_upper(str_sub(str_split(email, &#39;@&#39;)[[1]][1], start = 1, end = 6))</code></pre>
+<pre><code>## [1] &quot;JOVIAL&quot;</code></pre>
+<pre class="r"><code># with pipe
+email %&gt;%
+  str_split(pattern = &#39;@&#39;) %&gt;%
+  extract2(1) %&gt;%
+  extract(1) %&gt;%
+  str_sub(start = 1, end = 6) %&gt;%
+  str_to_upper()</code></pre>
+<pre><code>## [1] &quot;JOVIAL&quot;</code></pre>
+<p>Another method that uses <code>map_chr()</code> from the <a href="https://readr.tidyverse.org/">purrr</a> package.</p>
+<pre class="r"><code>email %&gt;%
+  str_split(pattern = &#39;@&#39;) %&gt;%
+  map_chr(1) %&gt;%
+  str_sub(start = 1, end = 6) %&gt;%
+  str_to_upper()</code></pre>
+<pre><code>## [1] &quot;JOVIAL&quot;</code></pre>
+</div>
+<div id="data-extraction" class="section level2">
+<h2>Data Extraction</h2>
+<p>Let us turn our attention towards data extraction. magrittr provides
+alternatives to <code>$</code>, <code>[</code> and <code>[[</code>.</p>
+<ul>
+<li><code>extract()</code></li>
+<li><code>extract2()</code></li>
+<li><code>use_series()</code></li>
+</ul>
+<div id="extract-column-by-name" class="section level4">
+<h4>Extract Column By Name</h4>
+<p>To extract a specific column using the column name, we mention the name
+of the column in single/double quotes within <code>[</code> or <code>[[</code>. In case of <code>$</code>,
+we do not use quotes.</p>
+<pre class="r"><code># base 
+ecom_mini[&#39;n_pages&#39;]</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3      18
+##  4      10
+##  5       7
+##  6       1
+##  7      17
+##  8       1
+##  9      15
+## 10      15</code></pre>
+<pre class="r"><code># magrittr
+extract(ecom_mini, &#39;n_pages&#39;) </code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3      18
+##  4      10
+##  5       7
+##  6       1
+##  7      17
+##  8       1
+##  9      15
+## 10      15</code></pre>
+</div>
+<div id="extract-column-by-position" class="section level4">
+<h4>Extract Column By Position</h4>
+<p>We can extract columns using their index position. Keep in mind that index
+position starts from <strong>1</strong> in R. In the below example, we show how to
+extract <code>n_pages</code> column but instead of using the column name, we use the
+column position.</p>
+<pre class="r"><code># base 
+ecom_mini[2]</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3      18
+##  4      10
+##  5       7
+##  6       1
+##  7      17
+##  8       1
+##  9      15
+## 10      15</code></pre>
+<pre class="r"><code># magrittr
+extract(ecom_mini, 2) </code></pre>
+<pre><code>## # A tibble: 10 x 1
+##    n_pages
+##      &lt;dbl&gt;
+##  1       1
+##  2       1
+##  3      18
+##  4      10
+##  5       7
+##  6       1
+##  7      17
+##  8       1
+##  9      15
+## 10      15</code></pre>
+</div>
+<div id="extract-column-as-vector" class="section level4">
+<h4>Extract Column (as vector)</h4>
+<p>One important differentiator between <code>[</code> and <code>[[</code> is that <code>[[</code> will
+return a atomic vector and not a <code>data.frame</code>. <code>$</code> will also return
+a atomic vector. In magrittr, we can use <code>use_series()</code> in place of
+<code>$</code>.</p>
+<pre class="r"><code># base 
+ecom_mini$n_pages</code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+<pre class="r"><code># magrittr
+use_series(ecom_mini, &#39;n_pages&#39;) </code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+</div>
+<div id="extract-list-element-by-name" class="section level4">
+<h4>Extract List Element By Name</h4>
+<p>Let us convert <code>ecom_mini</code> into a list using as.list() as shown below:</p>
+<pre class="r"><code>ecom_list &lt;- as.list(ecom_mini)</code></pre>
+<p>To extract elements of a list, we can use <code>extract2()</code>. It is an
+alternative for <code>[[</code>.</p>
+<pre class="r"><code># base 
+ecom_list[[&#39;n_pages&#39;]]</code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+<pre class="r"><code># magrittr
+extract2(ecom_list, &#39;n_pages&#39;)</code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+</div>
+<div id="extract-list-element-by-position" class="section level4">
+<h4>Extract List Element By Position</h4>
+<pre class="r"><code># base 
+ecom_list[[1]]</code></pre>
+<pre><code>##  [1] direct direct direct social yahoo  direct bing   bing   social google
+## Levels: bing direct social yahoo google</code></pre>
+<pre class="r"><code># magrittr
+extract2(ecom_list, 1)</code></pre>
+<pre><code>##  [1] direct direct direct social yahoo  direct bing   bing   social google
+## Levels: bing direct social yahoo google</code></pre>
+</div>
+<div id="extract-list-element" class="section level4">
+<h4>Extract List Element</h4>
+<p>We can extract the elements of a list using <code>use_series()</code> as well.</p>
+<pre class="r"><code># base 
+ecom_list$n_pages</code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+<pre class="r"><code># magrittr
+use_series(ecom_list, n_pages)</code></pre>
+<pre><code>##  [1]  1  1 18 10  7  1 17  1 15 15</code></pre>
+</div>
+</div>
+<div id="arithmetic-operations" class="section level2">
+<h2>Arithmetic Operations</h2>
+<p>magrittr offer alternatives for arithemtic operations as well. We will look at
+a few examples below.</p>
+<ul>
+<li><code>add()</code></li>
+<li><code>subtract()</code></li>
+<li><code>multiply_by()</code></li>
+<li><code>multiply_by_matrix()</code></li>
+<li><code>divide_by()</code></li>
+<li><code>divide_by_int()</code></li>
+<li><code>mod()</code></li>
+<li><code>raise_to_power()</code></li>
+</ul>
+<div id="addition" class="section level4">
+<h4>Addition</h4>
+<pre class="r"><code>1:10 + 1</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
+<pre class="r"><code>add(1:10, 1)</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
+<pre class="r"><code>`+`(1:10, 1)</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
+</div>
+<div id="multiplication" class="section level4">
+<h4>Multiplication</h4>
+<pre class="r"><code>1:10 * 3</code></pre>
+<pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
+<pre class="r"><code>multiply_by(1:10, 3)</code></pre>
+<pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
+<pre class="r"><code>`*`(1:10, 3)</code></pre>
+<pre><code>##  [1]  3  6  9 12 15 18 21 24 27 30</code></pre>
+</div>
+<div id="division" class="section level4">
+<h4>Division</h4>
+<pre class="r"><code>1:10 / 2</code></pre>
+<pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
+<pre class="r"><code>divide_by(1:10, 2)</code></pre>
+<pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
+<pre class="r"><code>`/`(1:10, 2)</code></pre>
+<pre><code>##  [1] 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</code></pre>
+</div>
+<div id="power" class="section level4">
+<h4>Power</h4>
+<pre class="r"><code>1:10 ^ 2</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
+##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
+##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
+<pre class="r"><code>raise_to_power(1:10, 2)</code></pre>
+<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
+<pre class="r"><code>`^`(1:10, 2)</code></pre>
+<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
+</div>
+</div>
+<div id="logical-operators" class="section level2">
+<h2>Logical Operators</h2>
+<p>There are alternatives for logical operators as well. We will look at
+a few examples below.</p>
+<ul>
+<li><code>and()</code></li>
+<li><code>or()</code></li>
+<li><code>equals()</code></li>
+<li><code>not()</code></li>
+<li><code>is_greater_than()</code></li>
+<li><code>is_weakly_greater_than()</code></li>
+<li><code>is_less_than()</code></li>
+<li><code>is_weakly_less_than()</code></li>
+</ul>
+<div id="greater-than" class="section level4">
+<h4>Greater Than</h4>
+<pre class="r"><code>1:10 &gt; 5</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>is_greater_than(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>`&gt;`(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+</div>
+<div id="weakly-greater-than" class="section level4">
+<h4>Weakly Greater Than</h4>
+<pre class="r"><code>1:10 &gt;= 5</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>is_weakly_greater_than(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>`&gt;=`(1:10, 5)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="https://magrittr.tidyverse.org/" class="uri">https://magrittr.tidyverse.org/</a></li>
+<li><a href="http://r4ds.had.co.nz/pipes.html" class="uri">http://r4ds.had.co.nz/pipes.html</a></li>
+</ul>
+</div>
