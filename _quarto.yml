@@ -41,25 +41,25 @@ website:
         href: index.xml
   page-footer: |
     <div class="container">
-    <div class="row">
-    <div class="col-sm-3"><h5>Get started</h5><ul class="list-unstyled">
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+    <div style="flex: 1 1 200px;"><h5>Get started</h5><ul class="list-unstyled">
     <li><a href="https://www.rsquaredacademy.com/data-science-with-r">Online Training</a></li>
     <li><a href="https://www.rsquaredacademy.com/data-science-with-r">Classroom Training</a></li>
     <li><a href="https://www.rsquaredacademy.com/data-science-corporate-training.html/">Corporate Training</a></li>
     <li><a href="https://www.rsquaredacademy.com/data-science-university-training.html/">University Training</a></li>
     </ul></div>
-    <div class="col-sm-3"><h5>Resources</h5><ul class="list-unstyled">
+    <div style="flex: 1 1 200px;"><h5>Resources</h5><ul class="list-unstyled">
     <li><a href="https://blog.rsquaredacademy.com">Blog</a></li>
     <li><a href="https://apps.rsquaredacademy.com">Apps</a></li>
     <li><a href="https://ebooks.rsquaredacademy.com">ebooks</a></li>
     <li><a href="https://pkgs.rsquaredacademy.com">R Packages</a></li>
     </ul></div>
-    <div class="col-sm-3"><h5>About</h5><ul class="list-unstyled">
+    <div style="flex: 1 1 200px;"><h5>About</h5><ul class="list-unstyled">
     <li><a href="https://www.rsquaredacademy.com/about.html">Company</a></li>
     <li><a href="https://www.rsquaredacademy.com/terms-and-conditions.html">Terms of Use</a></li>
     <li><a href="https://www.rsquaredacademy.com/privacy-policy.html">Privacy Policy</a></li>
     </ul></div>
-    <div class="col-sm-3"><h5>Support</h5><ul class="list-unstyled">
+    <div style="flex: 1 1 200px;"><h5>Support</h5><ul class="list-unstyled">
     <li><a href="https://www.rsquaredacademy.com/contact.html">Contact Us</a></li>
     <li><a href="index.xml">Subscribe via RSS</a></li>
     </ul></div>

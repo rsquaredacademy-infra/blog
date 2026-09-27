@@ -14,74 +14,55 @@ toc: false
 
 ### What would you like to learn today?
 
-::: {.row}
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+::: {layout-ncol=4}
 <a href="r-programming/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-code"></i> <br> R Programming <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="data-wrangling/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-tools"></i> <br> Data Wrangling <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="data-visualization/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-bar-chart"></i> <br> Data Visualization <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="posts/command-line-basics-for-r-users/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-terminal"></i> <br> Command Line <br> &nbsp;</div>
 </a>
-:::
-:::
 
-::: {.row}
-::: {.col-lg-3 .col-md-6 .col-sm-12}
 <a href="posts/working-with-databases-using-r/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-database"></i> <br> Databases <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="posts/regular-expression-in-r/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-percent"></i> <br> Regular Expressions <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="posts/handling-date-and-time-in-r/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-clock"></i> <br> Date &amp; Time <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="r-packages/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-gift"></i> <br> R Packages <br> &nbsp;</div>
 </a>
-:::
-:::
 
-::: {.row}
-::: {.col-lg-3 .col-md-6 .col-sm-12}
 <a href="posts/web-scraping/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-globe"></i> <br> Web Scraping <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="posts/customer-segmentation-using-rfm-analysis/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-people"></i> <br> Customer Segmentation <br> &nbsp;</div>
 </a>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <a href="posts/market-basket-analysis-in-r/" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-basket"></i> <br> Association Rule Mining <br> &nbsp;</div>
 </a>
 :::
-:::
 
 ### More Resources
 
-::: {.row}
-::: {.col-lg-4 .col-md-6 .col-sm-12}
+::: {layout-ncol=3}
 <a href="https://www.youtube.com/user/rsquaredin/videos" target="_blank" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-left">
 <i class="bi bi-camera-video" style="font-size: 2.5rem;"></i>
@@ -91,8 +72,7 @@ toc: false
 </div>
 </div>
 </a>
-:::
-::: {.col-lg-4 .col-md-6 .col-sm-12}
+
 <a href="https://ebooks.rsquaredacademy.com" target="_blank" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-left">
 <i class="bi bi-book" style="font-size: 2.5rem;"></i>
@@ -102,8 +82,7 @@ toc: false
 </div>
 </div>
 </a>
-:::
-::: {.col-lg-4 .col-md-6 .col-sm-12}
+
 <a href="https://pkgs.rsquaredacademy.com" target="_blank" style="color: black; text-decoration: none;">
 <div class="shadow p-3 mb-5 bg-white rounded text-left">
 <i class="bi bi-code" style="font-size: 2.5rem;"></i>
@@ -114,12 +93,10 @@ toc: false
 </div>
 </a>
 :::
-:::
 
 ### Trending Courses
 
-::: {.row}
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+::: {layout-ncol=4}
 <div class="card" style="width: 100%;">
 <a href="https://rsquared-academy.thinkific.com/courses/working-with-databases-using-r" target="_blank"><img src="images/course-card-databases.png" class="card-img-top" alt="Working with Databases using R course"></a>
 <div class="card-body text-center">
@@ -128,8 +105,7 @@ toc: false
 <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
 </div>
 </div>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <div class="card" style="width: 100%;">
 <a href="https://rsquared-academy.thinkific.com/courses/customer-segmentation-using-rfm-analysis" target="_blank"><img src="images/course-card-rfm.png" class="card-img-top" alt="Customer Segmentation using RFM Analysis course"></a>
 <div class="card-body text-center">
@@ -138,8 +114,7 @@ toc: false
 <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
 </div>
 </div>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <div class="card" style="width: 100%;">
 <a href="https://rsquared-academy.thinkific.com/courses/command-line-basics-for-r-users" target="_blank"><img src="images/course-card-command-line.png" class="card-img-top" alt="Command Line basics course"></a>
 <div class="card-body text-center">
@@ -148,8 +123,7 @@ toc: false
 <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
 </div>
 </div>
-:::
-::: {.col-lg-3 .col-md-6 .col-sm-12}
+
 <div class="card" style="width: 100%;">
 <a href="https://rsquared-academy.thinkific.com/courses/handling-date-and-time-in-R" target="_blank"><img src="images/course-card-template.png" class="card-img-top" alt="Handling Date and Time in R course"></a>
 <div class="card-body text-center">
@@ -158,7 +132,6 @@ toc: false
 <p class="text-left"><a href="https://rsquared-academy.thinkific.com/" target="_blank">By Rsquared Academy</a></p>
 </div>
 </div>
-:::
 :::
 
 ### Popular Articles
