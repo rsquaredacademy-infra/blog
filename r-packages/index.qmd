@@ -2,7 +2,7 @@
 title: "R Packages"
 description: "Package announcements and practice guides — olsrr, blorr, descriptr, rbin, vistributions, rfm, standby, and more."
 listing:
-  contents: "posts/*.qmd"
+  contents: posts
   sort: "date desc"
   type: default
   categories: true

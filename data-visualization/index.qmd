@@ -2,7 +2,7 @@
 title: "Data Visualization"
 description: "ggplot2 end to end — geoms, aesthetics, themes, and the 20-part series."
 listing:
-  contents: "posts/*.qmd"
+  contents: posts
   sort: "date desc"
   type: default
   categories: true
