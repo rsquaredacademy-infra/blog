@@ -12,11 +12,17 @@ website:
   description: "Explore…Discover…Learn"
   site-url: https://blog.rsquaredacademy.com
   search: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+    right:
+      - icon: rss
+        href: index.xml
   # Analytics (stubbed — fill at launch, Phase 4):
   # google-analytics: "G-XXXXXXXXXX"
-
-blog:
-  author: "Aravind Hebbali"
 
 execute:
   freeze: true
@@ -29,5 +35,3 @@ format:
     code-copy: true
     code-fold: show
     code-tools: true
-
-feed: full

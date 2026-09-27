@@ -1,0 +1,10 @@
+# Shared options for all documents in posts/ (Quarto shared metadata).
+# Global byline: fixes the "By Rsquared Academy" template bug at the source.
+
+author: "Aravind Hebbali"
+
+# Legacy posts ship as STATIC bundles — no R execution on Day 1.
+freeze: true
+
+# Per-post footer card (author + stubbed newsletter/Giscus activations).
+include-after-body: ../_includes/author-card.html
