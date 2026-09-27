@@ -1,0 +1,21 @@
+---
+title: "Rsquared Academy Blog"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  feed: true
+page-layout: full
+title-block-banner: true
+---
+
+Practical, in-depth tutorials on R, data wrangling, visualization, and
+data science — by [Aravind Hebbali](about.qmd).
+
+## Start here
+
+- [R Programming](r-programming/index.qmd)
+- [Data Wrangling](data-wrangling/index.qmd)
+- [Data Visualization](data-visualization/index.qmd)
+- [R Packages](r-packages/index.qmd)

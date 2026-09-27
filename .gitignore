@@ -3,6 +3,8 @@
 .RData
 .Ruserdata
 public/
+_site/
+.quarto/
 .Renviron
 .here
 config.yml

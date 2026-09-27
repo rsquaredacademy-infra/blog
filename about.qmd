@@ -1,0 +1,27 @@
+---
+title: "About"
+about:
+  template: jolla
+  links:
+    - icon: globe
+      text: Website
+      href: https://www.aravindhebbali.com/
+    - icon: github
+      text: GitHub
+      href: https://github.com/aravindhebbali
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/aravindhebbali/
+---
+
+Aravind Hebbali runs [Rsquared Academy](https://www.rsquaredacademy.com/) —
+courses, ebooks, and R packages (olsrr, blorr, descriptr, rbin, vistributions,
+rfm, standby) for learning R and data science. This blog is where that
+teaching happens in long form.
+
+::: {.callout-note}
+## Stay in the loop
+
+Newsletter signup, course, and consulting links land here in Phase 4
+(distribution engine). For now: follow along via [RSS](index.xml).
+:::

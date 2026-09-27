@@ -1,0 +1,33 @@
+project:
+  type: blog
+  output-dir: _site
+  resources:
+    - _redirects
+    - _headers
+    - img
+    - images
+
+website:
+  title: "Rsquared Academy Blog"
+  description: "Explore…Discover…Learn"
+  site-url: https://blog.rsquaredacademy.com
+  search: true
+  # Analytics (stubbed — fill at launch, Phase 4):
+  # google-analytics: "G-XXXXXXXXXX"
+
+blog:
+  author: "Aravind Hebbali"
+
+execute:
+  freeze: true
+
+format:
+  html:
+    theme: [flatly, darkly]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-fold: show
+    code-tools: true
+
+feed: full
