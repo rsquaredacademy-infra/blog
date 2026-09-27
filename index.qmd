@@ -8,6 +8,7 @@ listing:
   categories: false
   feed: true
 page-layout: full
+toc: false
 ---
 
 ### What would you like to learn today?
