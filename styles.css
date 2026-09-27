@@ -1,5 +1,16 @@
 /* Rsquared Academy blog chrome: light page, old-style courses CTA in navbar. */
 
+/* Slimmer navbar than the Quarto default. */
+.navbar {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+.navbar-brand {
+  font-size: 1.1rem;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+
 /* Match the legacy bright-blue navbar (Bootstrap bg-primary). */
 .navbar {
   background-color: #007bff !important;
