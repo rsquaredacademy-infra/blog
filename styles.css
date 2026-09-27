@@ -61,6 +61,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 0.75rem !important;
 }
 .res-cards p {
   margin-bottom: 0 !important;
