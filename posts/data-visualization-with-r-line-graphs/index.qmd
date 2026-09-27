@@ -9,12 +9,13 @@ tags: ["base", "visualization"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/data-visualization-with-r-line-graphs/">
-  <meta property="article:published_time" content="2017-06-29">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/viz_line.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Data Visualization With R - Line Graphs", "datePublished": "2017-06-29", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/viz_line.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/data-visualization-with-r-line-graphs/">
+    <meta property="article:published_time" content="2017-06-29">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/viz_line.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Data Visualization With R - Line Graphs", "datePublished": "2017-06-29", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/viz_line.png"}</script>
 ---
 
 <!-- Migrated from content/post/2017-06-29-data-visualization-with-r-line-graphs.Rmd. -->

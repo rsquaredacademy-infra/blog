@@ -9,12 +9,13 @@ tags: ["ggplot2", "visualization"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/ggplot2-introduction-to-geoms/">
-  <meta property="article:published_time" content="2017-10-15">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_geoms.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2 - Introduction to geoms", "datePublished": "2017-10-15", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_geoms.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/ggplot2-introduction-to-geoms/">
+    <meta property="article:published_time" content="2017-10-15">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_geoms.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2 - Introduction to geoms", "datePublished": "2017-10-15", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_geoms.png"}</script>
 ---
 
 <!-- Migrated from content/post/2017-10-15-ggplot2-introduction-to-geoms.Rmd. -->

@@ -9,12 +9,13 @@ tags: ["ggplot2"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/legend-part-4/">
-  <meta property="article:published_time" content="2018-03-20">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_leg_part_1.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2: Legend - Part 4", "datePublished": "2018-03-20", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_leg_part_1.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/legend-part-4/">
+    <meta property="article:published_time" content="2018-03-20">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/gg_leg_part_1.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "ggplot2: Legend - Part 4", "datePublished": "2018-03-20", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/gg_leg_part_1.png"}</script>
 ---
 
 <!-- Migrated from content/post/2018-03-20-legend-part-4.Rmd. -->

@@ -9,12 +9,13 @@ tags: ["lubridate", "datetime"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/handling-date-and-time-in-r/">
-  <meta property="article:published_time" content="2020-04-17">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/handling-date-and-time-in-r.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "A Comprehensive Introduction to Handling Date & Time in R", "datePublished": "2020-04-17", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/handling-date-and-time-in-r.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/handling-date-and-time-in-r/">
+    <meta property="article:published_time" content="2020-04-17">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/handling-date-and-time-in-r.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "A Comprehensive Introduction to Handling Date & Time in R", "datePublished": "2020-04-17", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/handling-date-and-time-in-r.png"}</script>
 ---
 
 <!-- Migrated from content/post/2020-04-17-handling-date-and-time-in-r.Rmd. -->

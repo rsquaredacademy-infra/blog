@@ -8,11 +8,12 @@ tags: ["vistributions"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/introducting-vistributions/">
-  <meta property="article:published_time" content="2019-03-14">
-  <meta property="article:author" content="Aravind Hebbali">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Visually explore Probability Distributions with vistributions", "datePublished": "2019-03-14", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/introducting-vistributions/">
+    <meta property="article:published_time" content="2019-03-14">
+    <meta property="article:author" content="Aravind Hebbali">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Visually explore Probability Distributions with vistributions", "datePublished": "2019-03-14", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}}</script>
 ---
 
 <!-- Migrated from content/post/2019-03-14-introducing-vistributions.Rmd. -->

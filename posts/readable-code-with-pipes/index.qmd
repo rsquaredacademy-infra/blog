@@ -9,12 +9,13 @@ tags: ["pipes", "magrittr"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/readable-code-with-pipes/">
-  <meta property="article:published_time" content="2018-10-10">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/pipes.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Readable Code with Pipes", "datePublished": "2018-10-10", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/pipes.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/readable-code-with-pipes/">
+    <meta property="article:published_time" content="2018-10-10">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/pipes.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Readable Code with Pipes", "datePublished": "2018-10-10", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/pipes.png"}</script>
 ---
 
 <!-- Migrated from content/post/2018-10-10-readable-code-with-pipes.Rmd. -->

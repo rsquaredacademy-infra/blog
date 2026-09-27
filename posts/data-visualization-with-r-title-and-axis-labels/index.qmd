@@ -9,12 +9,13 @@ tags: ["base", "visualization"]
 execute:
   eval: false
   freeze: true
-header-includes: |
-  <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/data-visualization-with-r-title-and-axis-labels/">
-  <meta property="article:published_time" content="2017-06-05">
-  <meta property="article:author" content="Aravind Hebbali">
-  <meta property="og:image" content="https://blog.rsquaredacademy.com/img/viz_title.png">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Data Visualization With R - Title and Axis Labels", "datePublished": "2017-06-05", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/viz_title.png"}</script>
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/data-visualization-with-r-title-and-axis-labels/">
+    <meta property="article:published_time" content="2017-06-05">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/viz_title.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Data Visualization With R - Title and Axis Labels", "datePublished": "2017-06-05", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/viz_title.png"}</script>
 ---
 
 <!-- Migrated from content/post/2017-06-05-data-visualization-with-r-title-and-axis-labels.Rmd. -->

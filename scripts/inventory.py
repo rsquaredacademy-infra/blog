@@ -459,8 +459,8 @@ def migrate_bundles(rows: list[dict]) -> int:
             + (f"categories: {_yaml_list(r['categories'])}\n" if r["categories"] else "")
             + (f"tags: {_yaml_list(r['tags'])}\n" if r["tags"] else "")
             + "execute:\n  eval: false\n  freeze: true\n"
-            + "header-includes: |\n"
-            + "".join(f"  {line}\n" for line in head)
+            + "include-in-header:\n  text: |\n"
+            + "".join(f"    {line}\n" for line in head)
             + "---\n\n"
             f"<!-- Migrated from content/post/{r['file']}. -->\n"
             "<!-- Day-1 static bundle: body reuses the pre-rendered .html fragment. -->\n\n"
