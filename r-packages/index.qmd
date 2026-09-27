@@ -1,0 +1,15 @@
+---
+title: "R Packages"
+description: "Package announcements and practice guides — olsrr, blorr, descriptr, rbin, vistributions, rfm, standby, and more."
+listing:
+  contents: "../posts/*.qmd"
+  sort: "date desc"
+  type: default
+  categories: true
+  feed: true
+  include:
+    categories: ["packages", "regression", "logistic regression", "segmentation", "binning", "distributions", "shiny", "rvest", "arules", "regex", "rfm", "databases", "database", "bash", "summary statistics"]
+---
+
+Announcements and deep-dives for Rsquared Academy packages and data-science
+practice topics (databases, regex, RFM, market-basket analysis, CLI).

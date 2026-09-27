@@ -1,0 +1,15 @@
+---
+title: "R Programming"
+description: "Core R: syntax, data structures, dates, strings, and getting help."
+listing:
+  contents: "../posts/*.qmd"
+  sort: "date desc"
+  type: default
+  categories: true
+  feed: true
+  include:
+    categories: ["R Programming", "r-introduction", "tibbles", "pipes"]
+---
+
+The foundations — variables, vectors, lists, tibbles, dates, strings, and pipes.
+New to R? Start with the earliest posts first.
