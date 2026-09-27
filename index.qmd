@@ -14,7 +14,7 @@ toc: false
 
 ### What would you like to learn today?
 
-<div class="rqa-grid rqa-grid-4">
+<div class="rqa-grid rqa-grid-4 topic-cards">
 <div class="shadow p-3 mb-5 bg-white rounded text-center">
 <a href="r-programming/" style="display: block; color: black; text-decoration: none;"><i class="bi bi-code"></i> <br> R Programming </a>
 </div>

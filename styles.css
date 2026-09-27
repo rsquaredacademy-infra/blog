@@ -48,6 +48,13 @@
 .rqa-grid .card {
   height: 100%;
 }
+/* Compact topic cards: kill pandoc paragraph margins, tighten padding. */
+.topic-cards > div {
+  padding: 0.75rem !important;
+}
+.topic-cards p {
+  margin-bottom: 0 !important;
+}
 @media (max-width: 991.98px) {
   .rqa-grid-4,
   .rqa-grid-3 {
