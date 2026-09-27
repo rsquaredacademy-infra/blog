@@ -3,7 +3,7 @@ title: "A Comprehensive Introduction to Working with Databases using R"
 author: "Aravind Hebbali"
 date: "2019-08-08"
 description: "Learn to connect, explore and query database from R"
-image: "img/dbi_cover_image.png"
+image: "/img/dbi_cover_image.png"
 categories: ["databases"]
 tags: ["dbi", "dbplot", "modeldb", "tidypredict", "config"]
 execute:

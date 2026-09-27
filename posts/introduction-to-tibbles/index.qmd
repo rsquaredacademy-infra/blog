@@ -3,7 +3,7 @@ title: "Introduction to tibbles"
 author: "Aravind Hebbali"
 date: "2018-09-28"
 description: "Introduction to tibbles"
-image: "img/tibble_intro.png"
+image: "/img/tibble_intro.png"
 categories: ["data wrangling", "tibbles"]
 tags: ["tibbles"]
 execute:

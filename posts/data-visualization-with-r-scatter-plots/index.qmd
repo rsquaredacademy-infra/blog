@@ -3,7 +3,7 @@ title: "Data Visualization With R - Scatter Plots"
 author: "Aravind Hebbali"
 date: "2017-06-17"
 description: "Learn to create scatter plots in R."
-image: "img/viz_scatter.png"
+image: "/img/viz_scatter.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization"]
 execute:

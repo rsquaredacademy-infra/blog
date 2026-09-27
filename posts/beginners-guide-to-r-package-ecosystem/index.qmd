@@ -3,7 +3,7 @@ title: "Beginners Guide to R Package Ecosystem"
 author: "Aravind Hebbali"
 date: "2017-03-13"
 description: "Beginners Guide to R Package System."
-image: "img/package_banner.png"
+image: "/img/package_banner.png"
 categories: ["r-introduction"]
 tags: ["packages", "help"]
 execute:

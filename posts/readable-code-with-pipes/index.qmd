@@ -3,7 +3,7 @@ title: "Readable Code with Pipes"
 author: "Aravind Hebbali"
 date: "2018-10-10"
 description: "Readable Code with Pipes"
-image: "img/pipes.png"
+image: "/img/pipes.png"
 categories: ["pipes"]
 tags: ["pipes", "magrittr"]
 execute:

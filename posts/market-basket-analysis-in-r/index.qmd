@@ -3,7 +3,7 @@ title: "Practical Introduction to Market Basket Analysis - Asociation Rules"
 author: "Aravind Hebbali"
 date: "2019-05-02"
 description: "Learn the what, why and how of market basket analysis in R"
-image: "img/cover_image.jpg"
+image: "/img/cover_image.jpg"
 categories: ["arules"]
 tags: ["arules"]
 execute:

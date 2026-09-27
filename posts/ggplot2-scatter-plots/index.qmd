@@ -3,7 +3,7 @@ title: "ggplot2: Scatter Plots"
 author: "Aravind Hebbali"
 date: "2017-12-02"
 description: "ggplot2 - Scatter Plots"
-image: "img/gg_scatter.png"
+image: "/img/gg_scatter.png"
 categories: ["ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:

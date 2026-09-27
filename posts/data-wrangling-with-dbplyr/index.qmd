@@ -3,7 +3,7 @@ title: "Data Wrangling with dbplyr"
 author: "Aravind Hebbali"
 date: "2018-12-09"
 description: "Learn data wrangling with dbplyr."
-image: "img/database.png"
+image: "/img/database.png"
 categories: ["database", "data-wrangling"]
 tags: ["dbplyr", "dplyr"]
 execute:

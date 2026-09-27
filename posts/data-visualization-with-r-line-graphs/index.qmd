@@ -3,7 +3,7 @@ title: "Data Visualization With R - Line Graphs"
 author: "Aravind Hebbali"
 date: "2017-06-29"
 description: "Learn to create line plots in R."
-image: "img/viz_line.png"
+image: "/img/viz_line.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization"]
 execute:

@@ -3,7 +3,7 @@ title: "Introducing nse2r"
 author: "Aravind Hebbali"
 date: "2020-01-17"
 description: "Fetch data from the National Stock Exchange, India"
-image: "img/github_nse2r.png"
+image: "/img/github_nse2r.png"
 categories: ["packages"]
 tags: ["nse", "finance", "stock"]
 execute:

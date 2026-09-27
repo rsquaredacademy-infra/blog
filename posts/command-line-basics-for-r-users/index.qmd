@@ -3,7 +3,7 @@ title: "A Comprehensive Introduction to Command Line for R Users"
 author: "Aravind Hebbali"
 date: "2019-10-26"
 description: "Getting Started with the Command Line"
-image: "img/cline_cover_image.png"
+image: "/img/cline_cover_image.png"
 categories: ["bash"]
 tags: ["bash", "shell", "terminal", "cli"]
 execute:

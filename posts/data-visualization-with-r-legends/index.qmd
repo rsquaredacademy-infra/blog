@@ -3,7 +3,7 @@ title: "Data Visualization with R - Legends"
 author: "Aravind Hebbali"
 date: "2017-08-16"
 description: "Learn to add legends to R plots."
-image: "img/viz_legend.png"
+image: "/img/viz_legend.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization", "legend"]
 execute:

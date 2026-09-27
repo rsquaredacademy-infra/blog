@@ -3,7 +3,7 @@ title: "Introducing yahoofinancer"
 author: "Aravind Hebbali"
 date: "2022-11-04"
 description: "Fetch data from Yahoo Finance API"
-image: "img/github-yfr.png"
+image: "/img/github-yfr.png"
 categories: ["packages"]
 tags: ["yahoo", "finance", "stock"]
 execute:

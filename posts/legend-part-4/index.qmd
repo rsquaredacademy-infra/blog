@@ -3,7 +3,7 @@ title: "ggplot2: Legend - Part 4"
 author: "Aravind Hebbali"
 date: "2018-03-20"
 description: "ggplot2 - Legend Part 4"
-image: "img/gg_leg_part_1.png"
+image: "/img/gg_leg_part_1.png"
 categories: ["data-visualization"]
 tags: ["ggplot2"]
 execute:

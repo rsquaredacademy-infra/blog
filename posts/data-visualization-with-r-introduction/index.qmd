@@ -3,7 +3,7 @@ title: "Data Visualization With R - Introduction"
 author: "Aravind Hebbali"
 date: "2017-05-24"
 description: "Introduction to data visualization in R."
-image: "img/viz_intro.png"
+image: "/img/viz_intro.png"
 categories: ["data-visualization"]
 tags: ["visualization", "base"]
 execute:
@@ -37,8 +37,6 @@ execute:
 <h3>What is data visualization?</h3>
 <p>In simple words, data visualization is the representation of data in graphical format.</p>
 <div class="figure">
-<img src="data-viz.png" alt="" />
-<p class="caption">data-viz</p>
 </div>
 </div>
 <div id="why-visualize-data" class="section level3">

@@ -3,7 +3,7 @@ title: "Data Visualization With R - Title and Axis Labels"
 author: "Aravind Hebbali"
 date: "2017-06-05"
 description: "Learn to add title and modify axis labels in R."
-image: "img/viz_title.png"
+image: "/img/viz_title.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization"]
 execute:

@@ -3,7 +3,7 @@ title: "Getting Help in R"
 author: "Aravind Hebbali"
 date: "2019-03-05"
 description: "Getting Help in R."
-image: "img/help_banner.png"
+image: "/img/help_banner.png"
 categories: ["r-introduction"]
 tags: ["help"]
 execute:

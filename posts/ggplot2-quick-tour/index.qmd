@@ -3,7 +3,7 @@ title: "ggplot2: Quick Tour"
 author: "Aravind Hebbali"
 date: "2017-10-03"
 description: "ggplot2 - Quick Tour"
-image: "img/gg_quick_tour.png"
+image: "/img/gg_quick_tour.png"
 categories: ["ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:

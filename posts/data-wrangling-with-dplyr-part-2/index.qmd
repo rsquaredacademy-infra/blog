@@ -3,7 +3,7 @@ title: "Data Wrangling with dplyr - Part 2"
 author: "Aravind Hebbali"
 date: "2018-09-04"
 description: "Learn to join tables using dplyr."
-image: "img/dplyr.png"
+image: "/img/dplyr.png"
 categories: ["data wrangling", "dplyr"]
 tags: ["dplyr", "joins"]
 execute:

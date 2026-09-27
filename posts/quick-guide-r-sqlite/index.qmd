@@ -3,7 +3,7 @@ title: "Quick Guide: R & SQLite"
 author: "Aravind Hebbali"
 date: "2018-11-27"
 description: "Learn to work with databases in R using DBI."
-image: "img/database.png"
+image: "/img/database.png"
 categories: ["data-wrangling"]
 tags: ["sqlite", "rsqlite", "database", "import"]
 execute:

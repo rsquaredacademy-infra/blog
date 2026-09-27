@@ -3,7 +3,7 @@ title: "SQL for Data Science - Part 2"
 author: "Aravind Hebbali"
 date: "2019-01-02"
 description: "Learn SQL for Data Science."
-image: "img/sql_banner.png"
+image: "/img/sql_banner.png"
 categories: ["database"]
 tags: ["sql", "sqlite"]
 execute:

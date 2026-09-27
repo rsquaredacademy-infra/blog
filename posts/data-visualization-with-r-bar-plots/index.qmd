@@ -3,7 +3,7 @@ title: "Data Visualization With R - Bar Plots"
 author: "Aravind Hebbali"
 date: "2017-07-11"
 description: "Learn to create bar plots in R."
-image: "img/viz_bar.png"
+image: "/img/viz_bar.png"
 categories: ["data-visualization"]
 tags: ["bar plot", "visualization"]
 execute:

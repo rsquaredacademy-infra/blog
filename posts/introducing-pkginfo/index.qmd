@@ -3,7 +3,7 @@ title: "pkginfo: Tools for Retrieving R Package Information"
 author: "Aravind Hebbali"
 date: "2019-07-05"
 description: "An experimental R package for retrieving R pacakge informatiom."
-image: "img/github_pkginfo.png"
+image: "/img/github_pkginfo.png"
 categories: ["packages"]
 tags: ["pkginfo"]
 execute:

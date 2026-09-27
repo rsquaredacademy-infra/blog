@@ -3,7 +3,7 @@ title: "Logistic regression in R using blorr package"
 author: "Aravind Hebbali"
 date: "2019-02-26"
 description: "Tools for building logistic regression models in R."
-image: "img/og_blorr.png"
+image: "/img/og_blorr.png"
 categories: ["logistic regression"]
 tags: ["blorr", "logistic regression"]
 execute:

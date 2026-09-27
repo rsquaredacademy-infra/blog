@@ -3,7 +3,7 @@ title: "Data Visualization with R - Text Annotations"
 author: "Aravind Hebbali"
 date: "2017-08-28"
 description: "Learn to add text annotations to R plots."
-image: "img/viz_text_ann.png"
+image: "/img/viz_text_ann.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization", "text", "annotations"]
 execute:

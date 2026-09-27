@@ -3,7 +3,7 @@ title: "ggplot2 - Introduction to geoms"
 author: "Aravind Hebbali"
 date: "2017-10-15"
 description: "ggplot2 - Introduction to geoms"
-image: "img/gg_geoms.png"
+image: "/img/gg_geoms.png"
 categories: ["ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:

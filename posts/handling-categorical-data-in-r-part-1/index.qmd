@@ -3,7 +3,7 @@ title: "Handling Categorical Data in R - Part 1"
 author: "Aravind Hebbali"
 date: "2022-01-07"
 description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
-image: "img/forcats-part-1.png"
+image: "/img/forcats-part-1.png"
 categories: ["data-wrangling"]
 tags: ["forcats"]
 execute:

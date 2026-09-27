@@ -110,7 +110,9 @@ def iter_posts() -> list[dict]:
             "author": str(fm.get("author", "")),
             "description": str(fm.get("description", "")),
             "twitterImg": twitter_img,
-            "image": twitter_img.lstrip("/"),  # roadmap: strip leading / to avoid //img
+            # Quarto resolves `image:` relative to the POST dir, so keep the
+            # leading / (site-root). The //img double-slash was a Hugo-only bug.
+            "image": twitter_img if twitter_img.startswith("/") else f"/{twitter_img}" if twitter_img else "",
             "categories": "|".join(as_list(fm.get("categories")) or as_list(fm.get("topics"))),
             "tags": "|".join(as_list(fm.get("tags"))),
             "uses_topics_key": "topics" in fm,
@@ -423,6 +425,12 @@ def migrate_bundles(rows: list[dict]) -> int:
                 shutil.copytree(files_dir, dest.parent / f"{stem}_files",
                                 dirs_exist_ok=True)
                 body = body.replace(f"/post/{stem}_files/", f"{stem}_files/")
+            # Drop <img> refs whose files exist nowhere (dead on live site too).
+            for dead in (r'<img\s+src\s*=\s*"data-viz\.png"[^>]*>\s*\n?(<p class="caption">data-viz</p>\s*\n?)?',
+                         r'<img\s+src\s*=\s*"/post/components\.png"[^>]*>\s*\n?'):
+                body, n = re.subn(dead, "", body)
+                if n:
+                    print(f"  dropped dead img in {r['slug']} ({n} tag(s))")
         else:
             body = "<!-- WARNING: no pre-rendered .html pair — body pending refresh. -->\n"
         dest.write_text(

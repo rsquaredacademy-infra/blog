@@ -3,7 +3,7 @@ title: "Data Visualization with R - Combining Plots"
 author: "Aravind Hebbali"
 date: "2017-09-09"
 description: "Learn to combine plots."
-image: "img/viz_facet.png"
+image: "/img/viz_facet.png"
 categories: ["data-visualization"]
 tags: ["base", "visualization", "facets"]
 execute:

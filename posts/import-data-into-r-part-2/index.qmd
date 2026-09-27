@@ -3,7 +3,7 @@ title: "Import Data into R - Part 2"
 author: "Aravind Hebbali"
 date: "2018-08-11"
 description: "Learn to read data from excel spreadsheets & statistical softwares into R."
-image: "img/import.png"
+image: "/img/import.png"
 execute:
   eval: false
   freeze: true

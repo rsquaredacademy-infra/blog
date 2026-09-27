@@ -67,7 +67,6 @@ area</code></pre>
 <div id="components-of-a-variable" class="section level2">
 <h2>Components of a Variable</h2>
 <center>
-<img src = "/post/components.png" width = "800" height = "600">
 </center>
 </div>
 <div id="naming-conventions" class="section level2">

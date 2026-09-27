@@ -3,7 +3,7 @@ title: "Working with Date and Time in R "
 author: "Aravind Hebbali"
 date: "2018-11-03"
 description: "Learn to handle dates & time in R using lubridate"
-image: "img/lubridate.png"
+image: "/img/lubridate.png"
 categories: ["data wrangling", "lubridate"]
 tags: ["lubridate", "date", "time"]
 execute:

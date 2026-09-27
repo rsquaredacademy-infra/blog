@@ -3,7 +3,7 @@ title: "Introducing olsrr"
 author: "Aravind Hebbali"
 date: "2019-02-08"
 description: "Tools for linear regression."
-image: "img/og_olsrr.png"
+image: "/img/og_olsrr.png"
 categories: ["regression"]
 tags: ["olsrr"]
 execute:

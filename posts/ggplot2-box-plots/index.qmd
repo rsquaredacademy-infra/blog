@@ -3,7 +3,7 @@ title: "ggplot2: Box Plots"
 author: "Aravind Hebbali"
 date: "2018-01-07"
 description: "ggplot2 - Box Plots"
-image: "img/gg_box.png"
+image: "/img/gg_box.png"
 categories: ["ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:

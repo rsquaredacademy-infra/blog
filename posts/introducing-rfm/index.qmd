@@ -3,7 +3,7 @@ title: "RFM Analysis in R"
 author: "Aravind Hebbali"
 date: "2019-02-12"
 description: "Tools for RFM analysis in R."
-image: "img/og_rfm.png"
+image: "/img/og_rfm.png"
 categories: ["segmentation"]
 tags: ["rfm"]
 execute:

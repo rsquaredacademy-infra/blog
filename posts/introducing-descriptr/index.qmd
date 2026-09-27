@@ -3,7 +3,7 @@ title: "Descriptive/Summary Statistics with descriptr"
 author: "Aravind Hebbali"
 date: "2019-02-20"
 description: "Tools for descriptive statistics in R."
-image: "img/og_descriptr.png"
+image: "/img/og_descriptr.png"
 categories: ["summary statistics"]
 tags: ["descriptr"]
 execute:

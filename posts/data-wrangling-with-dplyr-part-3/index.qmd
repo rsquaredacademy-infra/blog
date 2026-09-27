@@ -3,7 +3,7 @@ title: "Data Wrangling with dplyr - Part 3"
 author: "Aravind Hebbali"
 date: "2018-09-16"
 description: "Use dplyr to extract, sample and summarize data."
-image: "img/dplyr.png"
+image: "/img/dplyr.png"
 categories: ["data wrangling", "dplyr"]
 tags: ["dplyr"]
 execute:

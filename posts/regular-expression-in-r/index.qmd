@@ -3,7 +3,7 @@ title: "Demystifying Regular Expressions in R"
 author: "Aravind Hebbali"
 date: "2019-05-27"
 description: "Beginners guide to regular expressions in R"
-image: "img/regex_cover_image.png"
+image: "/img/regex_cover_image.png"
 categories: ["regex"]
 tags: ["regex"]
 execute:
