@@ -43,17 +43,73 @@ page-layout: full
 :::
 ::: {.col-lg-3 .col-md-6 .col-sm-12}
 <a href="posts/regular-expression-in-r/" style="color: black; text-decoration: none;">
-<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-asterisk"></i> <br> Regex <br> &nbsp;</div>
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-percent"></i> <br> Regular Expressions <br> &nbsp;</div>
+</a>
+:::
+::: {.col-lg-3 .col-md-6 .col-sm-12}
+<a href="posts/handling-date-and-time-in-r/" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-clock"></i> <br> Date &amp; Time <br> &nbsp;</div>
+</a>
+:::
+::: {.col-lg-3 .col-md-6 .col-sm-12}
+<a href="r-packages/" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-gift"></i> <br> R Packages <br> &nbsp;</div>
+</a>
+:::
+:::
+
+::: {.row}
+::: {.col-lg-3 .col-md-6 .col-sm-12}
+<a href="posts/web-scraping/" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-globe"></i> <br> Web Scraping <br> &nbsp;</div>
 </a>
 :::
 ::: {.col-lg-3 .col-md-6 .col-sm-12}
 <a href="posts/customer-segmentation-using-rfm-analysis/" style="color: black; text-decoration: none;">
-<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-people"></i> <br> RFM Analysis <br> &nbsp;</div>
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-people"></i> <br> Customer Segmentation <br> &nbsp;</div>
 </a>
 :::
 ::: {.col-lg-3 .col-md-6 .col-sm-12}
 <a href="posts/market-basket-analysis-in-r/" style="color: black; text-decoration: none;">
-<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-basket"></i> <br> Market Basket <br> &nbsp;</div>
+<div class="shadow p-3 mb-5 bg-white rounded text-center"><br> <i class="bi bi-basket"></i> <br> Association Rule Mining <br> &nbsp;</div>
+</a>
+:::
+:::
+
+### More Resources
+
+::: {.row}
+::: {.col-lg-4 .col-md-6 .col-sm-12}
+<a href="https://www.youtube.com/user/rsquaredin/videos" target="_blank" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-left">
+<i class="bi bi-camera-video" style="font-size: 2.5rem;"></i>
+<div class="text" style="display: inline-block; vertical-align: middle;">
+<h3>Videos</h3>
+<p>160+ Videos</p>
+</div>
+</div>
+</a>
+:::
+::: {.col-lg-4 .col-md-6 .col-sm-12}
+<a href="https://ebooks.rsquaredacademy.com" target="_blank" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-left">
+<i class="bi bi-book" style="font-size: 2.5rem;"></i>
+<div class="text" style="display: inline-block; vertical-align: middle;">
+<h3>eBooks</h3>
+<p>6+ ebooks</p>
+</div>
+</div>
+</a>
+:::
+::: {.col-lg-4 .col-md-6 .col-sm-12}
+<a href="https://pkgs.rsquaredacademy.com" target="_blank" style="color: black; text-decoration: none;">
+<div class="shadow p-3 mb-5 bg-white rounded text-left">
+<i class="bi bi-code" style="font-size: 2.5rem;"></i>
+<div class="text" style="display: inline-block; vertical-align: middle;">
+<h3>R Packages</h3>
+<p>10 Open Source Libraries</p>
+</div>
+</div>
 </a>
 :::
 :::
