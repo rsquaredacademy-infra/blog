@@ -56,6 +56,12 @@
   flex-direction: column;
   justify-content: center;
 }
+/* Same vertical centering for More Resources cards. */
+.res-cards > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .topic-cards p {
   margin-bottom: 0 !important;
 }
