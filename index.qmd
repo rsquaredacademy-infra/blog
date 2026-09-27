@@ -1,10 +1,11 @@
 ---
-title: "Rsquared Academy Blog"
+title: ""
 listing:
   id: latest
   contents: posts
   sort: "date desc"
-  type: default
+  type: grid
+  grid-columns: 4
   categories: false
   feed: true
 page-layout: full
@@ -160,7 +161,7 @@ toc: false
 :::
 :::
 
-### Latest Articles
+### Popular Articles
 
 ::: {#latest}
 :::
