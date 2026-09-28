@@ -317,7 +317,7 @@ def write_netlify_redirects(rows: list[dict], dest: Path) -> None:
             elif target in HUBS or target + "/" in HUBS:
                 add(legacy, target if target in HUBS else target + "/")
             elif legacy in ("/start-here", "/start-here/", "/page/4/"):
-                add(legacy, "/")
+                add(legacy, "/r-programming/")
             elif legacy in ("/about/", "/subscribe/"):
                 add(legacy, "/about/")
             elif target == "/":
