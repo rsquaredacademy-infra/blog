@@ -1,16 +1,14 @@
-# Phase 1: render the Quarto blog and deploy _site to Netlify as a DRAFT.
-# Draft deploys get Netlify's automatic X-Robots-Tag: noindex — flip
-# production-deploy to true only at DNS cutover (Phase 2+).
+# Production: render the Quarto blog and deploy _site to Netlify production.
+# master is the deploy branch: merge here to ship.
 # Required repo secrets: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID.
-# Phase 3 setup: R 4.5 + renv restore before render (for refreshed posts;
-# legacy bundles stay static). First run populates the renv cache; later runs
-# restore from cache.
+# R 4.5 + renv restore before render (for refreshed posts;
+# legacy bundles stay static).
 
 name: quarto-publish
 
 on:
   push:
-    branches: [quarto-migration]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -38,11 +36,11 @@ jobs:
       - name: Render site
         run: quarto render
 
-      - name: Deploy to Netlify (draft)
+      - name: Deploy to Netlify (production)
         uses: nwtgck/actions-netlify@v3
         with:
           publish-dir: ./_site
-          production-deploy: false
+          production-deploy: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: ${{ github.event.head_commit.message }}
           enable-commit-comment: false
