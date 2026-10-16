@@ -17,6 +17,7 @@ project:
     - img
     - images
     - rmarkdown-libs
+    - site-kit
 
 website:
   title: "Rsquared Academy Blog"
@@ -56,6 +57,7 @@ website:
     <li><a href="https://www.rsquaredacademy.com/about.html">Company</a></li>
     <li><a href="https://www.rsquaredacademy.com/terms-and-conditions.html">Terms of Use</a></li>
     <li><a href="https://www.rsquaredacademy.com/privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="#" data-rsa-analytics-optout>Turn off analytics</a></li>
     </ul></div>
     <div><h5>Support</h5><ul class="list-unstyled">
     <li><a href="https://www.rsquaredacademy.com/contact.html">Contact Us</a></li>
@@ -71,8 +73,7 @@ website:
     <p class="text-center">Sales and Support&nbsp;&nbsp;&nbsp;&nbsp;+91-960-687-2504&nbsp;&nbsp;&nbsp;&nbsp;support@rsquaredacademy.com</p>
     <p class="text-center">Copyright 2014–<script>document.write(new Date().getFullYear())</script> Rsquared Education Services Pvt. Ltd. All rights reserved.</p>
     </div>
-  # Analytics (GA4 live; Plausible/Cloudflare TBD Phase 4):
-  google-analytics: "G-YP0439LY21"
+  # Analytics: provided by the vendored site-kit (see _includes/site-kit-head.html)
 
 execute:
   freeze: true
@@ -81,6 +82,8 @@ format:
   html:
     theme: flatly
     css: styles.css
+    include-in-header:
+      - _includes/site-kit-head.html
     toc: true
     toc-depth: 3
     code-copy: true

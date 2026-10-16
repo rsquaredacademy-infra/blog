@@ -25,3 +25,7 @@ teaching happens in long form.
 Newsletter signup, course, and consulting links land here in Phase 4
 (distribution engine). For now: follow along via [RSS](index.xml).
 :::
+
+## Privacy
+
+We use Google Analytics 4 to understand how visitors interact with our website and to improve our educational content. In compliance with privacy regulations including the General Data Protection Regulation (GDPR), visitors accessing our sites from the European Economic Area, the United Kingdom, and Switzerland are presented with a consent banner before any analytics cookies are stored. If you decline or are visiting from outside these regions, Google Analytics operates in accordance with Consent Mode v2 without personal profiling, cross-site tracking, or advertising signals. We collect only aggregated technical metrics—such as page views, referral sources, device types, and general geographic location—and never collect personally identifiable information. You can change your preferences or opt out of analytics tracking at any time by clicking <a href="#" data-rsa-analytics-optout>Cookie preferences &amp; Opt-out</a>.
