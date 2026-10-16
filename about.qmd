@@ -25,3 +25,7 @@ teaching happens in long form.
 Newsletter signup, course, and consulting links land here in Phase 4
 (distribution engine). For now: follow along via [RSS](index.xml).
 :::
+
+## Privacy
+
+We use Google Analytics 4 to understand how people use this site (pages visited, referring sites, device type and approximate location) so we can improve our free learning material. Google Analytics uses cookies and a pseudonymous identifier; we don't use it for advertising and we never send Google names or email addresses. Visitors in the European Economic Area, the United Kingdom and Switzerland are asked for consent first, and if they decline, no analytics cookies are stored. Anyone can switch analytics off at any time: <a href="#" data-rsa-analytics-optout>Turn off analytics</a>.
