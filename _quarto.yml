@@ -14,6 +14,7 @@ project:
     - _redirects
     - _headers
     - robots.txt
+    - favicon.ico
     - img
     - images
     - rmarkdown-libs
@@ -23,6 +24,7 @@ website:
   title: "Rsquared Academy Blog"
   description: "Explore…Discover…Learn"
   site-url: https://blog.rsquaredacademy.com
+  favicon: favicon.ico
   search: true
   navbar:
     title: "Rsquared Academy"
