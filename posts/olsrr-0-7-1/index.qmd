@@ -3,7 +3,8 @@ title: "olsrr 0.7.1"
 author: "Aravind Hebbali"
 date: "2026-11-19"
 description: "What is new in olsrr since 2019: locked predictors in stepwise selection, model comparison, weighted regression summaries, and calculation fixes across diagnostics and tests."
-image: "/img/og_olsrr.png"
+image: "/img/olsrr-0-7-1.png"
+image-alt: "olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, corrected test results, the package name olsrr and olsrr.rsquaredacademy.com"
 categories: ["packages", "regression"]
 tags: ["olsrr"]
 execute:
@@ -13,9 +14,29 @@ include-in-header:
     <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/olsrr-0-7-1/">
     <meta property="article:published_time" content="2026-11-19">
     <meta property="article:author" content="Aravind Hebbali">
-    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/og_olsrr.png">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "olsrr 0.7.1", "datePublished": "2026-11-19", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/og_olsrr.png"}</script>
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/olsrr-0-7-1.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "olsrr 0.7.1", "datePublished": "2026-11-19", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/olsrr-0-7-1.png"}</script>
 ---
+
+![](/img/olsrr-0-7-1.png){fig-alt="olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, corrected test results, the package name olsrr and olsrr.rsquaredacademy.com" width="100%"}
+
+
+```{=html}
+<style>
+.ba-card{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #d0d7de;border-radius:8px;overflow:hidden;margin:1rem 0 .5rem;font-size:.92rem}
+.ba-card>div{padding:.75rem 1rem}
+.ba-card .ba-before{background:#fff5f5;border-right:1px solid #d0d7de}
+.ba-card .ba-after{background:#f3fbf5}
+.ba-card h5{margin:0 0 .4rem;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:#57606a}
+.ba-card code{font-size:.88rem}
+.ba-card table{margin:0;width:100%}
+.ba-card td{padding:.15rem .4rem;border:0}
+.ba-card .chg{font-weight:700;background:#fff3b0;border-radius:3px;padding:0 .2rem}
+.ba-call{font-size:.85rem;color:#57606a;margin:-.25rem 0 1rem}
+.ba-note{font-size:.88rem;color:#57606a;border-left:3px solid #d0d7de;padding-left:.75rem;margin:.5rem 0 1.25rem}
+@media (max-width:600px){.ba-card{grid-template-columns:1fr}.ba-card .ba-before{border-right:0;border-bottom:1px solid #d0d7de}}
+</style>
+```
 
 ```{r}
 #| label: setup
@@ -24,13 +45,15 @@ stopifnot(packageVersion("olsrr") == "0.7.1")
 library(olsrr)
 ```
 
-We're pleased to announce the release of `olsrr` 0.7.1. `olsrr` provides tools for building and checking ordinary least squares regression models in R: regression summaries, variable selection, heteroskedasticity and normality tests, collinearity diagnostics, influence measures and residual plots, all built around `lm()` objects.
+`olsrr` 0.7.1 is on CRAN. `olsrr` provides tools for building and checking ordinary least squares regression models in R: regression summaries, variable selection, heteroskedasticity and normality tests, collinearity diagnostics, influence measures and residual plots, all built around `lm()` objects.
 
 We don't usually write about patch releases, but this one deserves a post:
 
 - Several test and summary results change: Holm-adjusted Breusch-Pagan $p$-values, the Cramér–von Mises normality test, and the residual MSE/RMSE in model summaries. If you report these numbers, please re-run your analyses.
 - Every calculation and plot was checked against base R and reference packages (`car`, `lmtest` and `nortest`) for this release.
 - It is the first `olsrr` post since our [introduction in 2019](../introducing-olsrr/index.qmd), so it also covers what has been added since then.
+
+**Who should read what:** if you report Holm-adjusted Breusch-Pagan $p$-values, Cramér–von Mises normality tests or MSE/RMSE from `olsrr`, read [Behaviour changes](#behaviour-changes) first. Everyone else can skip to [What's new since 2019](#whats-new-since-2019).
 
 You can install it from CRAN with:
 
@@ -45,6 +68,10 @@ You can see a full list of changes in the [release notes](https://github.com/rsq
 ## Behaviour changes
 
 These fixes change numbers you may already have in reports. In each case 0.7.1 now agrees with the base R or reference implementation, so the new values are the ones to use.
+
+::: {.ba-note}
+How we checked: every number in this post was re-run on CRAN `olsrr` 0.7.0 and 0.7.1, and the release passed an independent audit against base R, `car`, `lmtest` and `nortest` before it was submitted.
+:::
 
 ### Breusch-Pagan test: Holm-adjusted p-values
 
@@ -62,11 +89,33 @@ m_bp <- lm(y ~ x1 + x2 + x3, data = d)
 ols_test_breusch_pagan(m_bp, rhs = TRUE, multiple = TRUE, p.adj = "holm")
 ```
 
-| Predictor | Raw $p$ | `olsrr` 0.7.0 (Holm) | `olsrr` 0.7.1 (Holm) |
-|---|---:|---:|---:|
-| `x1` | `0.0465` | `0.0465` | `0.0819` |
-| `x2` | `1.07e-05` | `3.21e-05` | `3.21e-05` |
-| `x3` | `0.0410` | `0.0819` | `0.0819` |
+```{=html}
+<div class="ba-card" role="group" aria-label="Before and after: ols_test_breusch_pagan(m_bp, rhs = TRUE, multiple = TRUE, p.adj = "holm")">
+<div class="ba-before"><h5>olsrr 0.7.0</h5><table><tr><td>x1</td><td><span class="chg">0.0465</span></td></tr><tr><td>x2</td><td>3.21e-05</td></tr><tr><td>x3</td><td>0.0819</td></tr></table></div>
+<div class="ba-after"><h5>olsrr 0.7.1</h5><table><tr><td>x1</td><td><span class="chg">0.0819</span></td></tr><tr><td>x2</td><td>3.21e-05</td></tr><tr><td>x3</td><td>0.0819</td></tr></table></div>
+</div>
+<p class="ba-call">Same call on both CRAN versions: <code>ols_test_breusch_pagan(m_bp, rhs = TRUE, multiple = TRUE, p.adj = "holm")</code>. Changed values are highlighted.</p>
+```
+
+<details>
+<summary>Code that produced both values</summary>
+
+```r
+# Run once with each version, e.g. in two sessions:
+# remotes::install_version("olsrr", "0.7.0")   # then
+# install.packages("olsrr")                    # 0.7.1
+library(olsrr)
+set.seed(15)
+n <- 60
+z <- rnorm(n)
+d <- data.frame(x1 = z + rnorm(n), x2 = z + rnorm(n), x3 = z + rnorm(n))
+d$y <- rnorm(n) * exp(0.55 * z)
+m_bp <- lm(y ~ x1 + x2 + x3, data = d)
+ols_test_breusch_pagan(m_bp, rhs = TRUE, multiple = TRUE, p.adj = "holm")$p
+```
+
+</details>
+
 
 In 0.7.0, `x1` remained below `0.05` (`0.0465`) even though `x3` had a smaller raw $p$-value and adjusted to `0.0819`. In 0.7.1, `x1` is `0.0819`, matching `stats::p.adjust()`.
 
@@ -82,10 +131,28 @@ model <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
 ols_test_normality(model)
 ```
 
-| Test on `lm(mpg ~ disp + hp + wt + qsec, mtcars)` | `olsrr` 0.7.0 | `olsrr` 0.7.1 |
-|---|---|---|
-| Cramér–von Mises statistic ($W$) | `2.8122` | `0.0764` |
-| Cramér–von Mises $p$-value | `0.0000` | `0.2230` |
+```{=html}
+<div class="ba-card" role="group" aria-label="Before and after: ols_test_normality(lm(mpg ~ disp + hp + wt + qsec, mtcars))">
+<div class="ba-before"><h5>olsrr 0.7.0</h5><table><tr><td>Cramér–von Mises W</td><td><span class="chg">2.8122</span></td></tr><tr><td>p-value</td><td><span class="chg">0.0000</span></td></tr></table></div>
+<div class="ba-after"><h5>olsrr 0.7.1</h5><table><tr><td>Cramér–von Mises W</td><td><span class="chg">0.0764</span></td></tr><tr><td>p-value</td><td><span class="chg">0.2230</span></td></tr></table></div>
+</div>
+<p class="ba-call">Same call on both CRAN versions: <code>ols_test_normality(lm(mpg ~ disp + hp + wt + qsec, mtcars))</code>. Changed values are highlighted.</p>
+```
+
+<details>
+<summary>Code that produced both values</summary>
+
+```r
+# Run once with each version, e.g. in two sessions:
+# remotes::install_version("olsrr", "0.7.0")   # then
+# install.packages("olsrr")                    # 0.7.1
+library(olsrr)
+model <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+ols_test_normality(model)$cramer
+```
+
+</details>
+
 
 In 0.7.1, the Cramér–von Mises result (`p = 0.2230`) agrees with `nortest::cvm.test(residuals(model))` and aligns qualitatively with the Shapiro-Wilk (`0.0600`) and Anderson-Darling (`0.1188`) tests on the same residuals. (See [What's next](#whats-next) about the Kolmogorov-Smirnov row.)
 
@@ -93,7 +160,31 @@ In 0.7.1, the Cramér–von Mises result (`p = 0.2230`) agrees with `nortest::cv
 
 ### Residual MSE and RMSE
 
-In 0.7.0, `ols_regress()` and `ols_model_performance()` divided the residual sum of squares by $n$ rather than by the residual degrees of freedom ([#221](https://github.com/rsquaredacademy/olsrr/issues/221)). For `lm(mpg ~ disp + hp + wt + qsec, data = mtcars)` ($n = 32$, 27 residual degrees of freedom) that gave `MSE = 5.8011` and `RMSE = 2.4085`. Version 0.7.1 reports `MSE = 6.8754` and `RMSE = 2.6221`, matching the ANOVA residual mean square and `summary(model)$sigma`.
+In 0.7.0, `ols_regress()` and `ols_model_performance()` divided the residual sum of squares by $n$ rather than by the residual degrees of freedom ([#221](https://github.com/rsquaredacademy/olsrr/issues/221), reported by [&#x0040;viqule11](https://github.com/viqule11)). For `lm(mpg ~ disp + hp + wt + qsec, data = mtcars)` ($n = 32$, 27 residual degrees of freedom) that gave `MSE = 5.8011` and `RMSE = 2.4085`. Version 0.7.1 reports `MSE = 6.8754` and `RMSE = 2.6221`, matching the ANOVA residual mean square and `summary(model)$sigma`.
+
+```{=html}
+<div class="ba-card" role="group" aria-label="Before and after: ols_regress(lm(mpg ~ disp + hp + wt + qsec, mtcars))">
+<div class="ba-before"><h5>olsrr 0.7.0</h5><table><tr><td>MSE</td><td><span class="chg">5.8011</span></td></tr><tr><td>RMSE</td><td><span class="chg">2.4085</span></td></tr></table></div>
+<div class="ba-after"><h5>olsrr 0.7.1</h5><table><tr><td>MSE</td><td><span class="chg">6.8754</span></td></tr><tr><td>RMSE</td><td><span class="chg">2.6221</span></td></tr></table></div>
+</div>
+<p class="ba-call">Same call on both CRAN versions: <code>ols_regress(lm(mpg ~ disp + hp + wt + qsec, mtcars))</code>. Changed values are highlighted.</p>
+```
+
+<details>
+<summary>Code that produced both values</summary>
+
+```r
+# Run once with each version, e.g. in two sessions:
+# remotes::install_version("olsrr", "0.7.0")   # then
+# install.packages("olsrr")                    # 0.7.1
+library(olsrr)
+model <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+r <- ols_regress(model)
+c(mse = r$mse, rmse = r$rmse)
+```
+
+</details>
+
 
 **What to do:** expect slightly larger MSE and RMSE values; they now match base R.
 
@@ -162,8 +253,8 @@ ols_regress(m_w1)
 - `ols_plot_resid_hist()` draws the bars with the same breaks as the normal curve. Previously the curve could be drawn at about half its correct height (`0.54` of the expected peak for `lm(hwy ~ displ + cty + year, data = ggplot2::mpg)`).
 - `ols_plot_comp_plus_resid()` keeps every predictor for single-predictor and no-intercept models; 0.7.0 dropped a column and plotted a single point.
 - `ols_test_outlier()` caps Bonferroni-adjusted $p$-values at 1 (0.7.0 could report values such as `6.62`).
-- Information criteria count parameters with the model rank, which fixes factor predictors and rank-deficient models; `ols_aic(corrected = TRUE)` matches the AICc formula ([#224](https://github.com/rsquaredacademy/olsrr/issues/224), [#170](https://github.com/rsquaredacademy/olsrr/issues/170)), and Mallows' $C_p$ is correct for factor predictors ([#92](https://github.com/rsquaredacademy/olsrr/issues/92)) and in `ols_step_all_possible()` ([#215](https://github.com/rsquaredacademy/olsrr/issues/215)).
-- Stepwise selection handles transformed and factor predictors in refits ([#244](https://github.com/rsquaredacademy/olsrr/issues/244), [#246](https://github.com/rsquaredacademy/olsrr/issues/246)), forward selection on saturated models ([#199](https://github.com/rsquaredacademy/olsrr/issues/199)), ties ([#206](https://github.com/rsquaredacademy/olsrr/issues/206)) and aliased terms ([#172](https://github.com/rsquaredacademy/olsrr/issues/172)).
+- Information criteria count parameters with the model rank, which fixes factor predictors and rank-deficient models; `ols_aic(corrected = TRUE)` matches the AICc formula ([#224](https://github.com/rsquaredacademy/olsrr/issues/224), [#170](https://github.com/rsquaredacademy/olsrr/issues/170), reported by [&#x0040;comatrion](https://github.com/comatrion)), and Mallows' $C_p$ is correct for factor predictors ([#92](https://github.com/rsquaredacademy/olsrr/issues/92), reported by [&#x0040;cccfran](https://github.com/cccfran)) and in `ols_step_all_possible()` ([#215](https://github.com/rsquaredacademy/olsrr/issues/215), reported by [&#x0040;LSantanaZA](https://github.com/LSantanaZA)).
+- Stepwise selection handles transformed and factor predictors in refits ([#244](https://github.com/rsquaredacademy/olsrr/issues/244), [#246](https://github.com/rsquaredacademy/olsrr/issues/246)), forward selection on saturated models ([#199](https://github.com/rsquaredacademy/olsrr/issues/199), reported by [&#x0040;hirscht](https://github.com/hirscht)), ties ([#206](https://github.com/rsquaredacademy/olsrr/issues/206), reported by [&#x0040;kaygmz](https://github.com/kaygmz)) and aliased terms ([#172](https://github.com/rsquaredacademy/olsrr/issues/172), reported by [&#x0040;yayyb](https://github.com/yayyb)).
 - Models fitted with `na.action = na.exclude` or with weights are handled consistently across plots and tests; diagnostics whose formulas assume unweighted least squares now stop with a clear error for weighted fits ([#236](https://github.com/rsquaredacademy/olsrr/issues/236)).
 
 ## What's next
