@@ -1,0 +1,269 @@
+---
+title: "olsrr 0.7.1"
+author: "Aravind Hebbali"
+date: "2026-11-19"
+description: "What is new in olsrr since 2019: locked predictors in stepwise selection, model comparison, weighted regression summaries, and calculation fixes across diagnostics and tests."
+image: "/img/og_olsrr.png"
+categories: ["packages", "regression"]
+tags: ["olsrr"]
+execute:
+  freeze: true
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/olsrr-0-7-1/">
+    <meta property="article:published_time" content="2026-11-19">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/og_olsrr.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "olsrr 0.7.1", "datePublished": "2026-11-19", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/og_olsrr.png"}</script>
+---
+
+```{r}
+#| label: setup
+#| include: false
+stopifnot(packageVersion("olsrr") == "0.7.1")
+library(olsrr)
+```
+
+`olsrr` 0.7.1 is now on CRAN. Here is what is new since our [first post in 2019](../introducing-olsrr/index.qmd), along with the calculation and plotting fixes included in this release.
+
+`olsrr` provides tools for ordinary least squares regression in R: regression summaries, variable selection routines, heteroskedasticity and normality tests, collinearity diagnostics, influence measures, and residual plots built around `lm()` objects. Between version 0.5.2 (covered in the 2019 post) and 0.7.1, the package gained locked predictors in stepwise selection, multi-model performance comparison, expanded selection criteria, and weighted linear regression support in `ols_regress()`. For 0.7.1, we also audited the calculation and plotting routines against base R and reference packages (`car`, `lmtest`, and `nortest`).
+
+## What's New Since 2019
+
+### Stepwise Selection with Locked Predictors
+
+Between versions 0.6.0 and 0.7.1, the variable selection family expanded to cover $p$-values, AIC, SBC (BIC), Sawa's BIC (`sbic`), $R^2$, and adjusted $R^2$. All forward, backward, and both-direction selectors now accept `include` and `exclude` arguments (by name or column index) so baseline covariates or confounders stay in the model throughout selection.
+
+On the `surgical` dataset, locking `age` and `alc_heavy` via `include` keeps both predictors in the base model (Step 0, `AIC = 795.956`) and through every subsequent addition and removal step, even though `age` itself has $p = 0.473$ in the final fit:
+
+```{r}
+#| label: step-include
+m_surg <- lm(
+  y ~ bcs + pindex + enzyme_test + liver_test + age + gender + alc_mod + alc_heavy,
+  data = surgical
+)
+ols_step_both_aic(m_surg, include = c("age", "alc_heavy"))
+```
+
+### Ten-Panel Diagnostic Grid
+
+`ols_plot_diagnostics()` gathers ten residual, fit, leverage, and influence views for an `lm` object: residuals vs fitted values, deleted studentized residuals vs predicted values, studentized residuals vs leverage, normal Q-Q plot, actual vs fitted values, Cook's D chart, centered fit spread, residual spread, residual histogram, and residual box plot.
+
+Calling `ols_plot_diagnostics(model)` directly pages the panels in 2×2 grids (and in 0.7.1 draws cleanly inside scripts, functions, and loops as well as at the top level). Setting `print_plot = FALSE` returns the ten `ggplot` objects without drawing them first, so they can be arranged in a single layout:
+
+```{r}
+#| label: diag-grid
+#| fig-width: 9
+#| fig-height: 13.5
+#| fig-alt: "Ten-panel regression diagnostic grid for mpg ~ disp + hp + wt + qsec on mtcars, arranged in five rows of two panels: Residual vs Fitted Values, Deleted Studentized Residual vs Predicted Values, Outlier and Leverage Diagnostics, Normal Q-Q Plot, Actual vs Fitted for mpg, Cook's D Chart, centered fit spread and residual spread plots, Residual Histogram with normal curve, and Residual Box Plot."
+model <- lm(mpg ~ disp + hp + wt + qsec, data = mtcars)
+panels <- ols_plot_diagnostics(model, print_plot = FALSE)
+gridExtra::grid.arrange(grobs = panels, ncol = 2, top = "Regression Diagnostics")
+```
+
+### Model Performance and Multi-Model Comparison
+
+Added in 0.7.0 and refined in 0.7.1, `ols_model_performance()` reports fit metrics for a single model, while `ols_compare_model_performance()` places competing models side by side across $R^2$, adjusted $R^2$, predicted $R^2$, AIC, SBC, SBIC, RMSE, and residual standard error (`sigma`):
+
+```{r}
+#| label: model-compare
+m1 <- lm(mpg ~ wt + hp, data = mtcars)
+m2 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
+m3 <- lm(mpg ~ wt + hp + qsec + disp, data = mtcars)
+
+ols_compare_model_performance(m1, m2, m3)
+```
+
+### Weighted Linear Regression in `ols_regress()`
+
+In 0.7.1, `ols_regress()` supports weighted linear models fitted with `lm(..., weights = ...)`, matching base R's `summary()`, `anova()`, and `confint()` for coefficient estimates, standard errors, $t$-statistics, confidence intervals, $R^2$, residual standard error, the ANOVA table, standardized betas, and weighted predicted $R^2$:
+
+```{r}
+#| label: weighted-regress
+d_wt <- mtcars
+d_wt$w <- seq_len(nrow(d_wt)) / 8
+
+m_w1 <- lm(mpg ~ wt + hp, data = d_wt, weights = w)
+ols_regress(m_w1)
+```
+
+## Fixes in 0.7.1
+
+We checked `olsrr`'s test statistics, selection criteria, and plot data against base R and reference packages including `car`, `lmtest`, and `nortest`. Below are six notable fixes in 0.7.1, starting with statistical test and fit calculations and comparing the 0.7.0 ("before") and 0.7.1 ("after") outputs.
+
+### 1. Breusch-Pagan Test: Holm-Adjusted p-Values
+
+When testing multiple predictors individually with `ols_test_breusch_pagan(..., rhs = TRUE, multiple = TRUE, p.adj = "holm")`, version 0.7.0 sorted the raw $p$-values and multiplied by reversed ranks without enforcing the cumulative-maximum step of Holm's step-down procedure. As a result, the largest raw $p$-value could be returned unadjusted, producing false rejections at $\alpha = 0.05$.
+
+Version 0.7.1 delegates to `stats::p.adjust(p, "holm")`. In the three-predictor example below, the unadjusted $p$-values are `0.0465`, `1.07e-05`, and `0.0410`:
+
+```{r}
+#| label: bp-holm
+set.seed(15)
+n <- 60
+z <- rnorm(n)
+d <- data.frame(x1 = z + rnorm(n), x2 = z + rnorm(n), x3 = z + rnorm(n))
+d$y <- rnorm(n) * exp(0.55 * z)
+
+m_bp <- lm(y ~ x1 + x2 + x3, data = d)
+ols_test_breusch_pagan(m_bp, rhs = TRUE, multiple = TRUE, p.adj = "holm")
+```
+
+| Predictor | Raw $p$ | `olsrr` 0.7.0 (Holm) | `olsrr` 0.7.1 (Holm) |
+|---|---:|---:|---:|
+| `x1` | `0.0465` | `0.0465` | `0.0819` |
+| `x2` | `1.07e-05` | `3.21e-05` | `3.21e-05` |
+| `x3` | `0.0410` | `0.0819` | `0.0819` |
+
+In 0.7.0, `x1` remained below `0.05` (`0.0465`) even though `x3` had a smaller raw $p$-value and adjusted to `0.0819`. In 0.7.1, `x1` is `0.0819`, matching `stats::p.adjust()`.
+
+### 2. Normality Test: Cramér–von Mises Reference Distribution
+
+In 0.7.0, `ols_test_normality()` evaluated the Cramér–von Mises statistic against a standard uniform distribution rather than a normal distribution with mean and standard deviation estimated from the residuals, causing it to reject normality on nearly any regression fit. Version 0.7.1 calls `nortest::cvm.test()`:
+
+```{r}
+#| label: cvm-normality
+ols_test_normality(model)
+```
+
+| Test on `lm(mpg ~ disp + hp + wt + qsec, mtcars)` | `olsrr` 0.7.0 | `olsrr` 0.7.1 |
+|---|---|---|
+| Cramér–von Mises statistic ($W$) | `2.8122` | `0.0764` |
+| Cramér–von Mises $p$-value | `0.0000` | `0.2230` |
+
+In 0.7.1, the Cramér–von Mises result (`p = 0.2230`) agrees with `nortest::cvm.test(residuals(model))` and aligns qualitatively with the Shapiro-Wilk (`0.0600`) and Anderson-Darling (`0.1188`) tests on the same residuals. (See [Known Issues](#known-issues) below regarding the Kolmogorov-Smirnov row.)
+
+### 3. Weighted Predicted R-Squared and Scale Invariance
+
+In 0.7.0, `ols_press()` computed unweighted deleted residuals (`253.2827` on `m_w1`) while `ols_pred_rsq()` divided that unweighted PRESS by the weighted total sum of squares. Multiplying the observation weights by a constant factor of 10 left `ols_press()` unchanged while multiplying the denominator by 10, pushing predicted $R^2$ toward `1`. In 0.7.1, `ols_press()` weights the squared deleted residuals, making `ols_pred_rsq()` invariant to weight rescaling and matching leave-one-out weighted cross-validation:
+
+```{r}
+#| label: weighted-pred-rsq
+m_w10 <- lm(mpg ~ wt + hp, data = d_wt, weights = 10 * w)
+
+c(
+  pred_rsq_w = ols_pred_rsq(m_w1),
+  pred_rsq_10w = ols_pred_rsq(m_w10),
+  abs_diff = abs(ols_pred_rsq(m_w1) - ols_pred_rsq(m_w10))
+)
+```
+
+| Quantity | Weights `w` (0.7.0) | Weights `10 * w` (0.7.0) | Weights `w` (0.7.1) | Weights `10 * w` (0.7.1) |
+|---|---:|---:|---:|---:|
+| `ols_press()` | `253.2827` | `253.2827` | `587.4367` | `5874.3672` |
+| `ols_pred_rsq()` | `0.9077` | `0.9908` | `0.7859` | `0.7859` |
+
+### 4. Residual Histogram Normal Curve Scaling
+
+In 0.7.0, `ols_plot_resid_hist()` scaled its normal density curve using the bin width from `graphics::hist()`, while `geom_histogram(bins = 6)` drew bars with different boundaries. On `lm(hwy ~ displ + cty + year, data = ggplot2::mpg)`, the drawn bars were `1.8459` units wide (max count `102`), while the normal curve peaked at `53.88` instead of `99.45` (`0.5418x` of the expected height, or 46% too low).
+
+In 0.7.1, `geom_histogram()` uses the exact `hist()` breaks (`width = 2.0000`), so the bars and the normal curve share a single vertical scale:
+
+| Model | 0.7.0 Curve-to-Expected Height Ratio | 0.7.1 Curve-to-Expected Height Ratio |
+|---|---:|---:|
+| `lm(hwy ~ displ + cty + year, data = ggplot2::mpg)` | `0.5418` | `1.0000` |
+| `lm(mpg ~ disp + hp + wt, data = mtcars)` | `1.0254` | `1.0000` |
+
+```{r}
+#| label: resid-hist
+#| fig-width: 7
+#| fig-height: 4.5
+#| fig-alt: "Residual histogram for hwy ~ displ + cty + year on ggplot2::mpg with 2-unit wide bins from -6 to 6 and a fitted normal curve scaled to the same bin width, peaking near count 108 above the central bars of counts 88 and 91."
+m_hwy <- lm(hwy ~ displ + cty + year, data = ggplot2::mpg)
+ols_plot_resid_hist(m_hwy)
+```
+
+### 5. Component-Plus-Residual Plots on Single-Predictor and No-Intercept Models
+
+In 0.7.0, `ols_plot_comp_plus_resid()` removed the intercept column with positional indexing (`[, -1]`). For a single-predictor model (`lm(mpg ~ wt, data = mtcars)`), that dropped the only predictor and produced a 1-row plot instead of 32 observations; for a two-predictor model without an intercept (`lm(mpg ~ 0 + wt + hp, data = mtcars)`), it dropped `hp` and again plotted a single row.
+
+In 0.7.1, `ols_plot_comp_plus_resid()` retains every non-intercept column of the model matrix:
+
+| Model | 0.7.0 Output | 0.7.1 Output |
+|---|---|---|
+| `lm(mpg ~ wt, data = mtcars)` | 1 plot, `1` row plotted | 1 plot (`wt`), `32` rows plotted |
+| `lm(mpg ~ 0 + wt + hp, data = mtcars)` | 1 plot, `1` row plotted (`hp` lost) | 2 plots (`wt`, `hp`), `32` rows each |
+
+```{r}
+#| label: cpr-plot
+#| fig-width: 6.8
+#| fig-height: 4.2
+#| message: false
+#| fig-alt: "Component-plus-residual scatter plot for the single-predictor model mpg ~ wt on mtcars, showing all 32 observations with a negative linear slope across vehicle weight from 1.5 to 5.4 thousand pounds."
+m_single <- lm(mpg ~ wt, data = mtcars)
+ols_plot_comp_plus_resid(m_single, print_plot = FALSE)[[1]]
+```
+
+### 6. Residual MSE/RMSE Denominator and Bonferroni Outlier p-Values
+
+Two smaller calculation fixes affect summary tables and outlier screening:
+
+- **Residual MSE and RMSE degrees of freedom ([#221](https://github.com/rsquaredacademy/olsrr/issues/221)):** In 0.7.0, `ols_regress()` and `ols_model_performance()` divided the residual sum of squares by $n$ (`mean(residuals^2)`). On `lm(mpg ~ disp + hp + wt + qsec, data = mtcars)` ($n = 32$, $\text{df}_{\text{res}} = 27$), that gave `MSE = 5.8011` and `RMSE = 2.4085`, disagreeing with `summary(model)$sigma` (`2.6221`) and the ANOVA table's Residual Mean Square. Version 0.7.1 uses `deviance(model) / df.residual(model)` (`MSE = 6.8754`, `RMSE = 2.6221`).
+- **Bonferroni outlier $p$-value cap:** `ols_test_outlier()` previously reported $n \times p_{\text{raw}}$ without an upper bound, returning values above `1` when no observation was extreme. Version 0.7.1 caps Bonferroni-adjusted $p$-values at `1`:
+
+```{r}
+#| label: outlier-cap
+d_sin <- data.frame(x = 1:50, y = sin(1:50))
+ols_test_outlier(lm(y ~ x, data = d_sin))
+```
+
+On the same model, `olsrr` 0.7.0 reported `bonferroni_p_val = 6.619194` ($50 \times 0.1323839$).
+
+Beyond these six examples, 0.7.1 also hardens `na.action = na.exclude` alignment across plots and tests, rank-deficient leverage and information criteria (`#224`), forward selection on saturated models (`#199`), tie-breaking in stepwise selection (`#206`), and refits involving transformed or factor predictors (`#244`, `#246`).
+
+## Known Issues
+
+Two open issues remain in 0.7.1 and are scheduled to be fixed in `0.7.2`:
+
+- **Kolmogorov-Smirnov $p$-value in `ols_test_normality()` ([#254](https://github.com/rsquaredacademy/olsrr/issues/254)):** `ols_test_normality()` computes the Kolmogorov-Smirnov test with `stats::ks.test(y, "pnorm", mean(y), sd(y))`, which evaluates the statistic against the standard Kolmogorov distribution as if the mean and standard deviation were fixed rather than estimated from the residuals, without the Lilliefors correction. On `lm(mpg ~ disp + hp + wt + qsec, data = mtcars)` (`D = 0.1152`), `ols_test_normality()` reports `pvalue = 0.7464`, whereas `nortest::lillie.test(residuals(model))` gives `p = 0.3446`:
+
+  ```{r}
+  #| label: ks-lilliefors
+  nortest::lillie.test(residuals(model))
+  ```
+
+  Until `0.7.2` is released, use the Shapiro-Wilk, Cramér–von Mises, or Anderson-Darling rows reported by `ols_test_normality()` (all three account for estimated parameters), or call `nortest::lillie.test(residuals(model))` directly.
+
+- **Duplicate panel title in `ols_plot_diagnostics()` ([#253](https://github.com/rsquaredacademy/olsrr/issues/253)):** Two panels in `ols_plot_diagnostics()` — the centered fit spread plot (`ols_plot_fm()`, y-axis `Fit - Mean`) and the residual spread plot (`ols_plot_resid_spread()`, y-axis `Residual`) — currently share the title `"Residual Fit Spread Plot"` (fourth row of the diagnostic grid above). The plotted quantities and y-axis labels are distinct; separate titles are planned for `0.7.2`.
+
+In addition, two scope boundaries are enforced intentionally with explicit errors:
+
+- `ols_correlations()` does not support multi-predictor models fitted without an intercept (`"ols_correlations() is not supported for models without an intercept and more than one predictor coefficient."`, [#232](https://github.com/rsquaredacademy/olsrr/issues/232)).
+- Stepwise selection routines and diagnostics whose formulas assume unweighted ordinary least squares (including `ols_test_breusch_pagan()`, `ols_plot_added_variable()`, and `ols_plot_comp_plus_resid()`) stop with an informative error when passed a weighted `lm` fit rather than refitting without weights ([#236](https://github.com/rsquaredacademy/olsrr/issues/236)).
+
+## What's Next
+
+- **Patch release `0.7.2`:** planned to switch the Kolmogorov-Smirnov normality test in `ols_test_normality()` to the Lilliefors-corrected $p$-value ([#254](https://github.com/rsquaredacademy/olsrr/issues/254)), separate the centered-fit and residual spread titles in `ols_plot_diagnostics()` ([#253](https://github.com/rsquaredacademy/olsrr/issues/253)), and include any further fixes surfaced as we continue checking calculations against base R and reference packages.
+- **Documentation site:** a refreshed pkgdown theme and updated search indexing for [olsrr.rsquaredacademy.com](https://olsrr.rsquaredacademy.com/) roll out alongside this release.
+
+## Install
+
+Install the current release from CRAN:
+
+```{r}
+#| label: install-cran
+#| eval: false
+install.packages("olsrr")
+```
+
+Or install the development version from GitHub:
+
+```{r}
+#| label: install-github
+#| eval: false
+# install.packages("devtools")
+devtools::install_github("rsquaredacademy/olsrr", ref = "develop")
+```
+
+For the complete list of changes across versions, see the [release notes](https://olsrr.rsquaredacademy.com/news/). Bug reports and feature requests are welcome on the [GitHub issue tracker](https://github.com/rsquaredacademy/olsrr/issues).
+
+<details>
+
+<summary>Session Info</summary>
+
+```{r}
+#| label: session-info
+sessionInfo()
+```
+
+</details>
