@@ -2,7 +2,7 @@
 title: "blorr 0.3.2"
 author: "Aravind Hebbali"
 date: "2026-11-21"
-draft: true
+draft: false
 description: "What is new in blorr since 2019: pseudo-R² on the fitted rows, a Gini index that matches the AUC, the likelihood ratio test's degrees of freedom, exported plot data, and stricter model checks."
 image: "/img/blorr-0-3-2.png"
 image-alt: "blorr hex logo next to the tagline Binary logistic regression in R, the line 0.3.2, corrected results, the package name blorr and blorr.rsquaredacademy.com"
