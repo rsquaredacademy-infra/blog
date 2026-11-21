@@ -11,5 +11,6 @@
 
 ## R-only feed (index-r.xml), from 2026-11-21
 - `index-r.qmd` publishes `/index-r.xml`, the feed for R-Bloggers. It includes only posts whose categories contain **"R"**.
+- **Language categories use this exact casing: `"R"`, `"Python"`, `"SQL"`** (decisions.md 2026-11-21 amendment). Quarto matches categories case-sensitively, so `"r"` or `"python"` won't reach the feeds. Later feeds follow the same pattern: `index-python.xml` (category "Python") and `index-sql.xml` (category "SQL").
 - **Every R post (tutorials, R package posts) must list "R" in `categories`.** Python, SQL-only, bash, platform or course posts must NOT, because R-Bloggers accepts R content only (no platform marketing on aggregators).
 - Don't run a full local `quarto render` on Windows: posts/binning-data-with-rbin (1.9 MB embedded HTML) makes pandoc use about 18 GB. Test listing/feed changes in a small copy with a few posts; CI does the full render.
