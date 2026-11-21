@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-08-23"
 description: "Introduction to data wrangling with dplyr."
 image: "/img/dplyr.png"
-categories: ["data wrangling", "dplyr"]
+categories: ["R", "data wrangling", "dplyr"]
 tags: ["dplyr"]
 execute:
   eval: false

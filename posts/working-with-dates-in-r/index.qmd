@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-11-03"
 description: "Learn to handle dates & time in R using lubridate"
 image: "/img/lubridate.png"
-categories: ["data wrangling", "lubridate"]
+categories: ["R", "data wrangling", "lubridate"]
 tags: ["lubridate", "date", "time"]
 execute:
   eval: false

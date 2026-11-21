@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-01-31"
 description: "ggplot2 - Guides & Axes"
 image: "/img/gg_axes_guide.png"
-categories: ["data-visualization"]
+categories: ["R", "data-visualization"]
 tags: ["ggplot2"]
 execute:
   eval: false

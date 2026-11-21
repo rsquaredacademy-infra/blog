@@ -5,7 +5,7 @@ date: "2020-04-17"
 date-modified: "2026-09-28"
 description: "Learn to handle date & time in R"
 image: "/img/handling-date-and-time-in-r.png"
-categories: ["data-wrangling"]
+categories: ["R", "data-wrangling"]
 tags: ["lubridate", "datetime"]
 execute:
   eval: false

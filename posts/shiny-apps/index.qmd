@@ -3,7 +3,7 @@ title: "Shiny Apps for Interactive Data Analysis"
 author: "Aravind Hebbali"
 date: "2019-04-01"
 description: "Shiny Apps for Interactive Data Analysis."
-categories: ["shiny"]
+categories: ["R", "shiny"]
 tags: ["shiny"]
 execute:
   eval: false

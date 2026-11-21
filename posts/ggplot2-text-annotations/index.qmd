@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2017-11-20"
 description: "ggplot2 - Text Annotations"
 image: "/img/gg_text_ann.png"
-categories: ["ggplot2"]
+categories: ["R", "ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:
   eval: false

@@ -1,0 +1,15 @@
+---
+title: "R posts"
+description: "R tutorials and R package posts from the Rsquared Academy Blog. This page's feed (index-r.xml) carries R content only."
+listing:
+  id: r-posts
+  contents: posts/**/*.qmd
+  sort: "date desc"
+  type: default
+  categories: false
+  include:
+    categories: "R"
+  feed:
+    title: "Rsquared Academy Blog: R"
+    type: full
+---

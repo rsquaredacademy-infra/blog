@@ -3,7 +3,7 @@ title: "Visually explore Probability Distributions with vistributions"
 author: "Aravind Hebbali"
 date: "2019-03-14"
 description: "Visually explore probability distributions with vistributions."
-categories: ["distributions"]
+categories: ["R", "distributions"]
 tags: ["vistributions"]
 execute:
   eval: false

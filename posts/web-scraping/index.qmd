@@ -3,7 +3,7 @@ title: "Practical Introduction to Web Scraping in R"
 author: "Aravind Hebbali"
 date: "2019-04-11"
 description: "Practical Introduction to Web Scraping in R"
-categories: ["rvest"]
+categories: ["R", "rvest"]
 tags: ["rvest"]
 execute:
   eval: false

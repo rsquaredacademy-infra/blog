@@ -3,7 +3,7 @@ title: "Vectors - Part 3"
 author: "Aravind Hebbali"
 date: "2017-04-03"
 description: ""
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["vectors"]
 execute:
   eval: false

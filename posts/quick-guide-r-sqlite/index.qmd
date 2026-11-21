@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-11-27"
 description: "Learn to work with databases in R using DBI."
 image: "/img/database.png"
-categories: ["data-wrangling"]
+categories: ["R", "data-wrangling"]
 tags: ["sqlite", "rsqlite", "database", "import"]
 execute:
   eval: false

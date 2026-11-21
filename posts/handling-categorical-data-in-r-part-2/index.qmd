@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2022-01-12"
 description: "Learn to read, store, manipulate, summarize and visualize categorical data in R."
 image: "/img/forcats-part-2.png"
-categories: ["data-wrangling"]
+categories: ["R", "data-wrangling"]
 tags: ["forcats"]
 execute:
   eval: false

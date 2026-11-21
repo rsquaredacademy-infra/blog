@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2019-02-08"
 description: "Tools for linear regression."
 image: "/img/og_olsrr.png"
-categories: ["regression"]
+categories: ["R", "regression"]
 tags: ["olsrr"]
 execute:
   eval: false

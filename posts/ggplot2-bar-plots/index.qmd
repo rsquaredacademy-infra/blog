@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2017-12-26"
 description: "ggplot2 - Bar Plots"
 image: "/img/gg_bar.png"
-categories: ["ggplot2"]
+categories: ["R", "ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:
   eval: false

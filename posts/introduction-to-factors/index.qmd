@@ -3,7 +3,7 @@ title: "Factors"
 author: "Aravind Hebbali"
 date: "2017-04-30"
 description: ""
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["factors"]
 execute:
   eval: false

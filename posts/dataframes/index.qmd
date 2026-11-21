@@ -3,7 +3,7 @@ title: "Dataframes"
 author: "Aravind Hebbali"
 date: "2017-05-12"
 description: "Introduction to data frames in R."
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["dataframe"]
 execute:
   eval: false

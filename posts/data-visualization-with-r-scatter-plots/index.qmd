@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2017-06-17"
 description: "Learn to create scatter plots in R."
 image: "/img/viz_scatter.png"
-categories: ["data-visualization"]
+categories: ["R", "data-visualization"]
 tags: ["base", "visualization"]
 execute:
   eval: false

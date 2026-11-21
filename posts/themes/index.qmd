@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-05-07"
 description: "ggplot2 - Themes"
 image: "/img/gg_themes.png"
-categories: ["data-visualization"]
+categories: ["R", "data-visualization"]
 tags: ["ggplot2"]
 execute:
   eval: false
