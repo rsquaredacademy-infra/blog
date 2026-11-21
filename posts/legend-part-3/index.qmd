@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-03-08"
 description: "ggplot2 - Legend Part 3"
 image: "/img/gg_leg_part_1.png"
-categories: ["data-visualization"]
+categories: ["R", "data-visualization"]
 tags: ["ggplot2"]
 execute:
   eval: false

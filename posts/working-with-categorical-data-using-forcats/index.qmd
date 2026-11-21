@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-11-15"
 description: "Learn to work with categorical data in R using forcats"
 image: "/img/forcats.png"
-categories: ["data wrangling", "forcats"]
+categories: ["R", "data wrangling", "forcats"]
 tags: ["forcats", "factor", "categorical"]
 execute:
   eval: false

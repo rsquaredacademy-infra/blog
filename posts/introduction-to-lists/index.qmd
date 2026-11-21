@@ -3,7 +3,7 @@ title: "Lists"
 author: "Aravind Hebbali"
 date: "2017-04-18"
 description: ""
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["lists"]
 execute:
   eval: false

@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2017-05-24"
 description: "Introduction to data visualization in R."
 image: "/img/viz_intro.png"
-categories: ["data-visualization"]
+categories: ["R", "data-visualization"]
 tags: ["visualization", "base"]
 execute:
   eval: false

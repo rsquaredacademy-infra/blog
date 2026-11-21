@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2017-10-03"
 description: "ggplot2 - Quick Tour"
 image: "/img/gg_quick_tour.png"
-categories: ["ggplot2"]
+categories: ["R", "ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:
   eval: false

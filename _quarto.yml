@@ -4,6 +4,7 @@ project:
   output-dir: _site
   render:
     - "index.qmd"
+    - "index-r.qmd"
     - "about.qmd"
     - "posts/**/*.qmd"
     - "r-programming/*.qmd"

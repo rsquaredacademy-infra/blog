@@ -3,7 +3,7 @@ title: "Binning Data with rbin"
 author: "Aravind Hebbali"
 date: "2019-03-12"
 description: "Binning Data with rbin (Includes RStudio Addins)"
-categories: ["binning"]
+categories: ["R", "binning"]
 tags: ["rbin"]
 execute:
   eval: false

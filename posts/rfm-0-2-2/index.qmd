@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2020-07-31"
 description: "The newest release of rfm includes improved docs, bug fixes and much more."
 image: "/img/github_rfm.png"
-categories: ["packages"]
+categories: ["R", "packages"]
 tags: ["rfm"]
 execute:
   eval: false

@@ -3,7 +3,7 @@ title: "Matrices - Part 2"
 author: "Aravind Hebbali"
 date: "2017-04-12"
 description: ""
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["matrix"]
 execute:
   eval: false

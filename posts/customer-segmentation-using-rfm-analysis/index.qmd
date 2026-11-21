@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2019-07-22"
 description: "Learn to use RFM analysis for customer segmentation."
 image: "/img/rfm_cover_image.png"
-categories: ["rfm"]
+categories: ["R", "rfm"]
 tags: ["rfm"]
 execute:
   eval: false

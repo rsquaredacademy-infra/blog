@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2023-05-30"
 description: "Easily create alerts, notifications, tooltips and loading screens in Shiny"
 image: "/img/github-standby.png"
-categories: ["packages"]
+categories: ["R", "packages"]
 tags: ["shiny"]
 execute:
   eval: false

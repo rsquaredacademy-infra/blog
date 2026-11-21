@@ -3,7 +3,7 @@ title: "Variables in R"
 author: "Aravind Hebbali"
 date: "2017-02-05"
 description: ""
-categories: ["R Programming"]
+categories: ["R", "R Programming"]
 tags: ["data"]
 execute:
   eval: false

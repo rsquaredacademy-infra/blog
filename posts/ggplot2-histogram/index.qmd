@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2018-01-19"
 description: "ggplot2 - Histograms"
 image: "/img/gg_hist.png"
-categories: ["ggplot2"]
+categories: ["R", "ggplot2"]
 tags: ["ggplot2", "visualization"]
 execute:
   eval: false

@@ -3,7 +3,7 @@ title: "Data Types in R"
 author: "Aravind Hebbali"
 date: "2017-02-17"
 description: ""
-categories: ["r-introduction"]
+categories: ["R", "r-introduction"]
 tags: ["data"]
 execute:
   eval: false
