@@ -64,23 +64,24 @@ How we checked: Every number in this post was re-run against blorr 0.3.2 from CR
 
 Cox–Snell and Nagelkerke R² are functions of the fitted and intercept-only log-likelihoods and of the number of observations. If the data contain missing values, that number is the rows the model used, not the rows in the data frame.
 
-`airquality` records ozone, solar radiation, wind and temperature for 153 days in New York; `Ozone` and `Solar.R` both contain missing values, so a logistic model of high ozone is fitted on fewer rows than the data has:
+`bank_marketing` records bank term-deposit marketing outcomes. It has no missing values, so we blank out 300 balances to mimic incomplete records:
 
 ```{r}
 #| label: r2-rows
-aq <- airquality
-aq$high <- as.integer(aq$Ozone > 100)
-m_aq <- glm(high ~ Solar.R + Wind + Temp, data = aq, family = binomial)
-c(rows_in_data = nrow(aq), rows_fitted = nobs(m_aq))
+bank_incomplete <- bank_marketing
+set.seed(123)
+bank_incomplete$balance[sample(nrow(bank_incomplete), 300)] <- NA
+m_bank <- glm(y ~ balance + housing + loan, data = bank_incomplete, family = binomial)
+c(rows_in_data = nrow(bank_incomplete), rows_fitted = nobs(m_bank))
 ```
 
-With $n = 111$ and the intercept-only model fitted on the same 111 rows, the two R² values are:
+With $n = 4221$ and the intercept-only model fitted on the same 4221 rows, the two R² values are:
 
 ```{r}
 #| label: r2-check
-n <- nobs(m_aq)
-ll <- as.numeric(logLik(m_aq))
-ll0 <- as.numeric(logLik(glm(high ~ 1, data = model.frame(m_aq), family = binomial)))
+n <- nobs(m_bank)
+ll <- as.numeric(logLik(m_bank))
+ll0 <- as.numeric(logLik(glm(y ~ 1, data = model.frame(m_bank), family = binomial)))
 cox_snell <- 1 - exp((2 / n) * (ll0 - ll))
 nagelkerke <- cox_snell / (1 - exp((2 / n) * ll0))
 c(cox_snell = cox_snell, nagelkerke = nagelkerke)
@@ -90,7 +91,7 @@ c(cox_snell = cox_snell, nagelkerke = nagelkerke)
 
 ```{r}
 #| label: r2-fn
-blr_model_fit_stats(m_aq)
+blr_model_fit_stats(m_bank)
 ```
 
 In 0.3.2 the intercept-only model keeps the fitted model's response, offset and family/link, and `n` is `nobs(model)`. Earlier versions used the number of rows in the data frame, so missing values pulled both R² towards zero.
