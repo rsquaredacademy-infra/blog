@@ -218,7 +218,7 @@ These issues are known in 0.3.2. Most were found by an independent audit after t
 - The total information value printed by `blr_woe_iv()` adds up the rounded per-level values. For an accurate total, use a larger `digits`, for example `digits = 4` ([#155](https://github.com/rsquaredacademy/blorr/issues/155)).
 - A factor response with only one observed level is treated as all non-events by the segment and weight-of-evidence functions. Check that both classes are present first ([#154](https://github.com/rsquaredacademy/blorr/issues/154)).
 
-Fixes for #152–#155 are in progress on the development branch. blorr 0.3.3, with all of these fixes, is planned after 2027-01-13.
+Fixes for #152–#155 are on the development branch. blorr 0.3.3, with all of these fixes, is planned after 2027-01-13.
 
 ## Acknowledgements
 
