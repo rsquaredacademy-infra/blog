@@ -46,21 +46,21 @@ The full list of changes is in the [release notes](https://vistributions.rsquare
 
 ## Shading follows the event
 
-How likely is it that exactly 10 of 200 visitors sign up, when 5% of visitors usually do?
+A trial cohort has 40 users, and about 25% of trial users usually upgrade. How likely is it that exactly 10 of them upgrade?
 
 ```{r}
 #| label: binom-exact
 #| fig-width: 7
 #| fig-height: 4.5
-#| fig-alt: "Binomial distribution of sign-ups out of 200 visitors at a 5% rate, with the bar for exactly 10 sign-ups shaded and the caption P(X = 10)."
-vdist_binom_prob(n = 200, p = 0.05, s = 10, type = "exact")
+#| fig-alt: "Binomial distribution of upgrades out of 40 trial users at a 25% rate, with the bar for exactly 10 upgrades shaded and the caption P(X = 10)."
+vdist_binom_prob(n = 40, p = 0.25, s = 10, type = "exact")
 ```
 
 The exact value, from base R:
 
 ```{r}
 #| label: binom-check
-dbinom(10, size = 200, prob = 0.05)
+dbinom(10, size = 40, prob = 0.25)
 ```
 
 The caption and the shaded bar match this value. The change matters most for large `n`, where bars are grouped. A grouped bar that crossed the cutoff was painted whole: for `n = 10000`, `p = 0.01` and `s = 100`, the shaded area was 19.26% for an event whose exact probability is 4.01% ([release notes](https://vistributions.rsquaredacademy.com/news/)). Every event cutoff is now a bar edge, so the shaded bar heights add up to `dbinom()` or `pbinom()` for the event.
