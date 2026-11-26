@@ -67,7 +67,7 @@ The caption and the shaded bar match this value. The change matters most for lar
 
 ## Inputs that cannot be an event
 
-A count of successes has to lie between 0 and the number of trials. Asking for a negative count used to be accepted and labelled with a probability of a different event. It now gives the same clear error as a count above `n`:
+A count of successes has to lie between 0 and the number of trials. Asking for a negative count used to be accepted, with the caption `P(X) <= -1 = 0`. It now gives the same clear error as a count above `n`:
 
 ```{r}
 #| label: binom-error
@@ -107,7 +107,6 @@ qnorm(0.95, mean = 48, sd = 6)
 - Binomial captions put the inequality inside `P()`, for example `P(X >= 4)`, and round once from the exact probability.
 - `vdist_t_*()`, `vdist_chisquare_*()` and `vdist_f_*()` no longer truncate non-integer degrees of freedom.
 - Plot grids have a bounded number of points, however large the scale.
-- The tests that run on CRAN are much shorter, and the maintainer address is now aravindhebbali@rsquaredacademy.com.
 
 The release notes carry the rest.
 
