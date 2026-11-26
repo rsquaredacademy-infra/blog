@@ -2,7 +2,7 @@
 title: "vistributions 0.2.2"
 author: "Aravind Hebbali"
 date: "2026-11-26"
-draft: true
+draft: false
 description: "vistributions 0.2.2 makes the captions, shaded regions and input checks of the distribution plots agree with the exact probabilities."
 image: "/img/vistributions-0-2-2.png"
 image-alt: "vistributions hex logo next to the tagline Visualize probabilities and percentiles of distributions in R, the line 0.2.2, accuracy and input checks, the package name vistributions and vistributions.rsquaredacademy.com"
