@@ -4,7 +4,7 @@ author: "Aravind Hebbali"
 date: "2026-11-19"
 description: "What is new in olsrr since 2019: locked predictors in stepwise selection, model comparison, weighted regression summaries, and calculation fixes across diagnostics and tests."
 image: "/img/olsrr-0-7-1.png"
-image-alt: "olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, corrected test results, the package name olsrr and olsrr.rsquaredacademy.com"
+image-alt: "olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, stepwise and model comparison, the package name olsrr and olsrr.rsquaredacademy.com"
 categories: ["R", "packages", "regression"]
 tags: ["olsrr"]
 execute:
@@ -18,7 +18,7 @@ include-in-header:
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "olsrr 0.7.1", "datePublished": "2026-11-19", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/olsrr-0-7-1.png"}</script>
 ---
 
-![](/img/olsrr-0-7-1.png){fig-alt="olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, corrected test results, the package name olsrr and olsrr.rsquaredacademy.com" width="100%"}
+![](/img/olsrr-0-7-1.png){fig-alt="olsrr hex logo next to the tagline Tools for building and checking OLS regression models in R, the line 0.7.1, stepwise and model comparison, the package name olsrr and olsrr.rsquaredacademy.com" width="100%"}
 
 
 ```{=html}
