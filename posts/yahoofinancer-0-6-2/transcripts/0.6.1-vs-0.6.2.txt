@@ -1,0 +1,95 @@
+# yahoofinancer 0.6.2 (CRAN) vs 0.6.1 (CRAN archive) - same calls, 2026-11-28
+
+## 0.6.2
+Warning message:
+package 'yahoofinancer' was built under R version 4.6.2 
+yahoofinancer 0.6.2 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:26 IST 
+
+## 1 valuation_measures BRK-B
+# A tibble: 6 × 5
+  date          market_cap pe_ratio pb_ratio enterprise_value_ebitda_ratio
+  <date>             <dbl>    <dbl>    <dbl>                         <dbl>
+1 2025-06-30 1048045753477     NA      NA                               NA
+2 2025-09-30            NA     17.2     1.62                            NA
+3 2025-12-31 1084810071493     16.1     1.55                            NA
+4 2026-03-31 1033230593958     15.4     1.44                            NA
+5 2026-06-30 1073737621968     14.9     1.48                            NA
+6 2026-09-30 1066005700669     12.5     1.43                            NA
+
+## 2 valuation AAPL MSFT
+# A tibble: 5 × 2
+  date          market_cap
+  <date>             <dbl>
+1 2025-09-30 3761715193800
+2 2025-12-31 3997076837580
+3 2026-03-31 3722512537520
+4 2026-06-30 4249933332160
+5 2026-09-30 4839532892180
+# A tibble: 5 × 2
+  date          market_cap
+  <date>             <dbl>
+1 2025-09-30 3849967698594
+2 2025-12-31 3592734665478
+3 2026-03-31 2749992930000
+4 2026-06-30 2770954713286
+5 2026-09-30 3809308300000
+
+## 3 failed symbol partial
+Warning message:
+Failed to fetch data for ticker: NOTASTOCK 
+# A tibble: 3 × 8
+  symbol date                 open  high   low close adj_close   volume
+  <chr>  <dttm>              <dbl> <dbl> <dbl> <dbl>     <dbl>    <dbl>
+1 AAPL   2025-11-03 14:30:00  270.  271.  266.  269.      268. 50194600
+2 AAPL   2025-11-04 14:30:00  268.  271.  268.  270.      269. 49274800
+3 AAPL   2025-11-05 14:30:00  269.  272.  267.  270.      269. 43683100
+rows: 5 
+
+## 4 failed symbol full
+Warning message:
+Failed to fetch data for ticker: NOTASTOCK 
+# A tibble: 0 × 8
+# ℹ 8 variables: symbol <chr>, date <dttm>, open <dbl>, high <dbl>, low <dbl>,
+#   close <dbl>, adj_close <dbl>, volume <dbl>
+dim: 0 x 8 
+
+## 5 ticker switch
+AAPL: 358.54 
+MSFT, same object: 492.85 
+
+## 6 validate
+[1] "VOD.L" "AAPL" 
+[1] "vod.l" "aapl" 
+MSFT AAPL 
+TRUE TRUE 
+
+## 0.6.1
+yahoofinancer 0.6.1 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:26 IST 
+
+## 1 valuation_measures BRK-B
+[1] "ERROR: Tibble columns must have compatible sizes.\n• Size 5: Existing data.\n• Size 0: Column `enterprise_value_ebitda_ratio`.\nℹ Only values of size one are recycled."
+
+## 3 failed symbol partial
+Warning message:
+Failed to fetch data for ticker: NOTASTOCK 
+# A tibble: 3 × 8
+  symbol date                 open  high   low close adj_close   volume
+  <chr>  <dttm>              <dbl> <dbl> <dbl> <dbl>     <dbl>    <dbl>
+1 AAPL   2025-11-03 14:30:00  270.  271.  266.  269.      268. 50194600
+2 AAPL   2025-11-04 14:30:00  268.  271.  268.  270.      269. 49274800
+3 AAPL   2025-11-05 14:30:00  269.  272.  267.  270.      269. 43683100
+dim: 5 x 8 
+
+## 4 failed symbol full
+Warning message:
+Failed to fetch data for ticker: NOTASTOCK 
+# A tibble: 0 × 0
+dim: 0 x 0 
+
+## 5 ticker switch
+AAPL: 358.54 
+MSFT, same object: 358.54 
+
+## 6 validate
+[1] "AAPL"
+[1] "vod.l" "aapl" 
