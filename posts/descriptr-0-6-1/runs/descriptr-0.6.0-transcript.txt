@@ -1,0 +1,57 @@
+version: 0.6.0 
+=== freq discount ===
+                       Variable: discount_pct                         
+|-------------------------------------------------------------------|
+|  Bins   | Frequency | Cum Frequency |   Percent    | Cum Percent  |
+|-------------------------------------------------------------------|
+| 0  - 6  |    141    |      141      |     23.5     |     23.5     |
+|-------------------------------------------------------------------|
+| 6  - 12 |    134    |      275      |    22.33     |    45.83     |
+|-------------------------------------------------------------------|
+| 12 - 18 |    125    |      400      |    20.83     |    66.67     |
+|-------------------------------------------------------------------|
+| 18 - 24 |    155    |      555      |    25.83     |     92.5     |
+|-------------------------------------------------------------------|
+| 24 - 30 |    129    |      684      |     21.5     |     114      |
+|-------------------------------------------------------------------|
+|  Total  |    600    |       -       |    100.00    |      -       |
+|-------------------------------------------------------------------|=== variation ===
+            var   n range    iqr     variance         sd coeff_var   std_error
+1 delivery_days 560    10   2.00 3.737922e+00   1.933371  39.07209  0.08169982
+2  discount_pct 560    30  15.00 7.848453e+01   8.859149  60.36899  0.37436739
+3      order_id 560   599 303.50 3.033196e+04 174.160731  57.58569  7.35963415
+4   order_value 560  3383 590.25 2.571501e+05 507.099719  58.16662 21.42887425
+=== group summary ===
+[1] "ERROR: missing values and NaN's not allowed if 'na.rm' is FALSE"
+=== cross table ===
+[1] "ERROR: channel is not a categorical variable. The function expects an object of type `factor` but channel is of type `character`."
+=== extreme obs ===
+   type value index
+1  high  3498   369
+2  high  3359   269
+3  high  2946   559
+4  high  2755    47
+5  high  2673   149
+6   low   115   343
+7   low   130    80
+8   low   186   504
+9   low   187    28
+10  low   191   253
+=== tidy stats ===
+# A tibble: 4 × 16
+  vars       min   max   mean t_mean median  mode range variance  stdev     skew
+  <chr>    <dbl> <dbl>  <dbl>  <dbl>  <dbl> <dbl> <dbl>    <dbl>  <dbl>    <dbl>
+1 deliver…     1    11   4.95   4.92     5      5    10   3.74e0   1.93  0.236  
+2 discoun…     0    30  14.7   14.6     15     19    30   7.85e1   8.86  0.00103
+3 order_id     1   600 302.   303.     304.     1   599   3.03e4 174.   -0.00924
+4 order_v…   115  3498 872.   827.     744    619  3383   2.57e5 507.    1.52   
+# ℹ 5 more variables: kurtosis <dbl>, coeff_var <dbl>, q1 <dbl>, q3 <dbl>,
+#   iqrange <dbl>
+=== decimals 1 ===
+            var   n range    iqr     variance         sd coeff_var   std_error
+1 delivery_days 560    10   2.00 3.737922e+00   1.933371  39.07209  0.08169982
+2  discount_pct 560    30  15.00 7.848453e+01   8.859149  60.36899  0.37436739
+3      order_id 560   599 303.50 3.033196e+04 174.160731  57.58569  7.35963415
+4   order_value 560  3383 590.25 2.571501e+05 507.099719  58.16662 21.42887425
+=== gmean large ===
+[1] Inf
