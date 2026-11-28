@@ -5,7 +5,7 @@ date: "2026-11-28"
 draft: false
 description: "descriptr 0.6.1 counts every order once in frequency tables, keeps missing values in their own column, and accepts text columns in cross tables and plots."
 image: "/img/descriptr-0-6-1.png"
-image-alt: "descriptr hex logo next to the tagline Descriptive statistics for data frames in R, the line 0.6.1, every row counted once, the package name descriptr and descriptr.rsquaredacademy.com"
+image-alt: "descriptr hex logo next to the tagline Descriptive statistics for data frames in R, the line 0.6.1, tables you can report as they print, the package name descriptr and descriptr.rsquaredacademy.com"
 categories: ["R", "packages", "summary statistics"]
 tags: ["descriptr"]
 execute:
@@ -21,7 +21,7 @@ include-in-header:
 
 descriptr 0.6.1
 
-![](/img/descriptr-0-6-1.png){fig-alt="descriptr hex logo next to the tagline Descriptive statistics for data frames in R, the line 0.6.1, every row counted once, the package name descriptr and descriptr.rsquaredacademy.com" width="100%"}
+![](/img/descriptr-0-6-1.png){fig-alt="descriptr hex logo next to the tagline Descriptive statistics for data frames in R, the line 0.6.1, tables you can report as they print, the package name descriptr and descriptr.rsquaredacademy.com" width="100%"}
 
 ```{r}
 #| label: setup
@@ -46,6 +46,7 @@ If you report frequencies, group summaries or cross tables from descriptr, start
 #| label: install
 #| eval: false
 install.packages("descriptr")
+library(descriptr)
 ```
 
 The full list of changes is in the [release notes](https://descriptr.rsquaredacademy.com/news/).
@@ -97,7 +98,7 @@ A bin now includes its lower bound and excludes its upper bound, and the last bi
 
 ## Missing values stay in their own column
 
-One column has 40 missing values. The other columns still describe all 600 orders:
+Does one gap change every column? One column has 40 missing values. The other columns still describe all 600 orders:
 
 ```{r}
 #| label: variation
@@ -117,7 +118,9 @@ ds_group_summary(orders, region, order_value)
 
 The Obs and Missing rows add up to each region's orders, and the three orders with no region label are left out of the table. In 0.6.0 a missing order value stopped the call with `missing values and NaN's not allowed if 'na.rm' is FALSE`.
 
-A column with no values at all returns `NA` for every metric instead of an error or an infinity, and `decimals` now applies to data-frame input as it already did to a numeric vector.
+A column with no values at all returns `NA` for every metric instead of an error or an infinity.
+
+`decimals` now applies to data-frame input as it already did to a numeric vector.
 
 ## Text columns get cross tables
 
@@ -138,8 +141,8 @@ The same two columns as a plot:
 
 ```{r}
 #| label: fig-stacked
-#| fig-cap: "November orders by region and channel."
-#| fig-alt: "Stacked bar chart of November orders by region (East, North, South, West and a small bar for a missing region), with each bar split by channel: Partner, Store and Web."
+#| fig-cap: "Orders by region and channel."
+#| fig-alt: "Stacked bar chart of orders by region (East, North, South, West and a small bar for a missing region), with each bar split by channel: Partner, Store and Web."
 #| fig-width: 7
 #| fig-height: 4.5
 plots <- ds_plot_bar_stacked(orders, region, channel, print_plot = FALSE)
@@ -148,7 +151,7 @@ plots[[1]]
 
 ## Row numbers point back to your data
 
-An extreme value is only useful if you can find the row it came from:
+Which row is the largest order? The value alone is not enough; you need the row it came from:
 
 ```{r}
 #| label: extreme-obs
@@ -157,12 +160,16 @@ ds_extreme_obs(orders, order_value)
 
 The largest order, 3,498, is in row 398. In 0.6.0 the same call reported it as row 369, its position after the missing rows were removed. The index now refers to the row in the data frame you passed, and ties are reported on distinct rows.
 
+If you saved frequency tables, summaries or extreme-observation row numbers from 0.6.0, re-run them. `closed = "both"` reproduces the old frequency table when you need to match a published one.
+
 ## Other improvements
 
+- Every function that accepts data frames accepts grouped or rowwise tibbles and summarises the whole columns, ignoring the grouping.
+- `ds_group_summary()` drops unused levels in the grouping factor instead of failing.
 - `ds_gmean()` computes on the log scale, so large values return a finite number; `ds_gmean()` and `ds_hmean()` return `NA` with a warning for non-positive values ([#134](https://github.com/rsquaredacademy/descriptr/issues/134)).
 - Frequency tables, cross tables, group summaries and categorical plots treat character columns as categorical, so results match the same data stored as factors ([#152](https://github.com/rsquaredacademy/descriptr/issues/152)).
 - `ds_summary_stats()` and `ds_extreme_obs()` work when a variable has fewer than five non-missing values, and `ds_tailobs()` checks `n` against the non-missing count.
-- `ds_freq_table()` rejects `bins` values such as `0`, `2.7` and `NA` with a clear error ([#131](https://github.com/rsquaredacademy/descriptr/issues/131)).
+- `ds_freq_table()` rejects `bins` values such as `0`, `2.7` and `NA` with a clear error ([#147](https://github.com/rsquaredacademy/descriptr/issues/147)).
 - The deprecated `ds_freq_cont()` forwards its variable correctly, `ds_twoway_table()` no longer prints a join message, and `ds_auto_summary_stats()` no longer prints a stray `NULL`.
 - The release notes carry the rest.
 
@@ -176,4 +183,4 @@ Documentation and examples for every function are at [descriptr.rsquaredacademy.
 
 ## Acknowledgements
 
-Thank you to [&#x0040;GegznaV](https://github.com/GegznaV) and [&#x0040;adam_medcalf](https://github.com/adam_medcalf), whose code and feedback shaped earlier releases.
+Thank you to everyone who has contributed to descriptr, including [&#x0040;GegznaV](https://github.com/GegznaV) and [Adam Medcalf](https://dabblingwithdata.amedcalf.com).
