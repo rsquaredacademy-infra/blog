@@ -114,7 +114,7 @@ rbin_create(data.frame(duration = c(50, 100, 350, 600, 900)), duration, bins)
 
 Each value gets one row, with one dummy column marked for the bin it falls in; 50 and 900 fall outside the clamps into the outer bins.
 
-In 0.2.1 `min_val` and `max_val` were read as counts of values rather than as the clamp values, and the object it saved could not be scored at all: `rbin_create()` stopped on a length mismatch.
+In 0.2.1 the cuts (133.25, 249.5 and 365.75) did not follow the clamps, and the object it saved could not be scored at all: `rbin_create()` stopped on a length mismatch.
 
 rbin takes its cut points from finite predictor values up to 1e300 in absolute value and stops beyond that with a message.
 
