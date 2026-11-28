@@ -1,0 +1,30 @@
+rbin 0.2.1 
+
+Binning Summary
+------------------------------------
+Method               Equal Frequency 
+Response             y 
+Predictor            previous 
+Bins                 5 
+Count                4521 
+Goods                517 
+Bads                 4004 
+Entropy              0.5 
+Information Value    0.2 
+
+
+  lower_cut upper_cut bin_count good bad  good_rate        woe          iv
+1         0         0       904   82 822 0.09070796  0.2580149 0.012046032
+2         0         0       904   75 829 0.08296460  0.3557258 0.022046197
+3         0         0       904   81 823 0.08960177  0.2715008 0.013268607
+4         0         0       904   85 819 0.09402655  0.2184266 0.008766637
+5         0        30       905  194 711 0.21436464 -0.7481920 0.147894627
+    entropy
+1 0.4388285
+2 0.4125400
+3 0.4351392
+4 0.4497690
+5 0.7497432
+
+rbin_create() on the same summary:
+Error: replacement has length zero 

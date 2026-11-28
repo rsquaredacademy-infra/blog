@@ -3,7 +3,7 @@
 #   Rscript winsorize-clamp.R "<library path>"
 lib <- commandArgs(trailingOnly = TRUE)[1]
 if (!is.na(lib) && nzchar(lib)) .libPaths(lib)
-library(rbin)
+suppressWarnings(library(rbin))
 
 cat("rbin", as.character(packageVersion("rbin")), "\n\n")
 
@@ -11,7 +11,7 @@ d <- mbank[, c("duration", "y")]
 
 bins <- rbin_winsorize(
   d, y, duration,
-  bins = 4, winsor_rate = 0.1,
+  bins = 4,
   min_val = 100, max_val = 600
 )
 print(bins)

@@ -3,7 +3,7 @@
 #   Rscript missing-response.R "<library path>"
 lib <- commandArgs(trailingOnly = TRUE)[1]
 if (!is.na(lib) && nzchar(lib)) .libPaths(lib)
-library(rbin)
+suppressWarnings(library(rbin))
 
 cat("rbin", as.character(packageVersion("rbin")), "\n\n")
 
