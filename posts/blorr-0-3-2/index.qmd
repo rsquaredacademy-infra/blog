@@ -210,7 +210,7 @@ Both can go straight into `ggplot2`, `plotly` or any other plotting library, wit
 
 ## What's next
 
-Six issues remain open and will be fixed in 0.3.3:
+Six known issues in 0.3.2, all fixed in 0.3.3:
 
 - Known issue: a response with three levels is fitted silently and the response summary drops a level ([#130](https://github.com/rsquaredacademy/blorr/issues/130)), fixed in blorr 0.3.3.
 - Known issue: the delta deviance in `blr_residual_diagnostics()` uses the squared standardized Pearson residual ([#146](https://github.com/rsquaredacademy/blorr/pull/146)), fixed in blorr 0.3.3.
