@@ -3,7 +3,7 @@
 ## 0.6.2
 Warning message:
 package 'yahoofinancer' was built under R version 4.6.2 
-yahoofinancer 0.6.2 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:26 IST 
+yahoofinancer 0.6.2 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:45 IST 
 
 ## 1 valuation_measures BRK-B
 # A tibble: 6 × 5
@@ -15,6 +15,17 @@ yahoofinancer 0.6.2 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:26 IST
 4 2026-03-31 1033230593958     15.4     1.44                            NA
 5 2026-06-30 1073737621968     14.9     1.48                            NA
 6 2026-09-30 1066005700669     12.5     1.43                            NA
+
+## 1b valuation_measures 7203.T
+# A tibble: 6 × 4
+  date       market_cap pe_ratio pb_ratio
+  <date>          <dbl>    <dbl>    <dbl>
+1 2025-06-30   NA          NA      NA    
+2 2025-09-30    3.71e13     8.76    1.03 
+3 2025-12-31    4.37e13     9.49    1.17 
+4 2026-03-31    4.12e13    11.1     1.06 
+5 2026-06-30    3.23e13     9.23    0.890
+6 2026-09-30    3.44e13     8.31    0.927
 
 ## 2 valuation AAPL MSFT
 # A tibble: 5 × 2
@@ -53,21 +64,31 @@ Failed to fetch data for ticker: NOTASTOCK
 #   close <dbl>, adj_close <dbl>, volume <dbl>
 dim: 0 x 8 
 
+## 4b prices$close after a failed call
+close: numeric(0) 
+
 ## 5 ticker switch
 AAPL: 358.54 
 MSFT, same object: 492.85 
+
+## 5b set_symbol
+AAPL: 358.54 
+after set_symbol(MSFT): 492.85 
 
 ## 6 validate
 [1] "VOD.L" "AAPL" 
 [1] "vod.l" "aapl" 
 MSFT AAPL 
-TRUE TRUE 
+TRUE TRUE
 
 ## 0.6.1
-yahoofinancer 0.6.1 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:26 IST 
+yahoofinancer 0.6.1 | R R version 4.6.1 (2026-06-24 ucrt) | 2026-11-28 15:45 IST 
 
 ## 1 valuation_measures BRK-B
 [1] "ERROR: Tibble columns must have compatible sizes.\n• Size 5: Existing data.\n• Size 0: Column `enterprise_value_ebitda_ratio`.\nℹ Only values of size one are recycled."
+
+## 1b valuation_measures 7203.T
+[1] "ERROR: Tibble columns must have compatible sizes.\n• Size 5: Existing data.\n• Size 0: Column `peg_ratio`.\nℹ Only values of size one are recycled."
 
 ## 3 failed symbol partial
 Warning message:
@@ -86,10 +107,18 @@ Failed to fetch data for ticker: NOTASTOCK
 # A tibble: 0 × 0
 dim: 0 x 0 
 
+## 4b prices$close after a failed call
+WARNING: Unknown or uninitialised column: `close`. 
+close: NULL 
+
 ## 5 ticker switch
 AAPL: 358.54 
 MSFT, same object: 358.54 
 
+## 5b set_symbol
+AAPL: 358.54 
+after set_symbol(MSFT): 492.85 
+
 ## 6 validate
 [1] "AAPL"
-[1] "vod.l" "aapl" 
+[1] "vod.l" "aapl"

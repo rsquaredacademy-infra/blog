@@ -5,7 +5,7 @@ date: "2026-11-28"
 draft: false
 description: "yahoofinancer 0.6.2 keeps every valuation figure on its own quarter, returns a documented empty table when a request fails, and loads the quote of the symbol you switch to."
 image: "/img/yahoofinancer-0-6-2.png"
-image-alt: "yahoofinancer hex logo next to the tagline Market and company data from Yahoo Finance, in R, the line 0.6.2, tables that line up, the package name yahoofinancer and yahoofinancer.rsquaredacademy.com"
+image-alt: "yahoofinancer hex logo next to the tagline Market and company data from Yahoo Finance, in R, the line 0.6.2, valuation tables by date, the package name yahoofinancer and yahoofinancer.rsquaredacademy.com"
 categories: ["R", "packages", "finance"]
 tags: ["yahoofinancer", "market data"]
 execute:
@@ -21,7 +21,7 @@ include-in-header:
 
 yahoofinancer 0.6.2
 
-![](/img/yahoofinancer-0-6-2.png){fig-alt="yahoofinancer hex logo next to the tagline Market and company data from Yahoo Finance, in R, the line 0.6.2, tables that line up, the package name yahoofinancer and yahoofinancer.rsquaredacademy.com" width="100%"}
+![](/img/yahoofinancer-0-6-2.png){fig-alt="yahoofinancer hex logo next to the tagline Market and company data from Yahoo Finance, in R, the line 0.6.2, valuation tables by date, the package name yahoofinancer and yahoofinancer.rsquaredacademy.com" width="100%"}
 
 ```{r}
 #| label: setup
@@ -30,14 +30,14 @@ suppressWarnings(library(yahoofinancer))
 stopifnot(packageVersion("yahoofinancer") == "0.6.2")
 ```
 
-`yahoofinancer` fetches prices, quotes and company financials from Yahoo Finance into R: one tidy table per call, a row per symbol per day, and fields named after the figures on the Yahoo Finance pages.
+`yahoofinancer` is an R interface to the Yahoo Finance API: daily prices, real-time quotes, financial statements, valuation metrics and currency rates, returned as tidy tibbles.
 
-Version 0.6.2 is on CRAN. The last post here introduced the package in 2022, and there have been five CRAN releases since. This one rebuilds the tables around the dates Yahoo reports, and it gives a failed request a predictable shape:
+Version 0.6.2 is on CRAN. The last post here introduced the package in 2022, and there have been six CRAN releases since, this one included. This one joins each valuation figure to its own date and gives a failed request a predictable shape:
 
 - Every valuation figure now joins its own observation date, and a metric Yahoo does not publish is an empty column.
 - A request that fails for every symbol returns a zero-row tibble with the documented columns, not a zero-column one.
 - Switching `Ticker$symbol` loads the new symbol's quote.
-- `validate()` keeps symbols with dots, such as `VOD.L`, and returns them in your spelling and order.
+- `validate()` keeps symbols with dots, such as `VOD.L`.
 
 If you read `Ticker$valuation_measures`, switch symbols on one `Ticker`, or check symbols before a batch download, the next four sections show what changed. Everyone else can start at [Other improvements](#other-improvements).
 
@@ -47,6 +47,7 @@ You can install it from CRAN with:
 #| label: install-cran
 #| eval: false
 install.packages("yahoofinancer")
+library(yahoofinancer)
 ```
 
 The full list of changes is in the [release notes](https://yahoofinancer.rsquaredacademy.com/news/).
@@ -55,7 +56,7 @@ The full list of changes is in the [release notes](https://yahoofinancer.rsquare
 How we checked: every output in this post was produced by the code shown, run on 28 November 2026 against yahoofinancer 0.6.2 from CRAN. The comparisons use the same calls on 0.6.1, installed from the CRAN archive. Quotes are a snapshot of the last session, Friday 27 November.
 :::
 
-The data comes from Yahoo Finance's public endpoints, which the package does not control. A value is as correct as Yahoo's record for that symbol, and a quote is the last traded price at the time of the call.
+The data comes from Yahoo Finance's public endpoints, which the package does not control.
 
 ## Every valuation figure keeps its own quarter
 
@@ -72,7 +73,33 @@ brk_valuation[, c("date", "market_cap", "pe_ratio", "pb_ratio")]
 
 Each row is one date with the figures Yahoo reports for that date. A metric Yahoo does not publish for a symbol is an empty column, so `enterprise_value_ebitda_ratio` is `NA` for Berkshire in every quarter.
 
-In 0.6.1 the same call stopped with `Tibble columns must have compatible sizes`, because a series with no values could not join the table. That happened for Berkshire (`BRK-B`) and for Toyota (`7203.T`). In 0.6.2 the rows Yahoo has are returned, with `NA` where a metric is absent.
+In 0.6.1 the same call stopped with `Tibble columns must have compatible sizes`, because a series with no values could not join the table. That happened for Berkshire (`BRK-B`) and for Toyota (`7203.T`). In 0.6.2 the rows Yahoo has are returned, with `NA` where a metric is absent. NEWS for 0.6.2 also notes that 0.6.1 combined the series by position, so a reordered or missing quarter could pair a figure with a date it does not describe.
+
+Each series keeps its own dates, so every figure sits on the quarter it measures:
+
+```{r}
+#| label: fig-valuation-brk
+#| fig-cap: "Berkshire Hathaway's market capitalisation and PE ratio by quarter."
+#| fig-alt: "Two line charts of Berkshire Hathaway's quarterly market capitalisation and PE ratio. The market capitalisation has no value at 30 September 2025, and the PE ratio has none at 30 June 2025."
+#| fig-width: 7
+#| fig-height: 5
+library(ggplot2)
+brk_long <- rbind(
+  data.frame(date = brk_valuation$date, metric = "Market capitalisation (US$ billion)", value = brk_valuation$market_cap / 1e9),
+  data.frame(date = brk_valuation$date, metric = "PE ratio", value = brk_valuation$pe_ratio)
+)
+brk_long$metric <- factor(brk_long$metric, levels = c("Market capitalisation (US$ billion)", "PE ratio"))
+brk_long$seg <- ave(is.na(brk_long$value), brk_long$metric, FUN = cumsum)
+brk_plot <- brk_long[!is.na(brk_long$value), ]
+ggplot(brk_plot, aes(date, value, group = seg)) +
+  geom_line(linewidth = 1, colour = "#1d5e17") +
+  geom_point(size = 2, colour = "#1d5e17") +
+  facet_wrap(vars(metric), scales = "free_y", ncol = 1) +
+  scale_x_date(breaks = unique(brk_valuation$date), date_labels = "%b %Y") +
+  labs(x = NULL, y = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank(), strip.text = element_text(hjust = 0))
+```
 
 For two companies with complete series, the same field draws the comparison a reader expects:
 
@@ -82,7 +109,6 @@ For two companies with complete series, the same field draws the comparison a re
 #| fig-alt: "Line chart of quarterly market capitalisation in trillions of US dollars for AAPL and MSFT from September 2025 to September 2026. AAPL rises from 3.76 to 4.84 trillion dollars. MSFT falls from 3.85 trillion dollars to 2.75 trillion in March 2026 and recovers to 3.81 trillion by September."
 #| fig-width: 7
 #| fig-height: 4
-library(ggplot2)
 valuation <- rbind(
   transform(Ticker$new("AAPL")$valuation_measures[, c("date", "market_cap")], symbol = "AAPL"),
   transform(Ticker$new("MSFT")$valuation_measures[, c("date", "market_cap")], symbol = "MSFT")
@@ -90,6 +116,7 @@ valuation <- rbind(
 ggplot(valuation, aes(date, market_cap / 1e12, colour = symbol)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_x_date(breaks = unique(valuation$date), date_labels = "%b %Y") +
   scale_colour_manual(values = c(AAPL = "#1d5e17", MSFT = "#37b62b")) +
   labs(x = NULL, y = "Market capitalisation (US$ trillion)", colour = NULL) +
   theme_minimal(base_size = 12) +
@@ -153,9 +180,9 @@ Will the symbol check agree with the download?
 validate(c("VOD.L", "AAPL", "NOTASTOCK"))
 ```
 
-Vodafone's London listing (`VOD.L`) and `AAPL` come back; the misspelling does not. In 0.6.1 the same call returned only `AAPL`: the dot was trimmed from each response name before the match, so `VOD.L` dropped out.
+Vodafone's London listing (`VOD.L`) and `AAPL` come back; the misspelling does not. In 0.6.1 the same call returned only `AAPL`. 0.6.2 matches response keys case-insensitively by name, preserving dots.
 
-The names come back in the spelling and order you passed; `validate(c("vod.l", "aapl"))` returns `"vod.l"` and `"aapl"`. With `return_logical = TRUE`, the result is a named logical vector in the same order, ready to filter a symbol vector:
+The names come back as you passed them: `validate(c("vod.l", "aapl"))` returns `"vod.l"` and `"aapl"`. With `return_logical = TRUE`, the result is a named logical vector in the same order, ready to filter a symbol vector:
 
 ```{r}
 #| label: validate-logical
@@ -176,13 +203,7 @@ The release notes carry the rest.
 
 ## What's next
 
-Nothing in 0.6.2 closes an open issue, and none of the open issues affects the results above. They are feature and documentation requests:
-
-- Screens and scores: a screener query engine (#38), momentum and Darvas box screens (#41), Piotroski and Altman scores (#39), Magic Formula and Graham screens (#40), a peer comparison matrix (#43), CAGR scorecards (#36), ownership patterns (#37) and health diagnostics (#42).
-- The data engine: parallel batch fetching (#34), a disk and session cache (#33), cookie and crumb session management for authenticated endpoints (#56), a `yf_status()` connectivity and rate-limit check (#31) and a nightly live canary test (#35).
-- Other requests: multi-tab Excel export (#44), an NSE/BSE suffix helper with an Indian-markets guide (#32) and an ESG screening guide (#58).
-
-No fix version is set for these. The [issue tracker](https://github.com/rsquaredacademy/yahoofinancer/issues) is the place to follow them.
+No known issue affects the results above. Open requests (screeners and scores, parallel and cached fetching, Excel export, Indian-market helpers) are tracked on the [issue tracker](https://github.com/rsquaredacademy/yahoofinancer/issues).
 
 ## Acknowledgements
 
