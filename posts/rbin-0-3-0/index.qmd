@@ -1,0 +1,162 @@
+---
+title: "rbin 0.3.0"
+author: "Aravind Hebbali"
+date: "2026-11-28"
+draft: false
+description: "rbin 0.3.0 puts missing predictors in their own bin, keeps tied values in one bin, applies winsorized endpoints when scoring, and drops missing responses with a warning."
+image: "/img/rbin-0-3-0.png"
+image-alt: "rbin hex logo next to the tagline Binning for credit scoring models in R, the line 0.3.0, corrected binning results, the package name rbin and rbin.rsquaredacademy.com"
+categories: ["R", "packages", "credit scoring"]
+tags: ["rbin"]
+execute:
+  freeze: true
+include-in-header:
+  text: |
+    <link rel="canonical" href="https://blog.rsquaredacademy.com/posts/rbin-0-3-0/">
+    <meta property="article:published_time" content="2026-11-28">
+    <meta property="article:author" content="Aravind Hebbali">
+    <meta property="og:image" content="https://blog.rsquaredacademy.com/img/rbin-0-3-0.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "rbin 0.3.0", "datePublished": "2026-11-28", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/rbin-0-3-0.png"}</script>
+---
+
+rbin 0.3.0
+
+![](/img/rbin-0-3-0.png){fig-alt="rbin hex logo next to the tagline Binning for credit scoring models in R, the line 0.3.0, corrected binning results, the package name rbin and rbin.rsquaredacademy.com" width="100%"}
+
+```{=html}
+<style>
+.ba-note{font-size:.88rem;color:#57606a;border-left:3px solid #d0d7de;padding-left:.75rem;margin:.5rem 0 1.25rem}
+</style>
+```
+
+```{r}
+#| label: setup
+#| include: false
+library(rbin)
+stopifnot(packageVersion("rbin") == "0.3.0")
+```
+
+`rbin` bins numeric and categorical predictors for credit scoring models: equal-frequency, quantile, equal-length, winsorized and manual cuts, weight-of-evidence and information-value summaries, and dummy variables built from the bins.
+
+The last CRAN release was 0.2.1 in 2024. Version 0.3.0 brings in the work prepared for 0.2.2 and 0.2.3, neither of which reached CRAN, and four of its changes move the numbers of an ordinary call:
+
+- Missing predictors form their own group instead of joining the top interval.
+- Tied values stay in one bin, so equal-frequency binning returns the bins it can build.
+- Winsorized endpoints bound the fit, and scoring applies the same clamps.
+- Rows with a missing response are dropped with a warning instead of turning the summary into `NA`.
+
+If you binned a predictor with missing values, repeated values or winsorized endpoints, refit the bins before you score. Summaries and dummy variables saved before this release differ from what the same call returns now.
+
+You can install it from CRAN with:
+
+```{r}
+#| label: install-cran
+#| eval: false
+install.packages("rbin")
+```
+
+You can see a full list of changes in the [release notes](https://rbin.rsquaredacademy.com/news/).
+
+::: {.ba-note}
+How we checked: every number in this post comes from the code shown, rendered against rbin 0.3.0 from CRAN. The 0.2.1 comparison used the same scripts, and both sets of output are kept with the post's source.
+:::
+
+## Do missing predictors get their own bin?
+
+`mbank` records the outcome of a bank's term-deposit campaign for 4,521 customers, with the age of each. The data has no missing values, so four ages are blanked to mimic incomplete records before `age` is binned into four groups:
+
+```{r}
+#| label: missing-predictor
+d <- mbank[, c("age", "y")]
+missing_rows <- c(which(d$y == "0")[c(2, 5, 9)], which(d$y == "1")[4])
+d$age[missing_rows] <- NA
+rbin_equal_freq(d, y, age, bins = 4)
+```
+
+The summary has five bins: four intervals cut from the 4,517 customers who have an age, and a final group of 4 rows marked `NA` in both cut columns. The last interval runs to `Inf`, so there is no open-ended bin left to absorb them ([#69](https://github.com/rsquaredacademy/rbin/issues/69)).
+
+In 0.2.1 those four rows sat inside the top interval, whose upper cut printed as `NA`, and the total information value read 0.06. Kept separate, those rows take their information value with them: the total reads 0.04, and the top interval holds 1,103 rows instead of 1,130.
+
+**What to do:** refit and re-read the top bin. Its count, weight of evidence and information value all move.
+
+## Do tied values share a bin?
+
+Most customers in `mbank` had no earlier contact: `previous` is zero for 3,686 of them. Ask for five equal-frequency bins:
+
+```{r}
+#| label: tied-values
+rbin_equal_freq(mbank[, c("previous", "y")], y, previous, bins = 5)
+```
+
+Two bins come back, and the message says why. A run of identical values cannot be split across a boundary, so the first bin holds the 3,686 customers with `previous` of 0 and the second holds the rest.
+
+Version 0.2.1 cut through the ties. It returned five bins, four of them labelled 0 to 0, and `rbin_create()` could not build dummy variables from that summary.
+
+**What to do:** ask for the number of bins you want and check how many come back. Fewer bins means the predictor is coarse, not that the call failed.
+
+## Do winsorized endpoints bound the fit and the score?
+
+Credit teams cap a long tail so that a handful of extreme values do not set the cuts. Cap `duration` at 100 and 600 seconds and ask for four bins:
+
+```{r}
+#| label: winsorize
+bins <- rbin_winsorize(
+  mbank[, c("duration", "y")], y, duration,
+  bins = 4, winsor_rate = 0.1, min_val = 100, max_val = 600
+)
+bins
+```
+
+The cuts are 225, 350 and 475, and the top bin holds 617 customers with a weight of evidence of -1.70. Scoring new records uses the same clamps:
+
+```{r}
+#| label: score-clamped
+rbin_create(data.frame(duration = c(50, 100, 350, 600, 900)), duration, bins)
+```
+
+The values 50 and 900 fall outside the clamps and are scored into the outer bins instead of returning missing indicators; every value gets one.
+
+Version 0.2.1 ignored `min_val` and `max_val` when it fitted the bins, and the object it saved could not be scored at all: `rbin_create()` stopped on a length mismatch. The clamps are now stored with the bins.
+
+**What to do:** refit any winsorized bins saved before 0.3.0. The old objects carry no clamps, so they cannot score values outside the training range.
+
+The fit takes its cut points from values up to 1e300 in absolute value and stops beyond that, because exact-cut membership at the edge of double precision would depend on the platform; `rbin_create()` still scores any finite value into the first or last bin.
+
+## Are rows with a missing response dropped?
+
+Three responses are blanked to mimic missing outcomes in this extract:
+
+```{r}
+#| label: missing-response
+#| warning: true
+d <- mbank[, c("age", "y")]
+d$y[c(3, 7, 11)] <- NA
+rbin_equal_freq(d, y, age, bins = 4)
+```
+
+The call drops the three rows, says how many it removed, and summarises the 4,518 that remain: 516 goods, 4,002 bads and an information value of 0.04.
+
+Version 0.2.1 kept those rows in the count and returned `NA` for goods, bads, entropy and information value in every bin that held one, while the count still read 4,521. A summary that looked complete carried no usable numbers.
+
+**What to do:** read the warning. The count tells you how many rows left the analysis, so the summary describes the complete cases.
+
+## Other improvements
+
+- Bare column names, strings and variables that hold names work in every numeric binning function and in `rbin_create()`, including long non-syntactic names.
+- Character responses are sorted in byte order, so the second value is the event on every machine; declare the response as a factor to choose the event level yourself.
+- Empty intervals keep zero counts and undefined rates and weight of evidence, with zero information value and entropy, instead of dropping out of the summary.
+- `rbin_factor()` groups on integer IDs, so distinct numeric or date categories whose printed text looks the same stay separate, and explicit `NA` factor levels stay separate from missing codes.
+- `rbin_create()` keeps bin order, keeps a column for a bin with no rows, makes colliding boundary labels distinct, and scores values outside the training range into the outer intervals ([#67](https://github.com/rsquaredacademy/rbin/issues/67)).
+- A character predictor is no longer ignored: the numeric methods stop and point to `rbin_factor()` or `rbin_factor_create()` ([#70](https://github.com/rsquaredacademy/rbin/issues/70)). `integer64` and `difftime` predictors are refused with conversion guidance.
+- Every method and both addins accept `data.table` input, and a response that is not 0/1, logical or a two-level factor or character stops with a message.
+- The package no longer checks CRAN for updates when it is attached.
+
+## What's next
+
+Known issue: a bin with no events or no non-events gets an infinite weight of evidence, and the total information value is then infinite too (#68), fixed in rbin 0.3.1.
+
+The remaining open reports are about input checks and messages, not results: argument names in errors and the addins ([#80](https://github.com/rsquaredacademy/rbin/issues/80)), a one-column matrix predictor ([#79](https://github.com/rsquaredacademy/rbin/issues/79)), and the conversion hints for date and time predictors ([#77](https://github.com/rsquaredacademy/rbin/issues/77)). The first two are fixed on the development branch for rbin 0.3.1.
+
+## Acknowledgements
+
+Thank you to everyone who reported a problem with `rbin` since 0.2.1. Issues and pull requests are welcome at [github.com/rsquaredacademy/rbin](https://github.com/rsquaredacademy/rbin).

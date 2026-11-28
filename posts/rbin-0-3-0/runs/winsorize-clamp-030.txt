@@ -1,0 +1,28 @@
+rbin 0.3.0 
+
+Binning Summary
+------------------------------
+Method               Winsorize 
+Response             y 
+Predictor            duration 
+Bins                 4 
+Count                4521 
+Goods                517 
+Bads                 4004 
+Entropy              0.42 
+Information Value    1.23 
+
+
+  cut_point bin_count good  bad        woe           iv   entropy
+1     < 225      2700  104 2596  1.1703299 0.5233611290 0.2354579
+2     < 350       807   90  717  0.0282599 0.0001410082 0.5044962
+3     < 475       397   68  329 -0.4704562 0.0232218198 0.6606351
+4    >= 475       617  255  362 -1.6966256 0.6834357142 0.9781958
+
+Scoring values outside the training range:
+  duration duration_<_225 duration_<_350 duration_<_475 duration_>=_475
+1       50              1              0              0               0
+2      100              1              0              0               0
+3      350              0              0              1               0
+4      600              0              0              0               1
+5      900              0              0              0               1

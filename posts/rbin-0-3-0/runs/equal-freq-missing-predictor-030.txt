@@ -1,0 +1,27 @@
+rbin 0.3.0 
+
+Binning Summary
+------------------------------------
+Method               Equal Frequency 
+Response             y 
+Predictor            age 
+Bins                 5 
+Count                4521 
+Goods                517 
+Bads                 4004 
+Entropy              0.51 
+Information Value    0.04 
+
+
+  lower_cut upper_cut bin_count good  bad  good_rate        woe          iv
+1      -Inf        34      1289  167 1122 0.12955780 -0.1421320 0.006082912
+2        34        40      1070  102  968 0.09532710  0.2032530 0.009037883
+3        40        49      1055   95  960 0.09004739  0.2660501 0.014900888
+4        49       Inf      1103  152  951 0.13780598 -0.2133727 0.012053720
+5        NA        NA         4    1    3 0.25000000 -0.9483940 0.001123833
+    entropy
+1 0.5562242
+2 0.4540054
+3 0.4366280
+4 0.5784639
+5 0.8112781
