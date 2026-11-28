@@ -5,7 +5,7 @@ date: "2026-11-21"
 draft: false
 description: "What is new in blorr since 2019: pseudo-R² on the fitted rows, a Gini index that matches the AUC, the likelihood ratio test's degrees of freedom, exported plot data, and stricter model checks."
 image: "/img/blorr-0-3-2.png"
-image-alt: "blorr hex logo next to the tagline Binary logistic regression in R, the line 0.3.2, corrected results, the package name blorr and blorr.rsquaredacademy.com"
+image-alt: "blorr hex logo next to the tagline Binary logistic regression in R, the line 0.3.2, accuracy and model checks, the package name blorr and blorr.rsquaredacademy.com"
 categories: ["R", "packages", "regression"]
 tags: ["blorr"]
 execute:
@@ -19,7 +19,7 @@ include-in-header:
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "blorr 0.3.2", "datePublished": "2026-11-21", "author": {"@type": "Person", "name": "Aravind Hebbali", "url": "https://www.aravindhebbali.com/"}, "image": "https://blog.rsquaredacademy.com/img/blorr-0-3-2.png"}</script>
 ---
 
-![](/img/blorr-0-3-2.png){fig-alt="blorr hex logo next to the tagline Binary logistic regression in R, the line 0.3.2, corrected results, the package name blorr and blorr.rsquaredacademy.com" width="100%"}
+![](/img/blorr-0-3-2.png){fig-alt="blorr hex logo next to the tagline Binary logistic regression in R, the line 0.3.2, accuracy and model checks, the package name blorr and blorr.rsquaredacademy.com" width="100%"}
 
 ```{=html}
 <style>
@@ -210,16 +210,14 @@ Both can go straight into `ggplot2`, `plotly` or any other plotting library, wit
 
 ## What's next
 
-These issues are known in 0.3.2. Most were found by an independent audit after the CRAN release. Each has a GitHub issue with a reproducible example, and each fix goes into blorr 0.3.3:
+Six issues remain open and will be fixed in 0.3.3:
 
-- A response with three levels is fitted silently, and the response summary drops a level ([#130](https://github.com/rsquaredacademy/blorr/issues/130)). Check `nlevels()` of the response before fitting. Fixed on the development branch.
-- The delta deviance in `blr_residual_diagnostics()` uses the squared standardized Pearson residual ([#146](https://github.com/rsquaredacademy/blorr/pull/146)). Fixed on the development branch.
-- The cells of `blr_segment_twoway()` are each cell's share of all observations, not the event rate within the cell. For a within-cell rate, use `tapply(y, list(a, b), mean)` ([#152](https://github.com/rsquaredacademy/blorr/issues/152)).
-- `blr_segment()` and `blr_segment_dist()` round proportions to two decimals before using them, so their percentages and plots can be off by up to half a percentage point ([#153](https://github.com/rsquaredacademy/blorr/issues/153)). For exact shares, use `prop.table(table(x))` and `tapply(y, x, mean)`.
-- The total information value printed by `blr_woe_iv()` adds up the rounded per-level values. For an accurate total, use a larger `digits`, for example `digits = 4` ([#155](https://github.com/rsquaredacademy/blorr/issues/155)).
-- A factor response with only one observed level is treated as all non-events by the segment and weight-of-evidence functions. Check that both classes are present first ([#154](https://github.com/rsquaredacademy/blorr/issues/154)).
-
-Fixes for #152–#155 are on the development branch. blorr 0.3.3, with all of these fixes, is planned after 2027-01-13.
+- Known issue: a response with three levels is fitted silently and the response summary drops a level ([#130](https://github.com/rsquaredacademy/blorr/issues/130)), fixed in blorr 0.3.3.
+- Known issue: the delta deviance in `blr_residual_diagnostics()` uses the squared standardized Pearson residual ([#146](https://github.com/rsquaredacademy/blorr/pull/146)), fixed in blorr 0.3.3.
+- Known issue: the cells of `blr_segment_twoway()` are each cell's share of all observations, not the event rate within the cell ([#152](https://github.com/rsquaredacademy/blorr/issues/152)), fixed in blorr 0.3.3.
+- Known issue: `blr_segment()` and `blr_segment_dist()` round proportions to two decimals before using them, so percentages and plots can be off by up to half a percentage point ([#153](https://github.com/rsquaredacademy/blorr/issues/153)), fixed in blorr 0.3.3.
+- Known issue: a factor response with only one observed level is treated as all non-events by the segment and weight-of-evidence functions ([#154](https://github.com/rsquaredacademy/blorr/issues/154)), fixed in blorr 0.3.3.
+- Known issue: the total information value printed by `blr_woe_iv()` adds up the rounded per-level values ([#155](https://github.com/rsquaredacademy/blorr/issues/155)), fixed in blorr 0.3.3.
 
 ## Acknowledgements
 
