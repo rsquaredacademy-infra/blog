@@ -1,0 +1,22 @@
+rbin 0.3.0 
+
+Requested 5 equal-frequency bins; returning 2 non-missing bin(s) because tied values are kept together.
+Binning Summary
+------------------------------------
+Method               Equal Frequency 
+Response             y 
+Predictor            previous 
+Bins                 2 
+Count                4521 
+Goods                517 
+Bads                 4004 
+Entropy              0.5 
+Information Value    0.2 
+
+
+  lower_cut upper_cut bin_count good  bad  good_rate        woe         iv
+1      -Inf         1      3686  334 3352 0.09061313  0.2591652 0.04953373
+2         1       Inf       835  183  652 0.21916168 -0.7764479 0.14840094
+    entropy
+1 0.4385131
+2 0.7586338

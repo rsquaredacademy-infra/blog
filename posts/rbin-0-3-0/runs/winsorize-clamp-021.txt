@@ -1,0 +1,23 @@
+rbin 0.2.1 
+
+Binning Summary
+------------------------------
+Method               Winsorize 
+Response             y 
+Predictor            duration 
+Bins                 4 
+Count                4521 
+Goods                517 
+Bads                 4004 
+Entropy              0.42 
+Information Value    1.49 
+
+
+  cut_point bin_count good  bad        woe          iv    entropy
+1  < 133.25      1578   19 1559  2.3603546 0.832285012 0.09403589
+2   < 249.5      1361  105 1256  0.4347207 0.048076433 0.39205353
+3  < 365.75       639   80  559 -0.1028834 0.001556471 0.54411336
+4 >= 365.75       943  313  630 -1.3474896 0.603773998 0.91687541
+
+Scoring values outside the training range:
+Error: 'names' attribute [4] must be the same length as the vector [2] 
