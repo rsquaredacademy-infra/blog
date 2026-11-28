@@ -36,7 +36,7 @@ library(rbin)
 stopifnot(packageVersion("rbin") == "0.3.0")
 ```
 
-rbin 0.3.0 keeps every record in a scorecard in a bin you can explain: missing predictors, repeated values, extreme values and missing responses are each handled, and the package tells you what it did. It also brings in the 0.2.2 and 0.2.3 work, which never reached CRAN. If you saved binning results from 0.2.1, refit before you score; the [Behaviour changes](#behaviour-changes) block lists what moves.
+rbin bins numeric predictors for scorecards and reports the weight of evidence and information value of every bin. rbin 0.3.0 keeps every record in a scorecard in a bin you can explain: missing predictors, repeated values, extreme values and missing responses are each handled, and the package tells you what it did. It also brings in the 0.2.2 and 0.2.3 work, which never reached CRAN. If you saved binning results from 0.2.1, refit before you score; the [Behaviour changes](#behaviour-changes) block lists what moves.
 
 ## Install from CRAN
 
